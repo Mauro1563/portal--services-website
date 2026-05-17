@@ -13,9 +13,9 @@ export function Nav() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink-0/70 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         <Link href="/" className="flex items-center" aria-label="Portal Services Digital">
-          {/* Logo oficial PNG — mismo archivo que el Hero */}
+          {/* Logo v2 PNG */}
           <img
-            src="/logo%20de%20portal%20services%20digital.png"
+            src="/logo%20portal%20services%20digital%202.PNG"
             alt="Portal Services Digital"
             className="h-14 w-auto"
           />

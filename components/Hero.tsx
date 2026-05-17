@@ -10,7 +10,7 @@ export function Hero() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-4xl text-center">
           <img
-            src="/logo%20de%20portal%20services%20digital.png"
+            src="/logo%20portal%20services%20digital%202.PNG"
             alt="Portal Services Digital — One platform. One place. Everyone connected."
             className="mx-auto mb-12 h-auto w-full max-w-2xl"
           />
