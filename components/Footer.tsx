@@ -41,22 +41,14 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5" aria-label="Portal Services Digital">
-              <img src="/logo.svg" alt="" className="h-9 w-9" />
-              <span className="flex flex-col leading-tight">
-                <span className="font-display text-[13px] font-semibold tracking-[0.18em] text-white">
-                  PORTAL SERVICES
-                </span>
-                <span className="text-[11px] font-semibold tracking-[0.32em] text-cyan-300">
-                  DIGITAL
-                </span>
-              </span>
+            <Link href="/" aria-label="Portal Services Digital">
+              {/* Logo v2 PNG — mismo archivo que Nav y Hero */}
+              <img
+                src="/logo%20portal%20services%20digital%202.PNG"
+                alt="Portal Services Digital — One platform. One place. Everyone connected."
+                className="h-auto w-full max-w-[280px]"
+              />
             </Link>
-            <p className="mt-5 max-w-xs text-sm tracking-wider text-slate-400">
-              <span className="text-slate-300">ONE PLATFORM.</span>{' '}
-              <span className="text-cyan-300">ONE PLACE.</span>{' '}
-              <span className="text-slate-400">EVERYONE CONNECTED.</span>
-            </p>
           </div>
 
           {cols.map((col) => (
