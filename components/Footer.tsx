@@ -1,13 +1,14 @@
 import Link from 'next/link';
+import { Logo } from './Logo';
 
 const cols = [
   {
     title: 'Product',
     links: [
-      { label: 'HQ Portal', href: '#product' },
-      { label: 'Manager Portal', href: '#product' },
-      { label: 'Supervisor Portal', href: '#product' },
-      { label: 'Operative App', href: '#product' },
+      { label: 'HQ Portal', href: '#solutions' },
+      { label: 'Manager Portal', href: '#solutions' },
+      { label: 'Supervisor Portal', href: '#solutions' },
+      { label: 'Operative App', href: '#solutions' },
       { label: 'Integrations', href: '#solutions' },
     ],
   },
@@ -16,7 +17,7 @@ const cols = [
     links: [
       { label: 'Cleaning ops', href: '#solutions' },
       { label: 'Facilities management', href: '#solutions' },
-      { label: 'Multi-site', href: '#solutions' },
+      { label: 'Airbnb / Property', href: '#who' },
       { label: 'Audits & compliance', href: '#solutions' },
     ],
   },
@@ -42,12 +43,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href="/" aria-label="Portal Services Digital">
-              {/* Logo v2 PNG — mismo archivo que Nav y Hero */}
-              <img
-                src="/logo%20portal%20services%20digital%202.PNG"
-                alt="Portal Services Digital — One platform. One place. Everyone connected."
-                className="h-auto w-full max-w-[280px]"
-              />
+              <Logo size="md" />
             </Link>
           </div>
 

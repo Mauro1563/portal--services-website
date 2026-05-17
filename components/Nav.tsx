@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { Button } from './ui/Button';
+import { Logo } from './Logo';
 
 export function Nav() {
   const links = [
-    { href: '/#product', label: 'Product' },
-    { href: '/#solutions', label: 'Solutions' },
+    { href: '/#solutions', label: 'Product' },
+    { href: '/#who', label: 'Who it\'s for' },
     { href: '/#pricing', label: 'Pricing' },
     { href: '/#security', label: 'Security' },
   ];
@@ -12,13 +13,8 @@ export function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink-0/70 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center" aria-label="Portal Services Digital">
-          {/* Logo v2 PNG */}
-          <img
-            src="/logo%20portal%20services%20digital%202.PNG"
-            alt="Portal Services Digital"
-            className="h-14 w-auto"
-          />
+        <Link href="/" aria-label="Portal Services Digital">
+          <Logo size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

@@ -1,5 +1,6 @@
 import { Badge, Button } from './ui';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { Logo } from './Logo';
 
 export function Hero() {
   return (
@@ -9,11 +10,9 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-4xl text-center">
-          <img
-            src="/logo%20portal%20services%20digital%202.PNG"
-            alt="Portal Services Digital — One platform. One place. Everyone connected."
-            className="mx-auto mb-12 h-auto w-full max-w-2xl"
-          />
+          <div className="mb-12 flex justify-center">
+            <Logo size="lg" />
+          </div>
 
           <Badge tone="info" className="mb-6">
             <Sparkles className="h-3 w-3" />
