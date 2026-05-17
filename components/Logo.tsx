@@ -4,9 +4,9 @@ const LOGO_URL =
   'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'h-12 w-auto sm:h-14',
-  md: 'h-auto w-full max-w-[280px]',
-  lg: 'h-auto w-full max-w-md sm:max-w-lg',
+  sm: 'block h-12 w-auto sm:h-14',
+  md: 'block h-auto w-full max-w-[260px] mx-auto',
+  lg: 'block h-auto w-full max-w-sm sm:max-w-md mx-auto',
 };
 
 export function Logo({
