@@ -1,0 +1,126 @@
+{
+  "nav": {
+    "product": "Produto",
+    "solutions": "Soluções",
+    "pricing": "Preços",
+    "security": "Segurança",
+    "login": "Entrar",
+    "cta": "Agendar demo"
+  },
+  "hero": {
+    "badge": "Feito para empresas de limpeza, facilities e property managers",
+    "title_a": "Substitua WhatsApp e Excel",
+    "title_b": "por uma única plataforma operacional.",
+    "subtitle": "Controle de turnos por edifício. Inbox de supervisor. Relatórios de ausências. Portal da comunidade. Comunicação em tempo real entre HQ, supervisores e operativos — tudo em um só lugar.",
+    "cta_primary": "Agendar demo",
+    "cta_secondary": "Ver ao vivo",
+    "trust": "Teste grátis de 14 dias · Sem cartão · A partir de £49/mês"
+  },
+  "logos": "Equipes de operações em 14 países confiam em nós",
+  "features": {
+    "title": "Tudo o que sua equipe operacional precisa.",
+    "subtitle": "Feito especificamente para empresas de limpeza, facilities management e property managers — não um SaaS genérico adaptado.",
+    "shift_title": "Controle de turnos por edifício",
+    "shift_desc": "Atribua operativos a locais e turnos (dia / noite). Veja quem está, quem falta, quem cobre — de relance.",
+    "inbox_title": "Inbox do supervisor",
+    "inbox_desc": "Cada tarefa chega em um único inbox. Supervisores confirmam, pedem cobertura, escalam incidentes — sem dez grupos de WhatsApp.",
+    "absence_title": "Relatórios de ausência e férias",
+    "absence_desc": "Operativos solicitam folga, supervisores aprovam, HQ enxerga lacunas de cobertura antes que afetem o SLA.",
+    "community_title": "Portal da comunidade",
+    "community_desc": "Hub estilo WeWork para seus operativos. Comunicados, horários, holerites, diretório da equipe — sua marca, suas regras.",
+    "comms_title": "Comunicação HQ → Supervisor → Operativo",
+    "comms_desc": "Chat direto entre os três níveis. Transmita para um edifício, uma equipe ou um operativo. Tradução automática opcional.",
+    "geo_title": "Check-in / check-out geolocalizado",
+    "geo_desc": "O operativo confirma a chegada no edifício certo. Acabou o \"eu estive lá, juro\" — timesheet verificado por GPS.",
+    "photo_title": "Evidência fotográfica por tarefa",
+    "photo_desc": "O limpador envia foto quando termina. HQ e property managers veem a prova em cada turno.",
+    "airbnb_title": "Integração iCal do Airbnb",
+    "airbnb_desc": "Conecte seu calendário do Airbnb / Booking.com. Tarefas são criadas automaticamente a cada checkout — sem agendamento manual."
+  },
+  "segments": {
+    "eyebrow": "Para quem é",
+    "title": "De 5 limpadores a 5.000 operativos.",
+    "subtitle": "Três níveis — mesma plataforma. Comece pequeno, escale a enterprise sem trocar de ferramenta.",
+    "airbnb_badge": "Win mais rápido",
+    "airbnb_title": "Anfitriões Airbnb e property managers",
+    "airbnb_headcount": "5 – 25 limpadores",
+    "airbnb_pricing": "a partir de £49 / mês",
+    "airbnb_cta": "Iniciar teste grátis",
+    "airbnb_customers": "Co-anfitriões, STR managers, aluguel por temporada",
+    "midmarket_badge": "Mais popular",
+    "midmarket_title": "Limpeza e FM mid-market",
+    "midmarket_headcount": "15 – 50 operativos",
+    "midmarket_pricing": "£150 – £500 / mês",
+    "midmarket_cta": "Agendar demo",
+    "midmarket_customers": "Empreiteiros FM, limpeza de escritórios, escolas, clínicas",
+    "enterprise_badge": "Enterprise",
+    "enterprise_title": "Operações grandes e grupos FM",
+    "enterprise_headcount": "50+ operativos",
+    "enterprise_pricing": "a partir de £500 / mês + setup",
+    "enterprise_cta": "Falar com vendas",
+    "enterprise_customers": "Empresas FM, hospitais, aeroportos, redes hoteleiras, operadores estilo WeWork",
+    "typical_label": "Clientes típicos:"
+  },
+  "portals": {
+    "title": "Feito para cada camada das operações.",
+    "subtitle": "Quatro portais especializados, uma única fonte de verdade — de dashboards executivos a apps móveis para o time de campo.",
+    "hq_title": "Portal HQ",
+    "hq_desc": "Visão global das operações, análises multi-local, permissões por função, faturamento.",
+    "manager_title": "Portal Manager",
+    "manager_desc": "Gestão de equipes, desempenho, atribuição de tarefas, supervisão de incidentes.",
+    "supervisor_title": "Portal Supervisor",
+    "supervisor_desc": "Supervisão ao vivo, auditorias, inspeções, acompanhamento de tarefas em tempo real.",
+    "operative_title": "App Operativo",
+    "operative_desc": "PWA mobile-first. Marcar entrada, tarefas, relatórios de incidentes, evidência fotográfica."
+  },
+  "dashboard": {
+    "badge": "Tempo real",
+    "title": "Visibilidade em tempo real de cada local.",
+    "body": "Saiba o que está acontecendo — agora. Status de turnos ao vivo, pontuações de auditorias, feed de incidentes e desempenho SLA em toda a sua operação, atualizado no momento em que muda no campo.",
+    "bullet_geo": "Marcação de entrada com geocerca e verificação do local",
+    "bullet_metrics": "Métricas de desempenho consolidadas por portfólio",
+    "bullet_stream": "Stream de atividade ao vivo — cada ação auditada",
+    "live_label": "Operações ao vivo"
+  },
+  "integrations": {
+    "title": "Se dá bem com a sua stack.",
+    "subtitle": "SSO, webhooks, REST API e integrações nativas — conecte o Portal Services Digital às ferramentas que seu time já usa."
+  },
+  "security": {
+    "title": "Segurança enterprise, por padrão.",
+    "subtitle": "Projetado desde o início para organizações que levam dados, compliance e uptime a sério.",
+    "soc2_title": "SOC 2 Type II",
+    "soc2_sub": "Em busca da certificação — controles já implementados",
+    "gdpr_title": "GDPR-ready",
+    "gdpr_sub": "Residência de dados na UE disponível",
+    "rbac_title": "RBAC + SSO",
+    "rbac_sub": "Funções granulares, SAML, OAuth, MFA obrigatório",
+    "uptime_title": "99,9% uptime",
+    "uptime_sub": "Multi-região, criptografado em repouso e em trânsito"
+  },
+  "pricing": {
+    "title": "Preços que cabem no tamanho da sua equipe.",
+    "subtitle": "Pagamento mensal. Cancele quando quiser. 14 dias de teste grátis — sem cartão.",
+    "footnote": "Todos os preços em GBP. Descontos por volume a partir de 100+ operativos. VAT não incluído.",
+    "popular": "Mais popular"
+  },
+  "cta": {
+    "title": "Pronto para evoluir suas operações?",
+    "subtitle": "Junte-se aos times de operações que rodam toda a equipe de campo no Portal Services Digital.",
+    "primary": "Agendar demo",
+    "secondary": "Falar com vendas"
+  },
+  "footer": {
+    "tagline_a": "UMA PLATAFORMA.",
+    "tagline_b": "UM SÓ LUGAR.",
+    "tagline_c": "TODOS CONECTADOS.",
+    "col_product": "Produto",
+    "col_solutions": "Soluções",
+    "col_company": "Empresa",
+    "col_resources": "Recursos",
+    "link_contact": "Contato",
+    "link_security": "Segurança",
+    "link_pricing": "Preços",
+    "copyright": "Todos os direitos reservados."
+  }
+}

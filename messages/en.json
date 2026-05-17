@@ -1,0 +1,126 @@
+{
+  "nav": {
+    "product": "Product",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "security": "Security",
+    "login": "Login",
+    "cta": "Get a demo"
+  },
+  "hero": {
+    "badge": "Built for cleaning, facilities & property teams",
+    "title_a": "Replace WhatsApp and Excel",
+    "title_b": "with one operational platform.",
+    "subtitle": "Shift control by building. Supervisor inbox. Absence reports. Community portal. Live communication from HQ to supervisors to operatives — all in one place.",
+    "cta_primary": "Get a demo",
+    "cta_secondary": "See it live",
+    "trust": "14-day free trial · No credit card · From £49/month"
+  },
+  "logos": "Trusted by operations teams across 14 countries",
+  "features": {
+    "title": "Everything your operations team needs.",
+    "subtitle": "Built specifically for cleaning companies, facilities management and property managers — not generic SaaS retrofitted to fit.",
+    "shift_title": "Shift control by building",
+    "shift_desc": "Assign operatives to sites and shifts (day / night). See who's on, who's missing, who's covering — at a glance.",
+    "inbox_title": "Supervisor inbox",
+    "inbox_desc": "Every task lands in one inbox. Supervisors confirm completion, request cover, escalate incidents — without ten WhatsApp groups.",
+    "absence_title": "Absence & holiday reports",
+    "absence_desc": "Operatives request time off, supervisors approve, HQ sees coverage gaps before they hurt the SLA.",
+    "community_title": "Community portal",
+    "community_desc": "WeWork-style hub for your operatives. Announcements, schedules, payslips, team directory — your brand, your rules.",
+    "comms_title": "HQ → Supervisor → Operative comms",
+    "comms_desc": "Direct chat across the three levels. Broadcast to a building, a team, or one operative. Auto-translate optional.",
+    "geo_title": "Geo check-in / check-out",
+    "geo_desc": "Operative confirms arrival at the right building. No more \"I was there, I swear\" — GPS-verified timesheet.",
+    "photo_title": "Photo evidence per task",
+    "photo_desc": "Cleaner uploads photo when the job is done. HQ and property managers see proof on every shift.",
+    "airbnb_title": "Airbnb iCal integration",
+    "airbnb_desc": "Connect your Airbnb / Booking.com calendar. Tasks auto-create on every checkout — no manual scheduling."
+  },
+  "segments": {
+    "eyebrow": "Who it's for",
+    "title": "From 5 cleaners to 5,000 operatives.",
+    "subtitle": "Three tiers — same platform. Start small, scale to enterprise without changing tools.",
+    "airbnb_badge": "Fastest win",
+    "airbnb_title": "Airbnb hosts & property managers",
+    "airbnb_headcount": "5 – 25 cleaners",
+    "airbnb_pricing": "from £49 / month",
+    "airbnb_cta": "Start free trial",
+    "airbnb_customers": "Co-hosts, STR managers, holiday lets",
+    "midmarket_badge": "Most popular",
+    "midmarket_title": "Mid-market cleaning & FM",
+    "midmarket_headcount": "15 – 50 operatives",
+    "midmarket_pricing": "£150 – £500 / month",
+    "midmarket_cta": "Book a demo",
+    "midmarket_customers": "FM contractors, office cleaners, schools, clinics",
+    "enterprise_badge": "Enterprise",
+    "enterprise_title": "Large operations & FM groups",
+    "enterprise_headcount": "50+ operatives",
+    "enterprise_pricing": "from £500 / month + setup",
+    "enterprise_cta": "Talk to sales",
+    "enterprise_customers": "FM companies, hospitals, airports, hotel chains, WeWork-style operators",
+    "typical_label": "Typical customers:"
+  },
+  "portals": {
+    "title": "Built for every layer of operations.",
+    "subtitle": "Four purpose-built portals, one shared source of truth — from C-suite dashboards to frontline mobile apps.",
+    "hq_title": "HQ Portal",
+    "hq_desc": "Global operations overview, multi-site analytics, role permissions, billing.",
+    "manager_title": "Manager Portal",
+    "manager_desc": "Team management, staff performance, task assignment, incident oversight.",
+    "supervisor_title": "Supervisor Portal",
+    "supervisor_desc": "Live supervision, audits, site inspections, real-time task tracking.",
+    "operative_title": "Operative App",
+    "operative_desc": "Mobile-first PWA. Clock-in, tasks, incident reports, photo evidence."
+  },
+  "dashboard": {
+    "badge": "Real-time",
+    "title": "Real-time visibility across every site.",
+    "body": "Know what's happening — right now. Live shift status, audit scores, incident feeds, and SLA performance across your entire operation, updated the moment it changes on the ground.",
+    "bullet_geo": "Geo-fenced clock-in with site verification",
+    "bullet_metrics": "Performance metrics rolled up across portfolios",
+    "bullet_stream": "Live activity stream — every action audited",
+    "live_label": "Live operations"
+  },
+  "integrations": {
+    "title": "Plays nicely with your stack.",
+    "subtitle": "SSO, webhooks, REST API and native integrations — connect Portal Services Digital to the tools your team already uses."
+  },
+  "security": {
+    "title": "Enterprise security, by default.",
+    "subtitle": "Designed from the ground up for organisations that take data, compliance and uptime seriously.",
+    "soc2_title": "SOC 2 Type II",
+    "soc2_sub": "Pursuing certification — controls in place",
+    "gdpr_title": "GDPR-ready",
+    "gdpr_sub": "EU data residency available",
+    "rbac_title": "RBAC + SSO",
+    "rbac_sub": "Granular roles, SAML, OAuth, MFA enforced",
+    "uptime_title": "99.9% uptime",
+    "uptime_sub": "Multi-region, encrypted at rest and in transit"
+  },
+  "pricing": {
+    "title": "Pricing that fits your team size.",
+    "subtitle": "Pay monthly. Cancel anytime. 14-day free trial — no credit card required.",
+    "footnote": "All prices in GBP. Volume discounts for 100+ operatives. VAT not included.",
+    "popular": "Most popular"
+  },
+  "cta": {
+    "title": "Ready to upgrade your operations?",
+    "subtitle": "Join the operations teams running their entire field workforce on Portal Services Digital.",
+    "primary": "Get a demo",
+    "secondary": "Talk to sales"
+  },
+  "footer": {
+    "tagline_a": "ONE PLATFORM.",
+    "tagline_b": "ONE PLACE.",
+    "tagline_c": "EVERYONE CONNECTED.",
+    "col_product": "Product",
+    "col_solutions": "Solutions",
+    "col_company": "Company",
+    "col_resources": "Resources",
+    "link_contact": "Contact",
+    "link_security": "Security",
+    "link_pricing": "Pricing",
+    "copyright": "All rights reserved."
+  }
+}
