@@ -4,9 +4,9 @@ const LOGO_URL =
   'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
 
 // Aspect ratio used to crop the embedded tagline out of the PNG.
-// The natural image is wider-than-tall by ~2.5:1; using ~3.4:1 hides
-// the bottom strip (the embedded tagline).
-const CROP_ASPECT = '3.4 / 1';
+// The image includes a tagline strip at the bottom; this ratio shows
+// the full mark + wordmark (incl. DIGITAL) while hiding the tagline.
+const CROP_ASPECT = '2.6 / 1';
 
 const sizeConfig: Record<Size, {
   imgWrap: string;
