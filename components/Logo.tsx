@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type Size = 'sm' | 'md' | 'lg';
 
@@ -45,6 +45,7 @@ export function Logo({
   showTagline?: boolean;
   className?: string;
 }) {
+  const t = useTranslations('footer');
   const cfg = sizeConfig[size];
   const tagline = showTagline ?? cfg.defaultTagline;
 
@@ -63,12 +64,10 @@ export function Logo({
           DIGITAL
         </span>
         {tagline && (
-          <span
-            className={`mt-1.5 ${cfg.tagline} font-semibold tracking-[0.18em]`}
-          >
-            <span className="text-slate-200">ONE PLATFORM.</span>{' '}
-            <span className="text-cyan-300">ONE PLACE.</span>{' '}
-            <span className="text-slate-400">EVERYONE CONNECTED.</span>
+          <span className={`mt-1.5 ${cfg.tagline} font-semibold tracking-[0.18em]`}>
+            <span className="text-slate-200">{t('tagline_a')}</span>{' '}
+            <span className="text-cyan-300">{t('tagline_b')}</span>{' '}
+            <span className="text-slate-400">{t('tagline_c')}</span>
           </span>
         )}
       </div>
