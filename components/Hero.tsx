@@ -8,13 +8,20 @@ export function Hero() {
       <div className="absolute inset-0 bg-grid" />
 
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
+          {/* Full lockup — logo + wordmark + tagline */}
+          <img
+            src="/logo-lockup.svg"
+            alt="Portal Services Digital — One platform. One place. Everyone connected."
+            className="mx-auto mb-10 h-auto w-full max-w-2xl"
+          />
+
           <Badge tone="info" className="mb-6">
             <Sparkles className="h-3 w-3" />
             New · Real-time operations engine
           </Badge>
 
-          <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
             The Operational OS for
             <br />
             <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
@@ -23,8 +30,6 @@ export function Hero() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-lg text-slate-300">
-            One platform. One place. Everyone connected.
-            <br className="hidden sm:block" />
             Run cleaning, facilities and field operations from a single intelligent system.
           </p>
 
