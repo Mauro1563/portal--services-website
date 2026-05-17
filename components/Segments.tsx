@@ -14,13 +14,7 @@ export function Segments() {
       pricing: t('airbnb_pricing'),
       cta: t('airbnb_cta'),
       customers: t('airbnb_customers'),
-      valueProps: [
-        'Who goes to which flat today — auto-assigned',
-        'No more chaotic WhatsApp groups',
-        'Photo evidence proves the clean was done',
-        'iCal sync: tasks auto-create on Airbnb checkout',
-        'Per-property rating from the property manager',
-      ],
+      valueProps: t.raw('airbnb_props') as string[],
     },
     {
       icon: Building,
@@ -32,13 +26,7 @@ export function Segments() {
       cta: t('midmarket_cta'),
       customers: t('midmarket_customers'),
       featured: true,
-      valueProps: [
-        'Day and night shift management',
-        'Supervisor dashboard ready out of the box',
-        'Timesheets and holiday reports',
-        'Onboarded in one week',
-        'Multi-site visibility for HQ',
-      ],
+      valueProps: t.raw('midmarket_props') as string[],
     },
     {
       icon: Building2,
@@ -49,13 +37,7 @@ export function Segments() {
       pricing: t('enterprise_pricing'),
       cta: t('enterprise_cta'),
       customers: t('enterprise_customers'),
-      valueProps: [
-        'White-label with your logo and colours',
-        'Custom community portal for your operatives',
-        'API or integration with your ERP / payroll',
-        'Dedicated SLA and account manager',
-        'SSO / SAML, advanced RBAC',
-      ],
+      valueProps: t.raw('enterprise_props') as string[],
     },
   ];
 

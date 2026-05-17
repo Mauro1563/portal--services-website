@@ -47,18 +47,39 @@
     "airbnb_pricing": "a partir de £49 / mês",
     "airbnb_cta": "Iniciar teste grátis",
     "airbnb_customers": "Co-anfitriões, STR managers, aluguel por temporada",
+    "airbnb_props": [
+      "Quem vai a qual apartamento hoje — atribuição automática",
+      "Acabaram os grupos caóticos de WhatsApp",
+      "A evidência fotográfica prova que a limpeza foi feita",
+      "Sincronização iCal: tarefas criadas automaticamente no checkout do Airbnb",
+      "Avaliação por propriedade do property manager"
+    ],
     "midmarket_badge": "Mais popular",
     "midmarket_title": "Limpeza e FM mid-market",
     "midmarket_headcount": "15 – 50 operativos",
     "midmarket_pricing": "£150 – £500 / mês",
     "midmarket_cta": "Agendar demo",
     "midmarket_customers": "Empreiteiros FM, limpeza de escritórios, escolas, clínicas",
+    "midmarket_props": [
+      "Gestão de turnos dia e noite",
+      "Dashboard de supervisor pronto de fábrica",
+      "Folhas de ponto e relatórios de férias",
+      "Onboarding em uma semana",
+      "Visibilidade multi-local para HQ"
+    ],
     "enterprise_badge": "Enterprise",
     "enterprise_title": "Operações grandes e grupos FM",
     "enterprise_headcount": "50+ operativos",
     "enterprise_pricing": "a partir de £500 / mês + setup",
     "enterprise_cta": "Falar com vendas",
     "enterprise_customers": "Empresas FM, hospitais, aeroportos, redes hoteleiras, operadores estilo WeWork",
+    "enterprise_props": [
+      "Marca branca com seu logo e cores",
+      "Portal de comunidade personalizado para seus operativos",
+      "API ou integração com seu ERP / folha",
+      "SLA dedicado e account manager",
+      "SSO / SAML, RBAC avançado"
+    ],
     "typical_label": "Clientes típicos:"
   },
   "portals": {
@@ -102,7 +123,35 @@
     "title": "Preços que cabem no tamanho da sua equipe.",
     "subtitle": "Pagamento mensal. Cancele quando quiser. 14 dias de teste grátis — sem cartão.",
     "footnote": "Todos os preços em GBP. Descontos por volume a partir de 100+ operativos. VAT não incluído.",
-    "popular": "Mais popular"
+    "popular": "Mais popular",
+    "airbnb_description": "Para anfitriões Airbnb, co-hosts e property managers pequenos.",
+    "midmarket_description": "Para empresas de limpeza, empreiteiros FM, escolas e clínicas.",
+    "enterprise_description": "Para grupos FM, hospitais, aeroportos e redes hoteleiras.",
+    "airbnb_features": [
+      "Até 10 propriedades",
+      "Atribuição automática de tarefas por propriedade",
+      "Evidência fotográfica por limpeza",
+      "Sincronização iCal com Airbnb",
+      "Inbox de supervisor sem WhatsApp",
+      "Suporte por email"
+    ],
+    "midmarket_features": [
+      "Locais e turnos ilimitados",
+      "Gestão de turnos dia / noite",
+      "Dashboard de supervisor",
+      "Folhas de ponto + relatórios de férias",
+      "Marcação verificada por GPS",
+      "Onboarding em uma semana",
+      "Suporte prioritário"
+    ],
+    "enterprise_features": [
+      "Marca branca com seu logo e cores",
+      "Portal de comunidade personalizado",
+      "Integração ERP / folha via API",
+      "SSO / SAML, RBAC avançado",
+      "SLA dedicado + account manager",
+      "Infraestrutura single-tenant disponível"
+    ]
   },
   "cta": {
     "title": "Pronto para evoluir suas operações?",

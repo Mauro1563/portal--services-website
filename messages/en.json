@@ -47,18 +47,39 @@
     "airbnb_pricing": "from £49 / month",
     "airbnb_cta": "Start free trial",
     "airbnb_customers": "Co-hosts, STR managers, holiday lets",
+    "airbnb_props": [
+      "Who goes to which flat today — auto-assigned",
+      "No more chaotic WhatsApp groups",
+      "Photo evidence proves the clean was done",
+      "iCal sync: tasks auto-create on Airbnb checkout",
+      "Per-property rating from the property manager"
+    ],
     "midmarket_badge": "Most popular",
     "midmarket_title": "Mid-market cleaning & FM",
     "midmarket_headcount": "15 – 50 operatives",
     "midmarket_pricing": "£150 – £500 / month",
     "midmarket_cta": "Book a demo",
     "midmarket_customers": "FM contractors, office cleaners, schools, clinics",
+    "midmarket_props": [
+      "Day and night shift management",
+      "Supervisor dashboard ready out of the box",
+      "Timesheets and holiday reports",
+      "Onboarded in one week",
+      "Multi-site visibility for HQ"
+    ],
     "enterprise_badge": "Enterprise",
     "enterprise_title": "Large operations & FM groups",
     "enterprise_headcount": "50+ operatives",
     "enterprise_pricing": "from £500 / month + setup",
     "enterprise_cta": "Talk to sales",
     "enterprise_customers": "FM companies, hospitals, airports, hotel chains, WeWork-style operators",
+    "enterprise_props": [
+      "White-label with your logo and colours",
+      "Custom community portal for your operatives",
+      "API or integration with your ERP / payroll",
+      "Dedicated SLA and account manager",
+      "SSO / SAML, advanced RBAC"
+    ],
     "typical_label": "Typical customers:"
   },
   "portals": {
@@ -102,7 +123,35 @@
     "title": "Pricing that fits your team size.",
     "subtitle": "Pay monthly. Cancel anytime. 14-day free trial — no credit card required.",
     "footnote": "All prices in GBP. Volume discounts for 100+ operatives. VAT not included.",
-    "popular": "Most popular"
+    "popular": "Most popular",
+    "airbnb_description": "For Airbnb hosts, co-hosts and small property managers.",
+    "midmarket_description": "For cleaning companies, FM contractors, schools and clinics.",
+    "enterprise_description": "For FM groups, hospitals, airports and hotel chains.",
+    "airbnb_features": [
+      "Up to 10 properties",
+      "Auto-assign tasks per property",
+      "Photo evidence per clean",
+      "Airbnb iCal sync",
+      "WhatsApp-free supervisor inbox",
+      "Email support"
+    ],
+    "midmarket_features": [
+      "Unlimited sites and shifts",
+      "Day / night shift management",
+      "Supervisor dashboard",
+      "Timesheets + holiday reports",
+      "GPS-verified clock in/out",
+      "Onboarded in one week",
+      "Priority support"
+    ],
+    "enterprise_features": [
+      "White-label with your logo and colours",
+      "Custom community portal",
+      "ERP / payroll integration via API",
+      "SSO / SAML, advanced RBAC",
+      "Dedicated SLA + account manager",
+      "Single-tenant infra available"
+    ]
   },
   "cta": {
     "title": "Ready to upgrade your operations?",

@@ -5,21 +5,22 @@ import { Check } from 'lucide-react';
 export function Pricing() {
   const t = useTranslations('pricing');
   const tSeg = useTranslations('segments');
+
   const tiers = [
     {
       name: tSeg('airbnb_title'),
       range: tSeg('airbnb_headcount'),
       price: tSeg('airbnb_pricing'),
-      description: 'For Airbnb hosts, co-hosts and small property managers.',
-      features: ['Up to 10 properties', 'Auto-assign tasks per property', 'Photo evidence per clean', 'Airbnb iCal sync', 'WhatsApp-free supervisor inbox', 'Email support'],
+      description: t('airbnb_description'),
+      features: t.raw('airbnb_features') as string[],
       cta: tSeg('airbnb_cta'),
     },
     {
       name: tSeg('midmarket_title'),
       range: tSeg('midmarket_headcount'),
       price: tSeg('midmarket_pricing'),
-      description: 'For cleaning companies, FM contractors, schools and clinics.',
-      features: ['Unlimited sites and shifts', 'Day / night shift management', 'Supervisor dashboard', 'Timesheets + holiday reports', 'GPS-verified clock in/out', 'Onboarded in one week', 'Priority support'],
+      description: t('midmarket_description'),
+      features: t.raw('midmarket_features') as string[],
       cta: tSeg('midmarket_cta'),
       featured: true,
     },
@@ -27,11 +28,12 @@ export function Pricing() {
       name: tSeg('enterprise_title'),
       range: tSeg('enterprise_headcount'),
       price: tSeg('enterprise_pricing'),
-      description: 'For FM groups, hospitals, airports and hotel chains.',
-      features: ['White-label with your logo and colours', 'Custom community portal', 'ERP / payroll integration via API', 'SSO / SAML, advanced RBAC', 'Dedicated SLA + account manager', 'Single-tenant infra available'],
+      description: t('enterprise_description'),
+      features: t.raw('enterprise_features') as string[],
       cta: tSeg('enterprise_cta'),
     },
   ];
+
   return (
     <section id="pricing" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
