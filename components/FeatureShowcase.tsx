@@ -7,7 +7,7 @@ import {
   MessageSquare,
   Camera,
   MapPin,
-  CalendarSync,
+  CalendarCheck,
 } from 'lucide-react';
 
 const features = [
@@ -18,7 +18,7 @@ const features = [
   { icon: MessageSquare, title: 'HQ → Supervisor → Operative comms', description: 'Direct chat across the three levels. Broadcast to a building, a team, or one operative. Auto-translate optional.' },
   { icon: MapPin, title: 'Geo check-in / check-out', description: 'Operative confirms arrival at the right building. No more "I was there, I swear" — GPS-verified timesheet.' },
   { icon: Camera, title: 'Photo evidence per task', description: 'Cleaner uploads photo when the job is done. HQ and property managers see proof on every shift.' },
-  { icon: CalendarSync, title: 'Airbnb iCal integration', description: 'Connect your Airbnb / Booking.com calendar. Tasks auto-create on every checkout — no manual scheduling.' },
+  { icon: CalendarCheck, title: 'Airbnb iCal integration', description: 'Connect your Airbnb / Booking.com calendar. Tasks auto-create on every checkout — no manual scheduling.' },
 ];
 
 export function FeatureShowcase() {
