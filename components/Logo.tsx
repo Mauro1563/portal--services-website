@@ -3,10 +3,31 @@ type Size = 'sm' | 'md' | 'lg';
 const LOGO_URL =
   'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
 
-const sizeClasses: Record<Size, string> = {
-  sm: 'block h-12 w-auto sm:h-14',
-  md: 'block h-auto w-full max-w-[260px] mx-auto',
-  lg: 'block h-auto w-full max-w-sm sm:max-w-md mx-auto',
+// Aspect ratio used to crop the embedded tagline out of the PNG.
+// The natural image is wider-than-tall by ~2.5:1; using ~3.4:1 hides
+// the bottom strip (the embedded tagline).
+const CROP_ASPECT = '3.4 / 1';
+
+const sizeConfig: Record<Size, {
+  imgWrap: string;
+  tagline: string;
+  showTagline: boolean;
+}> = {
+  sm: {
+    imgWrap: 'h-10 sm:h-12 w-auto',
+    tagline: '',
+    showTagline: false,
+  },
+  md: {
+    imgWrap: 'mx-auto w-full max-w-[280px]',
+    tagline: 'mt-3 text-[10px]',
+    showTagline: true,
+  },
+  lg: {
+    imgWrap: 'mx-auto w-full max-w-md sm:max-w-lg',
+    tagline: 'mt-5 text-xs sm:text-sm',
+    showTagline: true,
+  },
 };
 
 export function Logo({
@@ -17,11 +38,29 @@ export function Logo({
   showTagline?: boolean;
   className?: string;
 }) {
+  const cfg = sizeConfig[size];
+
   return (
-    <img
-      src={LOGO_URL}
-      alt="Portal Services Digital — One platform. One place. Everyone connected."
-      className={`${sizeClasses[size]} ${className}`}
-    />
+    <div className={className}>
+      <div
+        className={`${cfg.imgWrap} overflow-hidden`}
+        style={{ aspectRatio: CROP_ASPECT }}
+      >
+        <img
+          src={LOGO_URL}
+          alt="Portal Services Digital"
+          className="block h-auto w-full"
+        />
+      </div>
+      {cfg.showTagline && (
+        <p
+          className={`text-center font-semibold tracking-[0.2em] ${cfg.tagline}`}
+        >
+          <span className="text-slate-200">ONE PLATFORM.</span>{' '}
+          <span className="text-cyan-300">ONE PLACE.</span>{' '}
+          <span className="text-slate-400">EVERYONE CONNECTED.</span>
+        </p>
+      )}
+    </div>
   );
 }
