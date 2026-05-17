@@ -32,11 +32,11 @@ export function Hero() {
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">{t('subtitle')}</p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg">
+            <Button size="lg" href="mailto:hello@portalservices.digital?subject=Demo%20request">
               {t('cta_primary')}
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button size="lg" variant="secondary">
+            <Button size="lg" variant="secondary" href="mailto:hello@portalservices.digital?subject=See%20it%20live">
               {t('cta_secondary')}
             </Button>
           </div>

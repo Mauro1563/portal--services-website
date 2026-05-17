@@ -2,6 +2,9 @@ import { useTranslations } from 'next-intl';
 import { Card, Badge, Button } from './ui';
 import { Building, Building2, Home, ArrowRight, Check } from 'lucide-react';
 
+const mailto = (subject: string) =>
+  `mailto:hello@portalservices.digital?subject=${encodeURIComponent(subject)}`;
+
 export function Segments() {
   const t = useTranslations('segments');
   const segments = [
@@ -14,6 +17,7 @@ export function Segments() {
       pricing: t('airbnb_pricing'),
       cta: t('airbnb_cta'),
       customers: t('airbnb_customers'),
+      href: mailto('Airbnb plan — start free trial'),
       valueProps: t.raw('airbnb_props') as string[],
     },
     {
@@ -26,6 +30,7 @@ export function Segments() {
       cta: t('midmarket_cta'),
       customers: t('midmarket_customers'),
       featured: true,
+      href: mailto('Mid-market demo request'),
       valueProps: t.raw('midmarket_props') as string[],
     },
     {
@@ -37,6 +42,7 @@ export function Segments() {
       pricing: t('enterprise_pricing'),
       cta: t('enterprise_cta'),
       customers: t('enterprise_customers'),
+      href: mailto('Enterprise inquiry'),
       valueProps: t.raw('enterprise_props') as string[],
     },
   ];
@@ -77,7 +83,7 @@ export function Segments() {
                   <span className="font-semibold text-slate-400">{t('typical_label')}</span> {seg.customers}
                 </p>
                 <div className="mt-auto pt-6">
-                  <Button className="w-full" variant={seg.featured ? 'primary' : 'secondary'}>
+                  <Button className="w-full" variant={seg.featured ? 'primary' : 'secondary'} href={seg.href}>
                     {seg.cta} <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>

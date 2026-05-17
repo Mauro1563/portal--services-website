@@ -41,7 +41,9 @@ export function Nav() {
           >
             {t('login')}
           </Link>
-          <Button size="sm">{t('cta')}</Button>
+          <Button size="sm" href="mailto:hello@portalservices.digital?subject=Demo%20request">
+            {t('cta')}
+          </Button>
         </div>
       </div>
     </header>
