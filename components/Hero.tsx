@@ -9,11 +9,11 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Full lockup — logo + wordmark + tagline */}
+          {/* Logo lockup oficial — PNG alta resolución */}
           <img
-            src="/logo-lockup.svg"
+            src="/logo%20de%20portal%20services%20digital.png"
             alt="Portal Services Digital — One platform. One place. Everyone connected."
-            className="mx-auto mb-10 h-auto w-full max-w-2xl"
+            className="mx-auto mb-12 h-auto w-full max-w-2xl"
           />
 
           <Badge tone="info" className="mb-6">
