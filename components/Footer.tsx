@@ -34,6 +34,8 @@ export function Footer() {
       links: [
         { label: t('link_security'), href: `/${locale}#security` },
         { label: t('link_pricing'), href: `/${locale}#pricing` },
+        { label: 'Privacy Policy', href: `/${locale}/privacy` },
+        { label: 'Terms of Service', href: `/${locale}/terms` },
       ],
     },
   ];
@@ -62,6 +64,14 @@ export function Footer() {
         </div>
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-xs text-slate-500 sm:flex-row">
           <p>© {new Date().getFullYear()} Portal Services Digital. {t('copyright')}</p>
+          <div className="flex items-center gap-4">
+            <Link href={`/${locale}/privacy`} className="hover:text-slate-300">
+              Privacy
+            </Link>
+            <Link href={`/${locale}/terms`} className="hover:text-slate-300">
+              Terms
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
