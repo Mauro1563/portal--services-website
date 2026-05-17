@@ -1,7 +1,8 @@
 import { useTranslations } from 'next-intl';
-import { Badge, Button } from './ui';
+import { Badge } from './ui';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from './Logo';
+import { CTAButton } from './CTAButton';
 
 export function Hero() {
   const t = useTranslations('hero');
@@ -32,13 +33,13 @@ export function Hero() {
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">{t('subtitle')}</p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
+            <CTAButton size="lg" subject="Demo request">
               {t('cta_primary')}
               <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button size="lg" variant="secondary" href="mailto:portalservicesdigital@gmail.com?subject=See%20it%20live">
+            </CTAButton>
+            <CTAButton size="lg" variant="secondary" subject="See it live">
               {t('cta_secondary')}
-            </Button>
+            </CTAButton>
           </div>
 
           <p className="mt-6 text-xs text-slate-500">{t('trust')}</p>

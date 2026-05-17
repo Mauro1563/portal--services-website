@@ -171,5 +171,24 @@
     "link_security": "Segurança",
     "link_pricing": "Preços",
     "copyright": "Todos os direitos reservados."
+  },
+  "contact": {
+    "title": "Conte-nos sobre sua operação",
+    "subtitle": "Deixe seus dados e entramos em contato por WhatsApp no mesmo dia.",
+    "field_name": "Nome",
+    "field_email": "Email",
+    "field_phone": "WhatsApp / telefone",
+    "field_company": "Empresa",
+    "field_message": "Mensagem",
+    "field_message_placeholder": "Quantos operários, qual segmento, o que mais quiser contar…",
+    "submit": "Enviar",
+    "sending": "Enviando…",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "privacy": "Usamos seus dados apenas para falar sobre o Portal Services. Sem spam, sem terceiros.",
+    "success_title": "Pronto, obrigado!",
+    "success_body": "Entraremos em contato em breve. Fique de olho no WhatsApp e no email.",
+    "err_email": "Esse email não parece válido. Pode revisar?",
+    "err_generic": "Algo deu errado do nosso lado. Tente novamente ou nos escreva direto."
   }
 }

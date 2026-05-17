@@ -171,5 +171,24 @@
     "link_security": "Security",
     "link_pricing": "Pricing",
     "copyright": "All rights reserved."
+  },
+  "contact": {
+    "title": "Tell us about your operation",
+    "subtitle": "Drop your details and we'll reach out on WhatsApp within the day.",
+    "field_name": "Name",
+    "field_email": "Email",
+    "field_phone": "WhatsApp / phone",
+    "field_company": "Company",
+    "field_message": "Message",
+    "field_message_placeholder": "How many cleaners, what segment, anything else we should know…",
+    "submit": "Send",
+    "sending": "Sending…",
+    "cancel": "Cancel",
+    "close": "Close",
+    "privacy": "We use your details only to follow up about Portal Services. No spam, no third parties.",
+    "success_title": "Got it — thanks!",
+    "success_body": "We'll reach out shortly. Keep an eye on your WhatsApp and inbox.",
+    "err_email": "That email doesn't look right. Mind checking it?",
+    "err_generic": "Something went wrong on our side. Try again or email us directly."
   }
 }

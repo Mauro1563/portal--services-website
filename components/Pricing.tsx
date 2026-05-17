@@ -1,9 +1,7 @@
 import { useTranslations } from 'next-intl';
-import { Badge, Button, Card } from './ui';
+import { Badge, Card } from './ui';
 import { Check } from 'lucide-react';
-
-const mailto = (subject: string) =>
-  `mailto:portalservicesdigital@gmail.com?subject=${encodeURIComponent(subject)}`;
+import { CTAButton } from './CTAButton';
 
 export function Pricing() {
   const t = useTranslations('pricing');
@@ -17,7 +15,7 @@ export function Pricing() {
       description: t('airbnb_description'),
       features: t.raw('airbnb_features') as string[],
       cta: tSeg('airbnb_cta'),
-      href: mailto('Airbnb plan — start free trial'),
+      subject: 'Airbnb plan — start free trial',
     },
     {
       name: tSeg('midmarket_title'),
@@ -26,7 +24,7 @@ export function Pricing() {
       description: t('midmarket_description'),
       features: t.raw('midmarket_features') as string[],
       cta: tSeg('midmarket_cta'),
-      href: mailto('Mid-market demo request'),
+      subject: 'Mid-market demo request',
       featured: true,
     },
     {
@@ -36,7 +34,7 @@ export function Pricing() {
       description: t('enterprise_description'),
       features: t.raw('enterprise_features') as string[],
       cta: tSeg('enterprise_cta'),
-      href: mailto('Enterprise inquiry'),
+      subject: 'Enterprise inquiry',
     },
   ];
 
@@ -68,9 +66,14 @@ export function Pricing() {
                 ))}
               </ul>
               <div className="mt-auto pt-8">
-                <Button className="w-full" variant={tier.featured ? 'primary' : 'secondary'} size="md" href={tier.href}>
+                <CTAButton
+                  className="w-full"
+                  variant={tier.featured ? 'primary' : 'secondary'}
+                  size="md"
+                  subject={tier.subject}
+                >
                   {tier.cta}
-                </Button>
+                </CTAButton>
               </div>
             </Card>
           ))}

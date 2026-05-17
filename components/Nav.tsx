@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { Button } from './ui/Button';
 import { Logo } from './Logo';
 import { LocaleSwitcher } from './LocaleSwitcher';
+import { CTAButton } from './CTAButton';
 
 export function Nav() {
   const t = useTranslations('nav');
@@ -41,9 +41,9 @@ export function Nav() {
           >
             {t('login')}
           </Link>
-          <Button size="sm" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
+          <CTAButton size="sm" subject="Demo request">
             {t('cta')}
-          </Button>
+          </CTAButton>
         </div>
       </div>
     </header>
