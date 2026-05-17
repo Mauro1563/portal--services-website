@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" fill="none" role="img" aria-label="Portal Services Digital — One Platform. One Place. Everyone Connected.">
+  <defs>
+    <linearGradient id="lockup-mark" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#3DC5F0"/>
+      <stop offset="45%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mark on the left -->
+  <g transform="translate(40, 50)">
+    <path
+      fill="url(#lockup-mark)"
+      d="
+        M 30 30
+        L 30 180
+        L 70 180
+        L 70 120
+        L 110 120
+        C 150 120, 170 100, 170 75
+        C 170 50, 150 30, 110 30
+        Z
+        M 70 60
+        L 105 60
+        C 125 60, 135 65, 135 75
+        C 135 85, 125 90, 105 90
+        L 70 90
+        Z
+      "
+    />
+    <path
+      fill="url(#lockup-mark)" opacity="0.65"
+      d="
+        M 95 100
+        C 80 100, 75 110, 80 125
+        C 85 135, 100 138, 115 140
+        L 115 115
+        C 110 110, 102 105, 95 100
+        Z
+      "
+    />
+  </g>
+
+  <!-- Wordmark on the right -->
+  <g transform="translate(280, 90)" font-family="Poppins, Inter, system-ui, sans-serif">
+    <!-- PORTAL — outlined white -->
+    <text x="0" y="0" font-size="58" font-weight="600" letter-spacing="6"
+      fill="none" stroke="#f8fafc" stroke-width="1.2">PORTAL</text>
+    <!-- SERVICES — outlined white -->
+    <text x="0" y="68" font-size="58" font-weight="600" letter-spacing="4"
+      fill="none" stroke="#f8fafc" stroke-width="1.2">SERVICES</text>
+    <!-- DIGITAL — solid cyan-blue -->
+    <text x="0" y="136" font-size="44" font-weight="500" letter-spacing="14" fill="#2563EB">DIGITAL</text>
+    <!-- Underline -->
+    <line x1="0" y1="156" x2="560" y2="156" stroke="#3DC5F0" stroke-width="1.5"/>
+  </g>
+
+  <!-- Tagline -->
+  <text x="440" y="320" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="16" letter-spacing="3" font-weight="500">
+    <tspan fill="#cbd5e1">ONE PLATFORM.</tspan>
+    <tspan fill="#3DC5F0"> ONE PLACE.</tspan>
+    <tspan fill="#cbd5e1"> EVERYONE CONNECTED.</tspan>
+  </text>
+</svg>
