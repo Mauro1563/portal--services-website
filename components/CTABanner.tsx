@@ -1,0 +1,22 @@
+import { Button } from './ui';
+import { ArrowRight } from 'lucide-react';
+
+export function CTABanner() {
+  return (
+    <section className="relative py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-blue-600/[0.15] via-cyan-500/[0.08] to-transparent p-12 text-center">
+          <div className="absolute inset-0 bg-mesh-1 opacity-50" />
+          <div className="relative">
+            <h2 className="font-display text-4xl font-semibold tracking-tight">Ready to upgrade your operations?</h2>
+            <p className="mx-auto mt-3 max-w-xl text-slate-300">Join the operations teams running their entire field workforce on Portal Services Digital.</p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button size="lg">Get a demo <ArrowRight className="h-4 w-4" /></Button>
+              <Button size="lg" variant="secondary">Talk to sales</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
