@@ -1,8 +1,9 @@
 import { Nav } from '@/components/Nav';
 import { Hero } from '@/components/Hero';
 import { LogoCloud } from '@/components/LogoCloud';
-import { PortalsGrid } from '@/components/PortalsGrid';
 import { FeatureShowcase } from '@/components/FeatureShowcase';
+import { Segments } from '@/components/Segments';
+import { PortalsGrid } from '@/components/PortalsGrid';
 import { LiveDashboard } from '@/components/LiveDashboard';
 import { Integrations } from '@/components/Integrations';
 import { Security } from '@/components/Security';
@@ -16,8 +17,9 @@ export default function Home() {
       <Nav />
       <Hero />
       <LogoCloud />
-      <PortalsGrid />
       <FeatureShowcase />
+      <Segments />
+      <PortalsGrid />
       <LiveDashboard />
       <Integrations />
       <Security />
