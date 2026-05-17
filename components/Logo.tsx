@@ -18,10 +18,27 @@ export function Logo({
   className?: string;
 }) {
   return (
-    <img
-      src={LOGO_URL}
-      alt="Portal Services Digital — One platform. One place. Everyone connected."
-      className={`${sizeClasses[size]} ${className}`}
-    />
+    <>
+      {/* SVG filter that turns near-white pixels transparent */}
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        className="pointer-events-none absolute h-0 w-0"
+      >
+        <filter id="psd-logo-keyout" colorInterpolationFilters="sRGB">
+          <feColorMatrix
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1 -1 -1 3 0"
+          />
+        </filter>
+      </svg>
+
+      <img
+        src={LOGO_URL}
+        alt="Portal Services Digital — One platform. One place. Everyone connected."
+        className={`${sizeClasses[size]} ${className}`}
+        style={{ filter: 'url(#psd-logo-keyout)' }}
+      />
+    </>
   );
 }
