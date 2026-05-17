@@ -1,19 +1,22 @@
 import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import { Button } from './ui/Button';
 import { Logo } from './Logo';
+import { LocaleSwitcher } from './LocaleSwitcher';
 
 export function Nav() {
+  const locale = useLocale();
   const links = [
-    { href: '/#solutions', label: 'Product' },
-    { href: '/#who', label: "Who it's for" },
-    { href: '/#pricing', label: 'Pricing' },
-    { href: '/#security', label: 'Security' },
+    { href: `/${locale}#solutions`, label: 'Product' },
+    { href: `/${locale}#who`, label: "Who it's for" },
+    { href: `/${locale}#pricing`, label: 'Pricing' },
+    { href: `/${locale}#security`, label: 'Security' },
   ];
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink-0/70 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <Link href="/" aria-label="Portal Services Digital">
+        <Link href={`/${locale}`} aria-label="Portal Services Digital">
           <Logo size="sm" />
         </Link>
 
@@ -29,7 +32,8 @@ export function Nav() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <LocaleSwitcher />
           <Link
             href="https://hq.portalservices.digital"
             className="hidden text-sm text-slate-300 transition hover:text-white md:block"
