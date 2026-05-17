@@ -11,17 +11,14 @@ export function Nav() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink-0/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="Portal Services Digital">
-          <img src="/logo.svg" alt="" className="h-8 w-8" />
-          <span className="flex flex-col leading-tight">
-            <span className="font-display text-[13px] font-semibold tracking-[0.18em] text-white">
-              PORTAL SERVICES
-            </span>
-            <span className="text-[11px] font-semibold tracking-[0.32em] text-cyan-300">
-              DIGITAL
-            </span>
-          </span>
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+        <Link href="/" className="flex items-center" aria-label="Portal Services Digital">
+          {/* Logo oficial PNG — mismo archivo que el Hero */}
+          <img
+            src="/logo%20de%20portal%20services%20digital.png"
+            alt="Portal Services Digital"
+            className="h-14 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
