@@ -1,69 +1,71 @@
+import { useTranslations } from 'next-intl';
 import { Card, Badge, Button } from './ui';
 import { Building, Building2, Home, ArrowRight, Check } from 'lucide-react';
 
-const segments = [
-  {
-    icon: Home,
-    badge: 'Fastest win',
-    tone: 'success' as const,
-    title: 'Airbnb hosts & property managers',
-    headcount: '5 – 25 cleaners',
-    pricing: 'from £49 / month',
-    cta: 'Start free trial',
-    valueProps: [
-      'Who goes to which flat today — auto-assigned',
-      'No more chaotic WhatsApp groups',
-      'Photo evidence proves the clean was done',
-      'iCal sync: tasks auto-create on Airbnb checkout',
-      'Per-property rating from the property manager',
-    ],
-    customers: 'Co-hosts, STR managers, holiday lets',
-  },
-  {
-    icon: Building,
-    badge: 'Most popular',
-    tone: 'info' as const,
-    title: 'Mid-market cleaning & FM',
-    headcount: '15 – 50 operatives',
-    pricing: '£150 – £500 / month',
-    cta: 'Book a demo',
-    valueProps: [
-      'Day and night shift management',
-      'Supervisor dashboard ready out of the box',
-      'Timesheets and holiday reports',
-      'Onboarded in one week',
-      'Multi-site visibility for HQ',
-    ],
-    customers: 'FM contractors, office cleaners, schools, clinics',
-    featured: true,
-  },
-  {
-    icon: Building2,
-    badge: 'Enterprise',
-    tone: 'brand' as const,
-    title: 'Large operations & FM groups',
-    headcount: '50+ operatives',
-    pricing: 'from £500 / month + setup',
-    cta: 'Talk to sales',
-    valueProps: [
-      'White-label with your logo and colours',
-      'Custom community portal for your operatives',
-      'API or integration with your ERP / payroll',
-      'Dedicated SLA and account manager',
-      'SSO / SAML, advanced RBAC',
-    ],
-    customers: 'FM companies, hospitals, airports, hotel chains, WeWork-style operators',
-  },
-];
-
 export function Segments() {
+  const t = useTranslations('segments');
+  const segments = [
+    {
+      icon: Home,
+      badge: t('airbnb_badge'),
+      tone: 'success' as const,
+      title: t('airbnb_title'),
+      headcount: t('airbnb_headcount'),
+      pricing: t('airbnb_pricing'),
+      cta: t('airbnb_cta'),
+      customers: t('airbnb_customers'),
+      valueProps: [
+        'Who goes to which flat today — auto-assigned',
+        'No more chaotic WhatsApp groups',
+        'Photo evidence proves the clean was done',
+        'iCal sync: tasks auto-create on Airbnb checkout',
+        'Per-property rating from the property manager',
+      ],
+    },
+    {
+      icon: Building,
+      badge: t('midmarket_badge'),
+      tone: 'info' as const,
+      title: t('midmarket_title'),
+      headcount: t('midmarket_headcount'),
+      pricing: t('midmarket_pricing'),
+      cta: t('midmarket_cta'),
+      customers: t('midmarket_customers'),
+      featured: true,
+      valueProps: [
+        'Day and night shift management',
+        'Supervisor dashboard ready out of the box',
+        'Timesheets and holiday reports',
+        'Onboarded in one week',
+        'Multi-site visibility for HQ',
+      ],
+    },
+    {
+      icon: Building2,
+      badge: t('enterprise_badge'),
+      tone: 'brand' as const,
+      title: t('enterprise_title'),
+      headcount: t('enterprise_headcount'),
+      pricing: t('enterprise_pricing'),
+      cta: t('enterprise_cta'),
+      customers: t('enterprise_customers'),
+      valueProps: [
+        'White-label with your logo and colours',
+        'Custom community portal for your operatives',
+        'API or integration with your ERP / payroll',
+        'Dedicated SLA and account manager',
+        'SSO / SAML, advanced RBAC',
+      ],
+    },
+  ];
+
   return (
     <section id="who" className="relative border-y border-white/[0.06] bg-ink-1/40 py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <Badge tone="info" className="mb-4">Who it's for</Badge>
-          <h2 className="font-display text-4xl font-semibold tracking-tight">From 5 cleaners to 5,000 operatives.</h2>
-          <p className="mt-4 text-slate-400">Three tiers — same platform. Start small, scale to enterprise without changing tools.</p>
+          <Badge tone="info" className="mb-4">{t('eyebrow')}</Badge>
+          <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
+          <p className="mt-4 text-slate-400">{t('subtitle')}</p>
         </div>
         <div className="mt-16 grid gap-5 lg:grid-cols-3">
           {segments.map((seg) => {
@@ -90,7 +92,7 @@ export function Segments() {
                   ))}
                 </ul>
                 <p className="mt-6 text-xs leading-relaxed text-slate-500">
-                  <span className="font-semibold text-slate-400">Typical customers:</span> {seg.customers}
+                  <span className="font-semibold text-slate-400">{t('typical_label')}</span> {seg.customers}
                 </p>
                 <div className="mt-auto pt-6">
                   <Button className="w-full" variant={seg.featured ? 'primary' : 'secondary'}>

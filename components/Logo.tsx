@@ -1,11 +1,10 @@
+import { useTranslations } from 'next-intl';
+
 type Size = 'sm' | 'md' | 'lg';
 
 const LOGO_URL =
   'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
 
-// Aspect ratio used to crop the embedded tagline out of the PNG.
-// The image includes a tagline strip at the bottom; this ratio shows
-// the full mark + wordmark (incl. DIGITAL) while hiding the tagline.
 const CROP_ASPECT = '2.6 / 1';
 
 const sizeConfig: Record<Size, {
@@ -38,6 +37,7 @@ export function Logo({
   showTagline?: boolean;
   className?: string;
 }) {
+  const t = useTranslations('footer');
   const cfg = sizeConfig[size];
 
   return (
@@ -53,12 +53,10 @@ export function Logo({
         />
       </div>
       {cfg.showTagline && (
-        <p
-          className={`text-center font-semibold tracking-[0.2em] ${cfg.tagline}`}
-        >
-          <span className="text-slate-200">ONE PLATFORM.</span>{' '}
-          <span className="text-cyan-300">ONE PLACE.</span>{' '}
-          <span className="text-slate-400">EVERYONE CONNECTED.</span>
+        <p className={`text-center font-semibold tracking-[0.2em] ${cfg.tagline}`}>
+          <span className="text-slate-200">{t('tagline_a')}</span>{' '}
+          <span className="text-cyan-300">{t('tagline_b')}</span>{' '}
+          <span className="text-slate-400">{t('tagline_c')}</span>
         </p>
       )}
     </div>

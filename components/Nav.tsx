@@ -1,16 +1,17 @@
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Button } from './ui/Button';
 import { Logo } from './Logo';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
 export function Nav() {
+  const t = useTranslations('nav');
   const locale = useLocale();
   const links = [
-    { href: `/${locale}#solutions`, label: 'Product' },
-    { href: `/${locale}#who`, label: "Who it's for" },
-    { href: `/${locale}#pricing`, label: 'Pricing' },
-    { href: `/${locale}#security`, label: 'Security' },
+    { href: `/${locale}#solutions`, label: t('product') },
+    { href: `/${locale}#who`, label: t('solutions') },
+    { href: `/${locale}#pricing`, label: t('pricing') },
+    { href: `/${locale}#security`, label: t('security') },
   ];
 
   return (
@@ -38,9 +39,9 @@ export function Nav() {
             href="https://hq.portalservices.digital"
             className="hidden text-sm text-slate-300 transition hover:text-white md:block"
           >
-            Login
+            {t('login')}
           </Link>
-          <Button size="sm">Get a demo</Button>
+          <Button size="sm">{t('cta')}</Button>
         </div>
       </div>
     </header>
