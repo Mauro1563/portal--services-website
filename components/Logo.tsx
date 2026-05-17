@@ -9,7 +9,7 @@ const sizeConfig: Record<Size, {
   defaultTagline: boolean;
 }> = {
   sm: {
-    mark: 'h-9 w-9',
+    mark: 'h-10 w-10',
     wordmark: 'text-[13px]',
     digital: 'text-[10px]',
     tagline: 'text-[9px]',
@@ -17,7 +17,7 @@ const sizeConfig: Record<Size, {
     defaultTagline: false,
   },
   md: {
-    mark: 'h-12 w-12',
+    mark: 'h-14 w-14',
     wordmark: 'text-base',
     digital: 'text-xs',
     tagline: 'text-[10px]',
@@ -25,7 +25,7 @@ const sizeConfig: Record<Size, {
     defaultTagline: true,
   },
   lg: {
-    mark: 'h-20 w-20 sm:h-24 sm:w-24',
+    mark: 'h-24 w-24 sm:h-28 sm:w-28',
     wordmark: 'text-2xl sm:text-3xl',
     digital: 'text-sm sm:text-base',
     tagline: 'text-xs sm:text-sm',
@@ -83,22 +83,44 @@ function LogoMark({ className }: { className?: string }) {
     >
       <defs>
         <linearGradient
-          id="psd-mark-grad"
+          id="psd-p-back"
           x1="0"
           y1="0"
           x2="64"
           y2="64"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stopColor="#22D3EE" />
-          <stop offset="1" stopColor="#2563EB" />
+          <stop offset="0" stopColor="#1E5BE0" />
+          <stop offset="1" stopColor="#0F2D78" />
+        </linearGradient>
+        <linearGradient
+          id="psd-p-front"
+          x1="0"
+          y1="0"
+          x2="64"
+          y2="64"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#5EC9FF" />
+          <stop offset="1" stopColor="#2C8DEF" />
         </linearGradient>
       </defs>
-      <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#psd-mark-grad)" />
-      <rect x="13" y="13" width="15" height="15" rx="3" fill="#0B1220" fillOpacity="0.35" />
-      <rect x="32" y="13" width="19" height="15" rx="3" fill="#0B1220" fillOpacity="0.7" />
-      <rect x="13" y="32" width="19" height="19" rx="3" fill="#0B1220" fillOpacity="0.7" />
-      <rect x="36" y="32" width="15" height="19" rx="3" fill="#0B1220" fillOpacity="0.35" />
+
+      {/* Back P (darker, offset down-right) */}
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M18 14 H40 C49 14 55 20 55 28 C55 36 49 42 40 42 H30 V60 H18 Z M30 22 V34 H38 C41 34 43 32 43 28 C43 24 41 22 38 22 Z"
+        fill="url(#psd-p-back)"
+      />
+
+      {/* Front P (brighter cyan-blue gradient, offset up-left) */}
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10 4 H32 C41 4 47 10 47 18 C47 26 41 32 32 32 H22 V50 H10 Z M22 12 V24 H30 C33 24 35 22 35 18 C35 14 33 12 30 12 Z"
+        fill="url(#psd-p-front)"
+      />
     </svg>
   );
 }
