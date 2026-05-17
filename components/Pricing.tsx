@@ -3,7 +3,7 @@ import { Badge, Button, Card } from './ui';
 import { Check } from 'lucide-react';
 
 const mailto = (subject: string) =>
-  `mailto:hello@portalservices.digital?subject=${encodeURIComponent(subject)}`;
+  `mailto:portalservicesdigital@gmail.com?subject=${encodeURIComponent(subject)}`;
 
 export function Pricing() {
   const t = useTranslations('pricing');

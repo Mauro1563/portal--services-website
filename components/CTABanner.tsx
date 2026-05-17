@@ -13,10 +13,10 @@ export function CTABanner() {
             <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
             <p className="mx-auto mt-3 max-w-xl text-slate-300">{t('subtitle')}</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button size="lg" href="mailto:hello@portalservices.digital?subject=Demo%20request">
+              <Button size="lg" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
                 {t('primary')} <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button size="lg" variant="secondary" href="mailto:hello@portalservices.digital?subject=Sales%20inquiry">
+              <Button size="lg" variant="secondary" href="mailto:portalservicesdigital@gmail.com?subject=Sales%20inquiry">
                 {t('secondary')}
               </Button>
             </div>

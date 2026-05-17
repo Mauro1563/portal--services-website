@@ -3,7 +3,7 @@ import { Card, Badge, Button } from './ui';
 import { Building, Building2, Home, ArrowRight, Check } from 'lucide-react';
 
 const mailto = (subject: string) =>
-  `mailto:hello@portalservices.digital?subject=${encodeURIComponent(subject)}`;
+  `mailto:portalservicesdigital@gmail.com?subject=${encodeURIComponent(subject)}`;
 
 export function Segments() {
   const t = useTranslations('segments');

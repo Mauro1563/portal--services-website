@@ -27,7 +27,7 @@ export function Footer() {
     },
     {
       title: t('col_company'),
-      links: [{ label: t('link_contact'), href: 'mailto:hello@portalservices.digital' }],
+      links: [{ label: t('link_contact'), href: 'mailto:portalservicesdigital@gmail.com' }],
     },
     {
       title: t('col_resources'),
