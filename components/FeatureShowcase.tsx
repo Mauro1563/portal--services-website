@@ -1,13 +1,64 @@
 import { Card } from './ui';
-import { CheckSquare, ShieldAlert, ClipboardList, Boxes, BarChart3, MessageSquare } from 'lucide-react';
+import {
+  CalendarClock,
+  Inbox,
+  Plane,
+  Users,
+  MessageSquare,
+  Camera,
+  MapPin,
+  CalendarSync,
+} from 'lucide-react';
 
 const features = [
-  { icon: CheckSquare, title: 'Tasks & Checklists', description: 'Recurring tasks, templates, photo evidence, and signatures. Real-time completion tracking across every site.' },
-  { icon: ClipboardList, title: 'Live Audits', description: 'Configurable audit templates with weighted scoring, evidence capture and instant SLA flags.' },
-  { icon: ShieldAlert, title: 'Incident Center', description: 'Report, triage and resolve incidents collaboratively with full audit trail and notifications.' },
-  { icon: Boxes, title: 'Inventory', description: 'Stock per site, low-stock alerts, requests workflow, transfer tracking.' },
-  { icon: BarChart3, title: 'Analytics', description: 'Performance, SLA compliance, financials. Saved views, scheduled reports, export to PDF/CSV.' },
-  { icon: MessageSquare, title: 'Chat & Notifications', description: 'Multi-channel messaging tied to sites and incidents. Email, SMS, push, in-app.' },
+  {
+    icon: CalendarClock,
+    title: 'Shift control by building',
+    description:
+      'Assign operatives to sites and shifts (day / night). See who\'s on, who\'s missing, who\'s covering — at a glance.',
+  },
+  {
+    icon: Inbox,
+    title: 'Supervisor inbox',
+    description:
+      'Every task lands in one inbox. Supervisors confirm completion, request cover, escalate incidents — without ten WhatsApp groups.',
+  },
+  {
+    icon: Plane,
+    title: 'Absence & holiday reports',
+    description:
+      'Operatives request time off, supervisors approve, HQ sees coverage gaps before they hurt the SLA.',
+  },
+  {
+    icon: Users,
+    title: 'Community portal',
+    description:
+      'WeWork-style hub for your operatives. Announcements, schedules, payslips, team directory — your brand, your rules.',
+  },
+  {
+    icon: MessageSquare,
+    title: 'HQ → Supervisor → Operative comms',
+    description:
+      'Direct chat across the three levels. Broadcast to a building, a team, or one operative. Auto-translate optional.',
+  },
+  {
+    icon: MapPin,
+    title: 'Geo check-in / check-out',
+    description:
+      'Operative confirms arrival at the right building. No more "I was there, I swear" — GPS-verified timesheet.',
+  },
+  {
+    icon: Camera,
+    title: 'Photo evidence per task',
+    description:
+      'Cleaner uploads photo when the job is done. HQ and property managers see proof on every shift.',
+  },
+  {
+    icon: CalendarSync,
+    title: 'Airbnb iCal integration',
+    description:
+      'Connect your Airbnb / Booking.com calendar. Tasks auto-create on every checkout — no manual scheduling.',
+  },
 ];
 
 export function FeatureShowcase() {
@@ -15,10 +66,16 @@ export function FeatureShowcase() {
     <section id="solutions" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-4xl font-semibold tracking-tight">One platform, every workflow.</h2>
-          <p className="mt-4 text-slate-400">Replace 5+ tools with a unified operational system designed for the modern enterprise.</p>
+          <h2 className="font-display text-4xl font-semibold tracking-tight">
+            Everything your operations team needs.
+          </h2>
+          <p className="mt-4 text-slate-400">
+            Built specifically for cleaning companies, facilities management and property
+            managers — not generic SaaS retrofitted to fit.
+          </p>
         </div>
-        <div className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+        <div className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {features.map(({ icon: Icon, title, description }) => (
             <Card key={title} hover className="p-6">
               <Icon className="mb-4 h-6 w-6 text-cyan-300" />
