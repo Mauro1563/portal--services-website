@@ -153,6 +153,27 @@
       "Single-tenant infra available"
     ]
   },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Common questions",
+    "subtitle": "Everything you need to know before you start.",
+    "q1": "How does the 14-day free trial work?",
+    "a1": "Sign up and use every feature for 14 days without paying. Add your card before the trial ends to keep your account active. If you don't, the account simply pauses — your data stays safe until you come back.",
+    "q2": "Can I cancel anytime?",
+    "a2": "Yes. Cancel from the Stripe billing portal and your subscription stops at the end of the current period. No long-term contracts, no exit fees.",
+    "q3": "Do my cleaners need to install an app?",
+    "a3": "No. The operative app runs in any modern phone browser (Safari, Chrome). Your cleaners open hq.portalservices.digital, sign in with the 6-digit PIN you share with them, and they're in. They can add it to the home screen for an app-like feel.",
+    "q4": "How does GPS check-in work?",
+    "a4": "When the cleaner taps \"Check in\" at the property, the phone asks for location permission. Once granted, the platform records the timestamp + coordinates so you can verify they were on site — with a link straight to Google Maps.",
+    "q5": "Is my data secure?",
+    "a5": "Yes. Data in transit is encrypted with TLS, stored in EU regions (UK-friendly), and each customer's data is isolated via row-level security in the database. We never share or sell your data.",
+    "q6": "Can I sync with Airbnb or Booking.com?",
+    "a6": "Yes. Paste your Airbnb / Booking iCal URL into the property, and the platform auto-creates an unassigned cleaning task on every checkout. A daily background sync keeps everything up to date.",
+    "q7": "What if I have more than 50 operatives?",
+    "a7": "That's our Enterprise plan: white-label with your logo and colours, custom community portal, ERP / payroll integration via API, dedicated SLA and account manager. Get in touch and we'll quote setup + monthly pricing.",
+    "q8": "Do you offer onboarding help?",
+    "a8": "Yes. Mid-market and Enterprise plans include guided onboarding. For Airbnb plans, our docs + quick-start emails get you running in under 15 minutes. Direct support via email always included."
+  },
   "cta": {
     "title": "Ready to upgrade your operations?",
     "subtitle": "Join the operations teams running their entire field workforce on Portal Services Digital.",

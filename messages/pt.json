@@ -153,6 +153,27 @@
       "Infraestrutura single-tenant disponível"
     ]
   },
+  "faq": {
+    "eyebrow": "Perguntas frequentes",
+    "title": "Perguntas comuns",
+    "subtitle": "Tudo o que você precisa saber antes de começar.",
+    "q1": "Como funciona o teste grátis de 14 dias?",
+    "a1": "Cadastre-se e use todas as funcionalidades por 14 dias sem pagar. Adicione seu cartão antes do teste terminar para manter a conta ativa. Se não, a conta simplesmente pausa — seus dados ficam seguros até você voltar.",
+    "q2": "Posso cancelar a qualquer momento?",
+    "a2": "Sim. Cancele pelo portal de cobrança do Stripe e sua assinatura termina no final do período atual. Sem contratos de longo prazo, sem multas de saída.",
+    "q3": "Meus limpadores precisam instalar um aplicativo?",
+    "a3": "Não. O app do operativo roda em qualquer navegador moderno (Safari, Chrome). Seus limpadores abrem hq.portalservices.digital, entram com o PIN de 6 dígitos que você compartilha, e está feito. Podem adicionar à tela início para virar como um app.",
+    "q4": "Como funciona o check-in por GPS?",
+    "a4": "Quando o limpador toca \"Check in\" na propriedade, o celular pede permissão de localização. Uma vez concedida, a plataforma registra data/hora + coordenadas para você verificar que ele esteve no local — com link direto para o Google Maps.",
+    "q5": "Meus dados estão seguros?",
+    "a5": "Sim. Dados em trânsito são criptografados com TLS, armazenados em regiões UE (UK-friendly), e cada cliente tem seus dados isolados via row-level security no banco. Nunca compartilhamos nem vendemos seus dados.",
+    "q6": "Posso sincronizar com Airbnb ou Booking.com?",
+    "a6": "Sim. Cole a URL iCal do Airbnb / Booking na propriedade, e a plataforma cria automaticamente uma tarefa de limpeza sem atribuição a cada checkout. Sincronização diária automática.",
+    "q7": "E se eu tiver mais de 50 operativos?",
+    "a7": "Esse é o plano Enterprise: marca branca com seu logo e cores, portal de comunidade personalizado, integração ERP / folha via API, SLA dedicado e account manager. Entre em contato para orçamento de setup + mensal.",
+    "q8": "Vocês oferecem ajuda com onboarding?",
+    "a8": "Sim. Os planos Mid-market e Enterprise incluem onboarding guiado. Para os planos Airbnb, nossos docs + emails de quickstart te colocam em operação em menos de 15 minutos. Suporte direto por email sempre incluído."
+  },
   "cta": {
     "title": "Pronto para evoluir suas operações?",
     "subtitle": "Junte-se aos times de operações que rodam toda a equipe de campo no Portal Services Digital.",
