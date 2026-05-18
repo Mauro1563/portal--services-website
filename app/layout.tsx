@@ -15,11 +15,50 @@ const poppins = Poppins({
   display: 'swap',
 });
 
+const SITE_URL = 'https://portalservices.digital';
+
 export const metadata: Metadata = {
-  title: 'Portal Services Digital — Operational OS for facility teams',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Portal Services Digital — Operational OS for facility teams',
+    template: '%s | Portal Services Digital',
+  },
   description:
-    'One Platform. One Place. Everyone Connected. The operational management system for cleaning, facilities and field-service enterprises.',
-  metadataBase: new URL('https://portalservices.digital'),
+    'One platform. One place. Everyone connected. The operational system for cleaning, facilities and field-service teams — used by Airbnb hosts, FM contractors and enterprise operations.',
+  applicationName: 'Portal Services Digital',
+  keywords: [
+    'cleaning operations software',
+    'Airbnb cleaning management',
+    'facilities management platform',
+    'property cleaning software UK',
+    'cleaning company SaaS',
+  ],
+  authors: [{ name: 'Portal Services Digital' }],
+  openGraph: {
+    title: 'Portal Services Digital — Operational OS for facility teams',
+    description:
+      'Replace WhatsApp and Excel with one operational platform. Shift control, supervisor inbox, geo check-in, photo evidence, Airbnb iCal sync.',
+    url: SITE_URL,
+    siteName: 'Portal Services Digital',
+    locale: 'en_GB',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Portal Services Digital',
+    description:
+      'The operational platform for cleaning, facilities and Airbnb teams. Replace WhatsApp and Excel.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

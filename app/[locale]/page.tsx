@@ -9,6 +9,7 @@ import { LiveDashboard } from '@/components/LiveDashboard';
 import { Integrations } from '@/components/Integrations';
 import { Security } from '@/components/Security';
 import { Pricing } from '@/components/Pricing';
+import { FAQ } from '@/components/FAQ';
 import { CTABanner } from '@/components/CTABanner';
 import { Footer } from '@/components/Footer';
 
@@ -31,6 +32,7 @@ export default async function Home({
       <Integrations />
       <Security />
       <Pricing />
+      <FAQ />
       <CTABanner />
       <Footer />
     </main>
