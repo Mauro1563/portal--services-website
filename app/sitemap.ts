@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = 'https://portalservices.digital';
   const locales = ['en', 'es', 'pt'];
-  const paths = ['', '/privacy', '/terms'];
+  const paths = ['', '/docs', '/privacy', '/terms'];
 
   return locales.flatMap((locale) =>
     paths.map((path) => ({

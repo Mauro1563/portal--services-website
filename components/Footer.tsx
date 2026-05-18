@@ -32,6 +32,7 @@ export function Footer() {
     {
       title: t('col_resources'),
       links: [
+        { label: 'Quick start guide', href: `/${locale}/docs` },
         { label: t('link_security'), href: `/${locale}#security` },
         { label: t('link_pricing'), href: `/${locale}#pricing` },
         { label: 'Privacy Policy', href: `/${locale}/privacy` },

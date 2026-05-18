@@ -12,6 +12,7 @@ export function Nav() {
     { href: `/${locale}#who`, label: t('solutions') },
     { href: `/${locale}#pricing`, label: t('pricing') },
     { href: `/${locale}#security`, label: t('security') },
+    { href: `/${locale}/docs`, label: 'Docs' },
   ];
 
   return (
