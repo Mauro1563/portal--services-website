@@ -190,5 +190,10 @@
     "success_body": "Te contactamos en breve. Atento al WhatsApp y al mail.",
     "err_email": "Ese email no parece válido. ¿Lo revisás?",
     "err_generic": "Algo salió mal de nuestro lado. Probá de nuevo o escribinos directo."
+  },
+  "lead_autoreply": {
+    "greeting": "¡Hola {name}! 👋",
+    "body": "Gracias por contactarnos sobre Portal Services — recibimos tu mensaje y alguien del equipo se va a comunicar con vos en las próximas 24 horas.",
+    "signature": "— El equipo de Portal Services"
   }
 }

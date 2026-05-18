@@ -190,5 +190,10 @@
     "success_body": "We'll reach out shortly. Keep an eye on your WhatsApp and inbox.",
     "err_email": "That email doesn't look right. Mind checking it?",
     "err_generic": "Something went wrong on our side. Try again or email us directly."
+  },
+  "lead_autoreply": {
+    "greeting": "Hi {name}! 👋",
+    "body": "Thanks for reaching out about Portal Services — we got your message and someone from the team will be in touch within 24 hours.",
+    "signature": "— The Portal Services team"
   }
 }

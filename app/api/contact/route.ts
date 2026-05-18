@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
+import { getTranslations } from 'next-intl/server';
 
 import {
   WhatsAppNotConfiguredError,
@@ -89,6 +90,30 @@ export async function POST(req: Request) {
 
   try {
     await sendWhatsAppText({ text: lines.join('\n') });
+
+    if (phone.replace(/\D/g, '').length >= 7) {
+      const safeLocale = ['en', 'es', 'pt'].includes(locale) ? locale : 'en';
+      after(async () => {
+        try {
+          const t = await getTranslations({
+            locale: safeLocale,
+            namespace: 'lead_autoreply',
+          });
+          const firstName = name.split(/\s+/)[0] || name;
+          const body = [
+            t('greeting', { name: firstName }),
+            '',
+            t('body'),
+            '',
+            t('signature'),
+          ].join('\n');
+          await sendWhatsAppText({ to: phone, text: body });
+        } catch (autoErr) {
+          console.warn('[contact] auto-reply skipped:', (autoErr as Error).message);
+        }
+      });
+    }
+
     return NextResponse.json({ ok: true });
   } catch (err) {
     if (err instanceof WhatsAppNotConfiguredError) {
