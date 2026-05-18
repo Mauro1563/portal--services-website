@@ -1,6 +1,7 @@
 import { after, NextResponse } from 'next/server';
 import { getTranslations } from 'next-intl/server';
 
+import { checkRate, getClientIp } from '../../../lib/rate-limit';
 import {
   WhatsAppNotConfiguredError,
   isWhatsAppConfigured,
@@ -41,6 +42,18 @@ const trim = (v: unknown, max: number): string => {
 const escape = (s: string) => s.replace(/[‮‏]/g, '');
 
 export async function POST(req: Request) {
+  const ip = getClientIp(req);
+  const rate = checkRate(`contact:${ip}`);
+  if (!rate.ok) {
+    return NextResponse.json(
+      { error: 'rate_limited' },
+      {
+        status: 429,
+        headers: { 'retry-after': String(rate.retryAfter) },
+      },
+    );
+  }
+
   let body: ContactPayload;
   try {
     body = (await req.json()) as ContactPayload;
@@ -69,6 +82,17 @@ export async function POST(req: Request) {
   }
   if (!EMAIL_RE.test(email)) {
     return NextResponse.json({ error: 'invalid_email' }, { status: 400 });
+  }
+
+  const emailRate = checkRate(`contact:email:${email.toLowerCase()}`);
+  if (!emailRate.ok) {
+    return NextResponse.json(
+      { error: 'rate_limited' },
+      {
+        status: 429,
+        headers: { 'retry-after': String(emailRate.retryAfter) },
+      },
+    );
   }
 
   if (!isWhatsAppConfigured()) {

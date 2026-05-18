@@ -118,7 +118,13 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
         return;
       }
 
-      setErrorMsg(t(data?.error === 'invalid_email' ? 'err_email' : 'err_generic'));
+      const key =
+        data?.error === 'invalid_email'
+          ? 'err_email'
+          : data?.error === 'rate_limited'
+            ? 'err_rate'
+            : 'err_generic';
+      setErrorMsg(t(key));
       setStatus('error');
     } catch {
       window.location.href = mailtoFor(subject, form);

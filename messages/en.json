@@ -189,6 +189,7 @@
     "success_title": "Got it — thanks!",
     "success_body": "We'll reach out shortly. Keep an eye on your WhatsApp and inbox.",
     "err_email": "That email doesn't look right. Mind checking it?",
+    "err_rate": "Too many submissions from here. Give it a few minutes and try again.",
     "err_generic": "Something went wrong on our side. Try again or email us directly."
   },
   "lead_autoreply": {

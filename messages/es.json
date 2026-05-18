@@ -189,6 +189,7 @@
     "success_title": "¡Listo, gracias!",
     "success_body": "Te contactamos en breve. Atento al WhatsApp y al mail.",
     "err_email": "Ese email no parece válido. ¿Lo revisás?",
+    "err_rate": "Demasiados envíos desde acá. Esperá unos minutos y probá de nuevo.",
     "err_generic": "Algo salió mal de nuestro lado. Probá de nuevo o escribinos directo."
   },
   "lead_autoreply": {
