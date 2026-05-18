@@ -196,5 +196,17 @@
     "greeting": "Hi {name}! 👋",
     "body": "Thanks for reaching out about Portal Services — we got your message and someone from the team will be in touch within 24 hours.",
     "signature": "— The Portal Services team"
+  },
+  "lead_status_update": {
+    "in_progress": {
+      "greeting": "Hi {name}! 👋",
+      "body": "Quick update on your Portal Services request: we've picked it up and someone from the team is working on it right now. We'll come back with concrete next steps shortly.",
+      "signature": "— The Portal Services team"
+    },
+    "done": {
+      "greeting": "Hi {name}! 👋",
+      "body": "Wrapping up your Portal Services request — we hope we've covered what you needed. If anything else comes up, just reply here and we'll get back on it.",
+      "signature": "— The Portal Services team"
+    }
   }
 }
