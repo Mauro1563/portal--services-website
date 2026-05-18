@@ -192,5 +192,16 @@
     "link_security": "Security",
     "link_pricing": "Pricing",
     "copyright": "All rights reserved."
+  },
+  "how": {
+    "eyebrow": "How it works",
+    "title": "From setup to first cleaning in 15 minutes",
+    "subtitle": "No installs, no consultants. Three steps and you're operational.",
+    "step1_title": "Add properties and cleaners",
+    "step1_body": "Create your properties, paste your Airbnb iCal URL, invite cleaners — each gets a unique 6-digit PIN. No app store, no onboarding calls.",
+    "step2_title": "Assign tasks automatically",
+    "step2_body": "Checkouts sync from Airbnb / Booking every day and create unassigned tasks. Drag-and-drop to the right cleaner — or auto-assign by zone.",
+    "step3_title": "Verify with photos and GPS",
+    "step3_body": "Cleaner taps Check In on site (GPS-verified), uploads photos when done. You see real-time progress on the owner dashboard."
   }
 }

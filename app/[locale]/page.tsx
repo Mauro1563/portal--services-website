@@ -4,7 +4,9 @@ import { Hero } from '@/components/Hero';
 import { LogoCloud } from '@/components/LogoCloud';
 import { FeatureShowcase } from '@/components/FeatureShowcase';
 import { Segments } from '@/components/Segments';
+import { HowItWorks } from '@/components/HowItWorks';
 import { PortalsGrid } from '@/components/PortalsGrid';
+import { StructuredData } from '@/components/StructuredData';
 import { LiveDashboard } from '@/components/LiveDashboard';
 import { Integrations } from '@/components/Integrations';
 import { Security } from '@/components/Security';
@@ -22,11 +24,13 @@ export default async function Home({
   setRequestLocale(locale);
   return (
     <main className="relative overflow-hidden">
+      <StructuredData locale={locale} />
       <Nav />
       <Hero />
       <LogoCloud />
       <FeatureShowcase />
       <Segments />
+      <HowItWorks />
       <PortalsGrid />
       <LiveDashboard />
       <Integrations />

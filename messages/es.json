@@ -192,5 +192,16 @@
     "link_security": "Seguridad",
     "link_pricing": "Precios",
     "copyright": "Todos los derechos reservados."
+  },
+  "how": {
+    "eyebrow": "Cómo funciona",
+    "title": "De cero a primera limpieza en 15 minutos",
+    "subtitle": "Sin instalaciones ni consultores. Tres pasos y estás operando.",
+    "step1_title": "Añade propiedades y limpiadoras",
+    "step1_body": "Crea tus propiedades, pega tu iCal de Airbnb, invita a tus limpiadoras — cada una recibe un PIN único de 6 dígitos. Sin app store, sin llamadas.",
+    "step2_title": "Asigna tareas automáticamente",
+    "step2_body": "Los checkouts se sincronizan desde Airbnb / Booking cada día y se crean tareas sin asignar. Arrastra a la limpiadora correcta — o auto-asigna por zona.",
+    "step3_title": "Verifica con fotos y GPS",
+    "step3_body": "La limpiadora toca Check In en sitio (verificado por GPS) y sube fotos al terminar. Tú ves el progreso en tiempo real desde tu panel."
   }
 }
