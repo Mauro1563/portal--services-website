@@ -1,6 +1,7 @@
 import { after, NextResponse } from 'next/server';
 import { getTranslations } from 'next-intl/server';
 
+import { appendLeadToNotion, isNotionConfigured } from '../../../lib/notion';
 import { checkRate, getClientIp } from '../../../lib/rate-limit';
 import {
   WhatsAppNotConfiguredError,
@@ -115,8 +116,27 @@ export async function POST(req: Request) {
   try {
     await sendWhatsAppText({ text: lines.join('\n') });
 
+    const safeLocale = ['en', 'es', 'pt'].includes(locale) ? locale : 'en';
+
+    if (isNotionConfigured()) {
+      after(async () => {
+        try {
+          await appendLeadToNotion({
+            name,
+            email,
+            phone,
+            company,
+            message,
+            subject,
+            locale: safeLocale,
+          });
+        } catch (notionErr) {
+          console.warn('[contact] notion sync skipped:', (notionErr as Error).message);
+        }
+      });
+    }
+
     if (phone.replace(/\D/g, '').length >= 7) {
-      const safeLocale = ['en', 'es', 'pt'].includes(locale) ? locale : 'en';
       after(async () => {
         try {
           const t = await getTranslations({
