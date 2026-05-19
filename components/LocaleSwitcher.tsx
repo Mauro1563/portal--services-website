@@ -29,7 +29,7 @@ export function LocaleSwitcher() {
   };
 
   return (
-    <div className="hidden items-center gap-0.5 rounded-md border border-white/10 bg-white/[0.03] p-0.5 sm:flex">
+    <div className="hidden items-center gap-0.5 rounded-md border border-surface-3 bg-surface-1 p-0.5 sm:flex">
       {items.map((l) => (
         <button
           key={l.code}
@@ -38,8 +38,8 @@ export function LocaleSwitcher() {
           disabled={isPending}
           className={`rounded px-2 py-1 text-[10px] font-semibold tracking-wider transition ${
             currentLocale === l.code
-              ? 'bg-cyan-500/15 text-cyan-300'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-cyan-500/15 text-brand-600'
+              : 'text-text-2 hover:text-text-1'
           }`}
         >
           {l.label}

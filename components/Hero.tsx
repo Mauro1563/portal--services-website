@@ -6,13 +6,14 @@ import { Logo } from './Logo';
 export function Hero() {
   const t = useTranslations('hero');
   return (
-    <section className="relative pt-32 pb-24">
-      <div className="absolute inset-0 bg-mesh-1 opacity-90" />
-      <div className="absolute inset-0 bg-grid" />
+    <section className="relative overflow-hidden pt-32 pb-24">
+      {/* Soft brand-tinted ambient glow on white */}
+      <div className="absolute inset-0 bg-mesh-1 opacity-100" />
+      <div className="absolute inset-0 bg-grid opacity-60" />
 
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-4xl text-center">
-          <div className="mb-12 flex justify-center">
+          <div className="mb-10 flex justify-center">
             <Logo size="lg" />
           </div>
 
@@ -21,15 +22,15 @@ export function Hero() {
             {t('badge')}
           </Badge>
 
-          <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-text-1 sm:text-5xl lg:text-6xl">
             {t('title_a')}
             <br />
-            <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-500 via-brand-500 to-brand-600 bg-clip-text text-transparent">
               {t('title_b')}
             </span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">{t('subtitle')}</p>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-text-2">{t('subtitle')}</p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
@@ -41,7 +42,7 @@ export function Hero() {
             </Button>
           </div>
 
-          <p className="mt-6 text-xs text-slate-500">{t('trust')}</p>
+          <p className="mt-6 text-xs text-text-3">{t('trust')}</p>
         </div>
       </div>
     </section>

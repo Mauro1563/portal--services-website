@@ -2,38 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Portal Services Digital — design tokens */
+/* Portal Services Digital — design tokens (light, professional) */
 :root {
-  --psd-bg-0: #060a14;
-  --psd-bg-1: #0f172a;
-  --psd-bg-2: #111b30;
-  --psd-bg-3: #1a2542;
-  --psd-border: rgba(255, 255, 255, 0.08);
-  --psd-glass: rgba(255, 255, 255, 0.04);
-  --psd-brand-400: #3b82f6;
-  --psd-brand-500: #2563eb;
-  --psd-brand-600: #1d4ed8;
+  --psd-bg-0: #ffffff;
+  --psd-bg-1: #f8fafc;
+  --psd-bg-2: #f1f5f9;
+  --psd-bg-3: #e2e8f0;
+  --psd-border: rgba(15, 23, 42, 0.08);
+  --psd-navy-900: #0a0f1e;
+  --psd-navy-800: #0f1729;
+  --psd-brand-400: #38bdf8;
+  --psd-brand-500: #0ea5e9;
+  --psd-brand-600: #2563eb;
+  --psd-brand-700: #1d4ed8;
   --psd-accent: #06b6d4;
   --psd-accent-soft: #22d3ee;
-  --psd-accent-sky: #3dc5f0;
-  --psd-text-1: #f8fafc;
-  --psd-text-2: #cbd5e1;
+  --psd-text-1: #0f172a;
+  --psd-text-2: #475569;
   --psd-text-3: #94a3b8;
-  --psd-gradient: linear-gradient(135deg, #3dc5f0 0%, #2563eb 50%, #1d4ed8 100%);
+  --psd-gradient: linear-gradient(135deg, #22d3ee 0%, #2563eb 100%);
 }
 
 html, body {
-  background-color: #060a14;
-  color: #f8fafc;
+  background-color: var(--psd-bg-0);
+  color: var(--psd-text-1);
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: rgba(37, 99, 235, 0.35); color: white; }
+::selection { background: rgba(37, 99, 235, 0.18); color: var(--psd-text-1); }
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse at 50% 0%, black 0%, transparent 70%);
+}
+
+.bg-mesh-1 {
+  background-image:
+    radial-gradient(at 18% 22%, rgba(34, 211, 238, 0.10) 0px, transparent 50%),
+    radial-gradient(at 82% 55%, rgba(37, 99, 235, 0.08) 0px, transparent 50%);
 }

@@ -45,7 +45,7 @@ export function Pricing() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
-          <p className="mt-4 text-slate-400">{t('subtitle')}</p>
+          <p className="mt-4 text-text-2">{t('subtitle')}</p>
         </div>
         <div className="mt-16 grid gap-5 lg:grid-cols-3">
           {tiers.map((tier) => (
@@ -53,16 +53,16 @@ export function Pricing() {
               {tier.featured && (
                 <Badge tone="info" className="absolute -top-3 right-6">{t('popular')}</Badge>
               )}
-              <p className="font-display text-lg font-semibold text-white">{tier.name}</p>
-              <p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{tier.range}</p>
-              <p className="mt-3 text-sm text-slate-400">{tier.description}</p>
+              <p className="font-display text-lg font-semibold text-text-1">{tier.name}</p>
+              <p className="mt-1 text-xs uppercase tracking-wider text-text-3">{tier.range}</p>
+              <p className="mt-3 text-sm text-text-2">{tier.description}</p>
               <div className="mt-6 flex items-baseline gap-1">
-                <span className="font-display text-4xl font-semibold text-white">{tier.price}</span>
+                <span className="font-display text-4xl font-semibold text-text-1">{tier.price}</span>
               </div>
               <ul className="mt-8 space-y-3">
                 {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-slate-300">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                  <li key={f} className="flex items-start gap-2 text-sm text-text-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
                     {f}
                   </li>
                 ))}
@@ -75,7 +75,7 @@ export function Pricing() {
             </Card>
           ))}
         </div>
-        <p className="mt-10 text-center text-xs text-slate-500">{t('footnote')}</p>
+        <p className="mt-10 text-center text-xs text-text-3">{t('footnote')}</p>
       </div>
     </section>
   );
