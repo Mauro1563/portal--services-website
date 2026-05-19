@@ -3,6 +3,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Button } from './ui/Button';
 import { Logo } from './Logo';
 import { LocaleSwitcher } from './LocaleSwitcher';
+import { MobileMenu } from './MobileMenu';
 
 export function Nav() {
   const t = useTranslations('nav');
@@ -45,6 +46,7 @@ export function Nav() {
           <Button size="sm" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
             {t('cta')}
           </Button>
+          <MobileMenu />
         </div>
       </div>
     </header>
