@@ -8,23 +8,15 @@ export function FAQ() {
     { q: t('q2'), a: t('a2') },
     { q: t('q3'), a: t('a3') },
     { q: t('q4'), a: t('a4') },
-    { q: t('q5'), a: t('a5') },
-    { q: t('q6'), a: t('a6') },
-    { q: t('q7'), a: t('a7') },
-    { q: t('q8'), a: t('a8') },
   ];
 
   return (
     <section id="faq" className="relative py-24">
       <div className="mx-auto max-w-3xl px-6">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
-            {t('eyebrow')}
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight">
+          <h2 className="font-display text-4xl font-semibold tracking-tight text-white">
             {t('title')}
           </h2>
-          <p className="mt-4 text-slate-300">{t('subtitle')}</p>
         </div>
 
         <div className="mt-12 space-y-3">

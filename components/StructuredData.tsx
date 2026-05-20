@@ -5,7 +5,7 @@ const SITE_URL = 'https://portalservices.digital';
 export async function StructuredData({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'faq' });
 
-  const faqQuestions = [1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
+  const faqQuestions = [1, 2, 3, 4].map((i) => ({
     '@type': 'Question',
     name: t(`q${i}` as 'q1'),
     acceptedAnswer: {

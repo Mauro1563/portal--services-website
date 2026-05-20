@@ -4,39 +4,30 @@ import { Logo } from './Logo';
 
 export function Footer() {
   const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
   const locale = useLocale();
+
   const cols = [
     {
-      title: t('col_product'),
+      title: t('platform'),
       links: [
-        { label: 'HQ Portal', href: `/${locale}#product` },
-        { label: 'Manager Portal', href: `/${locale}#product` },
-        { label: 'Supervisor Portal', href: `/${locale}#product` },
-        { label: 'Operative App', href: `/${locale}#product` },
-        { label: 'Integrations', href: `/${locale}#solutions` },
+        { label: tNav('solutions'), href: `/${locale}#portals` },
+        { label: tNav('pricing'), href: `/${locale}#pricing` },
+        { label: tNav('security'), href: `/${locale}#security` },
       ],
     },
     {
-      title: t('col_solutions'),
+      title: t('company'),
       links: [
-        { label: 'Cleaning ops', href: `/${locale}#solutions` },
-        { label: 'Facilities management', href: `/${locale}#solutions` },
-        { label: 'Airbnb / Property', href: `/${locale}#who` },
-        { label: 'Audits & compliance', href: `/${locale}#solutions` },
+        { label: t('contact'), href: 'mailto:portalservicesdigital@gmail.com' },
+        { label: tNav('login'), href: 'https://hq.portalservices.digital' },
       ],
     },
     {
-      title: t('col_company'),
-      links: [{ label: t('link_contact'), href: 'mailto:portalservicesdigital@gmail.com' }],
-    },
-    {
-      title: t('col_resources'),
+      title: t('legal'),
       links: [
-        { label: 'Quick start guide', href: `/${locale}/docs` },
-        { label: t('link_security'), href: `/${locale}#security` },
-        { label: t('link_pricing'), href: `/${locale}#pricing` },
-        { label: 'Privacy Policy', href: `/${locale}/privacy` },
-        { label: 'Terms of Service', href: `/${locale}/terms` },
+        { label: 'Privacy', href: `/${locale}/privacy` },
+        { label: 'Terms', href: `/${locale}/terms` },
       ],
     },
   ];
@@ -46,17 +37,25 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href={`/${locale}`} aria-label="Portal Services Digital">
+            <Link href={`/${locale}`} aria-label="Portal Services">
               <Logo size="md" />
             </Link>
+            <p className="mt-5 max-w-sm text-sm text-slate-400">{t('tagline')}</p>
           </div>
           {cols.map((col) => (
             <div key={col.title}>
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{col.title}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                {col.title}
+              </p>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <Link href={l.href} className="text-sm text-slate-400 transition hover:text-white">{l.label}</Link>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-400 transition hover:text-white"
+                    >
+                      {l.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -64,15 +63,7 @@ export function Footer() {
           ))}
         </div>
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-xs text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} Portal Services Digital. {t('copyright')}</p>
-          <div className="flex items-center gap-4">
-            <Link href={`/${locale}/privacy`} className="hover:text-slate-300">
-              Privacy
-            </Link>
-            <Link href={`/${locale}/terms`} className="hover:text-slate-300">
-              Terms
-            </Link>
-          </div>
+          <p>© {new Date().getFullYear()} Portal Services. {t('rights')}</p>
         </div>
       </div>
     </footer>

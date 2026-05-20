@@ -1,20 +1,18 @@
 import { setRequestLocale } from 'next-intl/server';
 import { Nav } from '@/components/Nav';
 import { Hero } from '@/components/Hero';
-import { TwoPortals } from '@/components/TwoPortals';
-import { LogoCloud } from '@/components/LogoCloud';
-import { FeatureShowcase } from '@/components/FeatureShowcase';
-import { Segments } from '@/components/Segments';
-import { HowItWorks } from '@/components/HowItWorks';
 import { PortalsGrid } from '@/components/PortalsGrid';
-import { StructuredData } from '@/components/StructuredData';
-import { LiveDashboard } from '@/components/LiveDashboard';
-import { Integrations } from '@/components/Integrations';
+import { VIPExperience } from '@/components/VIPExperience';
+import { LoyaltyClub } from '@/components/LoyaltyClub';
+import { PaymentsSection } from '@/components/PaymentsSection';
+import { Testimonials } from '@/components/Testimonials';
 import { Security } from '@/components/Security';
 import { Pricing } from '@/components/Pricing';
+import { FeatureComparison } from '@/components/FeatureComparison';
 import { FAQ } from '@/components/FAQ';
 import { CTABanner } from '@/components/CTABanner';
 import { Footer } from '@/components/Footer';
+import { StructuredData } from '@/components/StructuredData';
 
 export default async function Home({
   params,
@@ -28,16 +26,14 @@ export default async function Home({
       <StructuredData locale={locale} />
       <Nav />
       <Hero />
-      <TwoPortals />
       <PortalsGrid />
-      <LogoCloud />
-      <FeatureShowcase />
-      <Segments />
-      <HowItWorks />
-      <LiveDashboard />
-      <Integrations />
-      <Security />
+      <VIPExperience />
+      <LoyaltyClub />
+      <PaymentsSection />
+      <Testimonials />
       <Pricing />
+      <FeatureComparison />
+      <Security />
       <FAQ />
       <CTABanner />
       <Footer />

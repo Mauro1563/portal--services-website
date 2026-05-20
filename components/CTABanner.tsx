@@ -3,7 +3,7 @@ import { Button } from './ui';
 import { ArrowRight } from 'lucide-react';
 
 export function CTABanner() {
-  const t = useTranslations('cta');
+  const t = useTranslations('cta_banner');
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">

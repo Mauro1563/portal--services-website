@@ -22,11 +22,10 @@ export function MobileMenu() {
   const [pending, startTransition] = useTransition();
 
   const links = [
-    { href: `/${locale}#solutions`, label: t('product') },
-    { href: `/${locale}#who`, label: t('solutions') },
+    { href: `/${locale}#portals`, label: t('solutions') },
+    { href: `/${locale}#vip`, label: t('product') },
     { href: `/${locale}#pricing`, label: t('pricing') },
     { href: `/${locale}#security`, label: t('security') },
-    { href: `/${locale}/docs`, label: 'Docs' },
   ];
 
   function changeLocale(newLocale: string) {
