@@ -24,20 +24,20 @@ export function FeatureShowcase() {
     { icon: CalendarCheck, title: t('airbnb_title'), description: t('airbnb_desc') },
   ];
   return (
-    <section id="solutions" className="relative bg-surface-1 py-24">
+    <section id="solutions" className="relative bg-white/[0.03] py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-4xl font-semibold tracking-tight text-text-1">
+          <h2 className="font-display text-4xl font-semibold tracking-tight text-white">
             {t('title')}
           </h2>
-          <p className="mt-4 text-text-2">{t('subtitle')}</p>
+          <p className="mt-4 text-slate-300">{t('subtitle')}</p>
         </div>
         <div className="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {features.map(({ icon: Icon, title, description }) => (
             <Card key={title} hover className="p-6">
-              <Icon className="mb-4 h-6 w-6 text-brand-600" />
-              <h3 className="font-display text-base font-semibold text-text-1">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-text-2">{description}</p>
+              <Icon className="mb-4 h-6 w-6 text-cyan-300" />
+              <h3 className="font-display text-base font-semibold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-300">{description}</p>
             </Card>
           ))}
         </div>

@@ -41,16 +41,16 @@ export function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="relative bg-surface-0 py-24 sm:py-32">
+    <section id="pricing" className="relative bg-white/[0.02] py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
             Pricing
           </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-text-1 sm:text-5xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             {t('title')}
           </h2>
-          <p className="mt-4 text-lg text-text-2">{t('subtitle')}</p>
+          <p className="mt-4 text-lg text-slate-300">{t('subtitle')}</p>
         </div>
         <div className="mt-16 grid gap-6 lg:grid-cols-3">
           {tiers.map((tier) => (
@@ -67,18 +67,18 @@ export function Pricing() {
                   {t('popular')}
                 </Badge>
               )}
-              <p className="font-display text-lg font-semibold text-text-1">{tier.name}</p>
-              <p className="mt-1 text-xs uppercase tracking-wider text-text-3">{tier.range}</p>
-              <p className="mt-3 text-sm text-text-2">{tier.description}</p>
+              <p className="font-display text-lg font-semibold text-white">{tier.name}</p>
+              <p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{tier.range}</p>
+              <p className="mt-3 text-sm text-slate-300">{tier.description}</p>
               <div className="mt-6 flex items-baseline gap-1">
-                <span className="font-display text-4xl font-bold text-text-1 sm:text-5xl">
+                <span className="font-display text-4xl font-bold text-white sm:text-5xl">
                   {tier.price}
                 </span>
               </div>
               <ul className="mt-8 space-y-3">
                 {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-text-1">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                  <li key={f} className="flex items-start gap-2 text-sm text-white">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -96,7 +96,7 @@ export function Pricing() {
             </Card>
           ))}
         </div>
-        <p className="mt-10 text-center text-xs text-text-3">{t('footnote')}</p>
+        <p className="mt-10 text-center text-xs text-slate-500">{t('footnote')}</p>
       </div>
     </section>
   );

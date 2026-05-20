@@ -9,12 +9,12 @@ export function Integrations() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
-          <p className="mt-4 text-text-2">{t('subtitle')}</p>
+          <p className="mt-4 text-slate-300">{t('subtitle')}</p>
         </div>
         <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-5">
           {items.map((name) => (
             <Card key={name} hover className="flex h-20 items-center justify-center p-4">
-              <span className="text-sm font-medium text-text-2">{name}</span>
+              <span className="text-sm font-medium text-slate-300">{name}</span>
             </Card>
           ))}
         </div>

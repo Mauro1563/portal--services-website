@@ -2,66 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Portal Services Digital — premium design tokens */
+/* Portal Services Digital — brand tokens (dark navy + cyan/blue) */
 :root {
-  /* Warm cream surfaces — more sophisticated than pure white */
-  --psd-bg-0: #fafaf5;
-  --psd-bg-1: #f5f3ec;
-  --psd-bg-2: #ebe8df;
-  --psd-bg-3: #d8d4c8;
+  --psd-bg-0: #060a14;
+  --psd-bg-1: #0f172a;
+  --psd-bg-2: #111b30;
+  --psd-bg-3: #1a2542;
+  --psd-border: rgba(255, 255, 255, 0.08);
+  --psd-glass: rgba(255, 255, 255, 0.04);
 
-  /* Deep sophisticated navy — Stripe-style ocean */
-  --psd-ink-1: #0a2540;
-  --psd-ink-2: #1a3a5c;
-  --psd-ink-3: #2c4a6e;
+  --psd-brand-400: #3b82f6;
+  --psd-brand-500: #2563eb;
+  --psd-brand-600: #1d4ed8;
+  --psd-accent: #06b6d4;
+  --psd-accent-soft: #22d3ee;
+  --psd-accent-sky: #3dc5f0;
 
-  /* Refined teal accent — fresh + premium */
-  --psd-brand-500: #0d9488;
-  --psd-brand-600: #0f766e;
-  --psd-brand-700: #115e59;
+  --psd-text-1: #f8fafc;
+  --psd-text-2: #cbd5e1;
+  --psd-text-3: #94a3b8;
 
-  /* Warm coral highlight for hot CTAs */
-  --psd-warm-500: #ea7a5a;
-  --psd-warm-600: #d4623b;
-
-  /* Sophisticated slate text */
-  --psd-text-1: #0a2540;
-  --psd-text-2: #4a5568;
-  --psd-text-3: #8b8579;
-
-  --psd-border: rgba(10, 37, 64, 0.10);
-  --psd-gradient-hero: linear-gradient(135deg, #0d9488 0%, #0a2540 100%);
+  --psd-gradient: linear-gradient(135deg, #3dc5f0 0%, #2563eb 50%, #1d4ed8 100%);
 }
 
 html, body {
   background-color: var(--psd-bg-0);
   color: var(--psd-text-1);
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: 'ss01', 'cv11';
 }
 
-::selection { background: rgba(13, 148, 136, 0.18); color: var(--psd-text-1); }
+::selection { background: rgba(37, 99, 235, 0.35); color: white; }
 
-/* Subtle grid for hero only */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(10, 37, 64, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 37, 64, 0.04) 1px, transparent 1px);
-  background-size: 64px 64px;
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
   mask-image: radial-gradient(ellipse at 50% 0%, black 0%, transparent 70%);
 }
 
-/* Hero ambient glow — warm teal */
 .bg-mesh-1 {
   background-image:
-    radial-gradient(at 16% 18%, rgba(13, 148, 136, 0.10) 0px, transparent 50%),
-    radial-gradient(at 84% 60%, rgba(234, 122, 90, 0.06) 0px, transparent 50%);
-}
-
-/* Premium card lift */
-.shadow-premium {
-  box-shadow:
-    0 1px 2px 0 rgba(10, 37, 64, 0.04),
-    0 4px 8px -2px rgba(10, 37, 64, 0.04),
-    0 16px 32px -8px rgba(10, 37, 64, 0.06);
+    radial-gradient(at 20% 0%, rgba(37, 99, 235, 0.18) 0px, transparent 50%),
+    radial-gradient(at 80% 30%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(37, 99, 235, 0.12) 0px, transparent 50%);
 }

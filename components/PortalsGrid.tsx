@@ -15,16 +15,16 @@ export function PortalsGrid() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
-          <p className="mt-4 text-text-2">{t('subtitle')}</p>
+          <p className="mt-4 text-slate-300">{t('subtitle')}</p>
         </div>
         <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {portals.map(({ icon: Icon, title, description, color }) => (
             <Card key={title} hover className="group p-6">
-              <div className={`mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-text-1 shadow-lg`}>
+              <div className={`mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow-lg`}>
                 <Icon className="h-5 w-5" />
               </div>
-              <h3 className="font-display text-lg font-semibold text-text-1">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-text-2">{description}</p>
+              <h3 className="font-display text-lg font-semibold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-300">{description}</p>
             </Card>
           ))}
         </div>

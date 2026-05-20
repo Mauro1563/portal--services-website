@@ -9,60 +9,33 @@ const config: Config = {
         display: ['var(--font-poppins)', 'var(--font-inter)', 'sans-serif'],
       },
       colors: {
-        // Refined teal — primary brand
         brand: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          400: '#2dd4bf',
-          500: '#0d9488',
-          600: '#0f766e',
-          700: '#115e59',
-          800: '#134e4a',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          400: '#3b82f6',
+          500: '#2563eb',
+          600: '#1d4ed8',
+          700: '#1e40af',
         },
-        // Warm coral — hot accent for premium CTAs
-        warm: {
-          50: '#fff5f0',
-          100: '#ffe5d6',
-          400: '#ee9472',
-          500: '#ea7a5a',
-          600: '#d4623b',
-        },
-        // Stripe-style deep ocean navy
-        ink: {
-          0: '#0a2540',
-          1: '#1a3a5c',
-          2: '#2c4a6e',
-          3: '#4a6585',
-        },
-        navy: { 900: '#0a2540', 800: '#1a3a5c', 700: '#2c4a6e' },
-        // Warm cream surfaces (replaces flat white)
-        surface: {
-          0: '#fafaf5',
-          1: '#f5f3ec',
-          2: '#ebe8df',
-          3: '#d8d4c8',
-        },
-        text: {
-          1: '#0a2540',
-          2: '#4a5568',
-          3: '#8b8579',
-        },
-        // Legacy accent kept for backwards compat
-        accent: { DEFAULT: '#0d9488', soft: '#2dd4bf', sky: '#0d9488' },
+        accent: { DEFAULT: '#06b6d4', soft: '#22d3ee', sky: '#3DC5F0' },
+        ink: { 0: '#060a14', 1: '#0f172a', 2: '#111b30', 3: '#1a2542' },
+        navy: { 900: '#060a14', 800: '#0f172a', 700: '#111b30' },
+        // Aliases so existing migrated components keep working on dark
+        surface: { 0: '#0f172a', 1: '#111b30', 2: '#1a2542', 3: '#243044' },
+        text: { 1: '#f8fafc', 2: '#cbd5e1', 3: '#94a3b8' },
       },
       backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #0d9488 0%, #0a2540 100%)',
-        'warm-gradient': 'linear-gradient(135deg, #ea7a5a 0%, #d4623b 100%)',
+        'brand-gradient':
+          'linear-gradient(135deg, #3DC5F0 0%, #2563EB 50%, #1D4ED8 100%)',
         'mesh-1':
-          'radial-gradient(at 16% 18%, rgba(13, 148, 136, 0.10) 0px, transparent 50%), radial-gradient(at 84% 60%, rgba(234, 122, 90, 0.06) 0px, transparent 50%)',
+          'radial-gradient(at 20% 0%, rgba(37, 99, 235, 0.18) 0px, transparent 50%), radial-gradient(at 80% 30%, rgba(6, 182, 212, 0.15) 0px, transparent 50%), radial-gradient(at 50% 100%, rgba(37, 99, 235, 0.12) 0px, transparent 50%)',
       },
       boxShadow: {
-        card: '0 1px 2px 0 rgba(10,37,64,0.04), 0 1px 3px 0 rgba(10,37,64,0.06)',
+        card: '0 1px 2px 0 rgba(0,0,0,0.2), 0 1px 3px 0 rgba(0,0,0,0.3)',
         'card-lg':
-          '0 1px 2px 0 rgba(10,37,64,0.04), 0 4px 16px -2px rgba(10,37,64,0.06), 0 16px 40px -10px rgba(10,37,64,0.08)',
-        'brand-glow': '0 8px 24px -6px rgba(13,148,136,0.40)',
-        'warm-glow': '0 8px 24px -6px rgba(234,122,90,0.40)',
+          '0 4px 16px -2px rgba(0,0,0,0.3), 0 20px 40px -10px rgba(0,0,0,0.4)',
+        'brand-glow': '0 8px 30px -10px rgba(37,99,235,0.6)',
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',

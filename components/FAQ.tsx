@@ -18,26 +18,26 @@ export function FAQ() {
     <section id="faq" className="relative py-24">
       <div className="mx-auto max-w-3xl px-6">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
             {t('eyebrow')}
           </p>
           <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight">
             {t('title')}
           </h2>
-          <p className="mt-4 text-text-2">{t('subtitle')}</p>
+          <p className="mt-4 text-slate-300">{t('subtitle')}</p>
         </div>
 
         <div className="mt-12 space-y-3">
           {items.map(({ q, a }) => (
             <details
               key={q}
-              className="group rounded-2xl border border-surface-2 bg-surface-1 transition hover:border-white/[0.12] open:border-cyan-400/20 open:bg-cyan-500/[0.04]"
+              className="group rounded-2xl border border-white/[0.06] bg-white/[0.03] transition hover:border-white/[0.12] open:border-cyan-400/20 open:bg-cyan-500/[0.04]"
             >
-              <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-left text-sm font-medium text-text-1">
+              <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-left text-sm font-medium text-white">
                 <span>{q}</span>
-                <ChevronDown className="h-4 w-4 shrink-0 text-brand-600 transition group-open:rotate-180" />
+                <ChevronDown className="h-4 w-4 shrink-0 text-cyan-300 transition group-open:rotate-180" />
               </summary>
-              <p className="px-5 pb-5 text-sm leading-relaxed text-text-2">{a}</p>
+              <p className="px-5 pb-5 text-sm leading-relaxed text-slate-300">{a}</p>
             </details>
           ))}
         </div>

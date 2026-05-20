@@ -48,12 +48,12 @@ export function Segments() {
   ];
 
   return (
-    <section id="who" className="relative border-y border-surface-2 bg-surface-1/40 py-24">
+    <section id="who" className="relative border-y border-white/[0.06] bg-white/[0.03]/40 py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Badge tone="info" className="mb-4">{t('eyebrow')}</Badge>
           <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
-          <p className="mt-4 text-text-2">{t('subtitle')}</p>
+          <p className="mt-4 text-slate-300">{t('subtitle')}</p>
         </div>
         <div className="mt-16 grid gap-5 lg:grid-cols-3">
           {segments.map((seg) => {
@@ -65,22 +65,22 @@ export function Segments() {
                 className={seg.featured ? 'relative flex flex-col p-7 ring-1 ring-cyan-400/30 shadow-[0_0_60px_-15px_rgba(6,182,212,0.4)]' : 'relative flex flex-col p-7'}
               >
                 <Badge tone={seg.tone} className="absolute -top-3 right-6">{seg.badge}</Badge>
-                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-text-1 shadow-lg">
+                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg">
                   <Icon className="h-5 w-5" />
                 </div>
-                <p className="font-display text-xl font-semibold text-text-1">{seg.title}</p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-text-3">{seg.headcount}</p>
-                <p className="mt-5 font-display text-2xl font-semibold text-brand-600">{seg.pricing}</p>
+                <p className="font-display text-xl font-semibold text-white">{seg.title}</p>
+                <p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{seg.headcount}</p>
+                <p className="mt-5 font-display text-2xl font-semibold text-cyan-300">{seg.pricing}</p>
                 <ul className="mt-6 space-y-2.5">
                   {seg.valueProps.map((v) => (
-                    <li key={v} className="flex items-start gap-2 text-sm text-text-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                    <li key={v} className="flex items-start gap-2 text-sm text-slate-300">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
                       <span>{v}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-6 text-xs leading-relaxed text-text-3">
-                  <span className="font-semibold text-text-2">{t('typical_label')}</span> {seg.customers}
+                <p className="mt-6 text-xs leading-relaxed text-slate-500">
+                  <span className="font-semibold text-slate-300">{t('typical_label')}</span> {seg.customers}
                 </p>
                 <div className="mt-auto pt-6">
                   <Button className="w-full" variant={seg.featured ? 'primary' : 'secondary'} href={seg.href}>
