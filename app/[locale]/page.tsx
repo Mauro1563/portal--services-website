@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { Nav } from '@/components/Nav';
 import { Hero } from '@/components/Hero';
+import { TwoPortals } from '@/components/TwoPortals';
 import { LogoCloud } from '@/components/LogoCloud';
 import { FeatureShowcase } from '@/components/FeatureShowcase';
 import { Segments } from '@/components/Segments';
@@ -27,6 +28,7 @@ export default async function Home({
       <StructuredData locale={locale} />
       <Nav />
       <Hero />
+      <TwoPortals />
       <LogoCloud />
       <FeatureShowcase />
       <Segments />

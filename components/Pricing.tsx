@@ -41,34 +41,55 @@ export function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="relative py-24">
+    <section id="pricing" className="relative bg-surface-0 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-4xl font-semibold tracking-tight">{t('title')}</h2>
-          <p className="mt-4 text-text-2">{t('subtitle')}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+            Pricing
+          </p>
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-text-1 sm:text-5xl">
+            {t('title')}
+          </h2>
+          <p className="mt-4 text-lg text-text-2">{t('subtitle')}</p>
         </div>
-        <div className="mt-16 grid gap-5 lg:grid-cols-3">
+        <div className="mt-16 grid gap-6 lg:grid-cols-3">
           {tiers.map((tier) => (
-            <Card key={tier.name} hover className={tier.featured ? 'relative flex flex-col p-8 ring-1 ring-cyan-400/30 shadow-[0_0_60px_-15px_rgba(6,182,212,0.4)]' : 'relative flex flex-col p-8'}>
+            <Card
+              key={tier.name}
+              className={
+                tier.featured
+                  ? 'relative flex flex-col p-8 ring-2 ring-brand-500 shadow-card-lg'
+                  : 'relative flex flex-col p-8 hover:shadow-card-lg transition-shadow'
+              }
+            >
               {tier.featured && (
-                <Badge tone="info" className="absolute -top-3 right-6">{t('popular')}</Badge>
+                <Badge tone="brand" className="absolute -top-3 right-6 bg-brand-500 text-white ring-brand-500">
+                  {t('popular')}
+                </Badge>
               )}
               <p className="font-display text-lg font-semibold text-text-1">{tier.name}</p>
               <p className="mt-1 text-xs uppercase tracking-wider text-text-3">{tier.range}</p>
               <p className="mt-3 text-sm text-text-2">{tier.description}</p>
               <div className="mt-6 flex items-baseline gap-1">
-                <span className="font-display text-4xl font-semibold text-text-1">{tier.price}</span>
+                <span className="font-display text-4xl font-bold text-text-1 sm:text-5xl">
+                  {tier.price}
+                </span>
               </div>
               <ul className="mt-8 space-y-3">
                 {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-text-2">
+                  <li key={f} className="flex items-start gap-2 text-sm text-text-1">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
-                    {f}
+                    <span>{f}</span>
                   </li>
                 ))}
               </ul>
               <div className="mt-auto pt-8">
-                <Button className="w-full" variant={tier.featured ? 'primary' : 'secondary'} size="md" href={tier.href}>
+                <Button
+                  className="w-full"
+                  variant={tier.featured ? 'primary' : 'secondary'}
+                  size="md"
+                  href={tier.href}
+                >
                   {tier.cta}
                 </Button>
               </div>
