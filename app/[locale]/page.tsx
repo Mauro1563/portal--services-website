@@ -29,11 +29,11 @@ export default async function Home({
       <Nav />
       <Hero />
       <TwoPortals />
+      <PortalsGrid />
       <LogoCloud />
       <FeatureShowcase />
       <Segments />
       <HowItWorks />
-      <PortalsGrid />
       <LiveDashboard />
       <Integrations />
       <Security />

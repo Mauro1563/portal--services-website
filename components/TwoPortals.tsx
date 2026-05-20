@@ -21,14 +21,14 @@ export function TwoPortals() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
-            Two specialised portals · one platform
+            Two verticals · one platform
           </p>
           <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             Built for both sides of cleaning.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-slate-300">
-            Pick the one that fits — or use both. Same login, same team, the
-            interface adapts to what you actually do.
+            Whether you clean Airbnbs or homes — or both — the platform adapts.
+            Same team, same login, different workflows.
           </p>
         </div>
 
@@ -47,7 +47,7 @@ export function TwoPortals() {
               </div>
 
               <h3 className="mt-6 font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                Airbnb cleaning portal
+                Airbnb cleaning workflow
               </h3>
               <p className="mt-3 text-base text-slate-300">
                 Plug in your Airbnb / Booking iCal once. Every guest checkout
@@ -96,7 +96,7 @@ export function TwoPortals() {
               </div>
 
               <h3 className="mt-6 font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                House-cleaning portal
+                House-cleaning workflow
               </h3>
               <p className="mt-3 text-base text-slate-300">
                 For Regular, Deep, Move-out and End-of-tenancy cleanings. Your
