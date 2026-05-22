@@ -6,6 +6,9 @@ const LOGO_DARK_URL =
 /** Light-canvas brand mark with the tagline baked in. Stored in /public. */
 const LOGO_FULL_URL = '/Photoroom_20260522_163830.png';
 
+/** Icon-only mark (no wordmark, no tagline). For nav, favicons, mockups. */
+const LOGO_ICON_URL = '/Photoroom_20260522_165921.png';
+
 const sizeConfig: Record<
   Size,
   { h: string; pad: string; rounded: string }
@@ -32,9 +35,20 @@ export function Logo({
   size?: Size;
   className?: string;
   wrap?: boolean;
-  variant?: 'default' | 'full';
+  variant?: 'default' | 'full' | 'icon';
 }) {
   const cfg = sizeConfig[size];
+
+  if (variant === 'icon') {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={LOGO_ICON_URL}
+        alt="Portal Services Digital"
+        className={`block w-auto ${cfg.h} ${className}`}
+      />
+    );
+  }
 
   if (variant === 'full') {
     return (
