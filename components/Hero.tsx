@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from './ui';
 import { BrowserFrame } from './ui/DeviceFrame';
 import { HQDashboardMockup } from './mockups/HQDashboardMockup';
+import { Logo } from './Logo';
 import { getMarketingSection } from '@/lib/marketing';
 import type { HeroContent } from '@/app/hq/content/hero/page';
 
@@ -20,6 +21,8 @@ export async function Hero() {
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
           {/* ───── Copy column ───── */}
           <div>
+            <Logo size="lg" className="mb-7" />
+
             <p className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600 backdrop-blur-sm">
               <Sparkles className="h-3 w-3" /> {data.eyebrow}
             </p>
