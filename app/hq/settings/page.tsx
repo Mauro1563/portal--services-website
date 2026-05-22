@@ -23,37 +23,37 @@ export default async function HQSettings() {
       title="Ajustes"
       subtitle="Administradores autorizados y configuración de la cuenta."
     >
-      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      <section className="rounded-2xl bg-paper p-6 ring-1 ring-line">
         <header className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-brand-600 ring-1 ring-inset ring-cyan-200">
             <Shield className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="font-display text-lg font-semibold text-white">
+            <h2 className="font-display text-lg font-semibold text-graphite-1">
               Administradores autorizados
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-graphite-3">
               Solo los correos en esta lista pueden entrar al panel.
             </p>
           </div>
         </header>
 
-        <ul className="mt-5 divide-y divide-white/[0.04]">
+        <ul className="mt-5 divide-y divide-line">
           {(admins ?? []).map((a) => (
             <li
               key={a.email}
               className="flex items-center justify-between gap-3 py-3"
             >
               <div className="min-w-0">
-                <p className="inline-flex items-center gap-1.5 text-sm text-white">
-                  <Mail className="h-3.5 w-3.5 text-slate-400" />
+                <p className="inline-flex items-center gap-1.5 text-sm text-graphite-1">
+                  <Mail className="h-3.5 w-3.5 text-graphite-3" />
                   {a.email}
                 </p>
                 {a.name ? (
-                  <p className="mt-0.5 text-[11px] text-slate-500">{a.name}</p>
+                  <p className="mt-0.5 text-[11px] text-graphite-4">{a.name}</p>
                 ) : null}
               </div>
-              <p className="shrink-0 text-[10px] text-slate-500">
+              <p className="shrink-0 text-[10px] text-graphite-4">
                 Desde{' '}
                 {new Date(a.created_at).toLocaleDateString('es-ES', {
                   day: '2-digit',
@@ -65,24 +65,25 @@ export default async function HQSettings() {
           ))}
         </ul>
 
-        <p className="mt-5 rounded-xl bg-white/[0.03] px-3 py-2 text-[11px] text-slate-400 ring-1 ring-inset ring-white/[0.06]">
+        <p className="mt-5 rounded-xl bg-slate-50 px-3 py-2 text-[11px] text-graphite-3 ring-1 ring-inset ring-line">
           Para añadir otro administrador, corre este SQL en Supabase:
-          <code className="mt-2 block break-all font-mono text-[10px] text-cyan-300">
-            insert into marketing_admins (email) values (&apos;persona@empresa.com&apos;);
+          <code className="mt-2 block break-all font-mono text-[10px] text-brand-700">
+            insert into marketing_admins (email) values
+            (&apos;persona@empresa.com&apos;);
           </code>
         </p>
       </section>
 
-      <section className="mt-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      <section className="mt-6 rounded-2xl bg-paper p-6 ring-1 ring-line">
         <header className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15 text-violet-300 ring-1 ring-inset ring-violet-400/30">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600 ring-1 ring-inset ring-violet-200">
             <Globe className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="font-display text-lg font-semibold text-white">
+            <h2 className="font-display text-lg font-semibold text-graphite-1">
               Sitio público
             </h2>
-            <p className="text-xs text-slate-400">portalservices.digital</p>
+            <p className="text-xs text-graphite-3">portalservices.digital</p>
           </div>
         </header>
         <div className="mt-4 grid gap-2 sm:grid-cols-3">
@@ -92,7 +93,7 @@ export default async function HQSettings() {
               href={`/${l}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl bg-white/[0.03] px-3 py-2 text-center text-xs font-medium text-slate-300 ring-1 ring-inset ring-white/[0.06] hover:bg-white/[0.06] hover:text-white"
+              className="rounded-xl bg-slate-50 px-3 py-2 text-center text-xs font-medium text-graphite-2 ring-1 ring-inset ring-line hover:bg-slate-100 hover:text-graphite-1"
             >
               /{l}
             </a>

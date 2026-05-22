@@ -21,8 +21,8 @@ const items: { key: Active; href: string; label: string; Icon: typeof FileText }
 
 export function Sidebar({ active, email }: { active: Active; email: string }) {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-white/[0.06] bg-white/[0.02] lg:flex">
-      <div className="flex h-16 items-center border-b border-white/[0.06] px-5">
+    <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-paper lg:flex">
+      <div className="flex h-16 items-center border-b border-line px-5">
         <Logo size="sm" />
       </div>
 
@@ -35,8 +35,8 @@ export function Sidebar({ active, email }: { active: Active; email: string }) {
               href={href}
               className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition ${
                 isActive
-                  ? 'bg-white/[0.06] text-white'
-                  : 'text-slate-400 hover:bg-white/[0.04] hover:text-white'
+                  ? 'bg-brand-500/10 text-brand-700 ring-1 ring-inset ring-brand-500/20'
+                  : 'text-graphite-3 hover:bg-slate-100 hover:text-graphite-1'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -46,24 +46,24 @@ export function Sidebar({ active, email }: { active: Active; email: string }) {
         })}
       </nav>
 
-      <div className="space-y-3 border-t border-white/[0.06] px-3 py-4">
+      <div className="space-y-3 border-t border-line px-3 py-4">
         <a
           href="/en"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs text-slate-400 transition hover:bg-white/[0.04] hover:text-white"
+          className="flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs text-graphite-3 transition hover:bg-slate-100 hover:text-graphite-1"
         >
           <span>Ver sitio público</span>
           <ExternalLink className="h-3.5 w-3.5" />
         </a>
-        <div className="rounded-xl bg-white/[0.03] px-3 py-2.5 text-[11px] ring-1 ring-inset ring-white/[0.06]">
-          <p className="font-medium text-slate-300">Sesión iniciada</p>
-          <p className="truncate text-slate-500">{email}</p>
+        <div className="rounded-xl bg-slate-50 px-3 py-2.5 text-[11px] ring-1 ring-inset ring-line">
+          <p className="font-medium text-graphite-2">Sesión iniciada</p>
+          <p className="truncate text-graphite-4">{email}</p>
         </div>
         <form action={signOut}>
           <button
             type="submit"
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-slate-400 transition hover:bg-rose-500/10 hover:text-rose-300"
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-graphite-3 transition hover:bg-rose-50 hover:text-rose-700"
           >
             <LogOut className="h-3.5 w-3.5" />
             Cerrar sesión

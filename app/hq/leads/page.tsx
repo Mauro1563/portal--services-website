@@ -42,67 +42,68 @@ export default async function HQLeads() {
       title="Leads"
       subtitle="Solicitudes de demo y contacto desde el sitio público."
     >
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+      <div className="rounded-2xl bg-paper p-5 ring-1 ring-line">
         <div className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300 ring-1 ring-inset ring-emerald-400/30">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-200">
             <Inbox className="h-5 w-5" />
           </span>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-graphite-3">
               Resumen
             </p>
-            <p className="mt-0.5 text-sm text-white">
-              <span className="font-bold text-emerald-300">{newCount}</span>{' '}
-              nuevos · <span className="font-bold text-white">{rows.length}</span>{' '}
+            <p className="mt-0.5 text-sm text-graphite-1">
+              <span className="font-bold text-emerald-600">{newCount}</span>{' '}
+              nuevos ·{' '}
+              <span className="font-bold text-graphite-1">{rows.length}</span>{' '}
               en total
             </p>
           </div>
         </div>
       </div>
 
-      <section className="mt-6 overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+      <section className="mt-6 overflow-hidden rounded-2xl bg-paper ring-1 ring-line">
         {rows.length === 0 ? (
           <div className="p-10 text-center">
-            <Inbox className="mx-auto h-7 w-7 text-slate-500" />
-            <p className="mt-3 font-display text-base font-semibold text-white">
+            <Inbox className="mx-auto h-7 w-7 text-graphite-4" />
+            <p className="mt-3 font-display text-base font-semibold text-graphite-1">
               Aún no hay leads
             </p>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-graphite-3">
               Cuando los visitantes envíen el formulario de contacto, aparecerán
               aquí.
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-white/[0.04]">
+          <ul className="divide-y divide-line">
             {rows.map((l) => (
-              <li key={l.id} className="px-5 py-4 hover:bg-white/[0.02]">
+              <li key={l.id} className="px-5 py-4 hover:bg-slate-50">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <p className="font-display text-sm font-semibold text-white">
+                    <p className="font-display text-sm font-semibold text-graphite-1">
                       {l.name || l.email}
                     </p>
-                    <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-slate-400">
+                    <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-graphite-3">
                       <Mail className="h-3 w-3" /> {l.email}
                     </p>
                     {l.phone ? (
-                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-slate-400">
+                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-graphite-3">
                         <Phone className="h-3 w-3" /> {l.phone}
                       </p>
                     ) : null}
                     {l.company ? (
-                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-slate-400">
+                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-graphite-3">
                         <Building className="h-3 w-3" /> {l.company}
                       </p>
                     ) : null}
                     {l.message ? (
-                      <p className="mt-2 max-w-2xl rounded-lg bg-white/[0.03] px-3 py-2 text-xs text-slate-300">
+                      <p className="mt-2 max-w-2xl rounded-lg bg-slate-50 px-3 py-2 text-xs text-graphite-2 ring-1 ring-inset ring-line">
                         {l.message}
                       </p>
                     ) : null}
                   </div>
                   <div className="shrink-0 text-right">
                     <StatusBadge status={l.status} />
-                    <p className="mt-1 inline-flex items-center gap-1 text-[10px] text-slate-500">
+                    <p className="mt-1 inline-flex items-center gap-1 text-[10px] text-graphite-4">
                       <Calendar className="h-3 w-3" />
                       {new Date(l.created_at).toLocaleString('es-ES', {
                         day: '2-digit',
@@ -112,7 +113,7 @@ export default async function HQLeads() {
                       })}
                     </p>
                     {l.interest ? (
-                      <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">
+                      <p className="mt-1 text-[10px] uppercase tracking-wider text-graphite-4">
                         Interés: {l.interest}
                       </p>
                     ) : null}
@@ -124,8 +125,8 @@ export default async function HQLeads() {
         )}
       </section>
 
-      <p className="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-500/[0.04] p-4 text-xs text-slate-300">
-        <span className="font-semibold text-cyan-300">Próximamente:</span>{' '}
+      <p className="mt-6 rounded-2xl bg-cyan-50 p-4 text-xs text-graphite-2 ring-1 ring-inset ring-cyan-200">
+        <span className="font-semibold text-brand-700">Próximamente:</span>{' '}
         formulario de contacto en el sitio público que escribe directo aquí,
         cambio de estado (contactado / cualificado), y exportar a CSV.
       </p>
@@ -135,10 +136,10 @@ export default async function HQLeads() {
 
 function StatusBadge({ status }: { status: Lead['status'] }) {
   const map: Record<Lead['status'], string> = {
-    new: 'bg-emerald-500/10 text-emerald-300 ring-emerald-400/30',
-    contacted: 'bg-amber-500/10 text-amber-300 ring-amber-400/30',
-    qualified: 'bg-cyan-500/10 text-cyan-300 ring-cyan-400/30',
-    archived: 'bg-white/[0.04] text-slate-400 ring-white/[0.08]',
+    new: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+    contacted: 'bg-amber-50 text-amber-700 ring-amber-200',
+    qualified: 'bg-cyan-50 text-brand-700 ring-cyan-200',
+    archived: 'bg-slate-100 text-graphite-3 ring-slate-200',
   };
   const labels: Record<Lead['status'], string> = {
     new: 'Nuevo',

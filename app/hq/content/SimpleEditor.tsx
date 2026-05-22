@@ -25,14 +25,14 @@ export function SimpleEditor<T extends Record<string, string>>({
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      <section className="rounded-2xl bg-paper p-6 ring-1 ring-line">
         <div className="grid gap-5 sm:grid-cols-2">
           {fields.map((f) => (
             <label
               key={f.key}
               className={`block ${f.multiline ? 'sm:col-span-2' : ''}`}
             >
-              <span className="text-[11px] font-medium text-slate-400">
+              <span className="text-[11px] font-medium text-graphite-3">
                 {f.label}
               </span>
               {f.multiline ? (
@@ -42,7 +42,7 @@ export function SimpleEditor<T extends Record<string, string>>({
                   onChange={(e) =>
                     setData({ ...data, [f.key]: e.target.value } as T)
                   }
-                  className="mt-1 block w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                  className="mt-1 block w-full rounded-xl bg-white px-3 py-2 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                 />
               ) : (
                 <input
@@ -51,11 +51,11 @@ export function SimpleEditor<T extends Record<string, string>>({
                   onChange={(e) =>
                     setData({ ...data, [f.key]: e.target.value } as T)
                   }
-                  className="mt-1 block h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                  className="mt-1 block h-10 w-full rounded-xl bg-white px-3 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                 />
               )}
               {f.hint ? (
-                <span className="mt-1 block text-[10px] text-slate-500">
+                <span className="mt-1 block text-[10px] text-graphite-4">
                   {f.hint}
                 </span>
               ) : null}
@@ -64,8 +64,8 @@ export function SimpleEditor<T extends Record<string, string>>({
         </div>
       </section>
 
-      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-ink-0/85 px-5 py-3 backdrop-blur-xl">
-        <p className="text-xs text-slate-400">
+      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl bg-paper px-5 py-3 ring-1 ring-line shadow-[0_10px_40px_-20px_rgba(15,23,42,0.18)]">
+        <p className="text-xs text-graphite-3">
           {savedAt
             ? `Guardado a las ${savedAt.toLocaleTimeString('es-ES', {
                 hour: '2-digit',
@@ -82,7 +82,7 @@ export function SimpleEditor<T extends Record<string, string>>({
             })
           }
           disabled={saving}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_-10px_rgba(56,189,248,0.6)] transition hover:brightness-110 disabled:opacity-50"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 disabled:opacity-50"
         >
           <Save className="h-4 w-4" />
           {saving ? 'Guardando…' : 'Guardar cambios'}

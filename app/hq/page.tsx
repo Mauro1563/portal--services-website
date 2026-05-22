@@ -38,14 +38,14 @@ export default async function HQDashboard() {
       icon: FileText,
       title: 'Contenido del sitio',
       desc: 'Editar precios, testimonios, FAQ y copy del hero.',
-      accent: 'from-cyan-400 to-blue-500',
+      accent: 'from-cyan-500 to-blue-500',
     },
     {
       href: '/hq/leads',
       icon: Inbox,
       title: 'Leads y demos',
       desc: 'Solicitudes que entran desde la página pública.',
-      accent: 'from-emerald-400 to-teal-500',
+      accent: 'from-emerald-500 to-teal-500',
       badge: newLeads ?? 0,
     },
     {
@@ -53,7 +53,7 @@ export default async function HQDashboard() {
       icon: Settings,
       title: 'Ajustes',
       desc: 'Branding, dominio, administradores autorizados.',
-      accent: 'from-violet-400 to-fuchsia-500',
+      accent: 'from-violet-500 to-fuchsia-500',
     },
   ];
 
@@ -64,7 +64,6 @@ export default async function HQDashboard() {
       title="Dashboard"
       subtitle="El centro de mando de portalservices.digital"
     >
-      {/* Stats row */}
       <div className="grid gap-4 sm:grid-cols-3">
         <Stat
           label="Leads nuevos"
@@ -76,7 +75,7 @@ export default async function HQDashboard() {
           label="Leads totales"
           value={String(totalLeads ?? 0)}
           icon={TrendingUp}
-          tone="cyan"
+          tone="brand"
         />
         <Stat
           label="Secciones editadas"
@@ -86,21 +85,16 @@ export default async function HQDashboard() {
         />
       </div>
 
-      {/* Quick action cards */}
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {cards.map(({ href, icon: Icon, title, desc, accent, badge }) => (
           <Link
             key={href}
             href={href}
-            className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition hover:border-white/[0.16] hover:bg-white/[0.05]"
+            className="group relative overflow-hidden rounded-2xl bg-paper p-5 ring-1 ring-line transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(15,23,42,0.18)] hover:ring-slate-300"
           >
-            <div
-              aria-hidden
-              className={`pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-gradient-to-br ${accent} opacity-15 blur-2xl transition group-hover:opacity-25`}
-            />
             <div className="relative flex items-start justify-between gap-3">
               <span
-                className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${accent} text-white shadow-lg`}
+                className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${accent} text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.4)]`}
               >
                 <Icon className="h-5 w-5" />
               </span>
@@ -110,38 +104,37 @@ export default async function HQDashboard() {
                 </span>
               ) : null}
             </div>
-            <p className="relative mt-4 font-display text-base font-semibold text-white">
+            <p className="mt-4 font-display text-base font-semibold text-graphite-1">
               {title}
             </p>
-            <p className="relative mt-1 text-sm text-slate-400">{desc}</p>
-            <p className="relative mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyan-300">
+            <p className="mt-1 text-sm text-graphite-3">{desc}</p>
+            <p className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand-600">
               Abrir <ArrowRight className="h-3 w-3" />
             </p>
           </Link>
         ))}
       </div>
 
-      {/* Recent edits */}
-      <section className="mt-10 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+      <section className="mt-10 rounded-2xl bg-paper p-6 ring-1 ring-line">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-graphite-3">
           Últimas ediciones
         </h2>
         {!lastEdits || lastEdits.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-500">
+          <p className="mt-3 text-sm text-graphite-3">
             Aún no se ha editado nada desde el panel. Las secciones públicas
             muestran el contenido por defecto.
           </p>
         ) : (
-          <ul className="mt-3 divide-y divide-white/[0.04]">
+          <ul className="mt-3 divide-y divide-line">
             {lastEdits.map((row) => (
               <li
                 key={row.section}
                 className="flex items-center justify-between py-3"
               >
-                <p className="font-display text-sm font-medium text-white capitalize">
+                <p className="font-display text-sm font-medium capitalize text-graphite-1">
                   {row.section.replace('_', ' ')}
                 </p>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-graphite-4">
                   {new Date(row.updated_at).toLocaleString('es-ES', {
                     day: '2-digit',
                     month: 'short',
@@ -167,31 +160,28 @@ function Stat({
   label: string;
   value: string;
   icon: typeof Inbox;
-  tone: 'emerald' | 'cyan' | 'violet';
+  tone: 'emerald' | 'brand' | 'violet';
 }) {
-  const ring =
+  const cls =
     tone === 'emerald'
-      ? 'ring-emerald-400/30 bg-emerald-500/[0.06]'
-      : tone === 'cyan'
-      ? 'ring-cyan-400/30 bg-cyan-500/[0.06]'
-      : 'ring-violet-400/30 bg-violet-500/[0.06]';
-  const iconColor =
-    tone === 'emerald'
-      ? 'text-emerald-300'
-      : tone === 'cyan'
-      ? 'text-cyan-300'
-      : 'text-violet-300';
+      ? 'bg-emerald-50 ring-emerald-200 text-emerald-600'
+      : tone === 'brand'
+      ? 'bg-cyan-50 ring-cyan-200 text-brand-600'
+      : 'bg-violet-50 ring-violet-200 text-violet-600';
+  const [bg, ring, text] = cls.split(' ');
   return (
-    <div
-      className={`rounded-2xl border border-white/[0.06] p-5 ring-1 ring-inset ${ring}`}
-    >
+    <div className={`rounded-2xl bg-paper p-5 ring-1 ring-line`}>
       <div className="flex items-center justify-between">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-graphite-3">
           {label}
         </p>
-        <Icon className={`h-4 w-4 ${iconColor}`} />
+        <span
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-lg ${bg} ${text} ring-1 ring-inset ${ring}`}
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </span>
       </div>
-      <p className="mt-3 font-display text-3xl font-bold tabular-nums text-white">
+      <p className="mt-3 font-display text-3xl font-bold tabular-nums text-graphite-1">
         {value}
       </p>
     </div>

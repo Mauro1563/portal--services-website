@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function HQLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="dark-shell min-h-screen bg-ink-0 text-white antialiased">
+    <div className="min-h-screen bg-canvas text-graphite-1 antialiased">
       {children}
     </div>
   );

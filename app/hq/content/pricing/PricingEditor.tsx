@@ -62,10 +62,7 @@ export function PricingEditor({
     }));
   }
 
-  function setFeaturedExclusive(
-    line: 'corporate' | 'home',
-    index: number,
-  ) {
+  function setFeaturedExclusive(line: 'corporate' | 'home', index: number) {
     setData((d) => ({
       ...d,
       [line]: d[line].map((t, i) => ({ ...t, featured: i === index })),
@@ -131,7 +128,6 @@ export function PricingEditor({
 
   return (
     <div className="space-y-10">
-      {/* Header / intro copy */}
       <Section title="Encabezado de la sección">
         <Grid>
           <Field
@@ -171,7 +167,6 @@ export function PricingEditor({
         </Grid>
       </Section>
 
-      {/* Corporate line */}
       <Section
         title="Línea Corporativo"
         subtitle="3 planes + add-ons. Marca un plan como destacado para resaltarlo."
@@ -197,16 +192,15 @@ export function PricingEditor({
           ))}
         </div>
 
-        {/* Add-ons */}
         <div className="mt-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-graphite-3">
             Add-ons
           </p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {data.addons.map((a, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-3"
+                className="rounded-xl bg-white p-3 ring-1 ring-line"
               >
                 <Grid cols={2}>
                   <Field
@@ -232,7 +226,6 @@ export function PricingEditor({
         </div>
       </Section>
 
-      {/* Home line */}
       <Section
         title="Línea Limpiezas de Hogar"
         subtitle="3 planes principales + un plan Enterprise resumido."
@@ -259,9 +252,8 @@ export function PricingEditor({
           ))}
         </div>
 
-        {/* Home enterprise */}
-        <div className="mt-6 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.03] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
+        <div className="mt-6 rounded-xl bg-emerald-50 p-4 ring-1 ring-emerald-200">
+          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
             Plan Enterprise (línea de hogar)
           </p>
           <div className="mt-3">
@@ -322,9 +314,8 @@ export function PricingEditor({
         </div>
       </Section>
 
-      {/* Sticky save bar */}
-      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-ink-0/85 px-5 py-3 backdrop-blur-xl">
-        <p className="text-xs text-slate-400">
+      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl bg-paper px-5 py-3 ring-1 ring-line shadow-[0_10px_40px_-20px_rgba(15,23,42,0.18)]">
+        <p className="text-xs text-graphite-3">
           {savedAt
             ? `Guardado a las ${savedAt.toLocaleTimeString('es-ES', {
                 hour: '2-digit',
@@ -336,7 +327,7 @@ export function PricingEditor({
           type="button"
           onClick={save}
           disabled={saving}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_-10px_rgba(56,189,248,0.6)] transition hover:brightness-110 disabled:opacity-50"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 disabled:opacity-50"
         >
           <Save className="h-4 w-4" />
           {saving ? 'Guardando…' : 'Guardar cambios'}
@@ -345,8 +336,6 @@ export function PricingEditor({
     </div>
   );
 }
-
-// ───────────────────── helpers ─────────────────────
 
 function Section({
   title,
@@ -358,11 +347,13 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+    <section className="rounded-2xl bg-paper p-6 ring-1 ring-line">
       <header className="mb-5">
-        <h2 className="font-display text-lg font-semibold text-white">{title}</h2>
+        <h2 className="font-display text-lg font-semibold text-graphite-1">
+          {title}
+        </h2>
         {subtitle ? (
-          <p className="mt-1 text-xs text-slate-400">{subtitle}</p>
+          <p className="mt-1 text-xs text-graphite-3">{subtitle}</p>
         ) : null}
       </header>
       {children}
@@ -379,9 +370,7 @@ function Grid({
 }) {
   return (
     <div
-      className={`grid gap-4 ${
-        cols === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
-      }`}
+      className={`grid gap-4 ${cols === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}
     >
       {children}
     </div>
@@ -401,24 +390,24 @@ function Field({
   multiline?: boolean;
   span?: number;
 }) {
-  const className =
-    'block w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20';
+  const cls =
+    'block w-full rounded-xl bg-white px-3 py-2 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40';
   return (
     <label className={`block ${span === 2 ? 'sm:col-span-2' : ''}`}>
-      <span className="text-[11px] font-medium text-slate-400">{label}</span>
+      <span className="text-[11px] font-medium text-graphite-3">{label}</span>
       {multiline ? (
         <textarea
           rows={2}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`mt-1 ${className}`}
+          className={`mt-1 ${cls}`}
         />
       ) : (
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`mt-1 h-10 ${className}`}
+          className={`mt-1 h-10 ${cls}`}
         />
       )}
     </label>
@@ -443,16 +432,12 @@ function TierCard({
   accent?: 'brand' | 'emerald';
 }) {
   const ring =
-    accent === 'emerald'
-      ? 'ring-emerald-400/30'
-      : 'ring-cyan-400/30';
+    accent === 'emerald' ? 'ring-emerald-400' : 'ring-brand-400';
   const featuredStyles = tier.featured
     ? `ring-2 ${ring}`
-    : 'ring-1 ring-inset ring-white/[0.06]';
+    : 'ring-1 ring-line';
   return (
-    <div
-      className={`relative rounded-2xl border border-white/[0.06] bg-white/[0.03] p-5 ${featuredStyles}`}
-    >
+    <div className={`relative rounded-2xl bg-paper p-5 ${featuredStyles}`}>
       <button
         type="button"
         onClick={onFeaturedClick}
@@ -460,8 +445,8 @@ function TierCard({
           tier.featured
             ? accent === 'emerald'
               ? 'bg-emerald-500 text-white'
-              : 'bg-cyan-500 text-white'
-            : 'bg-white/[0.06] text-slate-400 hover:bg-white/[0.12] hover:text-white'
+              : 'bg-brand-500 text-white'
+            : 'bg-slate-100 text-graphite-3 hover:bg-slate-200 hover:text-graphite-1'
         }`}
         title="Marcar este plan como destacado"
       >
@@ -499,13 +484,13 @@ function TierCard({
 
       <div className="mt-5">
         <div className="flex items-center justify-between">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-graphite-3">
             Features
           </p>
           <button
             type="button"
             onClick={onAddFeature}
-            className="inline-flex items-center gap-1 rounded-md bg-white/[0.06] px-2 py-1 text-[11px] text-slate-200 hover:bg-white/[0.12]"
+            className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 text-[11px] text-graphite-2 hover:bg-slate-200"
           >
             <Plus className="h-3 w-3" /> Añadir
           </button>
@@ -516,13 +501,13 @@ function TierCard({
               <input
                 value={f}
                 onChange={(e) => onUpdateFeature(i, e.target.value)}
-                className="h-9 flex-1 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                className="h-9 flex-1 rounded-lg bg-white px-3 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
               />
               <button
                 type="button"
                 onClick={() => onRemoveFeature(i)}
                 aria-label="Eliminar"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-rose-500/10 hover:text-rose-300"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-graphite-4 hover:bg-rose-50 hover:text-rose-600"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>

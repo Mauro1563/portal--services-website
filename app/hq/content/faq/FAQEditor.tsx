@@ -19,22 +19,22 @@ export function FAQEditor({
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      <section className="rounded-2xl bg-paper p-6 ring-1 ring-line">
         <label className="block">
-          <span className="text-[11px] font-medium text-slate-400">
+          <span className="text-[11px] font-medium text-graphite-3">
             Título de la sección FAQ
           </span>
           <input
             value={data.title}
             onChange={(e) => setData({ ...data, title: e.target.value })}
-            className="mt-1 h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+            className="mt-1 h-10 w-full rounded-xl bg-white px-3 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
           />
         </label>
       </section>
 
-      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      <section className="rounded-2xl bg-paper p-6 ring-1 ring-line">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-lg font-semibold text-white">
+          <h2 className="font-display text-lg font-semibold text-graphite-1">
             Preguntas ({data.items.length})
           </h2>
           <button
@@ -42,7 +42,7 @@ export function FAQEditor({
             onClick={() =>
               setData((d) => ({ ...d, items: [...d.items, { q: '', a: '' }] }))
             }
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-white/[0.06] px-3 text-xs font-medium text-white hover:bg-white/[0.12]"
+            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-slate-100 px-3 text-xs font-medium text-graphite-1 hover:bg-slate-200"
           >
             <Plus className="h-3.5 w-3.5" /> Añadir pregunta
           </button>
@@ -52,15 +52,15 @@ export function FAQEditor({
           {data.items.map((it, i) => (
             <div
               key={i}
-              className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-4"
+              className="rounded-xl bg-slate-50 p-4 ring-1 ring-inset ring-line"
             >
               <div className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/20 text-[11px] font-bold text-cyan-200">
+                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-100 text-[11px] font-bold text-brand-700">
                   {i + 1}
                 </span>
                 <div className="flex-1 space-y-3">
                   <label className="block">
-                    <span className="text-[11px] font-medium text-slate-400">
+                    <span className="text-[11px] font-medium text-graphite-3">
                       Pregunta
                     </span>
                     <input
@@ -73,11 +73,11 @@ export function FAQEditor({
                           ),
                         }))
                       }
-                      className="mt-1 h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                      className="mt-1 h-10 w-full rounded-xl bg-white px-3 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                     />
                   </label>
                   <label className="block">
-                    <span className="text-[11px] font-medium text-slate-400">
+                    <span className="text-[11px] font-medium text-graphite-3">
                       Respuesta
                     </span>
                     <textarea
@@ -91,7 +91,7 @@ export function FAQEditor({
                           ),
                         }))
                       }
-                      className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                      className="mt-1 w-full rounded-xl bg-white px-3 py-2 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                     />
                   </label>
                 </div>
@@ -104,7 +104,7 @@ export function FAQEditor({
                     }))
                   }
                   aria-label="Eliminar"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-rose-500/10 hover:text-rose-300"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-graphite-4 hover:bg-rose-50 hover:text-rose-600"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -114,8 +114,8 @@ export function FAQEditor({
         </div>
       </section>
 
-      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-ink-0/85 px-5 py-3 backdrop-blur-xl">
-        <p className="text-xs text-slate-400">
+      <div className="sticky bottom-4 z-10 flex items-center justify-between gap-3 rounded-2xl bg-paper px-5 py-3 ring-1 ring-line shadow-[0_10px_40px_-20px_rgba(15,23,42,0.18)]">
+        <p className="text-xs text-graphite-3">
           {savedAt
             ? `Guardado a las ${savedAt.toLocaleTimeString('es-ES', {
                 hour: '2-digit',
@@ -132,7 +132,7 @@ export function FAQEditor({
             })
           }
           disabled={saving}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_30px_-10px_rgba(56,189,248,0.6)] transition hover:brightness-110 disabled:opacity-50"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 disabled:opacity-50"
         >
           <Save className="h-4 w-4" />
           {saving ? 'Guardando…' : 'Guardar cambios'}
