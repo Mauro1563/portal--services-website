@@ -14,24 +14,16 @@ export async function Hero() {
       <div className="absolute inset-0 bg-grid" />
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
-        {/* Big logo as a navy badge so the PNG sits cleanly on the light canvas */}
+        {/* Brand mark with tagline baked in */}
         <div className="flex justify-center">
-          <Logo size="xl" wrap />
+          <Logo size="xl" variant="full" />
         </div>
-
-        {/* Three-part tagline — middle part highlighted */}
-        <p className="mt-10 font-display text-xl font-semibold uppercase tracking-[0.18em] text-graphite-2 sm:text-2xl lg:text-3xl">
-          <span>{data.tagline_a}</span>{' '}
-          <span className="text-brand-600">{data.tagline_b}</span>{' '}
-          <span className="text-graphite-4">{data.tagline_c}</span>
-        </p>
 
         {/* Sparkle audience chip */}
         <p className="mt-8 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-white/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600 backdrop-blur-sm">
           <Sparkles className="h-3 w-3" /> {data.audience_chip}
         </p>
 
-        {/* Title */}
         <h1 className="mt-10 font-display text-3xl font-semibold leading-[1.1] tracking-tight text-graphite-1 sm:text-5xl lg:text-[3.25rem]">
           {data.title_a}{' '}
           <span className="bg-gradient-to-r from-accent-sky via-brand-400 to-brand-600 bg-clip-text text-transparent">
@@ -43,14 +35,12 @@ export async function Hero() {
           {data.subtitle}
         </p>
 
-        {/* Audience chips */}
         <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
           <AudienceChip label={data.audience_corporate} tone="cyan" />
           <AudienceChip label={data.audience_property} tone="blue" />
           <AudienceChip label={data.audience_facility} tone="indigo" />
         </div>
 
-        {/* CTAs */}
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
             href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"

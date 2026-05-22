@@ -1,7 +1,10 @@
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
-const LOGO_URL =
+const LOGO_DARK_URL =
   'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
+
+/** Light-canvas brand mark with the tagline baked in. Stored in /public. */
+const LOGO_FULL_URL = '/logo-full.png';
 
 const sizeConfig: Record<
   Size,
@@ -10,32 +13,46 @@ const sizeConfig: Record<
   sm: { h: 'h-7', pad: 'px-2.5 py-1', rounded: 'rounded-lg' },
   md: { h: 'h-9', pad: 'px-3 py-1.5', rounded: 'rounded-xl' },
   lg: { h: 'h-12 sm:h-14', pad: 'px-4 py-2', rounded: 'rounded-2xl' },
-  xl: { h: 'h-28 sm:h-36 lg:h-44', pad: 'px-6 py-3', rounded: 'rounded-3xl' },
+  xl: { h: 'h-40 sm:h-52 lg:h-64', pad: 'px-6 py-3', rounded: 'rounded-3xl' },
 };
 
 /**
- * The logo PNG has a navy backdrop baked in.
- * - `wrap` (default) puts the PNG inside a navy pill so it reads as a
- *   brand badge against the light marketing canvas (nav, footer, etc).
- * - When `wrap={false}` we drop the pill so the PNG can sit directly
- *   on a navy background (hero) where its baked-in dark bg blends in.
+ * Two-variant logo:
+ * - default: the small dark-bg PNG (great for nav / footer). Wrap in a
+ *   navy pill on light backgrounds (`wrap`), or render raw on dark
+ *   sections (`wrap={false}`).
+ * - variant="full": the white-bg brand mark with the tagline baked in.
+ *   Used for the hero centrepiece. Sits naturally on the light canvas.
  */
 export function Logo({
   size = 'sm',
   className = '',
   wrap = true,
+  variant = 'default',
 }: {
   size?: Size;
   className?: string;
   wrap?: boolean;
+  variant?: 'default' | 'full';
 }) {
   const cfg = sizeConfig[size];
+
+  if (variant === 'full') {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={LOGO_FULL_URL}
+        alt="Portal Services Digital — One platform. One place. Everyone connected."
+        className={`block w-auto ${cfg.h} ${className}`}
+      />
+    );
+  }
 
   if (!wrap) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={LOGO_URL}
+        src={LOGO_DARK_URL}
         alt="Portal Services Digital"
         className={`block w-auto ${cfg.h} ${className}`}
       />
@@ -48,7 +65,7 @@ export function Logo({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={LOGO_URL}
+        src={LOGO_DARK_URL}
         alt="Portal Services Digital"
         className={`block w-auto ${cfg.h}`}
       />
