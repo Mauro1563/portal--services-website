@@ -18,7 +18,7 @@ export function Nav() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-canvas/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href={`/${locale}`} aria-label="Portal Services">
-          <Logo size="sm" wrap />
+          <Logo size="md" variant="full" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

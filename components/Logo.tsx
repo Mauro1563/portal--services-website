@@ -10,19 +10,18 @@ const sizeConfig: Record<
   Size,
   { h: string; pad: string; rounded: string }
 > = {
-  sm: { h: 'h-7', pad: 'px-2.5 py-1', rounded: 'rounded-lg' },
-  md: { h: 'h-9', pad: 'px-3 py-1.5', rounded: 'rounded-xl' },
+  sm: { h: 'h-8', pad: 'px-2.5 py-1', rounded: 'rounded-lg' },
+  md: { h: 'h-10', pad: 'px-3 py-1.5', rounded: 'rounded-xl' },
   lg: { h: 'h-12 sm:h-14', pad: 'px-4 py-2', rounded: 'rounded-2xl' },
-  xl: { h: 'h-40 sm:h-52 lg:h-64', pad: 'px-6 py-3', rounded: 'rounded-3xl' },
+  xl: { h: 'h-20 sm:h-28 lg:h-36', pad: 'px-6 py-3', rounded: 'rounded-3xl' },
 };
 
 /**
  * Two-variant logo:
- * - default: the small dark-bg PNG (great for nav / footer). Wrap in a
- *   navy pill on light backgrounds (`wrap`), or render raw on dark
- *   sections (`wrap={false}`).
- * - variant="full": the white-bg brand mark with the tagline baked in.
- *   Used for the hero centrepiece. Sits naturally on the light canvas.
+ * - default: small dark-bg PNG, optionally wrapped in a navy pill
+ *   (`wrap`) for placement on light backgrounds.
+ * - variant="full": the white-bg brand mark with the tagline baked in
+ *   (stored in /public). Sits naturally on the light canvas.
  */
 export function Logo({
   size = 'sm',

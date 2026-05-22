@@ -38,7 +38,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href={`/${locale}`} aria-label="Portal Services">
-              <Logo size="md" />
+              <Logo size="md" wrap={false} />
             </Link>
             <p className="mt-5 max-w-sm text-sm text-slate-400">{t('tagline')}</p>
           </div>
