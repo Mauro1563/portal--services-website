@@ -8,10 +8,10 @@ export async function FAQ() {
   const data: FAQContent = stored ?? (await loadFromI18n());
 
   return (
-    <section id="faq" className="relative py-24">
+    <section id="faq" className="relative bg-canvas py-24">
       <div className="mx-auto max-w-3xl px-6">
         <div className="text-center">
-          <h2 className="font-display text-4xl font-semibold tracking-tight text-white">
+          <h2 className="font-display text-4xl font-semibold tracking-tight text-graphite-1">
             {data.title}
           </h2>
         </div>
@@ -20,13 +20,13 @@ export async function FAQ() {
           {data.items.map((it, i) => (
             <details
               key={i}
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.03] transition hover:border-white/[0.12] open:border-cyan-400/20 open:bg-cyan-500/[0.04]"
+              className="group rounded-2xl bg-paper ring-1 ring-line transition open:ring-cyan-300"
             >
-              <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-left text-sm font-medium text-white">
+              <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-left text-sm font-medium text-graphite-1">
                 <span>{it.q}</span>
-                <ChevronDown className="h-4 w-4 shrink-0 text-cyan-300 transition group-open:rotate-180" />
+                <ChevronDown className="h-4 w-4 shrink-0 text-brand-600 transition group-open:rotate-180" />
               </summary>
-              <p className="px-5 pb-5 text-sm leading-relaxed text-slate-300">
+              <p className="px-5 pb-5 text-sm leading-relaxed text-graphite-3">
                 {it.a}
               </p>
             </details>

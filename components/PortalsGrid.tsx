@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl';
-import { Card } from './ui';
 import {
   ClipboardCheck,
   LayoutDashboard,
@@ -30,8 +29,8 @@ export function PortalsGrid() {
         t('supervisor_f4'),
         t('supervisor_f5'),
       ],
-      accent: 'from-indigo-400 to-violet-500',
-      glow: 'shadow-[0_0_60px_-15px_rgba(129,140,248,0.45)]',
+      accent: 'from-indigo-500 to-violet-500',
+      tone: 'indigo',
     },
     {
       key: 'manager',
@@ -48,8 +47,8 @@ export function PortalsGrid() {
         t('manager_f4'),
         t('manager_f5'),
       ],
-      accent: 'from-blue-400 to-indigo-500',
-      glow: 'shadow-[0_0_60px_-15px_rgba(59,130,246,0.45)]',
+      accent: 'from-blue-500 to-indigo-500',
+      tone: 'blue',
     },
     {
       key: 'operative',
@@ -60,8 +59,8 @@ export function PortalsGrid() {
       who: t('operative_who'),
       description: t('operative_desc'),
       features: [t('operative_f1'), t('operative_f2'), t('operative_f3')],
-      accent: 'from-violet-400 to-fuchsia-500',
-      glow: 'shadow-[0_0_60px_-15px_rgba(167,139,250,0.45)]',
+      accent: 'from-violet-500 to-fuchsia-500',
+      tone: 'violet',
     },
     {
       key: 'director',
@@ -78,8 +77,8 @@ export function PortalsGrid() {
         t('director_f4'),
         t('director_f5'),
       ],
-      accent: 'from-sky-400 to-blue-600',
-      glow: 'shadow-[0_0_60px_-15px_rgba(56,189,248,0.45)]',
+      accent: 'from-sky-500 to-blue-600',
+      tone: 'sky',
     },
     {
       key: 'hq',
@@ -90,8 +89,8 @@ export function PortalsGrid() {
       who: t('hq_who'),
       description: t('hq_desc'),
       features: [t('hq_f1'), t('hq_f2'), t('hq_f3')],
-      accent: 'from-cyan-400 to-blue-500',
-      glow: 'shadow-[0_0_60px_-15px_rgba(61,197,240,0.45)]',
+      accent: 'from-cyan-500 to-blue-500',
+      tone: 'cyan',
     },
     {
       key: 'airbnb',
@@ -110,8 +109,8 @@ export function PortalsGrid() {
         t('airbnb_f6'),
       ],
       footer: t('airbnb_cities'),
-      accent: 'from-rose-400 to-pink-500',
-      glow: 'shadow-[0_0_60px_-15px_rgba(244,114,182,0.45)]',
+      accent: 'from-rose-500 to-pink-500',
+      tone: 'rose',
     },
     {
       key: 'home',
@@ -129,86 +128,79 @@ export function PortalsGrid() {
         t('home_f5'),
         t('home_f6'),
       ],
-      accent: 'from-emerald-400 to-teal-500',
-      glow: 'shadow-[0_0_60px_-15px_rgba(52,211,153,0.45)]',
+      accent: 'from-emerald-500 to-teal-500',
+      tone: 'emerald',
     },
   ];
 
   return (
-    <section id="portals" className="relative py-24 sm:py-32">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(61,197,240,0.10),transparent_70%)]"
-      />
+    <section id="portals" className="relative bg-canvas py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             {t('eyebrow')}
           </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-graphite-1 sm:text-5xl">
             {t('title')}
           </h2>
-          <p className="mt-5 text-lg text-slate-300">{t('subtitle')}</p>
+          <p className="mt-5 text-lg leading-relaxed text-graphite-3">
+            {t('subtitle')}
+          </p>
         </div>
 
         <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {portals.map((p) => {
             const Icon = p.icon;
             return (
-              <Card
+              <article
                 key={p.key}
-                hover
-                className={`group relative flex flex-col overflow-hidden p-7 ${p.glow}`}
+                className="group relative flex flex-col rounded-2xl bg-paper p-7 ring-1 ring-line transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(15,23,42,0.18)] hover:ring-slate-300"
               >
-                <div
-                  aria-hidden
-                  className={`pointer-events-none absolute -top-24 -right-24 h-52 w-52 rounded-full bg-gradient-to-br ${p.accent} opacity-20 blur-3xl transition group-hover:opacity-30`}
-                />
-
                 <div className="flex items-start justify-between gap-4">
                   <div
-                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${p.accent} text-white shadow-lg`}
+                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${p.accent} text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.5)]`}
                   >
                     <Icon className="h-6 w-6" />
                   </div>
-                  <span className="rounded-full bg-white/[0.06] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-slate-300 ring-1 ring-inset ring-white/10">
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-graphite-3">
                     {p.tag}
                   </span>
                 </div>
 
-                <h3 className="mt-5 font-display text-xl font-semibold text-white">
+                <h3 className="mt-5 font-display text-xl font-semibold text-graphite-1">
                   {p.title}
                 </h3>
-                <p className="mt-1 text-sm font-medium italic text-cyan-300">
+                <p className="mt-1 text-sm font-medium italic text-brand-600">
                   &ldquo;{p.pitch}&rdquo;
                 </p>
 
-                <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                <p className="mt-4 text-sm leading-relaxed text-graphite-3">
                   {p.description}
                 </p>
 
-                <p className="mt-4 text-[11px] uppercase tracking-wider text-slate-500">
-                  Para: <span className="normal-case text-slate-300">{p.who}</span>
+                <p className="mt-4 text-[11px] uppercase tracking-wider text-graphite-4">
+                  Para:{' '}
+                  <span className="normal-case text-graphite-2">{p.who}</span>
                 </p>
 
-                <ul className="mt-5 space-y-2 border-t border-white/[0.06] pt-5">
+                <ul className="mt-5 space-y-2 border-t border-line pt-5">
                   {p.features.map((f) => (
                     <li
                       key={f}
-                      className="flex items-start gap-2.5 text-sm text-slate-200"
+                      className="flex items-start gap-2.5 text-sm text-graphite-2"
                     >
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
                       <span>{f}</span>
                     </li>
                   ))}
                 </ul>
 
                 {p.footer ? (
-                  <p className="mt-5 rounded-xl bg-white/[0.03] px-3 py-2 text-[11px] italic text-slate-400 ring-1 ring-inset ring-white/[0.06]">
+                  <p className="mt-5 rounded-xl bg-slate-50 px-3 py-2 text-[11px] italic text-graphite-3 ring-1 ring-inset ring-line">
                     {p.footer}
                   </p>
                 ) : null}
-              </Card>
+              </article>
             );
           })}
         </div>

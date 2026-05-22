@@ -21,7 +21,15 @@ const config: Config = {
         accent: { DEFAULT: '#06b6d4', soft: '#22d3ee', sky: '#3DC5F0' },
         ink: { 0: '#060a14', 1: '#0f172a', 2: '#111b30', 3: '#1a2542' },
         navy: { 900: '#060a14', 800: '#0f172a', 700: '#111b30' },
-        // Aliases so existing migrated components keep working on dark
+        // Light marketing palette — soft off-white canvas with subtle bands.
+        // The hero / CTA / footer keep using `ink` / `navy` for contrast.
+        canvas: '#F6F8FC',
+        paper: '#FFFFFF',
+        cloud: '#EEF2F8',
+        // Dark text on light surfaces
+        graphite: { 1: '#0B1220', 2: '#1E293B', 3: '#475569', 4: '#94A3B8' },
+        line: '#E2E8F0',
+        // Old aliases kept for /hq (dark admin) routes
         surface: { 0: '#0f172a', 1: '#111b30', 2: '#1a2542', 3: '#243044' },
         text: { 1: '#f8fafc', 2: '#cbd5e1', 3: '#94a3b8' },
       },

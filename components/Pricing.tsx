@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server';
-import { Badge, Button, Card } from './ui';
+import { Button } from './ui';
 import { Check, Plus } from 'lucide-react';
 import { getMarketingSection } from '@/lib/marketing';
 import type { PricingContent } from '@/app/hq/content/pricing/PricingEditor';
@@ -8,31 +8,28 @@ const mailto = (subject: string) =>
   `mailto:portalservicesdigital@gmail.com?subject=${encodeURIComponent(subject)}`;
 
 export async function Pricing() {
-  // 1) Try Supabase (edited via /hq). If present, it wins for ALL locales.
-  // 2) Otherwise fall back to the static i18n JSON so existing translations
-  //    keep working until the admin edits the section.
   const stored = await getMarketingSection<PricingContent>('pricing');
   const data = stored ?? (await loadFromI18n());
 
   return (
-    <section id="pricing" className="relative py-24 sm:py-32">
+    <section id="pricing" className="relative bg-canvas py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             {data.eyebrow}
           </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-graphite-1 sm:text-5xl">
             {data.title}
           </h2>
-          <p className="mt-4 text-lg text-slate-300">{data.subtitle}</p>
-          <p className="mt-3 inline-flex rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-300 ring-1 ring-inset ring-emerald-400/30">
+          <p className="mt-4 text-lg text-graphite-3">{data.subtitle}</p>
+          <p className="mt-4 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
             {data.trial_note}
           </p>
         </div>
 
-        {/* ───── Corporate ───── */}
+        {/* ─── Corporate ─── */}
         <div className="mt-16">
-          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-graphite-3">
             {data.corporate_eyebrow}
           </p>
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -46,24 +43,24 @@ export async function Pricing() {
             ))}
           </div>
 
-          <div className="mt-6 grid gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 sm:grid-cols-2">
+          <div className="mt-6 grid gap-3 rounded-2xl bg-paper p-4 ring-1 ring-line sm:grid-cols-2">
             {data.addons.map((a) => (
               <div
                 key={a.name}
-                className="flex items-center gap-3 rounded-xl bg-white/[0.02] px-4 py-3 ring-1 ring-inset ring-white/[0.06]"
+                className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-inset ring-line"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-300">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-brand-600 ring-1 ring-inset ring-cyan-200">
                   <Plus className="h-4 w-4" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-sm font-semibold text-white">
+                  <p className="font-display text-sm font-semibold text-graphite-1">
                     {a.name}
                   </p>
-                  <p className="text-[11px] text-slate-400">{a.desc}</p>
+                  <p className="text-[11px] text-graphite-3">{a.desc}</p>
                 </div>
-                <p className="shrink-0 text-sm font-bold text-white">
+                <p className="shrink-0 text-sm font-bold text-graphite-1">
                   + {a.price}
-                  <span className="ml-0.5 text-[11px] font-normal text-slate-400">
+                  <span className="ml-0.5 text-[11px] font-normal text-graphite-3">
                     /mes
                   </span>
                 </p>
@@ -72,9 +69,9 @@ export async function Pricing() {
           </div>
         </div>
 
-        {/* ───── Home Cleaning ───── */}
+        {/* ─── Home Cleaning ─── */}
         <div className="mt-20">
-          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700">
             {data.home_eyebrow}
           </p>
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -88,32 +85,32 @@ export async function Pricing() {
               />
             ))}
           </div>
-          <div className="mt-6 flex flex-col items-center justify-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.04] p-4 text-center sm:flex-row sm:gap-4">
-            <p className="text-sm text-white">
+          <div className="mt-6 flex flex-col items-center justify-center gap-2 rounded-2xl bg-paper p-4 text-center ring-1 ring-emerald-200 sm:flex-row sm:gap-4">
+            <p className="text-sm text-graphite-1">
               <span className="font-semibold">
                 {data.home_enterprise.name}
               </span>{' '}
-              <span className="text-slate-300">
+              <span className="text-graphite-3">
                 — {data.home_enterprise.range}
               </span>
             </p>
-            <span className="hidden text-slate-500 sm:inline">·</span>
-            <p className="text-sm font-semibold text-emerald-300">
+            <span className="hidden text-graphite-4 sm:inline">·</span>
+            <p className="text-sm font-semibold text-emerald-700">
               {data.home_enterprise.price}
-              <span className="text-xs font-normal text-slate-400">
+              <span className="text-xs font-normal text-graphite-3">
                 {data.home_enterprise.period}
               </span>
             </p>
             <a
               href={mailto('Limpiezas Hogar — Enterprise')}
-              className="rounded-lg bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-200 ring-1 ring-inset ring-emerald-400/30 hover:bg-emerald-500/25"
+              className="rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
             >
               {data.home_enterprise.cta}
             </a>
           </div>
         </div>
 
-        <p className="mt-12 text-center text-xs text-slate-500">
+        <p className="mt-12 text-center text-xs text-graphite-3">
           {data.footnote}
         </p>
       </div>
@@ -132,45 +129,45 @@ function PricingCard({
   accent?: 'brand' | 'emerald';
   href: string;
 }) {
-  const ring =
-    tier.featured && accent === 'emerald'
-      ? 'ring-2 ring-emerald-400 shadow-card-lg'
-      : tier.featured
-      ? 'ring-2 ring-brand-500 shadow-card-lg'
-      : 'hover:shadow-card-lg transition-shadow';
+  const featured = tier.featured;
+  const featuredRing =
+    featured && accent === 'emerald'
+      ? 'ring-2 ring-emerald-500 shadow-[0_24px_60px_-20px_rgba(16,185,129,0.35)]'
+      : featured
+      ? 'ring-2 ring-brand-500 shadow-[0_24px_60px_-20px_rgba(37,99,235,0.35)]'
+      : 'ring-1 ring-line hover:ring-slate-300';
   const badgeBg =
-    accent === 'emerald'
-      ? 'bg-emerald-500 ring-emerald-500'
-      : 'bg-brand-500 ring-brand-500';
+    accent === 'emerald' ? 'bg-emerald-500 text-white' : 'bg-brand-500 text-white';
+  const checkColor =
+    accent === 'emerald' ? 'text-emerald-500' : 'text-brand-500';
 
   return (
-    <Card className={`relative flex flex-col p-8 ${ring}`}>
-      {tier.featured && (
-        <Badge
-          tone="brand"
-          className={`absolute -top-3 right-6 ${badgeBg} text-white`}
+    <div
+      className={`relative flex flex-col rounded-2xl bg-paper p-8 transition ${featuredRing}`}
+    >
+      {featured && (
+        <span
+          className={`absolute -top-3 right-6 inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${badgeBg}`}
         >
           {popularLabel}
-        </Badge>
+        </span>
       )}
-      <p className="font-display text-lg font-semibold text-white">{tier.name}</p>
-      <p className="mt-1 text-[11px] uppercase tracking-wider text-slate-500">
+      <p className="font-display text-lg font-semibold text-graphite-1">
+        {tier.name}
+      </p>
+      <p className="mt-1 text-[11px] uppercase tracking-wider text-graphite-4">
         {tier.range}
       </p>
       <div className="mt-6 flex items-baseline gap-1">
-        <span className="font-display text-4xl font-bold text-white sm:text-5xl">
+        <span className="font-display text-4xl font-bold text-graphite-1 sm:text-5xl">
           {tier.price}
         </span>
-        <span className="text-sm text-slate-400">{tier.period}</span>
+        <span className="text-sm text-graphite-3">{tier.period}</span>
       </div>
       <ul className="mt-7 space-y-3">
         {tier.features.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-sm text-white">
-            <Check
-              className={`mt-0.5 h-4 w-4 shrink-0 ${
-                accent === 'emerald' ? 'text-emerald-300' : 'text-cyan-300'
-              }`}
-            />
+          <li key={f} className="flex items-start gap-2 text-sm text-graphite-2">
+            <Check className={`mt-0.5 h-4 w-4 shrink-0 ${checkColor}`} />
             <span>{f}</span>
           </li>
         ))}
@@ -178,22 +175,17 @@ function PricingCard({
       <div className="mt-auto pt-8">
         <Button
           className="w-full"
-          variant={tier.featured ? 'primary' : 'secondary'}
+          variant={featured ? 'primary' : 'secondary'}
           size="md"
           href={href}
         >
           {tier.cta}
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
 
-/**
- * Fallback: read the existing next-intl JSON pricing block and shape it
- * into the same PricingContent type the editor uses. Lets the public site
- * keep showing translated content until the admin saves new copy in /hq.
- */
 async function loadFromI18n(): Promise<PricingContent> {
   const t = await getTranslations('pricing');
 
@@ -212,9 +204,6 @@ async function loadFromI18n(): Promise<PricingContent> {
     featured,
     features: [],
   }));
-
-  // Corporate features in JSON aren't structured yet — leave empty so the
-  // admin populates them via the editor.
 
   const home = (['starter', 'pro', 'premium'] as const).map((k) => ({
     name: t(`home_${k}_name` as 'home_starter_name'),
@@ -236,16 +225,8 @@ async function loadFromI18n(): Promise<PricingContent> {
     corporate_eyebrow: t('corporate_eyebrow'),
     corporate,
     addons: [
-      {
-        name: t('addon_airbnb_name'),
-        desc: t('addon_airbnb_desc'),
-        price: t('addon_airbnb_price'),
-      },
-      {
-        name: t('addon_home_name'),
-        desc: t('addon_home_desc'),
-        price: t('addon_home_price'),
-      },
+      { name: t('addon_airbnb_name'), desc: t('addon_airbnb_desc'), price: t('addon_airbnb_price') },
+      { name: t('addon_home_name'), desc: t('addon_home_desc'), price: t('addon_home_price') },
     ],
     home_eyebrow: t('home_eyebrow'),
     home,

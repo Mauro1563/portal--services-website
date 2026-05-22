@@ -33,7 +33,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="border-t border-white/[0.06] bg-ink-1/40">
+    <footer className="bg-ink-0 text-slate-300">
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">

@@ -5,21 +5,16 @@ import type { TestimonialsContent } from '@/app/hq/content/testimonials/Testimon
 
 export async function Testimonials() {
   const stored = await getMarketingSection<TestimonialsContent>('testimonials');
-  const data: TestimonialsContent =
-    stored ?? (await loadFromI18n());
+  const data: TestimonialsContent = stored ?? (await loadFromI18n());
 
   return (
-    <section className="relative py-24 sm:py-32">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_50%,rgba(61,197,240,0.08),transparent_70%)]"
-      />
+    <section className="relative bg-canvas py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             {data.eyebrow}
           </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-graphite-1 sm:text-5xl">
             {data.title}
           </h2>
         </div>
@@ -28,16 +23,16 @@ export async function Testimonials() {
           {data.quotes.map((q, i) => (
             <figure
               key={i}
-              className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-7 backdrop-blur-sm"
+              className="relative rounded-3xl bg-paper p-7 ring-1 ring-line shadow-[0_10px_40px_-20px_rgba(15,23,42,0.15)]"
             >
               <Quote
                 aria-hidden
-                className="absolute right-4 top-4 h-7 w-7 text-cyan-300/30"
+                className="absolute right-5 top-5 h-7 w-7 text-cyan-200"
               />
-              <blockquote className="relative font-display text-base leading-relaxed text-white">
+              <blockquote className="relative font-display text-base leading-relaxed text-graphite-1">
                 &ldquo;{q.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-5 text-xs text-slate-400">
+              <figcaption className="mt-5 text-xs text-graphite-3">
                 — {q.author}
               </figcaption>
             </figure>

@@ -22,37 +22,37 @@ export function PaymentsSection() {
   ];
 
   return (
-    <section id="payments" className="relative bg-white/[0.02] py-24 sm:py-32">
+    <section id="payments" className="relative bg-cloud py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             {t('eyebrow')}
           </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-graphite-1 sm:text-5xl">
             {t('title')}
           </h2>
-          <p className="mt-4 text-lg text-slate-300">{t('subtitle')}</p>
+          <p className="mt-4 text-lg text-graphite-3">{t('subtitle')}</p>
         </div>
 
         <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {tiles.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition hover:border-white/[0.16] hover:bg-white/[0.05]"
+              className="rounded-2xl bg-paper p-5 ring-1 ring-line transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(15,23,42,0.15)]"
             >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-300 ring-1 ring-inset ring-cyan-400/20">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-brand-600 ring-1 ring-inset ring-cyan-200">
                 <Icon className="h-4 w-4" />
               </span>
-              <p className="mt-4 font-display text-base font-semibold text-white">
+              <p className="mt-4 font-display text-base font-semibold text-graphite-1">
                 {title}
               </p>
-              <p className="mt-1 text-sm text-slate-300">{desc}</p>
+              <p className="mt-1 text-sm text-graphite-3">{desc}</p>
             </div>
           ))}
         </div>
 
-        <p className="mt-10 inline-flex w-full items-center justify-center gap-2 text-xs text-slate-400">
-          <Lock className="h-3.5 w-3.5 text-emerald-400" /> {t('security_note')}
+        <p className="mt-10 inline-flex w-full items-center justify-center gap-2 text-xs text-graphite-3">
+          <Lock className="h-3.5 w-3.5 text-emerald-500" /> {t('security_note')}
         </p>
       </div>
     </section>
