@@ -9,37 +9,37 @@ export async function Hero() {
   const data: HeroContent = stored ?? (await loadFromI18n());
 
   return (
-    <section className="relative overflow-hidden bg-ink-0 pt-28 pb-24 sm:pt-32 sm:pb-32">
-      <div className="absolute inset-0 bg-mesh-1 opacity-90" />
+    <section className="relative overflow-hidden bg-canvas pt-28 pb-24 sm:pt-32 sm:pb-32">
+      <div className="absolute inset-0 bg-mesh-light opacity-80" />
       <div className="absolute inset-0 bg-grid" />
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
-        {/* Big centered logo */}
+        {/* Big logo as a navy badge so the PNG sits cleanly on the light canvas */}
         <div className="flex justify-center">
-          <Logo size="xl" wrap={false} />
+          <Logo size="xl" wrap />
         </div>
 
-        {/* Three-part tagline with the middle bit in cyan */}
-        <p className="mt-10 font-display text-2xl font-semibold uppercase tracking-[0.18em] text-slate-200 sm:text-3xl">
+        {/* Three-part tagline — middle part highlighted */}
+        <p className="mt-10 font-display text-xl font-semibold uppercase tracking-[0.18em] text-graphite-2 sm:text-2xl lg:text-3xl">
           <span>{data.tagline_a}</span>{' '}
-          <span className="text-cyan-300">{data.tagline_b}</span>{' '}
-          <span className="text-slate-400">{data.tagline_c}</span>
+          <span className="text-brand-600">{data.tagline_b}</span>{' '}
+          <span className="text-graphite-4">{data.tagline_c}</span>
         </p>
 
         {/* Sparkle audience chip */}
-        <p className="mt-8 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-500/[0.08] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200 backdrop-blur-sm">
+        <p className="mt-8 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-white/80 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600 backdrop-blur-sm">
           <Sparkles className="h-3 w-3" /> {data.audience_chip}
         </p>
 
-        {/* Eyebrow + title */}
-        <h1 className="mt-10 font-display text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.25rem]">
+        {/* Title */}
+        <h1 className="mt-10 font-display text-3xl font-semibold leading-[1.1] tracking-tight text-graphite-1 sm:text-5xl lg:text-[3.25rem]">
           {data.title_a}{' '}
           <span className="bg-gradient-to-r from-accent-sky via-brand-400 to-brand-600 bg-clip-text text-transparent">
             {data.title_b}
           </span>
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-graphite-3">
           {data.subtitle}
         </p>
 
@@ -54,20 +54,20 @@ export async function Hero() {
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
             href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
-            className="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-6 text-base font-semibold text-white shadow-[0_10px_30px_-8px_rgba(56,189,248,0.6)] transition hover:brightness-110"
+            className="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-6 text-base font-semibold text-white shadow-[0_10px_30px_-8px_rgba(56,189,248,0.55)] transition hover:brightness-110"
           >
             {data.cta_primary}
             <ArrowRight className="h-4 w-4" />
           </a>
           <a
             href="#portals"
-            className="inline-flex h-12 items-center justify-center rounded-xl bg-white/[0.06] px-6 text-base font-semibold text-white ring-1 ring-inset ring-white/[0.12] transition hover:bg-white/[0.10]"
+            className="inline-flex h-12 items-center justify-center rounded-xl bg-paper px-6 text-base font-semibold text-graphite-1 ring-1 ring-inset ring-slate-200 transition hover:bg-slate-50 hover:ring-slate-300"
           >
             {data.cta_secondary}
           </a>
         </div>
 
-        <p className="mt-6 text-xs text-slate-500">{data.trust}</p>
+        <p className="mt-6 text-xs text-graphite-4">{data.trust}</p>
       </div>
     </section>
   );
@@ -81,9 +81,9 @@ function AudienceChip({
   tone: 'cyan' | 'blue' | 'indigo';
 }) {
   const map = {
-    cyan: 'border-cyan-400/30 bg-cyan-500/[0.08] text-cyan-200',
-    blue: 'border-blue-400/30 bg-blue-500/[0.08] text-blue-200',
-    indigo: 'border-indigo-400/30 bg-indigo-500/[0.08] text-indigo-200',
+    cyan: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+    blue: 'border-blue-200 bg-blue-50 text-blue-700',
+    indigo: 'border-indigo-200 bg-indigo-50 text-indigo-700',
   } as const;
   return (
     <span

@@ -15,10 +15,10 @@ export function Nav() {
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink-0/80 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-canvas/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href={`/${locale}`} aria-label="Portal Services">
-          <Logo size="sm" wrap={false} />
+          <Logo size="sm" wrap />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -26,7 +26,7 @@ export function Nav() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm font-medium text-slate-300 transition-colors hover:text-white"
+              className="text-sm font-medium text-graphite-2 transition-colors hover:text-graphite-1"
             >
               {l.label}
             </Link>
@@ -37,7 +37,7 @@ export function Nav() {
           <LocaleSwitcher />
           <Link
             href="https://hq.portalservices.digital"
-            className="hidden text-sm font-medium text-slate-300 transition hover:text-white md:block"
+            className="hidden text-sm font-medium text-graphite-3 transition hover:text-graphite-1 md:block"
           >
             {t('login')}
           </Link>
