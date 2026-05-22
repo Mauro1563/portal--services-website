@@ -29,17 +29,17 @@ export function LocaleSwitcher() {
   };
 
   return (
-    <div className="hidden items-center gap-0.5 rounded-md border border-white/10 bg-white/[0.03] p-0.5 sm:flex">
+    <div className="flex items-center gap-0.5 rounded-md bg-slate-100 p-0.5 ring-1 ring-inset ring-slate-200">
       {items.map((l) => (
         <button
           key={l.code}
           type="button"
           onClick={() => changeLocale(l.code)}
           disabled={isPending}
-          className={`rounded px-2 py-1 text-[10px] font-semibold tracking-wider transition ${
+          className={`rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-wider transition ${
             currentLocale === l.code
-              ? 'bg-cyan-500/15 text-cyan-300'
-              : 'text-slate-300 hover:text-white'
+              ? 'bg-white text-brand-600 shadow-sm'
+              : 'text-graphite-3 hover:text-graphite-1'
           }`}
         >
           {l.label}
