@@ -38,7 +38,17 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href={`/${locale}`} aria-label="Portal Services">
-              <Logo size="md" wrap={false} />
+              {/* Crop the bottom of the PNG so the baked-in tagline doesn't
+                  show twice (the brand mark already lives in the hero) */}
+              <div className="overflow-hidden" style={{ height: '32px' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/Photoroom_20260522_165921.png"
+                  alt="Portal Services Digital"
+                  className="block w-auto"
+                  style={{ height: '46px' }}
+                />
+              </div>
             </Link>
             <p className="mt-5 max-w-sm text-sm text-slate-400">{t('tagline')}</p>
           </div>
