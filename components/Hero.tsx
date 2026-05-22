@@ -16,7 +16,11 @@ export async function Hero() {
       <div className="relative mx-auto max-w-5xl px-6 text-center">
         {/* Brand mark with tagline baked in */}
         <div className="flex justify-center">
-          <Logo size="xl" variant="full" />
+          <Logo
+            size="xl"
+            variant="full"
+            className="[filter:contrast(1.15)_saturate(1.1)_brightness(0.92)]"
+          />
         </div>
 
         {/* Sparkle audience chip */}
