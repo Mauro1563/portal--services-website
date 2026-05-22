@@ -4,7 +4,7 @@ const LOGO_DARK_URL =
   'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
 
 /** Light-canvas brand mark with the tagline baked in. Stored in /public. */
-const LOGO_FULL_URL = '/logo-full.png';
+const LOGO_FULL_URL = '/Photoroom_20260522_163830.png';
 
 const sizeConfig: Record<
   Size,
