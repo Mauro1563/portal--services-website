@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { Button } from './ui/Button';
 import { Logo } from './Logo';
 import { LocaleSwitcher } from './LocaleSwitcher';
 import { MobileMenu } from './MobileMenu';
@@ -16,10 +15,10 @@ export function Nav() {
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-canvas/75 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-ink-0/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href={`/${locale}`} aria-label="Portal Services">
-          <Logo size="sm" />
+          <Logo size="sm" wrap={false} />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -27,7 +26,7 @@ export function Nav() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm font-medium text-graphite-2 transition-colors hover:text-graphite-1"
+              className="text-sm font-medium text-slate-300 transition-colors hover:text-white"
             >
               {l.label}
             </Link>
@@ -38,16 +37,16 @@ export function Nav() {
           <LocaleSwitcher />
           <Link
             href="https://hq.portalservices.digital"
-            className="hidden text-sm font-medium text-graphite-3 transition hover:text-graphite-1 md:block"
+            className="hidden text-sm font-medium text-slate-300 transition hover:text-white md:block"
           >
             {t('login')}
           </Link>
-          <Button
-            size="sm"
+          <a
             href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
+            className="inline-flex h-9 items-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 px-3.5 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
           >
             {t('cta')}
-          </Button>
+          </a>
           <MobileMenu />
         </div>
       </div>

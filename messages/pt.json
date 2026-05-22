@@ -17,7 +17,11 @@
     "trust": "30 dias grátis · Sem cartão · Cancele quando quiser",
     "audience_corporate": "Limpeza corporativa",
     "audience_property": "Property managers",
-    "audience_facility": "Facility services"
+    "audience_facility": "Facility services",
+    "tagline_a": "Uma plataforma.",
+    "tagline_b": "Um único lugar.",
+    "tagline_c": "Todos conectados.",
+    "audience_chip": "Para equipes de limpeza, facilities e imobiliárias"
   },
   "portals": {
     "eyebrow": "Sete portais · uma plataforma",

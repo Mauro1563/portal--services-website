@@ -20,9 +20,17 @@ export type HeroContent = {
   audience_corporate: string;
   audience_property: string;
   audience_facility: string;
+  tagline_a: string;
+  tagline_b: string;
+  tagline_c: string;
+  audience_chip: string;
 };
 
 const FIELDS: FieldSpec<HeroContent>[] = [
+  { key: 'tagline_a', label: 'Tagline (parte 1)' },
+  { key: 'tagline_b', label: 'Tagline (parte 2, en cyan)' },
+  { key: 'tagline_c', label: 'Tagline (parte 3)' },
+  { key: 'audience_chip', label: 'Chip con sparkle ✨' },
   { key: 'eyebrow', label: 'Eyebrow' },
   { key: 'title_a', label: 'Título (primera parte)' },
   { key: 'title_b', label: 'Título (parte con gradiente)' },
@@ -80,5 +88,9 @@ async function loadFromI18n(): Promise<HeroContent> {
     audience_corporate: t('audience_corporate'),
     audience_property: t('audience_property'),
     audience_facility: t('audience_facility'),
+    tagline_a: t('tagline_a'),
+    tagline_b: t('tagline_b'),
+    tagline_c: t('tagline_c'),
+    audience_chip: t('audience_chip'),
   };
 }

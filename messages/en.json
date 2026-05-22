@@ -17,7 +17,11 @@
     "trust": "30-day free trial · No credit card · Cancel anytime",
     "audience_corporate": "Corporate cleaning",
     "audience_property": "Property managers",
-    "audience_facility": "Facility services"
+    "audience_facility": "Facility services",
+    "tagline_a": "One platform.",
+    "tagline_b": "One place.",
+    "tagline_c": "Everyone connected.",
+    "audience_chip": "Built for cleaning, facilities & property teams"
   },
   "portals": {
     "eyebrow": "Seven portals · one platform",

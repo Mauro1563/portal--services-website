@@ -17,7 +17,11 @@
     "trust": "Prueba gratuita 30 días · Sin tarjeta · Cancela cuando quieras",
     "audience_corporate": "Limpieza corporativa",
     "audience_property": "Gestores de propiedades",
-    "audience_facility": "Facility services"
+    "audience_facility": "Facility services",
+    "tagline_a": "Una plataforma.",
+    "tagline_b": "Un solo lugar.",
+    "tagline_c": "Todos conectados.",
+    "audience_chip": "Para equipos de limpieza, facilities y propiedades"
   },
   "portals": {
     "eyebrow": "Siete portales · una plataforma",
