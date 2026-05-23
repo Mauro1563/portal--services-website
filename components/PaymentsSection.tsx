@@ -3,7 +3,6 @@ import {
   CreditCard,
   FileText,
   History,
-  Lock,
   PauseCircle,
   RotateCw,
   Wallet,
@@ -22,38 +21,35 @@ export function PaymentsSection() {
   ];
 
   return (
-    <section id="payments" className="relative bg-cloud py-24 sm:py-32">
+    <section id="payments" className="relative bg-canvas py-32 sm:py-40">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
-            {t('eyebrow')}
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-graphite-1 sm:text-5xl">
+        <div className="max-w-3xl">
+          <h2 className="font-display text-4xl font-semibold leading-[1.05] tracking-[-0.02em] text-graphite-1 sm:text-5xl lg:text-6xl">
             {t('title')}
           </h2>
-          <p className="mt-4 text-lg text-graphite-3">{t('subtitle')}</p>
+          <p className="mt-6 text-lg leading-relaxed text-graphite-3">
+            {t('subtitle')}
+          </p>
         </div>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-20 grid gap-x-12 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           {tiles.map(({ icon: Icon, title, desc }) => (
-            <div
-              key={title}
-              className="rounded-2xl bg-paper p-5 ring-1 ring-line transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(15,23,42,0.15)]"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-brand-600 ring-1 ring-inset ring-cyan-200">
-                <Icon className="h-4 w-4" />
-              </span>
-              <p className="mt-4 font-display text-base font-semibold text-graphite-1">
+            <div key={title}>
+              <Icon
+                className="h-6 w-6 text-graphite-1"
+                strokeWidth={1.5}
+              />
+              <p className="mt-6 font-display text-lg font-semibold text-graphite-1">
                 {title}
               </p>
-              <p className="mt-1 text-sm text-graphite-3">{desc}</p>
+              <p className="mt-2 text-sm leading-relaxed text-graphite-3">
+                {desc}
+              </p>
             </div>
           ))}
         </div>
 
-        <p className="mt-10 inline-flex w-full items-center justify-center gap-2 text-xs text-graphite-3">
-          <Lock className="h-3.5 w-3.5 text-emerald-500" /> {t('security_note')}
-        </p>
+        <p className="mt-16 text-xs text-graphite-4">{t('security_note')}</p>
       </div>
     </section>
   );

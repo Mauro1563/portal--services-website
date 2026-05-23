@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server';
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { getMarketingSection } from '@/lib/marketing';
 import type { FAQContent } from '@/app/hq/content/faq/FAQEditor';
 
@@ -8,25 +8,22 @@ export async function FAQ() {
   const data: FAQContent = stored ?? (await loadFromI18n());
 
   return (
-    <section id="faq" className="relative bg-canvas py-24">
+    <section id="faq" className="relative bg-canvas py-32 sm:py-40">
       <div className="mx-auto max-w-3xl px-6">
-        <div className="text-center">
-          <h2 className="font-display text-4xl font-semibold tracking-tight text-graphite-1">
-            {data.title}
-          </h2>
-        </div>
+        <h2 className="font-display text-4xl font-semibold leading-[1.05] tracking-[-0.02em] text-graphite-1 sm:text-5xl">
+          {data.title}
+        </h2>
 
-        <div className="mt-12 space-y-3">
+        <div className="mt-16 divide-y divide-line border-y border-line">
           {data.items.map((it, i) => (
-            <details
-              key={i}
-              className="group rounded-2xl bg-paper ring-1 ring-line transition open:ring-cyan-300"
-            >
-              <summary className="flex cursor-pointer items-center justify-between gap-3 px-5 py-4 text-left text-sm font-medium text-graphite-1">
-                <span>{it.q}</span>
-                <ChevronDown className="h-4 w-4 shrink-0 text-brand-600 transition group-open:rotate-180" />
+            <details key={i} className="group py-6">
+              <summary className="flex cursor-pointer items-center justify-between gap-6 text-left">
+                <span className="font-display text-base font-medium text-graphite-1 sm:text-lg">
+                  {it.q}
+                </span>
+                <Plus className="h-4 w-4 shrink-0 text-graphite-3 transition group-open:rotate-45" />
               </summary>
-              <p className="px-5 pb-5 text-sm leading-relaxed text-graphite-3">
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-graphite-3">
                 {it.a}
               </p>
             </details>

@@ -10,26 +10,30 @@ export function Security() {
     { icon: Server, title: t('uptime_title'), sub: t('uptime_sub') },
   ];
   return (
-    <section id="security" className="relative bg-canvas py-24">
+    <section id="security" className="relative bg-paper py-32 sm:py-40">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div className="grid items-start gap-16 lg:grid-cols-2">
           <div>
-            <h2 className="font-display text-4xl font-semibold tracking-tight text-graphite-1">
+            <h2 className="font-display text-4xl font-semibold leading-[1.05] tracking-[-0.02em] text-graphite-1 sm:text-5xl">
               {t('title')}
             </h2>
-            <p className="mt-4 text-graphite-3">{t('subtitle')}</p>
+            <p className="mt-6 text-lg leading-relaxed text-graphite-3">
+              {t('subtitle')}
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-y-10 sm:grid-cols-2">
             {items.map(({ icon: Icon, title, sub }) => (
-              <div
-                key={title}
-                className="rounded-xl bg-paper p-5 ring-1 ring-line"
-              >
-                <Icon className="mb-3 h-5 w-5 text-brand-600" />
-                <p className="font-display text-sm font-semibold text-graphite-1">
+              <div key={title}>
+                <Icon
+                  className="h-5 w-5 text-graphite-1"
+                  strokeWidth={1.5}
+                />
+                <p className="mt-5 font-display text-sm font-semibold text-graphite-1">
                   {title}
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-graphite-3">{sub}</p>
+                <p className="mt-1 text-xs leading-relaxed text-graphite-3">
+                  {sub}
+                </p>
               </div>
             ))}
           </div>
