@@ -1,7 +1,10 @@
 import { setRequestLocale } from 'next-intl/server';
 import { Nav } from '@/components/Nav';
 import { Hero } from '@/components/Hero';
+import { StatsBand } from '@/components/StatsBand';
+import { TrustedBy } from '@/components/TrustedBy';
 import { PortalsGrid } from '@/components/PortalsGrid';
+import { ProductShowcase } from '@/components/ProductShowcase';
 import { VIPExperience } from '@/components/VIPExperience';
 import { LoyaltyClub } from '@/components/LoyaltyClub';
 import { PaymentsSection } from '@/components/PaymentsSection';
@@ -26,7 +29,10 @@ export default async function Home({
       <StructuredData locale={locale} />
       <Nav />
       <Hero />
+      <StatsBand />
+      <TrustedBy />
       <PortalsGrid />
+      <ProductShowcase />
       <VIPExperience />
       <LoyaltyClub />
       <PaymentsSection />

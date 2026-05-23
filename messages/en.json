@@ -23,6 +23,23 @@
     "tagline_c": "Everyone connected.",
     "audience_chip": "Built for cleaning, facilities & property teams"
   },
+  "stats": {
+    "portals": "Portals in the platform",
+    "uptime": "Guaranteed uptime",
+    "trial": "Days of free trial",
+    "languages": "Multi-language support"
+  },
+  "trusted": {
+    "label": "The platform chosen by professional cleaning, facilities and short-let teams across UK, ES and PT."
+  },
+  "showcase": {
+    "eyebrow": "The product, not the promises",
+    "title": "An interface your team learns in minutes.",
+    "subtitle": "Designed for mobile. Ready for leadership. Connected so everyone sees the same thing, in real time.",
+    "bullet_real_time": "Real-time data — no refresh needed",
+    "bullet_mobile_first": "Mobile-first — cleaners sign in with a PIN",
+    "bullet_branded": "White-label from Premium"
+  },
   "portals": {
     "eyebrow": "Seven portals · one platform",
     "title": "Our portals.",

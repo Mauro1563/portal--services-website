@@ -23,6 +23,23 @@
     "tagline_c": "Todos conectados.",
     "audience_chip": "Para equipos de limpieza, facilities y propiedades"
   },
+  "stats": {
+    "portals": "Portales en la plataforma",
+    "uptime": "Uptime garantizado",
+    "trial": "Días de prueba gratis",
+    "languages": "Soporte multi-idioma"
+  },
+  "trusted": {
+    "label": "La plataforma elegida por equipos profesionales de limpieza, facilities y short-let en UK, ES y PT."
+  },
+  "showcase": {
+    "eyebrow": "El producto, no las promesas",
+    "title": "Una interfaz que el equipo aprende en minutos.",
+    "subtitle": "Diseñada para móvil. Lista para dirección. Conectada para que todos vean lo mismo, en tiempo real.",
+    "bullet_real_time": "Datos en tiempo real — sin recargar",
+    "bullet_mobile_first": "Mobile-first — el limpiador entra con un PIN",
+    "bullet_branded": "White-label desde Premium"
+  },
   "portals": {
     "eyebrow": "Siete portales · una plataforma",
     "title": "Nuestros portales.",
