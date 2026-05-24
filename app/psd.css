@@ -1249,25 +1249,52 @@
 .psd .nav-mobile .nav-link { padding: 12px 4px; border-bottom: 1px solid var(--line); }
 .psd .nav-mobile .nav-link:last-child { border-bottom: 0; }
 
-/* ---------- nav logo + mobile declutter ---------- */
+/* ---------- nav logo ---------- */
 .psd .nav-logo { display: block; width: auto; height: 60px; }
 .psd .nav-mobile-actions {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; padding-top: 12px; margin-top: 4px; border-top: 1px solid var(--line);
 }
+
+/* ---------- mobile nav: links visible up top in a second row ---------- */
 @media (max-width: 920px) {
-  .psd .nav-logo { height: 40px; }
-  /* On mobile only the logo + hamburger stay; lang + demo move to the drawer. */
-  .psd .nav-right .lang-switch,
-  .psd .nav-right > .btn-primary { display: none; }
+  .psd .nav-logo { height: 38px; }
+  .psd .nav-menu-btn { display: none !important; }   /* drop the hamburger */
+
+  /* Two rows: logo + lang + demo on top, section links below */
+  .psd .nav-inner {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 10px 0 8px;
+    column-gap: 8px;
+    row-gap: 8px;
+  }
+  .psd .nav-left  { order: 1; }
+  .psd .nav-right { order: 2; margin-left: auto; gap: 8px; }
+  .psd .nav-right .lang-switch { display: inline-flex; }
+  .psd .nav-right > .btn-primary { display: inline-flex; }
+
+  .psd .nav-center {
+    order: 3;
+    display: flex;
+    width: 100%;
+    gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-top: 1px solid var(--line);
+    padding-top: 8px;
+  }
+  .psd .nav-center::-webkit-scrollbar { display: none; }
+  .psd .nav-center .nav-link { padding: 6px 10px; font-size: 13px; white-space: nowrap; }
 }
 
-/* ---------- mobile: lift the menu + content to the top ---------- */
+/* ---------- mobile: keep hero content near the top ---------- */
 @media (max-width: 640px) {
-  .psd .nav-inner { height: 60px; }
-  .psd .hero { padding-top: 16px; padding-bottom: 28px; }
-  .psd .hero-meta { margin-bottom: 16px; }
+  .psd .hero { padding-top: 18px; padding-bottom: 28px; }
+  .psd .hero-meta { margin-bottom: 14px; }
   .psd .hero-headline { margin-bottom: 18px; }
   .psd .hero-sub { margin-bottom: 24px; }
-  .psd .nav-logo { height: 36px; }
+  .psd .nav-logo { height: 34px; }
+  .psd .nav-right > .btn-primary { height: 38px; padding: 0 14px; font-size: 14px; }
 }
