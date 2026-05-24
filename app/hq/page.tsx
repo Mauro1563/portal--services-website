@@ -12,7 +12,7 @@ import {
   Settings,
   TrendingUp,
 } from 'lucide-react';
-import { requireMarketingAdmin } from '@/lib/marketing';
+import { requireMarketingAdmin, getCollection } from '@/lib/marketing';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { HQShell } from '@/components/hq/Shell';
 
@@ -23,19 +23,48 @@ export default async function HQDashboard() {
   if (!admin) redirect('/hq/login');
 
   const client = createAdminClient();
-  const [{ count: newLeads }, { count: totalLeads }, { data: lastEdits }] =
+  const [{ count: newLeads }, { data: lastEdits }, clients, sales, contracts] =
     await Promise.all([
       client
         .from('marketing_leads')
         .select('id', { head: true, count: 'exact' })
         .eq('status', 'new'),
-      client.from('marketing_leads').select('id', { head: true, count: 'exact' }),
       client
         .from('marketing_content')
         .select('section, updated_at')
         .order('updated_at', { ascending: false })
-        .limit(4),
+        .limit(5),
+      getCollection<{ status?: string }>('clients'),
+      getCollection<{ stage?: string; value?: string }>('sales'),
+      getCollection<unknown>('contracts'),
     ]);
+
+  const activeClients = clients.filter((c) => c.status === 'activo').length;
+  const num = (v?: string) => {
+    const n = parseFloat(String(v ?? '').replace(/[^\d.]/g, ''));
+    return Number.isFinite(n) ? n : 0;
+  };
+  const openStages = ['nuevo', 'contactado', 'demo', 'propuesta'];
+  const pipelineValue = sales
+    .filter((s) => openStages.includes(s.stage ?? ''))
+    .reduce((sum, s) => sum + num(s.value), 0);
+  const wonValue = sales
+    .filter((s) => s.stage === 'ganado')
+    .reduce((sum, s) => sum + num(s.value), 0);
+
+  const STAGES: { key: string; label: string }[] = [
+    { key: 'nuevo', label: 'Nuevo' },
+    { key: 'contactado', label: 'Contactado' },
+    { key: 'demo', label: 'Demo' },
+    { key: 'propuesta', label: 'Propuesta' },
+    { key: 'ganado', label: 'Ganado' },
+    { key: 'perdido', label: 'Perdido' },
+  ];
+  const stageCounts = STAGES.map((s) => ({
+    ...s,
+    count: sales.filter((x) => x.stage === s.key).length,
+  }));
+  const money = (n: number) => `£${n.toLocaleString('es-ES')}`;
 
   const cards = [
     {
@@ -111,26 +140,30 @@ export default async function HQDashboard() {
       title="Dashboard"
       subtitle="El centro de mando de portalservices.digital"
     >
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Stat
-          label="Leads nuevos"
-          value={String(newLeads ?? 0)}
-          icon={Inbox}
-          tone="emerald"
-        />
-        <Stat
-          label="Leads totales"
-          value={String(totalLeads ?? 0)}
-          icon={TrendingUp}
-          tone="brand"
-        />
-        <Stat
-          label="Secciones editadas"
-          value={String(lastEdits?.length ?? 0)}
-          icon={FileText}
-          tone="violet"
-        />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <Stat label="Clientes" value={String(clients.length)} icon={Users} tone="emerald" />
+        <Stat label="Clientes activos" value={String(activeClients)} icon={Users} tone="brand" />
+        <Stat label="Contratos" value={String(contracts.length)} icon={FileSignature} tone="rose" />
+        <Stat label="Pipeline abierto" value={money(pipelineValue)} icon={TrendingUp} tone="amber" />
+        <Stat label="Ganado (£/mes)" value={money(wonValue)} icon={TrendingUp} tone="violet" />
+        <Stat label="Leads nuevos" value={String(newLeads ?? 0)} icon={Inbox} tone="sky" />
       </div>
+
+      {sales.length > 0 && (
+        <section className="mt-6 rounded-2xl bg-paper p-6 ring-1 ring-line">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-graphite-3">
+            Pipeline por etapa
+          </h2>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {stageCounts.map((s) => (
+              <div key={s.key} className="rounded-xl bg-slate-50 p-3 ring-1 ring-inset ring-line">
+                <p className="font-display text-2xl font-bold tabular-nums text-graphite-1">{s.count}</p>
+                <p className="mt-0.5 text-[11px] font-medium text-graphite-3">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {cards.map(({ href, icon: Icon, title, desc, accent, badge }) => (
@@ -207,15 +240,17 @@ function Stat({
   label: string;
   value: string;
   icon: typeof Inbox;
-  tone: 'emerald' | 'brand' | 'violet';
+  tone: 'emerald' | 'brand' | 'violet' | 'amber' | 'rose' | 'sky';
 }) {
-  const cls =
-    tone === 'emerald'
-      ? 'bg-emerald-50 ring-emerald-200 text-emerald-600'
-      : tone === 'brand'
-      ? 'bg-cyan-50 ring-cyan-200 text-brand-600'
-      : 'bg-violet-50 ring-violet-200 text-violet-600';
-  const [bg, ring, text] = cls.split(' ');
+  const map: Record<string, string> = {
+    emerald: 'bg-emerald-50 ring-emerald-200 text-emerald-600',
+    brand: 'bg-cyan-50 ring-cyan-200 text-brand-600',
+    violet: 'bg-violet-50 ring-violet-200 text-violet-600',
+    amber: 'bg-amber-50 ring-amber-200 text-amber-600',
+    rose: 'bg-rose-50 ring-rose-200 text-rose-600',
+    sky: 'bg-sky-50 ring-sky-200 text-sky-600',
+  };
+  const [bg, ring, text] = map[tone].split(' ');
   return (
     <div className={`rounded-2xl bg-paper p-5 ring-1 ring-line`}>
       <div className="flex items-center justify-between">

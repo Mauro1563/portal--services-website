@@ -17,8 +17,7 @@ const BASE: Record<string, Json> = {
 
 async function forLocale(loc: string) {
   const override = (await getDoc<Json>(`site_${loc}`)) ?? {};
-  const merged = deepMerge(BASE[loc], override);
-  return { hero: merged.hero, pricing: merged.pricing };
+  return deepMerge(BASE[loc], override);
 }
 
 export default async function HQSite() {

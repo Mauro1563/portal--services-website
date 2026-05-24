@@ -1,64 +1,8 @@
 import Link from 'next/link';
-import {
-  LayoutDashboard,
-  FileText,
-  Globe,
-  Palette,
-  LayoutGrid,
-  Users,
-  TrendingUp,
-  FileSignature,
-  Inbox,
-  Settings,
-  LogOut,
-  ExternalLink,
-} from 'lucide-react';
+import { LogOut, ExternalLink } from 'lucide-react';
 import { signOut } from '@/app/hq/actions';
 import { Logo } from '@/components/Logo';
-
-type Active =
-  | 'dashboard'
-  | 'content'
-  | 'site'
-  | 'branding'
-  | 'portals'
-  | 'clients'
-  | 'sales'
-  | 'contracts'
-  | 'leads'
-  | 'settings';
-
-const groups: {
-  label: string;
-  items: { key: Active; href: string; label: string; Icon: typeof FileText }[];
-}[] = [
-  {
-    label: 'General',
-    items: [{ key: 'dashboard', href: '/hq', label: 'Dashboard', Icon: LayoutDashboard }],
-  },
-  {
-    label: 'Sitio',
-    items: [
-      { key: 'site', href: '/hq/site', label: 'Textos y precios', Icon: Globe },
-      { key: 'content', href: '/hq/content', label: 'Contenido (clásico)', Icon: FileText },
-      { key: 'branding', href: '/hq/branding', label: 'Branding', Icon: Palette },
-      { key: 'portals', href: '/hq/portals', label: 'Portales', Icon: LayoutGrid },
-    ],
-  },
-  {
-    label: 'Negocio',
-    items: [
-      { key: 'clients', href: '/hq/clients', label: 'Clientes', Icon: Users },
-      { key: 'sales', href: '/hq/sales', label: 'Ventas', Icon: TrendingUp },
-      { key: 'contracts', href: '/hq/contracts', label: 'Contratos', Icon: FileSignature },
-      { key: 'leads', href: '/hq/leads', label: 'Leads', Icon: Inbox },
-    ],
-  },
-  {
-    label: 'Sistema',
-    items: [{ key: 'settings', href: '/hq/settings', label: 'Ajustes', Icon: Settings }],
-  },
-];
+import { navGroups, type Active } from './nav-items';
 
 export function Sidebar({ active, email }: { active: Active; email: string }) {
   return (
@@ -68,7 +12,7 @@ export function Sidebar({ active, email }: { active: Active; email: string }) {
       </div>
 
       <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-5">
-        {groups.map((group) => (
+        {navGroups.map((group) => (
           <div key={group.label}>
             <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-graphite-4">
               {group.label}

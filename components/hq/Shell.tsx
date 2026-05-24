@@ -1,4 +1,6 @@
 import { Sidebar } from './Sidebar';
+import { MobileNav } from './MobileNav';
+import type { Active } from './nav-items';
 
 export function HQShell({
   active,
@@ -8,17 +10,7 @@ export function HQShell({
   actions,
   children,
 }: {
-  active:
-    | 'dashboard'
-    | 'content'
-    | 'site'
-    | 'branding'
-    | 'portals'
-    | 'clients'
-    | 'sales'
-    | 'contracts'
-    | 'leads'
-    | 'settings';
+  active: Active;
   email: string;
   title: string;
   subtitle?: string;
@@ -29,6 +21,7 @@ export function HQShell({
     <div className="flex min-h-screen">
       <Sidebar active={active} email={email} />
       <div className="min-w-0 flex-1">
+        <MobileNav active={active} />
         <header className="sticky top-0 z-30 border-b border-line bg-canvas/85 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-4 px-6 py-5 lg:px-10">
             <div className="min-w-0">
