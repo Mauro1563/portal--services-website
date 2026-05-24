@@ -16,7 +16,7 @@ export const DEFAULT_BRANDING: Branding = {
   accentSoft: '#EFF6FF',
   ink: '#0F172A',
   bg: '#F7F9FC',
-  logoUrl: '/Photoroom_20260522_163830.png',
+  logoUrl: '/Photoroom_20260522_165921.png',
 };
 
 export async function getBranding(): Promise<Branding> {

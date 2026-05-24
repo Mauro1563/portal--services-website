@@ -51,4 +51,4 @@ export const Icon = {
   ),
 };
 
-export const LOGO_FULL_URL = '/Photoroom_20260522_163830.png';
+export const LOGO_FULL_URL = '/Photoroom_20260522_165921.png';
