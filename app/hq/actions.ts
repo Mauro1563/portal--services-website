@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { requireMarketingAdmin } from '@/lib/marketing';
+import { requireMarketingAdmin, getDoc } from '@/lib/marketing';
+import { deepMerge, type Json } from '@/lib/deep-merge';
 
 function siteUrl() {
   return (
@@ -73,4 +74,35 @@ export async function saveMarketingSection(
   revalidatePath('/en');
   revalidatePath('/es');
   revalidatePath('/pt');
+}
+
+/**
+ * Patch the per-locale public-site override (section `site_<locale>`).
+ * Reads the current doc and deep-merges the patch so independent editors
+ * (textos, precios, portales) never clobber each other.
+ */
+export async function saveSitePatch(
+  locale: string,
+  patch: Json,
+): Promise<void> {
+  const admin = await requireMarketingAdmin();
+  if (!admin) throw new Error('Unauthorized');
+
+  const section = `site_${locale}`;
+  const current = (await getDoc<Json>(section)) ?? {};
+  const merged = deepMerge(current, patch);
+
+  const client = createAdminClient();
+  await client.from('marketing_content').upsert(
+    {
+      section,
+      content: merged,
+      updated_at: new Date().toISOString(),
+      updated_by: admin.id,
+    },
+    { onConflict: 'section' },
+  );
+
+  revalidatePath('/', 'layout');
+  revalidatePath(`/${locale}`);
 }

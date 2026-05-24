@@ -7,6 +7,7 @@ import { Pricing, FAQ } from '@/components/psd/Pricing';
 import { Comparison, Security } from '@/components/psd/Lower';
 import { CTA, Footer } from '@/components/psd/Footer';
 import { StructuredData } from '@/components/StructuredData';
+import { getBranding, brandingStyle } from '@/lib/branding';
 
 export default async function Home({
   params,
@@ -15,10 +16,13 @@ export default async function Home({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const branding = await getBranding();
+
   return (
     <div className="psd">
+      <style dangerouslySetInnerHTML={{ __html: brandingStyle(branding) }} />
       <StructuredData locale={locale} />
-      <Nav />
+      <Nav logoUrl={branding.logoUrl} />
       <main>
         <Hero />
         <LogoStrip />
@@ -33,7 +37,7 @@ export default async function Home({
         <Security />
         <FAQ />
         <CTA />
-        <Footer />
+        <Footer logoUrl={branding.logoUrl} />
       </main>
     </div>
   );

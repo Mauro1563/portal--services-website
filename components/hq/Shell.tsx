@@ -8,7 +8,17 @@ export function HQShell({
   actions,
   children,
 }: {
-  active: 'dashboard' | 'content' | 'leads' | 'settings';
+  active:
+    | 'dashboard'
+    | 'content'
+    | 'site'
+    | 'branding'
+    | 'portals'
+    | 'clients'
+    | 'sales'
+    | 'contracts'
+    | 'leads'
+    | 'settings';
   email: string;
   title: string;
   subtitle?: string;

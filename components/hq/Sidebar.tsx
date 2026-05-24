@@ -2,6 +2,12 @@ import Link from 'next/link';
 import {
   LayoutDashboard,
   FileText,
+  Globe,
+  Palette,
+  LayoutGrid,
+  Users,
+  TrendingUp,
+  FileSignature,
   Inbox,
   Settings,
   LogOut,
@@ -10,13 +16,48 @@ import {
 import { signOut } from '@/app/hq/actions';
 import { Logo } from '@/components/Logo';
 
-type Active = 'dashboard' | 'content' | 'leads' | 'settings';
+type Active =
+  | 'dashboard'
+  | 'content'
+  | 'site'
+  | 'branding'
+  | 'portals'
+  | 'clients'
+  | 'sales'
+  | 'contracts'
+  | 'leads'
+  | 'settings';
 
-const items: { key: Active; href: string; label: string; Icon: typeof FileText }[] = [
-  { key: 'dashboard', href: '/hq', label: 'Dashboard', Icon: LayoutDashboard },
-  { key: 'content', href: '/hq/content', label: 'Contenido', Icon: FileText },
-  { key: 'leads', href: '/hq/leads', label: 'Leads', Icon: Inbox },
-  { key: 'settings', href: '/hq/settings', label: 'Ajustes', Icon: Settings },
+const groups: {
+  label: string;
+  items: { key: Active; href: string; label: string; Icon: typeof FileText }[];
+}[] = [
+  {
+    label: 'General',
+    items: [{ key: 'dashboard', href: '/hq', label: 'Dashboard', Icon: LayoutDashboard }],
+  },
+  {
+    label: 'Sitio',
+    items: [
+      { key: 'site', href: '/hq/site', label: 'Textos y precios', Icon: Globe },
+      { key: 'content', href: '/hq/content', label: 'Contenido (clásico)', Icon: FileText },
+      { key: 'branding', href: '/hq/branding', label: 'Branding', Icon: Palette },
+      { key: 'portals', href: '/hq/portals', label: 'Portales', Icon: LayoutGrid },
+    ],
+  },
+  {
+    label: 'Negocio',
+    items: [
+      { key: 'clients', href: '/hq/clients', label: 'Clientes', Icon: Users },
+      { key: 'sales', href: '/hq/sales', label: 'Ventas', Icon: TrendingUp },
+      { key: 'contracts', href: '/hq/contracts', label: 'Contratos', Icon: FileSignature },
+      { key: 'leads', href: '/hq/leads', label: 'Leads', Icon: Inbox },
+    ],
+  },
+  {
+    label: 'Sistema',
+    items: [{ key: 'settings', href: '/hq/settings', label: 'Ajustes', Icon: Settings }],
+  },
 ];
 
 export function Sidebar({ active, email }: { active: Active; email: string }) {
@@ -26,24 +67,33 @@ export function Sidebar({ active, email }: { active: Active; email: string }) {
         <Logo size="sm" />
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-5">
-        {items.map(({ key, href, label, Icon }) => {
-          const isActive = key === active;
-          return (
-            <Link
-              key={key}
-              href={href}
-              className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition ${
-                isActive
-                  ? 'bg-brand-500/10 text-brand-700 ring-1 ring-inset ring-brand-500/20'
-                  : 'text-graphite-3 hover:bg-slate-100 hover:text-graphite-1'
-              }`}
-            >
-              <Icon className="h-4 w-4" />
-              <span>{label}</span>
-            </Link>
-          );
-        })}
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-5">
+        {groups.map((group) => (
+          <div key={group.label}>
+            <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-graphite-4">
+              {group.label}
+            </p>
+            <div className="space-y-1">
+              {group.items.map(({ key, href, label, Icon }) => {
+                const isActive = key === active;
+                return (
+                  <Link
+                    key={key}
+                    href={href}
+                    className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition ${
+                      isActive
+                        ? 'bg-brand-500/10 text-brand-700 ring-1 ring-inset ring-brand-500/20'
+                        : 'text-graphite-3 hover:bg-slate-100 hover:text-graphite-1'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       <div className="space-y-3 border-t border-line px-3 py-4">

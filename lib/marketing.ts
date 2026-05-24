@@ -9,6 +9,39 @@ export type MarketingSection =
   | 'cta_banner';
 
 /**
+ * Generic single-document fetch from the marketing_content key-value store.
+ * The HQ control-center modules (branding, clients, sales, contracts, portals,
+ * per-locale site overrides) all persist as JSON docs through this.
+ */
+export async function getDoc<T = unknown>(section: string): Promise<T | null> {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY
+  ) {
+    return null;
+  }
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from('marketing_content')
+      .select('content')
+      .eq('section', section)
+      .maybeSingle();
+    return (data?.content as T) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Fetch a JSON array collection (clients, sales, contracts…). Empty if unset. */
+export async function getCollection<T = unknown>(
+  section: string,
+): Promise<T[]> {
+  const doc = await getDoc<T[]>(section);
+  return Array.isArray(doc) ? doc : [];
+}
+
+/**
  * Fetch a marketing-content section from Supabase. Returns null if the row
  * doesn't exist yet, so the caller can fall back to the static JSON file.
  */

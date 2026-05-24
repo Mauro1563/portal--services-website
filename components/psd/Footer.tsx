@@ -27,7 +27,7 @@ export async function CTA() {
   );
 }
 
-export async function Footer() {
+export async function Footer({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
   const t = await getTranslations('psd');
   return (
     <footer className="footer">
@@ -36,7 +36,7 @@ export async function Footer() {
           <div>
             <a href="#" className="brand" aria-label="Portal Services Digital">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={LOGO_FULL_URL} alt="Portal Services Digital" height={60} style={{ display: 'block', height: 60, width: 'auto' }} />
+              <img src={logoUrl} alt="Portal Services Digital" height={60} style={{ display: 'block', height: 60, width: 'auto' }} />
             </a>
             <p className="footer-tagline">{t('footer.tag')}</p>
             <div style={{ marginTop: 18 }}>

@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Icon, LOGO_FULL_URL } from './icons';
 import { LangSwitch } from './LangSwitch';
 
-export function Nav() {
+export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
   const t = useTranslations('psd.nav');
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ export function Nav() {
         <div className="nav-left">
           <a href="#" className="brand" aria-label="Portal Services Digital">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={LOGO_FULL_URL} alt="Portal Services Digital" height={56} style={{ display: 'block', height: 56, width: 'auto' }} />
+            <img src={logoUrl} alt="Portal Services Digital" height={56} style={{ display: 'block', height: 56, width: 'auto' }} />
           </a>
         </div>
         <nav className="nav-center" aria-label="Primary">
