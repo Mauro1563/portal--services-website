@@ -1298,3 +1298,20 @@
   .psd .nav-logo { height: 34px; }
   .psd .nav-right > .btn-primary { height: 38px; padding: 0 14px; font-size: 14px; }
 }
+
+/* ---------- mobile: show all 7 portals as a selectable grid ---------- */
+@media (max-width: 900px) {
+  .psd .portal-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    overflow: visible;
+    padding: 12px;
+  }
+  .psd .portal-tab { min-width: 0; flex: initial; padding: 10px 12px; }
+  .psd .portal-tab .ptab-name { font-size: 13px; }
+  .psd .portal-tab .ptab-sub { font-size: 10px; }
+}
+@media (max-width: 480px) {
+  .psd .portal-list { grid-template-columns: 1fr; }
+}
