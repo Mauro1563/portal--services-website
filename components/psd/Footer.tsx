@@ -36,7 +36,17 @@ export async function Footer({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) 
           <div>
             <a href="#" className="brand" aria-label="Portal Services Digital">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logoUrl} alt="Portal Services Digital" height={60} style={{ display: 'block', height: 60, width: 'auto' }} />
+              <img
+                src={logoUrl}
+                alt="Portal Services Digital"
+                height={64}
+                style={{
+                  display: 'block',
+                  height: 64,
+                  width: 'auto',
+                  filter: 'saturate(1.25) contrast(1.18) brightness(0.82)',
+                }}
+              />
             </a>
             <p className="footer-tagline">{t('footer.tag')}</p>
             <div style={{ marginTop: 18 }}>

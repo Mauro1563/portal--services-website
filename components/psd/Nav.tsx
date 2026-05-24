@@ -22,7 +22,17 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
         <div className="nav-left">
           <a href="#" className="brand" aria-label="Portal Services Digital">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logoUrl} alt="Portal Services Digital" height={56} style={{ display: 'block', height: 56, width: 'auto' }} />
+            <img
+              src={logoUrl}
+              alt="Portal Services Digital"
+              height={72}
+              style={{
+                display: 'block',
+                height: 72,
+                width: 'auto',
+                filter: 'saturate(1.25) contrast(1.18) brightness(0.82)',
+              }}
+            />
           </a>
         </div>
         <nav className="nav-center" aria-label="Primary">
