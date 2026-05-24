@@ -1,5 +1,4 @@
 import 'server-only';
-import { getDoc } from '@/lib/marketing';
 
 export type Branding = {
   accent: string;
@@ -19,9 +18,10 @@ export const DEFAULT_BRANDING: Branding = {
   logoUrl: '/Photoroom_20260522_165921.png',
 };
 
+// Public render is fully static (no Supabase at request time) to guarantee
+// uptime. CMS-driven branding/publish is temporarily disabled here.
 export async function getBranding(): Promise<Branding> {
-  const stored = await getDoc<Partial<Branding>>('branding');
-  return { ...DEFAULT_BRANDING, ...(stored ?? {}) };
+  return DEFAULT_BRANDING;
 }
 
 /** Inline CSS that overrides the .psd design-system variables. */
