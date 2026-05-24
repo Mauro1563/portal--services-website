@@ -304,5 +304,538 @@
     "company": "Company",
     "legal": "Legal",
     "contact": "Contact"
+  },
+  "psd": {
+    "nav": {
+      "portals": "Portals",
+      "platform": "Platform",
+      "pricing": "Pricing",
+      "security": "Security",
+      "login": "Log in",
+      "demo": "Request demo"
+    },
+    "hero": {
+      "eyebrow": "For cleaning, facilities and property teams",
+      "title_a": "One platform.",
+      "title_b": "One place.",
+      "title_c": "The whole team, connected.",
+      "sub": "Manage teams, buildings, quality and communication from one place — in real time, on any device. Replace WhatsApp and Excel with an operational system built for the field.",
+      "cta_primary": "Request demo",
+      "cta_secondary": "See the portals",
+      "trust_a": "30-day free trial",
+      "trust_b": "No credit card",
+      "trust_c": "Cancel anytime",
+      "stat_portals": "Integrated portals",
+      "stat_uptime": "Guaranteed uptime",
+      "stat_trial": "Days free trial",
+      "stat_lang": "Supported languages"
+    },
+    "logos": {
+      "head": "Chosen by professional cleaning, facilities and short-let teams across UK · ES · PT"
+    },
+    "portals": {
+      "eyebrow": "Seven portals · one platform",
+      "title_a": "A portal for every",
+      "title_b": "role on the team.",
+      "sub": "Each person sees only what they need to do their job. From the supervisor on the ground to the director with a 360° view.",
+      "list": [
+        {
+          "name": "Supervisor",
+          "sub": "On the ground",
+          "title": "Supervisor Portal",
+          "tag": "The team's command on the ground",
+          "for": "For shift supervisors in corporate buildings, coworking and workplaces",
+          "features": [
+            "Attendance and shift register",
+            "Daily report sent to manager",
+            "Zone-by-zone quality inspection with scores",
+            "Direct comms with team and management",
+            "Supplies requests"
+          ]
+        },
+        {
+          "name": "Manager",
+          "sub": "Multi-building",
+          "title": "Manager Portal",
+          "tag": "Total control of your buildings",
+          "for": "For area managers and operations coordinators",
+          "features": [
+            "Real-time view of all buildings",
+            "Approve work reports and requests",
+            "Quality stats per building and operative",
+            "History of inspections with dated feedback",
+            "Comms with supervisors and leadership"
+          ]
+        },
+        {
+          "name": "Operative",
+          "sub": "Worker app",
+          "title": "Operative Portal",
+          "tag": "The worker's app",
+          "for": "For in-house cleaning staff",
+          "features": [
+            "Shift, building and floors assigned",
+            "Messages from supervisor",
+            "Employee profile and contact info",
+            "6-digit PIN check-in",
+            "Works offline"
+          ]
+        },
+        {
+          "name": "Director",
+          "sub": "360° view",
+          "title": "Director Portal",
+          "tag": "The 360° view of the whole company",
+          "for": "For operations directors and owners",
+          "features": [
+            "Real-time KPIs dashboard",
+            "Active buildings, operatives and supervisors online",
+            "Global quality stats",
+            "Direct comms with managers and team",
+            "Report exports"
+          ]
+        },
+        {
+          "name": "HQ",
+          "sub": "Control centre",
+          "title": "HQ Portal",
+          "tag": "The brain of the platform",
+          "for": "For Portal Services owners and admins",
+          "features": [
+            "Users and permissions management",
+            "Buildings and branding setup",
+            "Security, passwords and access",
+            "Change and event audit log",
+            "Multi-org and multi-language"
+          ]
+        },
+        {
+          "name": "Airbnb",
+          "sub": "Short-let",
+          "title": "Airbnb Portal",
+          "tag": "Professional management of short-let properties",
+          "for": "For Airbnb hosts, short-let managers and property managers",
+          "features": [
+            "Per-room cleaning checklist with scoring",
+            "Automatic report after each clean",
+            "Access and key-box code management",
+            "iCal sync with Airbnb",
+            "Auto-notify the host when ready"
+          ]
+        },
+        {
+          "name": "Home",
+          "sub": "Premium experience",
+          "title": "Home Cleaning Portal",
+          "tag": "Your home, always spotless",
+          "for": "For domestic cleaning companies with a premium service",
+          "features": [
+            "Client and address management",
+            "Recurring or one-off scheduling",
+            "Per-home customised checklist",
+            "Quality report after each visit",
+            "Premium client portal included"
+          ]
+        }
+      ]
+    },
+    "platform": {
+      "eyebrow": "The product, not the promises",
+      "title_a": "An interface the team",
+      "title_b": "learns in minutes.",
+      "sub": "Designed for mobile. Ready for leadership. Connected so everyone sees the same thing, in real time.",
+      "f1": "Real-time data — no refresh needed",
+      "f2": "Mobile-first — sign in with a 6-digit PIN",
+      "f3": "White-label from the Premium plan",
+      "kpi": {
+        "buildings": "Buildings",
+        "ops": "Operatives",
+        "quality": "Quality",
+        "uptime": "Uptime"
+      },
+      "activity": "Today's activity",
+      "buildings_active": "Active buildings",
+      "shift": "On shift",
+      "inspection": "Inspection"
+    },
+    "vip": {
+      "eyebrow": "For your client · the VIP experience",
+      "title_a": "Feel right at home…",
+      "title_b": "because it is.",
+      "sub": "Your client has their own elegant, intuitive digital space — everything under control.",
+      "items": [
+        {
+          "t": "Direct communication",
+          "d": "Talk to your cleaner or the team anytime. Instant messaging in the app."
+        },
+        {
+          "t": "Rate the service",
+          "d": "After each visit, rate with one tap. Feedback reaches the team directly."
+        },
+        {
+          "t": "What others say",
+          "d": "Real testimonials that build trust before signing up."
+        },
+        {
+          "t": "Refer and earn",
+          "d": "Share your personal link. Each referral that converts unlocks a benefit — discount, free visit or gift."
+        },
+        {
+          "t": "Your full history",
+          "d": "All your past visits, the report for each clean and who was in your home."
+        },
+        {
+          "t": "Live notifications",
+          "d": "Notified when the cleaner is on the way, when they arrive and when they finish."
+        }
+      ]
+    },
+    "loyalty": {
+      "eyebrow": "Loyalty programme",
+      "title_a": "Premium Club.",
+      "title_b": "Turn customers into ambassadors.",
+      "sub": "Reward loyalty and grow the business with every referral.",
+      "earn": "How points are earned",
+      "redeem": "What they can redeem",
+      "earn_items": [
+        {
+          "t": "Completed visit",
+          "p": "10 pts"
+        },
+        {
+          "t": "5-star rating",
+          "p": "5 pts"
+        },
+        {
+          "t": "Refer a friend",
+          "p": "50 pts"
+        },
+        {
+          "t": "Friend signs up",
+          "p": "100 pts"
+        },
+        {
+          "t": "Customer birthday",
+          "p": "20 pts"
+        }
+      ],
+      "redeem_items": [
+        "Free cleaning visit",
+        "Window cleaning included",
+        "Home aromatising",
+        "Discount on next month",
+        "Exclusive team surprise"
+      ]
+    },
+    "pay": {
+      "eyebrow": "Integrated payments",
+      "title_a": "Get paid like a",
+      "title_b": "modern company.",
+      "sub": "Card, Apple Pay, Google Pay and BACS. Recurring or per-visit. The client manages their subscription anytime.",
+      "items": [
+        {
+          "tag": "Subscription",
+          "t": "Automatic recurring payment",
+          "d": "Monthly direct debit, hassle-free."
+        },
+        {
+          "tag": "Per visit",
+          "t": "Pay per service",
+          "d": "Only pay when you receive the service."
+        },
+        {
+          "tag": "Invoice",
+          "t": "Instant digital invoice",
+          "d": "Receipt sent instantly after every visit."
+        }
+      ],
+      "methods": "Accepted methods",
+      "note": "Secure payments with SSL encryption and PCI DSS compliance"
+    },
+    "tst": {
+      "eyebrow": "What our clients say",
+      "title_a": "Trust, transparency",
+      "title_b": "and peace of mind.",
+      "items": [
+        {
+          "q": "It's like having a digital butler. I know exactly when they come, how the house looks and I can tell them in seconds.",
+          "n": "Residential client",
+          "c": "London"
+        },
+        {
+          "q": "I recommended the service to three friends and got a free clean. Incredible.",
+          "n": "Residential client",
+          "c": "Madrid"
+        },
+        {
+          "q": "Seeing other clients' reviews before signing up gave me all the confidence I needed.",
+          "n": "New client",
+          "c": "Barcelona"
+        }
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Plans and pricing",
+      "title_a": "Start small.",
+      "title_b": "Grow without changing platforms.",
+      "sub": "Two product lines: corporate for buildings and services, and home cleaning with a premium client experience.",
+      "trial": "30-day free trial — no credit card. Cancel anytime.",
+      "toggle_corp": "Corporate",
+      "toggle_home": "Home cleaning",
+      "footer_note": "All prices in GBP, ex-VAT. Volume discounts available. Switch plans anytime.",
+      "popular": "Most popular",
+      "month": "/ month",
+      "from": "From",
+      "corp_plans": [
+        {
+          "name": "Starter",
+          "scope": "1 – 3 buildings · up to 10 operatives",
+          "price": "£49",
+          "features": [
+            "Supervisor, Manager and Operative portals",
+            "Quality inspections",
+            "Work reports",
+            "Email support"
+          ],
+          "cta": "Start trial"
+        },
+        {
+          "name": "Business",
+          "scope": "4 – 15 buildings · up to 40 operatives",
+          "price": "£119",
+          "features": [
+            "Everything in Starter",
+            "Director Portal with KPIs",
+            "Advanced stats",
+            "Report exports",
+            "Priority support"
+          ],
+          "cta": "Request demo",
+          "featured": true
+        },
+        {
+          "name": "Enterprise",
+          "scope": "Unlimited · dedicated support · own branding",
+          "price": "£249",
+          "features": [
+            "Everything in Business",
+            "Full HQ Portal",
+            "SSO + SAML",
+            "Dedicated SLA",
+            "Personalised onboarding"
+          ],
+          "cta": "Talk to sales",
+          "from": true
+        }
+      ],
+      "home_plans": [
+        {
+          "name": "Starter",
+          "scope": "Up to 15 clients · 3 cleaners",
+          "price": "£39",
+          "features": [
+            "Basic client portal",
+            "Messaging with team",
+            "Feedback after each visit",
+            "Other client reviews",
+            "Live notifications",
+            "Cleaning history"
+          ],
+          "cta": "Start trial"
+        },
+        {
+          "name": "Professional",
+          "scope": "Up to 50 clients · 10 cleaners",
+          "price": "£89",
+          "features": [
+            "Everything in Starter",
+            "Full client portal",
+            "Referral programme",
+            "Loyalty club with points",
+            "Partial branding"
+          ],
+          "cta": "Request demo",
+          "featured": true
+        },
+        {
+          "name": "Premium",
+          "scope": "Unlimited clients · unlimited cleaners",
+          "price": "£169",
+          "features": [
+            "Everything in Professional",
+            "Integrated payments",
+            "Full custom branding",
+            "Priority 24/7 support",
+            "Exclusive surprises"
+          ],
+          "cta": "Start premium"
+        }
+      ],
+      "addons": [
+        {
+          "name": "Airbnb Add-on",
+          "desc": "Short-let properties module",
+          "price": "+ £29 / mo"
+        },
+        {
+          "name": "Home Cleaning Add-on",
+          "desc": "Domestic cleaning module",
+          "price": "+ £29 / mo"
+        }
+      ]
+    },
+    "cmp": {
+      "eyebrow": "Feature comparison",
+      "title_a": "Home cleaning —",
+      "title_b": "what each plan includes.",
+      "sub": "Every plan includes the elegant client portal. Premium unlocks as you grow.",
+      "headers": [
+        "Feature",
+        "Starter",
+        "Professional",
+        "Premium"
+      ],
+      "rows": [
+        [
+          "Elegant client portal",
+          true,
+          true,
+          true
+        ],
+        [
+          "Messaging with team",
+          true,
+          true,
+          true
+        ],
+        [
+          "Feedback after each visit",
+          true,
+          true,
+          true
+        ],
+        [
+          "Other client reviews",
+          true,
+          true,
+          true
+        ],
+        [
+          "Live notifications",
+          true,
+          true,
+          true
+        ],
+        [
+          "Cleaning history",
+          true,
+          true,
+          true
+        ],
+        [
+          "Referral programme",
+          false,
+          true,
+          true
+        ],
+        [
+          "Loyalty club with points",
+          false,
+          true,
+          true
+        ],
+        [
+          "Integrated payments",
+          false,
+          false,
+          true
+        ],
+        [
+          "Custom branding",
+          false,
+          false,
+          true
+        ],
+        [
+          "Priority 24/7 support",
+          false,
+          false,
+          true
+        ]
+      ]
+    },
+    "sec": {
+      "eyebrow": "Security",
+      "title_a": "Enterprise-grade security,",
+      "title_b": "by default.",
+      "sub": "Built from day one for organisations that take data, compliance and uptime seriously.",
+      "items": [
+        {
+          "t": "SOC 2 Type II",
+          "d": "Certification in progress — operational controls."
+        },
+        {
+          "t": "GDPR ready",
+          "d": "EU-resident data available."
+        },
+        {
+          "t": "RBAC + SSO",
+          "d": "Granular roles, SAML, OAuth, MFA."
+        },
+        {
+          "t": "99.9% uptime",
+          "d": "Multi-region, encryption at rest and in transit."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Frequently asked",
+      "title": "Let's clear things up.",
+      "items": [
+        {
+          "q": "Do I need to install anything?",
+          "a": "No. It's 100% web — works on any modern phone, computer or tablet. Operatives open the URL, enter a 6-digit PIN and they're in."
+        },
+        {
+          "q": "Can I import my existing data?",
+          "a": "Yes. We have CSV importers for clients, buildings and staff. In most cases we upload the data for you during onboarding."
+        },
+        {
+          "q": "Does it work offline?",
+          "a": "The operative can check in and upload photos even when signal drops — everything syncs once the connection is back."
+        },
+        {
+          "q": "Can I have my own brand on the client portal?",
+          "a": "Yes. Logo, colours and own domain are included in Premium and Enterprise. In Professional you can upload your logo."
+        },
+        {
+          "q": "Which languages is it available in?",
+          "a": "English, Spanish and Portuguese, with local support across UK, ES and PT."
+        }
+      ]
+    },
+    "cta": {
+      "title_a": "Start today.",
+      "title_b": "No card. No commitment.",
+      "sub": "30 days with your real team. If it doesn't convince you, you pay nothing — if it does, you stay.",
+      "primary": "Start free trial",
+      "secondary": "Talk to a human"
+    },
+    "footer": {
+      "tag": "We don't sell cleanings. We sell peace of mind, trust and the feeling of coming home and finding everything perfect.",
+      "platform": "Platform",
+      "company": "Company",
+      "legal": "Legal",
+      "links": {
+        "portals": "Portals",
+        "pricing": "Pricing",
+        "security": "Security",
+        "contact": "Contact",
+        "login": "Log in",
+        "privacy": "Privacy",
+        "terms": "Terms"
+      },
+      "copyright": "© 2026 Portal Services. All rights reserved."
+    }
   }
 }

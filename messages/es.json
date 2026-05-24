@@ -304,5 +304,538 @@
     "company": "Compañía",
     "legal": "Legal",
     "contact": "Contacto"
+  },
+  "psd": {
+    "nav": {
+      "portals": "Portales",
+      "platform": "Plataforma",
+      "pricing": "Precios",
+      "security": "Seguridad",
+      "login": "Acceso",
+      "demo": "Solicitar demo"
+    },
+    "hero": {
+      "eyebrow": "Para equipos de limpieza, facilities y propiedades",
+      "title_a": "Una plataforma.",
+      "title_b": "Un lugar.",
+      "title_c": "Todo el equipo, conectado.",
+      "sub": "Controla equipos, edificios, calidad y comunicación desde un solo lugar — en tiempo real, en cualquier dispositivo. Reemplaza WhatsApp y Excel con un sistema operativo diseñado para el terreno.",
+      "cta_primary": "Solicitar demo",
+      "cta_secondary": "Ver los portales",
+      "trust_a": "Prueba gratuita 30 días",
+      "trust_b": "Sin tarjeta",
+      "trust_c": "Cancela cuando quieras",
+      "stat_portals": "Portales integrados",
+      "stat_uptime": "Uptime garantizado",
+      "stat_trial": "Días de prueba",
+      "stat_lang": "Idiomas soportados"
+    },
+    "logos": {
+      "head": "La plataforma elegida por equipos profesionales en UK · ES · PT"
+    },
+    "portals": {
+      "eyebrow": "Siete portales · una plataforma",
+      "title_a": "Un portal para cada",
+      "title_b": "rol del equipo.",
+      "sub": "Cada persona ve sólo lo que necesita para hacer su trabajo. Del operativo en terreno al director con visión 360°.",
+      "list": [
+        {
+          "name": "Supervisor",
+          "sub": "Sobre el terreno",
+          "title": "Portal Supervisor",
+          "tag": "El mando del equipo sobre el terreno",
+          "for": "Para supervisores de turno en edificios corporativos, coworkings y centros de trabajo",
+          "features": [
+            "Registro de presencia y ficha de turno",
+            "Envío de parte diario al manager",
+            "Inspección de calidad por zonas con puntuación",
+            "Comunicación directa con equipo y management",
+            "Gestión de pedidos de suministros"
+          ]
+        },
+        {
+          "name": "Manager",
+          "sub": "Multi-edificio",
+          "title": "Portal Manager",
+          "tag": "Control total de tus edificios",
+          "for": "Para managers de área y coordinadores de operaciones",
+          "features": [
+            "Vista en tiempo real de todos los edificios",
+            "Aprobación de partes de trabajo y pedidos",
+            "Estadísticas de calidad por edificio y operativo",
+            "Historial de evaluaciones con feedback por fecha",
+            "Comunicación con supervisores y dirección"
+          ]
+        },
+        {
+          "name": "Operativo",
+          "sub": "App del trabajador",
+          "title": "Portal Operativo",
+          "tag": "La app del trabajador",
+          "for": "Para personal de limpieza en plantilla",
+          "features": [
+            "Consulta de turno, edificio y pisos asignados",
+            "Mensajes del supervisor",
+            "Ficha de empleado con datos de contacto",
+            "Check-in con PIN de 6 dígitos",
+            "Funciona sin conexión"
+          ]
+        },
+        {
+          "name": "Director",
+          "sub": "Visión 360°",
+          "title": "Portal Director",
+          "tag": "La vista 360° de toda la empresa",
+          "for": "Para directores de operaciones y propietarios",
+          "features": [
+            "Dashboard con KPIs en tiempo real",
+            "Edificios activos, operativos y supervisores online",
+            "Estadísticas de calidad globales",
+            "Comunicación directa con managers y equipo",
+            "Exportación de informes"
+          ]
+        },
+        {
+          "name": "HQ",
+          "sub": "Centro de control",
+          "title": "Portal HQ",
+          "tag": "El cerebro de la plataforma",
+          "for": "Para propietarios y administradores de Portal Services",
+          "features": [
+            "Gestión de usuarios y permisos",
+            "Configuración de edificios y branding",
+            "Seguridad, contraseñas y accesos",
+            "Auditoría de cambios y eventos",
+            "Multi-organización y multi-idioma"
+          ]
+        },
+        {
+          "name": "Airbnb",
+          "sub": "Short-let",
+          "title": "Portal Airbnb",
+          "tag": "Gestión profesional de propiedades turísticas",
+          "for": "Para anfitriones, gestores de apartamentos turísticos y property managers",
+          "features": [
+            "Checklist de limpieza por habitación con puntuación",
+            "Reporte automático tras cada limpieza",
+            "Gestión de accesos y códigos de caja",
+            "Sincronización con iCal de Airbnb",
+            "Notificación al anfitrión cuando está lista"
+          ]
+        },
+        {
+          "name": "Hogar",
+          "sub": "Experiencia premium",
+          "title": "Portal Limpiezas de Hogar",
+          "tag": "Tu hogar, siempre impecable",
+          "for": "Para empresas de limpieza doméstica con servicio premium",
+          "features": [
+            "Gestión de clientes y direcciones",
+            "Programación de visitas recurrentes",
+            "Checklist personalizado por hogar",
+            "Informe de calidad tras cada visita",
+            "Portal cliente premium incluido"
+          ]
+        }
+      ]
+    },
+    "platform": {
+      "eyebrow": "El producto, no las promesas",
+      "title_a": "Una interfaz que el equipo",
+      "title_b": "aprende en minutos.",
+      "sub": "Diseñada para móvil. Lista para dirección. Conectada para que todos vean lo mismo, en tiempo real.",
+      "f1": "Datos en tiempo real — sin recargar",
+      "f2": "Mobile-first — entra con un PIN de 6 dígitos",
+      "f3": "White-label desde el plan Premium",
+      "kpi": {
+        "buildings": "Edificios",
+        "ops": "Operativos",
+        "quality": "Calidad",
+        "uptime": "Uptime"
+      },
+      "activity": "Actividad del día",
+      "buildings_active": "Edificios activos",
+      "shift": "En turno",
+      "inspection": "Inspección"
+    },
+    "vip": {
+      "eyebrow": "Para tu cliente · la experiencia VIP",
+      "title_a": "Siéntete como en casa…",
+      "title_b": "porque lo está.",
+      "sub": "El cliente tiene su propio espacio digital, elegante e intuitivo, donde tiene todo bajo control.",
+      "items": [
+        {
+          "t": "Comunicación directa",
+          "d": "Habla con tu limpiador/a o con el equipo en cualquier momento. Mensajes instantáneos desde la app."
+        },
+        {
+          "t": "Da tu opinión",
+          "d": "Tras cada visita, valora el servicio con un clic. El feedback llega directamente al equipo."
+        },
+        {
+          "t": "Opiniones de otros clientes",
+          "d": "Testimonios reales que generan confianza antes de contratar."
+        },
+        {
+          "t": "Recomienda y gana",
+          "d": "Comparte tu enlace personal. Cada recomendación que se convierte en cliente te da un beneficio exclusivo."
+        },
+        {
+          "t": "Tu historial completo",
+          "d": "Todas tus visitas pasadas, los informes de cada limpieza y quién estuvo en tu hogar."
+        },
+        {
+          "t": "Notificaciones en tiempo real",
+          "d": "Aviso cuando el limpiador/a está en camino, cuando llega y cuando termina."
+        }
+      ]
+    },
+    "loyalty": {
+      "eyebrow": "Programa de fidelización",
+      "title_a": "Club Premium.",
+      "title_b": "Convierte clientes en embajadores.",
+      "sub": "Premia la fidelidad y haz crecer tu negocio con cada recomendación.",
+      "earn": "Cómo se ganan puntos",
+      "redeem": "Qué pueden canjear",
+      "earn_items": [
+        {
+          "t": "Visita completada",
+          "p": "10 pts"
+        },
+        {
+          "t": "Valoración de 5 estrellas",
+          "p": "5 pts"
+        },
+        {
+          "t": "Recomendar a un amigo",
+          "p": "50 pts"
+        },
+        {
+          "t": "Amigo contrata el servicio",
+          "p": "100 pts"
+        },
+        {
+          "t": "Cumpleaños del cliente",
+          "p": "20 pts"
+        }
+      ],
+      "redeem_items": [
+        "Visita de limpieza gratuita",
+        "Limpieza de cristales incluida",
+        "Aromatización del hogar",
+        "Descuento en el próximo mes",
+        "Sorpresa exclusiva del equipo"
+      ]
+    },
+    "pay": {
+      "eyebrow": "Pagos integrados",
+      "title_a": "Cobra como una",
+      "title_b": "empresa moderna.",
+      "sub": "Tarjeta, Apple Pay, Google Pay y BACS. Recurrente o por visita. El cliente controla su suscripción en todo momento.",
+      "items": [
+        {
+          "tag": "Suscripción",
+          "t": "Pago recurrente automático",
+          "d": "Domiciliación mensual sin preocupaciones."
+        },
+        {
+          "tag": "Por visita",
+          "t": "Pago por servicio",
+          "d": "Paga solo cuando recibes el servicio."
+        },
+        {
+          "tag": "Factura",
+          "t": "Factura digital instantánea",
+          "d": "Recibe tu factura al instante tras cada visita."
+        }
+      ],
+      "methods": "Métodos aceptados",
+      "note": "Pagos seguros con cifrado SSL y cumplimiento PCI DSS"
+    },
+    "tst": {
+      "eyebrow": "Lo que dicen nuestros clientes",
+      "title_a": "Confianza, transparencia",
+      "title_b": "y tranquilidad.",
+      "items": [
+        {
+          "q": "Es como tener un mayordomo digital. Sé exactamente cuándo viene, cómo quedó mi casa y puedo decírselo en segundos.",
+          "n": "Cliente residencial",
+          "c": "Londres"
+        },
+        {
+          "q": "Recomendé el servicio a tres amigas y me regalaron una limpieza gratis. Increíble.",
+          "n": "Cliente residencial",
+          "c": "Madrid"
+        },
+        {
+          "q": "Ver las opiniones de otros clientes antes de contratar me dio toda la confianza que necesitaba.",
+          "n": "Cliente nuevo",
+          "c": "Barcelona"
+        }
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Planes y precios",
+      "title_a": "Empieza pequeño.",
+      "title_b": "Crece sin cambiar de plataforma.",
+      "sub": "Dos líneas de producto: corporativo para edificios y servicios, y limpiezas de hogar con experiencia premium para el cliente.",
+      "trial": "Prueba gratuita 30 días — sin tarjeta de crédito. Cancela cuando quieras.",
+      "toggle_corp": "Corporativo",
+      "toggle_home": "Limpiezas de hogar",
+      "footer_note": "Todos los precios en GBP, sin IVA. Descuentos por volumen disponibles. Cambia de plan en cualquier momento.",
+      "popular": "Más popular",
+      "month": "/ mes",
+      "from": "Desde",
+      "corp_plans": [
+        {
+          "name": "Starter",
+          "scope": "1 – 3 edificios · hasta 10 operativos",
+          "price": "£49",
+          "features": [
+            "Portal Supervisor, Manager y Operativo",
+            "Inspecciones de calidad",
+            "Partes de trabajo",
+            "Soporte por email"
+          ],
+          "cta": "Empezar prueba"
+        },
+        {
+          "name": "Business",
+          "scope": "4 – 15 edificios · hasta 40 operativos",
+          "price": "£119",
+          "features": [
+            "Todo en Starter",
+            "Portal Director con KPIs",
+            "Estadísticas avanzadas",
+            "Exportación de informes",
+            "Soporte prioritario"
+          ],
+          "cta": "Solicitar demo",
+          "featured": true
+        },
+        {
+          "name": "Enterprise",
+          "scope": "Ilimitado · soporte dedicado · branding propio",
+          "price": "£249",
+          "features": [
+            "Todo en Business",
+            "Portal HQ completo",
+            "SSO + SAML",
+            "SLA dedicado",
+            "Onboarding personalizado"
+          ],
+          "cta": "Hablar con ventas",
+          "from": true
+        }
+      ],
+      "home_plans": [
+        {
+          "name": "Starter",
+          "scope": "Hasta 15 clientes · 3 limpiadores",
+          "price": "£39",
+          "features": [
+            "Portal cliente básico",
+            "Mensajes con el equipo",
+            "Feedback tras cada visita",
+            "Opiniones de otros clientes",
+            "Notificaciones en tiempo real",
+            "Historial de limpiezas"
+          ],
+          "cta": "Empezar prueba"
+        },
+        {
+          "name": "Professional",
+          "scope": "Hasta 50 clientes · 10 limpiadores",
+          "price": "£89",
+          "features": [
+            "Todo en Starter",
+            "Portal cliente completo",
+            "Programa de recomendaciones",
+            "Club de fidelización con puntos",
+            "Branding parcial"
+          ],
+          "cta": "Solicitar demo",
+          "featured": true
+        },
+        {
+          "name": "Premium",
+          "scope": "Clientes ilimitados · limpiadores ilimitados",
+          "price": "£169",
+          "features": [
+            "Todo en Professional",
+            "Pagos integrados",
+            "Branding personalizado completo",
+            "Soporte prioritario 24/7",
+            "Sorpresas exclusivas"
+          ],
+          "cta": "Empezar premium"
+        }
+      ],
+      "addons": [
+        {
+          "name": "Airbnb Add-on",
+          "desc": "Módulo propiedades turísticas",
+          "price": "+ £29 / mes"
+        },
+        {
+          "name": "Home Cleaning Add-on",
+          "desc": "Módulo limpiezas domésticas",
+          "price": "+ £29 / mes"
+        }
+      ]
+    },
+    "cmp": {
+      "eyebrow": "Comparativa de funciones",
+      "title_a": "Limpiezas de hogar —",
+      "title_b": "qué incluye cada plan.",
+      "sub": "Todos los planes incluyen el portal cliente elegante. Lo premium se desbloquea según creces.",
+      "headers": [
+        "Función",
+        "Starter",
+        "Professional",
+        "Premium"
+      ],
+      "rows": [
+        [
+          "Portal cliente elegante",
+          true,
+          true,
+          true
+        ],
+        [
+          "Mensajes con el equipo",
+          true,
+          true,
+          true
+        ],
+        [
+          "Feedback tras cada visita",
+          true,
+          true,
+          true
+        ],
+        [
+          "Opiniones de otros clientes",
+          true,
+          true,
+          true
+        ],
+        [
+          "Notificaciones en tiempo real",
+          true,
+          true,
+          true
+        ],
+        [
+          "Historial de limpiezas",
+          true,
+          true,
+          true
+        ],
+        [
+          "Programa de recomendaciones",
+          false,
+          true,
+          true
+        ],
+        [
+          "Club de fidelización con puntos",
+          false,
+          true,
+          true
+        ],
+        [
+          "Pagos integrados",
+          false,
+          false,
+          true
+        ],
+        [
+          "Branding personalizado",
+          false,
+          false,
+          true
+        ],
+        [
+          "Soporte prioritario 24/7",
+          false,
+          false,
+          true
+        ]
+      ]
+    },
+    "sec": {
+      "eyebrow": "Seguridad",
+      "title_a": "Seguridad de nivel empresarial,",
+      "title_b": "por defecto.",
+      "sub": "Diseñado desde cero para organizaciones que se toman en serio los datos, el cumplimiento y la disponibilidad.",
+      "items": [
+        {
+          "t": "SOC 2 Type II",
+          "d": "En curso de certificación — controles operativos."
+        },
+        {
+          "t": "GDPR ready",
+          "d": "Datos residentes en la UE disponible."
+        },
+        {
+          "t": "RBAC + SSO",
+          "d": "Roles granulares, SAML, OAuth, MFA."
+        },
+        {
+          "t": "99,9% uptime",
+          "d": "Multi-región, cifrado en reposo y en tránsito."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Resolvamos las dudas.",
+      "items": [
+        {
+          "q": "¿Necesito instalar algo?",
+          "a": "No. Es 100% web — funciona en cualquier móvil moderno, ordenador o tablet. Los operativos abren la URL, entran con un PIN de 6 dígitos y listo."
+        },
+        {
+          "q": "¿Puedo importar mis datos actuales?",
+          "a": "Sí. Tenemos importadores de CSV para clientes, edificios y empleados. En la mayoría de casos te subimos los datos nosotros durante el onboarding."
+        },
+        {
+          "q": "¿Funciona sin conexión?",
+          "a": "El operativo puede registrar el check-in y subir fotos aunque pierda señal — todo se sincroniza cuando vuelve a tener internet."
+        },
+        {
+          "q": "¿Puedo tener mi marca en el portal del cliente?",
+          "a": "Sí. Logo, colores y dominio propio están incluidos en Premium y Enterprise. En Professional puedes subir tu logo."
+        },
+        {
+          "q": "¿En qué idiomas está disponible?",
+          "a": "Inglés, español y portugués, con soporte local en UK, ES y PT."
+        }
+      ]
+    },
+    "cta": {
+      "title_a": "Empieza hoy.",
+      "title_b": "Sin tarjeta. Sin compromiso.",
+      "sub": "30 días de prueba con tu equipo real. Si no convence, no pagas — y si lo hace, te quedas.",
+      "primary": "Empezar prueba gratuita",
+      "secondary": "Hablar con un humano"
+    },
+    "footer": {
+      "tag": "No vendemos limpiezas. Vendemos tranquilidad, confianza y la sensación de llegar a casa y que todo esté perfecto.",
+      "platform": "Plataforma",
+      "company": "Compañía",
+      "legal": "Legal",
+      "links": {
+        "portals": "Portales",
+        "pricing": "Precios",
+        "security": "Seguridad",
+        "contact": "Contacto",
+        "login": "Acceso",
+        "privacy": "Privacidad",
+        "terms": "Términos"
+      },
+      "copyright": "© 2026 Portal Services. Todos los derechos reservados."
+    }
   }
 }
