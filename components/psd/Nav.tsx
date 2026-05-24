@@ -25,13 +25,8 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
             <img
               src={logoUrl}
               alt="Portal Services Digital"
-              height={72}
-              style={{
-                display: 'block',
-                height: 72,
-                width: 'auto',
-                filter: 'saturate(1.25) contrast(1.18) brightness(0.82)',
-              }}
+              className="nav-logo"
+              style={{ filter: 'saturate(1.25) contrast(1.18) brightness(0.82)' }}
             />
           </a>
         </div>
@@ -59,6 +54,16 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
           <a className="nav-link" href="#pricing" onClick={() => setOpen(false)}>{t('pricing')}</a>
           <a className="nav-link" href="#security" onClick={() => setOpen(false)}>{t('security')}</a>
           <a className="nav-link" href="https://hq.portalservices.digital">{t('login')}</a>
+          <div className="nav-mobile-actions">
+            <LangSwitch />
+            <a
+              className="btn btn-primary"
+              href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
+              onClick={() => setOpen(false)}
+            >
+              {t('demo')} <Icon.arrow />
+            </a>
+          </div>
         </div>
       )}
     </header>

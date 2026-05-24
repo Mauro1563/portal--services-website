@@ -1248,3 +1248,16 @@
 }
 .psd .nav-mobile .nav-link { padding: 12px 4px; border-bottom: 1px solid var(--line); }
 .psd .nav-mobile .nav-link:last-child { border-bottom: 0; }
+
+/* ---------- nav logo + mobile declutter ---------- */
+.psd .nav-logo { display: block; width: auto; height: 60px; }
+.psd .nav-mobile-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding-top: 12px; margin-top: 4px; border-top: 1px solid var(--line);
+}
+@media (max-width: 920px) {
+  .psd .nav-logo { height: 40px; }
+  /* On mobile only the logo + hamburger stay; lang + demo move to the drawer. */
+  .psd .nav-right .lang-switch,
+  .psd .nav-right > .btn-primary { display: none; }
+}
