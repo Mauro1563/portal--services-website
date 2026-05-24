@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Icon } from './icons';
+import { asArray } from './util';
 
 export async function Platform() {
   const t = await getTranslations('psd');
@@ -106,7 +107,7 @@ const VIP_ICONS = [
 
 export async function VIP() {
   const t = await getTranslations('psd');
-  const items = t.raw('vip.items') as { t: string; d: string }[];
+  const items = asArray<{ t: string; d: string }>(t.raw('vip.items'));
   return (
     <section className="section" id="vip">
       <div className="container">
@@ -133,8 +134,8 @@ export async function VIP() {
 
 export async function Loyalty() {
   const t = await getTranslations('psd');
-  const earn = t.raw('loyalty.earn_items') as { t: string; p: string }[];
-  const redeem = t.raw('loyalty.redeem_items') as string[];
+  const earn = asArray<{ t: string; p: string }>(t.raw('loyalty.earn_items'));
+  const redeem = asArray<string>(t.raw('loyalty.redeem_items'));
   const icons = ['✦', '◇', '❋', '%', '✿'];
   return (
     <section className="section-tight">
@@ -171,7 +172,7 @@ export async function Loyalty() {
 
 export async function Payments() {
   const t = await getTranslations('psd');
-  const items = t.raw('pay.items') as { tag: string; t: string; d: string }[];
+  const items = asArray<{ tag: string; t: string; d: string }>(t.raw('pay.items'));
   return (
     <section className="section-tight">
       <div className="container">
@@ -211,7 +212,7 @@ export async function Payments() {
 
 export async function Testimonials() {
   const t = await getTranslations('psd');
-  const items = t.raw('tst.items') as { q: string; n: string; c: string }[];
+  const items = asArray<{ q: string; n: string; c: string }>(t.raw('tst.items'));
   return (
     <section className="section-tight">
       <div className="container">

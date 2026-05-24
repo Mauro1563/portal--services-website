@@ -39,13 +39,18 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   const base = (await import(`./messages/${locale}.json`)).default as unknown as Json;
 
-  const override = await loadSiteOverride(locale);
-  // Clone (don't mutate the cached JSON module) and merge the CMS override
-  // into the `psd` namespace so server + client components pick it up.
-  const messages =
-    override && isObject(base.psd)
-      ? { ...base, psd: deepMerge(base.psd as Json, override) }
-      : base;
+  // Merge the CMS override into the `psd` namespace. Anything unexpected
+  // (non-object row, merge failure) falls back to the static base so the
+  // public site can never crash on bad CMS data.
+  let messages: Json = base;
+  try {
+    const override = await loadSiteOverride(locale);
+    if (isObject(override) && isObject(base.psd)) {
+      messages = { ...base, psd: deepMerge(base.psd as Json, override) };
+    }
+  } catch {
+    messages = base;
+  }
 
   // next-intl's AbstractIntlMessages is stricter than our generic Json shape.
   return { locale, messages: messages as Record<string, never> };

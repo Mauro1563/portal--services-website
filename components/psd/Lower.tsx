@@ -1,10 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import { Icon } from './icons';
+import { asArray } from './util';
 
 export async function Comparison() {
   const t = await getTranslations('psd');
-  const headers = t.raw('cmp.headers') as string[];
-  const rows = t.raw('cmp.rows') as (string | boolean)[][];
+  const headers = asArray<string>(t.raw('cmp.headers'));
+  const rows = asArray<(string | boolean)[]>(t.raw('cmp.rows'));
   return (
     <section className="section-tight">
       <div className="container">
@@ -25,7 +26,9 @@ export async function Comparison() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, i) => (
+              {rows.map((rawRow, i) => {
+                const row = asArray<string | boolean>(rawRow);
+                return (
                 <tr key={i}>
                   <td className="feat-label">{row[0] as string}</td>
                   {row.slice(1).map((c, j) => (
@@ -34,7 +37,8 @@ export async function Comparison() {
                     </td>
                   ))}
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -45,7 +49,7 @@ export async function Comparison() {
 
 export async function Security() {
   const t = await getTranslations('psd');
-  const items = t.raw('sec.items') as { t: string; d: string }[];
+  const items = asArray<{ t: string; d: string }>(t.raw('sec.items'));
   const icons = [<Icon.shield key="s" />, <Icon.globe key="g" />, <Icon.lock key="l" />, <Icon.zap key="z" />];
   return (
     <section className="section" id="security">

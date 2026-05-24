@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Icon } from './icons';
+import { asArray } from './util';
 
 type Plan = {
   name: string;
@@ -16,8 +17,8 @@ type Plan = {
 export function Pricing() {
   const t = useTranslations('psd');
   const [product, setProduct] = useState<'corp' | 'home'>('corp');
-  const plans = (product === 'corp' ? t.raw('pricing.corp_plans') : t.raw('pricing.home_plans')) as Plan[];
-  const addons = t.raw('pricing.addons') as { name: string; desc: string; price: string }[];
+  const plans = asArray<Plan>(product === 'corp' ? t.raw('pricing.corp_plans') : t.raw('pricing.home_plans'));
+  const addons = asArray<{ name: string; desc: string; price: string }>(t.raw('pricing.addons'));
 
   return (
     <section className="section" id="pricing">
@@ -51,7 +52,7 @@ export function Pricing() {
                 {p.price}<small>{t('pricing.month')}</small>
               </div>
               <ul>
-                {p.features.map((f, j) => (
+                {asArray<string>(p.features).map((f, j) => (
                   <li key={j}><Icon.check /> <span>{f}</span></li>
                 ))}
               </ul>
@@ -84,7 +85,7 @@ export function Pricing() {
 
 export function FAQ() {
   const t = useTranslations('psd');
-  const items = t.raw('faq.items') as { q: string; a: string }[];
+  const items = asArray<{ q: string; a: string }>(t.raw('faq.items'));
   const [open, setOpen] = useState(0);
   return (
     <section className="section">

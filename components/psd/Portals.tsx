@@ -222,8 +222,12 @@ const DEMOS = [SupervisorDemo, ManagerDemo, OperativeDemo, DirectorDemo, HQDemo,
 
 export function Portals() {
   const t = useTranslations('psd');
-  const portals = t.raw('portals.list') as Portal[];
+  const raw = t.raw('portals.list');
+  const portals = (Array.isArray(raw) ? raw : []) as Portal[];
   const [active, setActive] = useState(0);
+
+  if (portals.length === 0) return null;
+  const current = portals[active] ?? portals[0];
   const Demo = DEMOS[active] || DEMOS[0];
 
   return (
@@ -258,12 +262,12 @@ export function Portals() {
 
           <div className="portal-view">
             <div key={active} className="fade-up">
-              <span className="tag tag-accent">{portals[active].name}</span>
-              <h3 style={{ marginTop: 14 }}>{portals[active].title}</h3>
-              <p className="quote">&ldquo;{portals[active].tag}&rdquo;</p>
-              <p className="for">{portals[active].for}</p>
+              <span className="tag tag-accent">{current.name}</span>
+              <h3 style={{ marginTop: 14 }}>{current.title}</h3>
+              <p className="quote">&ldquo;{current.tag}&rdquo;</p>
+              <p className="for">{current.for}</p>
               <ul className="portal-features">
-                {portals[active].features.map((f, i) => (
+                {(Array.isArray(current.features) ? current.features : []).map((f, i) => (
                   <li key={i}><Icon.check /> <span>{f}</span></li>
                 ))}
               </ul>
