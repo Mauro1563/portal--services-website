@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import '../hqx.css';
 
 export const metadata: Metadata = {
   title: 'HQ · Portal Services',
