@@ -1256,47 +1256,42 @@
   gap: 12px; padding-top: 12px; margin-top: 4px; border-top: 1px solid var(--line);
 }
 
-/* ---------- mobile nav: links visible up top in a second row ---------- */
+/* ---------- mobile nav: single top row — logo + links + lang ---------- */
 @media (max-width: 920px) {
   .psd .nav-logo { height: 38px; }
-  .psd .nav-menu-btn { display: none !important; }   /* drop the hamburger */
+  .psd .nav-menu-btn { display: none !important; }      /* drop the hamburger */
+  .psd .nav-right > .btn-primary { display: none; }      /* demo lives in the hero */
 
-  /* Two rows: logo + lang + demo on top, section links below */
   .psd .nav-inner {
     height: auto;
-    flex-wrap: wrap;
-    padding: 10px 0 8px;
-    column-gap: 8px;
-    row-gap: 8px;
+    flex-wrap: nowrap;
+    padding: 8px 0;
+    gap: 8px;
   }
-  .psd .nav-left  { order: 1; }
-  .psd .nav-right { order: 2; margin-left: auto; gap: 8px; }
-  .psd .nav-right .lang-switch { display: inline-flex; }
-  .psd .nav-right > .btn-primary { display: inline-flex; }
-
+  .psd .nav-left  { order: 1; flex: none; }
   .psd .nav-center {
-    order: 3;
+    order: 2;
     display: flex;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     gap: 2px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    border-top: 1px solid var(--line);
-    padding-top: 8px;
   }
   .psd .nav-center::-webkit-scrollbar { display: none; }
   .psd .nav-center .nav-link { padding: 6px 10px; font-size: 13px; white-space: nowrap; }
+  .psd .nav-right { order: 3; flex: none; gap: 8px; }
+  .psd .nav-right .lang-switch { display: inline-flex; }
 }
 
 /* ---------- mobile: keep hero content near the top ---------- */
 @media (max-width: 640px) {
-  .psd .hero { padding-top: 18px; padding-bottom: 28px; }
+  .psd .hero { padding-top: 14px; padding-bottom: 28px; }
   .psd .hero-meta { margin-bottom: 14px; }
   .psd .hero-headline { margin-bottom: 18px; }
   .psd .hero-sub { margin-bottom: 24px; }
   .psd .nav-logo { height: 34px; }
-  .psd .nav-right > .btn-primary { height: 38px; padding: 0 14px; font-size: 14px; }
 }
 
 /* ---------- mobile: show all 7 portals as a selectable grid ---------- */
