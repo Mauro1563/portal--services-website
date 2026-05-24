@@ -1261,3 +1261,13 @@
   .psd .nav-right .lang-switch,
   .psd .nav-right > .btn-primary { display: none; }
 }
+
+/* ---------- mobile: lift the menu + content to the top ---------- */
+@media (max-width: 640px) {
+  .psd .nav-inner { height: 60px; }
+  .psd .hero { padding-top: 16px; padding-bottom: 28px; }
+  .psd .hero-meta { margin-bottom: 16px; }
+  .psd .hero-headline { margin-bottom: 18px; }
+  .psd .hero-sub { margin-bottom: 24px; }
+  .psd .nav-logo { height: 36px; }
+}
