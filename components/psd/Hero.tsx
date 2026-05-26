@@ -147,7 +147,7 @@ export async function Hero() {
         </div>
 
         <div className="hero-stats">
-          <div className="hero-stat"><span className="num tabular">7</span><span className="lbl">{t('hero.stat_portals')}</span></div>
+          <div className="hero-stat"><span className="num tabular">2</span><span className="lbl">{t('hero.stat_portals')}</span></div>
           <div className="hero-stat"><span className="num tabular">99.9%</span><span className="lbl">{t('hero.stat_uptime')}</span></div>
           <div className="hero-stat"><span className="num tabular">30d</span><span className="lbl">{t('hero.stat_trial')}</span></div>
           <div className="hero-stat"><span className="num tabular">3</span><span className="lbl">{t('hero.stat_lang')}</span></div>
