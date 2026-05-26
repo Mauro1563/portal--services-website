@@ -315,11 +315,11 @@
       "demo": "Pedir demo"
     },
     "hero": {
-      "eyebrow": "Para equipas de limpeza, facilities e propriedades",
+      "eyebrow": "Limpeza de casas e gestão de Airbnb",
       "title_a": "Uma plataforma.",
       "title_b": "Um lugar.",
-      "title_c": "Toda a equipa, ligada.",
-      "sub": "Gere equipas, edifícios, qualidade e comunicação a partir de um só lugar — em tempo real, em qualquer dispositivo. Substitui WhatsApp e Excel por um sistema operacional feito para o terreno.",
+      "title_c": "Tudo ligado.",
+      "sub": "Gere as tuas limpezas de casas e as rotações dos teus alojamentos Airbnb num só lugar — reservas, equipa, fotos do trabalho, avaliações e chat com o cliente, em tempo real. Adeus ao WhatsApp e Excel.",
       "cta_primary": "Pedir demo",
       "cta_secondary": "Ver os portais",
       "trust_a": "Teste grátis de 30 dias",
@@ -331,13 +331,13 @@
       "stat_lang": "Idiomas suportados"
     },
     "logos": {
-      "head": "A plataforma escolhida por equipas profissionais em UK · ES · PT"
+      "head": "Para negócios de limpeza de casas e Airbnb em UK · ES · PT"
     },
     "portals": {
-      "eyebrow": "Sete portais · uma plataforma",
-      "title_a": "Um portal para cada",
-      "title_b": "função da equipa.",
-      "sub": "Cada pessoa vê apenas o que precisa para fazer o seu trabalho. Do operacional no terreno ao diretor com visão 360°.",
+      "eyebrow": "Dois portais · uma plataforma",
+      "title_a": "Feito para a casa",
+      "title_b": "e para Airbnb.",
+      "sub": "Quer limpes casas ou giras as rotações dos teus alojamentos Airbnb, tens o portal e as ferramentas feitas para o teu negócio.",
       "list": [
         {
           "name": "Supervisor",
@@ -443,18 +443,18 @@
       "eyebrow": "O produto, não as promessas",
       "title_a": "Uma interface que a equipa",
       "title_b": "aprende em minutos.",
-      "sub": "Desenhada para mobile. Pronta para a direção. Ligada para que todos vejam o mesmo, em tempo real.",
+      "sub": "Pensada para o telemóvel. Para ti, a tua equipa e os teus clientes. Todos veem o mesmo, em tempo real.",
       "f1": "Dados em tempo real — sem refresh",
       "f2": "Mobile-first — entra com um PIN de 6 dígitos",
       "f3": "White-label desde o plano Premium",
       "kpi": {
-        "buildings": "Edifícios",
-        "ops": "Operacionais",
+        "buildings": "Propriedades",
+        "ops": "Limpezas",
         "quality": "Qualidade",
         "uptime": "Uptime"
       },
       "activity": "Atividade do dia",
-      "buildings_active": "Edifícios ativos",
+      "buildings_active": "Propriedades ativas",
       "shift": "Em turno",
       "inspection": "Inspeção"
     },
@@ -578,7 +578,7 @@
       "eyebrow": "Planos e preços",
       "title_a": "Começa pequeno.",
       "title_b": "Cresce sem mudar de plataforma.",
-      "sub": "Duas linhas de produto: corporativo para edifícios e serviços, e limpezas domésticas com experiência premium para o cliente.",
+      "sub": "Pensado para negócios de limpeza de casas e Airbnb. Começa pequeno e cresce sem mudar de plataforma.",
       "trial": "Teste gratuito de 30 dias — sem cartão. Cancela quando quiseres.",
       "toggle_corp": "Corporativo",
       "toggle_home": "Limpezas domésticas",

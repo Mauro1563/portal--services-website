@@ -315,11 +315,11 @@
       "demo": "Request demo"
     },
     "hero": {
-      "eyebrow": "For cleaning, facilities and property teams",
+      "eyebrow": "Home cleaning & Airbnb turnovers",
       "title_a": "One platform.",
       "title_b": "One place.",
-      "title_c": "The whole team, connected.",
-      "sub": "Manage teams, buildings, quality and communication from one place — in real time, on any device. Replace WhatsApp and Excel with an operational system built for the field.",
+      "title_c": "All connected.",
+      "sub": "Run your home cleanings and Airbnb turnovers from one place — bookings, team, finish photos, ratings and client chat, in real time. Replace WhatsApp and spreadsheets.",
       "cta_primary": "Request demo",
       "cta_secondary": "See the portals",
       "trust_a": "30-day free trial",
@@ -331,13 +331,13 @@
       "stat_lang": "Supported languages"
     },
     "logos": {
-      "head": "Chosen by professional cleaning, facilities and short-let teams across UK · ES · PT"
+      "head": "For home cleaning & Airbnb businesses across UK · ES · PT"
     },
     "portals": {
-      "eyebrow": "Seven portals · one platform",
-      "title_a": "A portal for every",
-      "title_b": "role on the team.",
-      "sub": "Each person sees only what they need to do their job. From the supervisor on the ground to the director with a 360° view.",
+      "eyebrow": "Two portals · one platform",
+      "title_a": "Built for the home",
+      "title_b": "and for Airbnb.",
+      "sub": "Whether you clean homes or manage Airbnb turnovers, you get the portal and tools made for your business.",
       "list": [
         {
           "name": "Supervisor",
@@ -443,18 +443,18 @@
       "eyebrow": "The product, not the promises",
       "title_a": "An interface the team",
       "title_b": "learns in minutes.",
-      "sub": "Designed for mobile. Ready for leadership. Connected so everyone sees the same thing, in real time.",
+      "sub": "Built for mobile. For you, your team and your clients. Everyone sees the same thing, in real time.",
       "f1": "Real-time data — no refresh needed",
       "f2": "Mobile-first — sign in with a 6-digit PIN",
       "f3": "White-label from the Premium plan",
       "kpi": {
-        "buildings": "Buildings",
-        "ops": "Operatives",
+        "buildings": "Properties",
+        "ops": "Cleanings",
         "quality": "Quality",
         "uptime": "Uptime"
       },
       "activity": "Today's activity",
-      "buildings_active": "Active buildings",
+      "buildings_active": "Active properties",
       "shift": "On shift",
       "inspection": "Inspection"
     },
@@ -578,7 +578,7 @@
       "eyebrow": "Plans and pricing",
       "title_a": "Start small.",
       "title_b": "Grow without changing platforms.",
-      "sub": "Two product lines: corporate for buildings and services, and home cleaning with a premium client experience.",
+      "sub": "Built for home cleaning and Airbnb businesses. Start small and grow without switching platforms.",
       "trial": "30-day free trial — no credit card. Cancel anytime.",
       "toggle_corp": "Corporate",
       "toggle_home": "Home cleaning",

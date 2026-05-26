@@ -30,8 +30,8 @@ function PhoneMockup({
         <div style={{ padding: '10px 18px 14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Supervisor</div>
-              <div style={{ fontSize: 18, fontWeight: 500, letterSpacing: '-0.02em', marginTop: 2 }}>Atlas Tower</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Hoy</div>
+              <div style={{ fontSize: 18, fontWeight: 500, letterSpacing: '-0.02em', marginTop: 2 }}>Tus limpiezas</div>
             </div>
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 600 }}>MR</div>
           </div>
@@ -68,7 +68,7 @@ function PhoneMockup({
 
         <div style={{ position: 'absolute', left: 14, right: 14, bottom: 16, display: 'flex', gap: 8 }}>
           <button style={{ flex: 1, height: 44, borderRadius: 12, background: 'var(--ink)', color: 'var(--bg)', fontWeight: 500, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-            <Icon.check /> Inspección
+            <Icon.check /> Ver informe
           </button>
           <button style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center' }}>
             <Icon.plus />
@@ -160,12 +160,12 @@ export async function Hero() {
 export async function LogoStrip() {
   const t = await getTranslations('psd');
   const logos = [
-    { name: 'Atlas Tower', style: 'wordmark' },
-    { name: 'RIVERSIDE', style: 'spaced' },
-    { name: 'Westwood', style: 'serif' },
+    { name: 'HomeShine', style: 'wordmark' },
+    { name: 'CASA CLEAN', style: 'spaced' },
+    { name: 'Bright Homes', style: 'serif' },
     { name: 'Cleanly Co.', style: 'wordmark' },
     { name: 'HOST/Madrid', style: 'spaced' },
-    { name: 'Northgate FM', style: 'wordmark' },
+    { name: 'StayFresh BnB', style: 'wordmark' },
   ];
   return (
     <section className="logos">
