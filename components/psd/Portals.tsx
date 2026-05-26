@@ -220,15 +220,25 @@ const HomeDemo = () => (
 
 const DEMOS = [SupervisorDemo, ManagerDemo, OperativeDemo, DirectorDemo, HQDemo, AirbnbDemo, HomeDemo];
 
+// Portals currently published on the public site, in display order.
+// Index refers to psd.portals.list in the messages files (0 Supervisor,
+// 1 Manager, 2 Operative, 3 Director, 4 HQ, 5 Airbnb, 6 Home). The hidden
+// portals stay defined in the messages — re-publish one by adding its index.
+const PUBLISHED_INDICES = [6, 5]; // Limpiezas de Hogar, Airbnb
+
 export function Portals() {
   const t = useTranslations('psd');
   const raw = t.raw('portals.list');
-  const portals = (Array.isArray(raw) ? raw : []) as Portal[];
+  const all = (Array.isArray(raw) ? raw : []) as Portal[];
+  const portals = PUBLISHED_INDICES
+    .filter((i) => all[i])
+    .map((i) => ({ portal: all[i], demoIndex: i }));
   const [active, setActive] = useState(0);
 
   if (portals.length === 0) return null;
-  const current = portals[active] ?? portals[0];
-  const Demo = DEMOS[active] || DEMOS[0];
+  const safeActive = Math.min(active, portals.length - 1);
+  const current = portals[safeActive].portal;
+  const Demo = DEMOS[portals[safeActive].demoIndex] || DEMOS[0];
 
   return (
     <section className="section" id="portals">
@@ -243,12 +253,12 @@ export function Portals() {
 
         <div className="portals-shell">
           <div className="portal-list" role="tablist">
-            {portals.map((p, i) => (
+            {portals.map(({ portal: p }, i) => (
               <button
                 key={p.name}
                 role="tab"
-                aria-selected={active === i}
-                className={`portal-tab ${active === i ? 'active' : ''}`}
+                aria-selected={safeActive === i}
+                className={`portal-tab ${safeActive === i ? 'active' : ''}`}
                 onClick={() => setActive(i)}
               >
                 <span className="ptab-num">{String(i + 1).padStart(2, '0')}</span>
@@ -261,7 +271,7 @@ export function Portals() {
           </div>
 
           <div className="portal-view">
-            <div key={active} className="fade-up">
+            <div key={safeActive} className="fade-up">
               <span className="tag tag-accent">{current.name}</span>
               <h3 style={{ marginTop: 14 }}>{current.title}</h3>
               <p className="quote">&ldquo;{current.tag}&rdquo;</p>
@@ -272,7 +282,7 @@ export function Portals() {
                 ))}
               </ul>
             </div>
-            <div className="portal-demo" key={`demo-${active}`}>
+            <div className="portal-demo" key={`demo-${safeActive}`}>
               <Demo />
             </div>
           </div>
