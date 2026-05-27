@@ -558,21 +558,22 @@
       "title_b": "and peace of mind.",
       "items": [
         {
-          "q": "It's like having a digital butler. I know exactly when they come, how the house looks and I can tell them in seconds.",
-          "n": "Residential client",
+          "q": "I know exactly when the team arrives, I see the photo of how my home turned out, and I can leave feedback in seconds.",
+          "n": "Home client",
           "c": "London"
         },
         {
-          "q": "I recommended the service to three friends and got a free clean. Incredible.",
-          "n": "Residential client",
-          "c": "Madrid"
+          "q": "I manage three Airbnb flats and the turnovers coordinate themselves. My guests always find everything spotless.",
+          "n": "Airbnb host",
+          "c": "Lisbon"
         },
         {
-          "q": "Seeing other clients' reviews before signing up gave me all the confidence I needed.",
-          "n": "New client",
+          "q": "I referred a friend and earned a free cleaning. Simple, clear and no surprises.",
+          "n": "Home client",
           "c": "Barcelona"
         }
-      ]
+      ],
+      "rating": "Rated by your clients after every visit."
     },
     "pricing": {
       "eyebrow": "Plans and pricing",

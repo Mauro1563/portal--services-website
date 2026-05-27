@@ -558,21 +558,22 @@
       "title_b": "y tranquilidad.",
       "items": [
         {
-          "q": "Es como tener un mayordomo digital. Sé exactamente cuándo viene, cómo quedó mi casa y puedo decírselo en segundos.",
-          "n": "Cliente residencial",
-          "c": "Londres"
-        },
-        {
-          "q": "Recomendé el servicio a tres amigas y me regalaron una limpieza gratis. Increíble.",
-          "n": "Cliente residencial",
+          "q": "Sé exactamente cuándo llega el equipo, veo la foto de cómo quedó mi casa y puedo dar mi opinión en segundos.",
+          "n": "Cliente de hogar",
           "c": "Madrid"
         },
         {
-          "q": "Ver las opiniones de otros clientes antes de contratar me dio toda la confianza que necesitaba.",
-          "n": "Cliente nuevo",
+          "q": "Gestiono tres pisos de Airbnb y las rotaciones se coordinan solas. Mis huéspedes siempre encuentran todo impecable.",
+          "n": "Anfitrión de Airbnb",
+          "c": "Lisboa"
+        },
+        {
+          "q": "Recomendé el servicio a una amiga y gané una limpieza gratis. Fácil, claro y sin sorpresas.",
+          "n": "Cliente de hogar",
           "c": "Barcelona"
         }
-      ]
+      ],
+      "rating": "Valorado por tus clientes en cada visita."
     },
     "pricing": {
       "eyebrow": "Planes y precios",
