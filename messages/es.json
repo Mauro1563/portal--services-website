@@ -765,26 +765,26 @@
       ]
     },
     "sec": {
-      "eyebrow": "Seguridad",
-      "title_a": "Seguridad de nivel empresarial,",
-      "title_b": "por defecto.",
-      "sub": "Diseñado desde cero para organizaciones que se toman en serio los datos, el cumplimiento y la disponibilidad.",
+      "eyebrow": "Seguridad y confianza",
+      "title_a": "Tus datos y los de tus clientes,",
+      "title_b": "siempre protegidos.",
+      "sub": "Protegemos la información de tu negocio y de tus clientes con los mismos estándares que usan las grandes plataformas.",
       "items": [
         {
-          "t": "SOC 2 Type II",
-          "d": "En curso de certificación — controles operativos."
+          "t": "Datos protegidos (GDPR)",
+          "d": "Cumplimiento RGPD, con datos alojados en la UE."
         },
         {
-          "t": "GDPR ready",
-          "d": "Datos residentes en la UE disponible."
+          "t": "Pagos seguros",
+          "d": "Cifrado SSL y cumplimiento PCI DSS en cada cobro."
         },
         {
-          "t": "RBAC + SSO",
-          "d": "Roles granulares, SAML, OAuth, MFA."
+          "t": "Acceso controlado",
+          "d": "Cada persona entra con su PIN; tú decides quién ve qué."
         },
         {
-          "t": "99,9% uptime",
-          "d": "Multi-región, cifrado en reposo y en tránsito."
+          "t": "99,9% de disponibilidad",
+          "d": "Copias de seguridad y cifrado en reposo y en tránsito."
         }
       ]
     },
@@ -794,19 +794,19 @@
       "items": [
         {
           "q": "¿Necesito instalar algo?",
-          "a": "No. Es 100% web — funciona en cualquier móvil moderno, ordenador o tablet. Los operativos abren la URL, entran con un PIN de 6 dígitos y listo."
+          "a": "No. Es 100% web — funciona en cualquier móvil, ordenador o tablet. Tu equipo abre la URL, entra con un PIN de 6 dígitos y listo."
         },
         {
           "q": "¿Puedo importar mis datos actuales?",
-          "a": "Sí. Tenemos importadores de CSV para clientes, edificios y empleados. En la mayoría de casos te subimos los datos nosotros durante el onboarding."
+          "a": "Sí. Tenemos importadores de CSV para clientes, propiedades y tu equipo. En la mayoría de casos te subimos los datos nosotros durante el onboarding."
         },
         {
           "q": "¿Funciona sin conexión?",
-          "a": "El operativo puede registrar el check-in y subir fotos aunque pierda señal — todo se sincroniza cuando vuelve a tener internet."
+          "a": "Sí. Tu limpiador/a puede registrar el check-in y subir fotos aunque pierda señal — todo se sincroniza cuando vuelve a tener internet."
         },
         {
           "q": "¿Puedo tener mi marca en el portal del cliente?",
-          "a": "Sí. Logo, colores y dominio propio están incluidos en Premium y Enterprise. En Professional puedes subir tu logo."
+          "a": "Sí. Logo, colores y dominio propio están incluidos en el plan Premium. En Professional puedes subir tu logo."
         },
         {
           "q": "¿En qué idiomas está disponible?",

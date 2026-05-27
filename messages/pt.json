@@ -765,26 +765,26 @@
       ]
     },
     "sec": {
-      "eyebrow": "Segurança",
-      "title_a": "Segurança de nível empresarial,",
-      "title_b": "por defeito.",
-      "sub": "Desenhado de raiz para organizações que levam dados, conformidade e disponibilidade a sério.",
+      "eyebrow": "Segurança e confiança",
+      "title_a": "Os teus dados e os dos teus clientes,",
+      "title_b": "sempre protegidos.",
+      "sub": "Protegemos a informação do teu negócio e dos teus clientes com os mesmos padrões das grandes plataformas.",
       "items": [
         {
-          "t": "SOC 2 Type II",
-          "d": "Certificação em curso — controlos operacionais."
+          "t": "Dados protegidos (RGPD)",
+          "d": "Conformidade RGPD, com dados alojados na UE."
         },
         {
-          "t": "GDPR ready",
-          "d": "Dados residentes na UE disponíveis."
+          "t": "Pagamentos seguros",
+          "d": "Encriptação SSL e conformidade PCI DSS em cada cobrança."
         },
         {
-          "t": "RBAC + SSO",
-          "d": "Funções granulares, SAML, OAuth, MFA."
+          "t": "Acesso controlado",
+          "d": "Cada pessoa entra com o seu PIN; tu decides quem vê o quê."
         },
         {
-          "t": "99,9% uptime",
-          "d": "Multi-região, cifragem em repouso e em trânsito."
+          "t": "99,9% de disponibilidade",
+          "d": "Backups e encriptação em repouso e em trânsito."
         }
       ]
     },
@@ -793,24 +793,24 @@
       "title": "Vamos esclarecer.",
       "items": [
         {
-          "q": "Preciso instalar alguma coisa?",
-          "a": "Não. É 100% web — funciona em qualquer telemóvel moderno, computador ou tablet. Os operacionais abrem o URL, entram com um PIN de 6 dígitos e pronto."
+          "q": "Preciso de instalar alguma coisa?",
+          "a": "Não. É 100% web — funciona em qualquer telemóvel, computador ou tablet. A tua equipa abre o URL, entra com um PIN de 6 dígitos e pronto."
         },
         {
           "q": "Posso importar os meus dados atuais?",
-          "a": "Sim. Temos importadores CSV para clientes, edifícios e colaboradores. Na maioria dos casos carregamos os dados por ti durante o onboarding."
+          "a": "Sim. Temos importadores de CSV para clientes, propriedades e a tua equipa. Na maioria dos casos carregamos os dados por ti durante o onboarding."
         },
         {
           "q": "Funciona sem ligação?",
-          "a": "O operacional pode fazer check-in e enviar fotos mesmo sem sinal — tudo sincroniza assim que a ligação volta."
+          "a": "Sim. O teu limpador/a pode registar o check-in e enviar fotos mesmo sem sinal — tudo sincroniza quando voltar a ter internet."
         },
         {
           "q": "Posso ter a minha marca no portal do cliente?",
-          "a": "Sim. Logo, cores e domínio próprio estão incluídos no Premium e Enterprise. No Professional podes carregar o teu logo."
+          "a": "Sim. Logótipo, cores e domínio próprio estão incluídos no plano Premium. No Professional podes carregar o teu logótipo."
         },
         {
           "q": "Em que idiomas está disponível?",
-          "a": "Inglês, espanhol e português, com suporte local em UK, ES e PT."
+          "a": "Inglês, espanhol e português, com apoio local no UK, ES e PT."
         }
       ]
     },
