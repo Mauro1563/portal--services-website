@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
 import { Nav } from '@/components/psd/Nav';
-import { Hero, LogoStrip } from '@/components/psd/Hero';
+import { Hero } from '@/components/psd/Hero';
 import { Portals } from '@/components/psd/Portals';
 import { Platform, VIP, Loyalty, Payments, Testimonials } from '@/components/psd/Showcase';
 import { Pricing, FAQ } from '@/components/psd/Pricing';
@@ -25,7 +25,6 @@ export default async function Home({
       <Nav logoUrl={branding.logoUrl} />
       <main>
         <Hero />
-        <LogoStrip />
         <Portals />
         <Platform />
         <VIP />

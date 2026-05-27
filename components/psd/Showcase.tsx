@@ -5,18 +5,18 @@ import { asArray } from './util';
 export async function Platform() {
   const t = await getTranslations('psd');
   const activity = [
-    { i: 'MR', n: 'María R.', w: 'Check-in · Atlas Tower', tt: '2m' },
-    { i: 'CM', n: 'Carlos M.', w: 'Inspection · 4.9/5', tt: '5m' },
-    { i: 'LV', n: 'Lucía V.', w: 'Daily report sent', tt: '11m' },
-    { i: 'PK', n: 'Pedro K.', w: 'Supplies approved', tt: '18m' },
-    { i: 'AC', n: 'Anna C.', w: 'Check-out · Riverside', tt: '24m' },
-    { i: 'DP', n: 'Daniel P.', w: 'Photo evidence uploaded', tt: '31m' },
+    { i: 'SM', n: 'Sofía M.', w: 'Check-in · Central Apartment', tt: '2m' },
+    { i: 'CM', n: 'Carlos M.', w: 'Cleaning done · photo sent', tt: '9m' },
+    { i: 'LV', n: 'Lucía V.', w: '5★ review received', tt: '14m' },
+    { i: 'PK', n: 'Pedro K.', w: 'Airbnb turnover ready', tt: '22m' },
+    { i: 'AC', n: 'Ana C.', w: 'Client message replied', tt: '28m' },
+    { i: 'DP', n: 'Diego P.', w: 'Payment received', tt: '35m' },
   ];
   const bldgs = [
-    { n: 'Atlas Tower · Mayfair', q: 4.9, s: t('platform.shift') },
-    { n: 'Riverside Coworking', q: 4.7, s: t('platform.shift') },
-    { n: 'Hospital Westwood', q: 4.8, s: t('platform.inspection') },
-    { n: 'Northgate Plaza', q: 4.6, s: t('platform.shift') },
+    { n: 'Soho Loft · Airbnb', q: 4.9, s: t('platform.shift') },
+    { n: 'Apartamento Centro · Madrid', q: 4.8, s: t('platform.shift') },
+    { n: 'Chiado Flat · Airbnb', q: 5.0, s: t('platform.inspection') },
+    { n: 'Casa Norte · cliente fijo', q: 4.7, s: t('platform.shift') },
   ];
   return (
     <section className="section" id="platform">
@@ -47,9 +47,9 @@ export async function Platform() {
               <span style={{ marginLeft: 'auto', color: 'var(--accent-2)' }}>● LIVE</span>
             </div>
             <div className="dash-grid">
-              <div className="kpi"><span className="l">{t('platform.kpi.buildings')}</span><span className="v tabular">47 <span className="d">+4</span></span></div>
-              <div className="kpi"><span className="l">{t('platform.kpi.ops')}</span><span className="v tabular">312 <span className="d">+18</span></span></div>
-              <div className="kpi"><span className="l">{t('platform.kpi.quality')}</span><span className="v tabular">4.8 <span className="d">+0.2</span></span></div>
+              <div className="kpi"><span className="l">{t('platform.kpi.buildings')}</span><span className="v tabular">24 <span className="d">+3</span></span></div>
+              <div className="kpi"><span className="l">{t('platform.kpi.ops')}</span><span className="v tabular">96 <span className="d">+12</span></span></div>
+              <div className="kpi"><span className="l">{t('platform.kpi.quality')}</span><span className="v tabular">4.9 <span className="d">+0.2</span></span></div>
               <div className="kpi"><span className="l">{t('platform.kpi.uptime')}</span><span className="v tabular">99.9%</span></div>
             </div>
             <div className="dash-body">
@@ -224,7 +224,7 @@ export async function Testimonials() {
           <div className="right">
             <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span className="stars" style={{ fontSize: 18 }}><Icon.star /><Icon.star /><Icon.star /><Icon.star /><Icon.star /></span>
-              <span>4.9 / 5 — 247 reviews</span>
+              <span>{t('tst.rating')}</span>
             </p>
           </div>
         </div>
