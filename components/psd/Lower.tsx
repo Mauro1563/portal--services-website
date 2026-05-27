@@ -71,7 +71,7 @@ export async function Security() {
           ))}
         </div>
         <div style={{ marginTop: 28, display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          {['GDPR', 'SSL', 'PCI DSS', 'SOC 2 (in progress)', 'UK · ES · PT', '3 languages'].map((s) => (
+          {['GDPR', 'SSL', 'PCI DSS', 'UK · ES · PT', '3 languages'].map((s) => (
             <span className="tag" key={s}>{s}</span>
           ))}
         </div>

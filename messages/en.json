@@ -765,26 +765,26 @@
       ]
     },
     "sec": {
-      "eyebrow": "Security",
-      "title_a": "Enterprise-grade security,",
-      "title_b": "by default.",
-      "sub": "Built from day one for organisations that take data, compliance and uptime seriously.",
+      "eyebrow": "Security & trust",
+      "title_a": "Your data and your clients',",
+      "title_b": "always protected.",
+      "sub": "We protect your business and client information with the same standards the big platforms use.",
       "items": [
         {
-          "t": "SOC 2 Type II",
-          "d": "Certification in progress — operational controls."
+          "t": "Data protected (GDPR)",
+          "d": "GDPR compliant, with EU-hosted data."
         },
         {
-          "t": "GDPR ready",
-          "d": "EU-resident data available."
+          "t": "Secure payments",
+          "d": "SSL encryption and PCI DSS compliance on every charge."
         },
         {
-          "t": "RBAC + SSO",
-          "d": "Granular roles, SAML, OAuth, MFA."
+          "t": "Controlled access",
+          "d": "Everyone signs in with their PIN; you decide who sees what."
         },
         {
           "t": "99.9% uptime",
-          "d": "Multi-region, encryption at rest and in transit."
+          "d": "Backups and encryption at rest and in transit."
         }
       ]
     },
@@ -794,23 +794,23 @@
       "items": [
         {
           "q": "Do I need to install anything?",
-          "a": "No. It's 100% web — works on any modern phone, computer or tablet. Operatives open the URL, enter a 6-digit PIN and they're in."
+          "a": "No. It's 100% web — works on any phone, computer or tablet. Your team opens the URL, signs in with a 6-digit PIN and that's it."
         },
         {
           "q": "Can I import my existing data?",
-          "a": "Yes. We have CSV importers for clients, buildings and staff. In most cases we upload the data for you during onboarding."
+          "a": "Yes. We have CSV importers for clients, properties and your team. In most cases we upload your data for you during onboarding."
         },
         {
           "q": "Does it work offline?",
-          "a": "The operative can check in and upload photos even when signal drops — everything syncs once the connection is back."
+          "a": "Yes. Your cleaner can check in and upload photos even with no signal — everything syncs once they're back online."
         },
         {
-          "q": "Can I have my own brand on the client portal?",
-          "a": "Yes. Logo, colours and own domain are included in Premium and Enterprise. In Professional you can upload your logo."
+          "q": "Can I put my brand on the client portal?",
+          "a": "Yes. Logo, colours and your own domain are included in the Premium plan. On Professional you can upload your logo."
         },
         {
-          "q": "Which languages is it available in?",
-          "a": "English, Spanish and Portuguese, with local support across UK, ES and PT."
+          "q": "Which languages are available?",
+          "a": "English, Spanish and Portuguese, with local support in the UK, ES and PT."
         }
       ]
     },
