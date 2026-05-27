@@ -283,10 +283,10 @@ export default async function DocsPage({
               <p>
                 Email{' '}
                 <a
-                  href="mailto:portalservicesdigital@gmail.com"
+                  href="mailto:hola@portalservices.digital"
                   className="text-cyan-300 hover:text-cyan-200"
                 >
-                  portalservicesdigital@gmail.com
+                  hola@portalservices.digital
                 </a>{' '}
                 with your account email and a short description of what's
                 happening. Screenshots help.

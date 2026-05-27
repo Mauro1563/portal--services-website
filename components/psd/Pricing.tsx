@@ -49,7 +49,7 @@ export function Pricing() {
                   <li key={j}><Icon.check /> <span>{f}</span></li>
                 ))}
               </ul>
-              <a className={p.featured ? 'btn btn-accent btn-lg' : 'btn btn-secondary btn-lg'} href={`mailto:portalservicesdigital@gmail.com?subject=Portal%20Services%20${encodeURIComponent(p.name)}`}>
+              <a className={p.featured ? 'btn btn-accent btn-lg' : 'btn btn-secondary btn-lg'} href={`mailto:hola@portalservices.digital?subject=Portal%20Services%20${encodeURIComponent(p.name)}`}>
                 {p.cta} <Icon.arrow />
               </a>
             </div>

@@ -47,7 +47,7 @@ export async function Hero() {
 
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
+            href="mailto:hola@portalservices.digital?subject=Demo%20request"
             className="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-6 text-base font-semibold text-white shadow-[0_10px_30px_-8px_rgba(56,189,248,0.55)] transition hover:brightness-110"
           >
             {data.cta_primary}

@@ -14,10 +14,10 @@ export async function CTA() {
           </h2>
           <p className="lede" style={{ position: 'relative' }}>{t('cta.sub')}</p>
           <div className="btns" style={{ position: 'relative' }}>
-            <a className="btn btn-accent btn-lg" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
+            <a className="btn btn-accent btn-lg" href="mailto:hola@portalservices.digital?subject=Demo%20request">
               {t('cta.primary')} <Icon.arrow />
             </a>
-            <a className="btn btn-secondary btn-lg" href="mailto:portalservicesdigital@gmail.com?subject=Sales%20inquiry">
+            <a className="btn btn-secondary btn-lg" href="mailto:hola@portalservices.digital?subject=Sales%20inquiry">
               {t('cta.secondary')}
             </a>
           </div>
@@ -65,7 +65,7 @@ export async function Footer({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) 
           <div>
             <h5>{t('footer.company')}</h5>
             <ul>
-              <li><a href="mailto:portalservicesdigital@gmail.com">{t('footer.links.contact')}</a></li>
+              <li><a href="mailto:hola@portalservices.digital">{t('footer.links.contact')}</a></li>
               <li><a href="https://hq.portalservices.digital">{t('footer.links.login')}</a></li>
             </ul>
           </div>

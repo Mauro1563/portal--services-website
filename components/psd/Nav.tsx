@@ -39,7 +39,7 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
         <div className="nav-right">
           <LangSwitch />
           <a className="nav-link desktop-only" href="https://hq.portalservices.digital" style={{ marginLeft: 8 }}>{t('login')}</a>
-          <a className="btn btn-primary" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request" style={{ marginLeft: 6 }}>
+          <a className="btn btn-primary" href="mailto:hola@portalservices.digital?subject=Demo%20request" style={{ marginLeft: 6 }}>
             {t('demo')} <Icon.arrow />
           </a>
           <button className="nav-menu-btn" aria-label="Menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
@@ -58,7 +58,7 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
             <LangSwitch />
             <a
               className="btn btn-primary"
-              href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
+              href="mailto:hola@portalservices.digital?subject=Demo%20request"
               onClick={() => setOpen(false)}
             >
               {t('demo')} <Icon.arrow />

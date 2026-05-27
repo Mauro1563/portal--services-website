@@ -44,7 +44,7 @@ export function Nav() {
               {t('login')}
             </Link>
             <a
-              href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
+              href="mailto:hola@portalservices.digital?subject=Demo%20request"
               className="inline-flex h-9 items-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 px-3 text-xs font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 sm:px-3.5 sm:text-sm"
             >
               {t('cta')}

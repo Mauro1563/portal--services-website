@@ -167,10 +167,10 @@ export default async function TermsPage({
             <p>
               Questions about these Terms? Email{' '}
               <a
-                href="mailto:portalservicesdigital@gmail.com"
+                href="mailto:hola@portalservices.digital"
                 className="text-cyan-300 hover:text-cyan-200"
               >
-                portalservicesdigital@gmail.com
+                hola@portalservices.digital
               </a>
               .
             </p>
