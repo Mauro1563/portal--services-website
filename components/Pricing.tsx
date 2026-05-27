@@ -5,7 +5,7 @@ import { getMarketingSection } from '@/lib/marketing';
 import type { PricingContent } from '@/app/hq/content/pricing/PricingEditor';
 
 const mailto = (subject: string) =>
-  `mailto:portalservicesdigital@gmail.com?subject=${encodeURIComponent(subject)}`;
+  `mailto:hola@portalservices.digital?subject=${encodeURIComponent(subject)}`;
 
 export async function Pricing() {
   const stored = await getMarketingSection<PricingContent>('pricing');

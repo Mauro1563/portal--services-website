@@ -97,7 +97,7 @@ export async function Hero() {
             </h1>
             <p className="lede hero-sub">{t('hero.sub')}</p>
             <div className="hero-cta">
-              <a className="btn btn-primary btn-lg" href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request">
+              <a className="btn btn-primary btn-lg" href="mailto:hola@portalservices.digital?subject=Demo%20request">
                 {t('hero.cta_primary')} <Icon.arrow />
               </a>
               <a className="btn btn-secondary btn-lg" href="#portals">

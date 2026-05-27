@@ -21,13 +21,13 @@ export async function CTABanner() {
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href="mailto:portalservicesdigital@gmail.com?subject=Demo%20request"
+                href="mailto:hola@portalservices.digital?subject=Demo%20request"
                 className="inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-6 text-base font-semibold text-white shadow-[0_10px_30px_-8px_rgba(56,189,248,0.6)] transition hover:brightness-110"
               >
                 {data.primary} <ArrowRight className="h-4 w-4" />
               </a>
               <a
-                href="mailto:portalservicesdigital@gmail.com?subject=Sales%20inquiry"
+                href="mailto:hola@portalservices.digital?subject=Sales%20inquiry"
                 className="inline-flex h-12 items-center justify-center rounded-xl bg-white/10 px-6 text-base font-semibold text-white ring-1 ring-inset ring-white/20 transition hover:bg-white/15"
               >
                 {data.secondary}

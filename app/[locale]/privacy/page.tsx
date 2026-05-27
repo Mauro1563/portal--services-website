@@ -45,10 +45,10 @@ export default async function PrivacyPage({
               <strong>hq.portalservices.digital</strong>. For privacy enquiries
               contact us at{' '}
               <a
-                href="mailto:portalservicesdigital@gmail.com"
+                href="mailto:hola@portalservices.digital"
                 className="text-cyan-300 hover:text-cyan-200"
               >
-                portalservicesdigital@gmail.com
+                hola@portalservices.digital
               </a>
               .
             </p>
@@ -125,10 +125,10 @@ export default async function PrivacyPage({
             <p>
               Send any such request to{' '}
               <a
-                href="mailto:portalservicesdigital@gmail.com"
+                href="mailto:hola@portalservices.digital"
                 className="text-cyan-300 hover:text-cyan-200"
               >
-                portalservicesdigital@gmail.com
+                hola@portalservices.digital
               </a>{' '}
               and we'll respond within 30 days.
             </p>
