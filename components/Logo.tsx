@@ -13,9 +13,9 @@ const sizeConfig: Record<
   Size,
   { h: string; pad: string; rounded: string }
 > = {
-  sm: { h: 'h-12 sm:h-14', pad: 'px-3 py-1.5', rounded: 'rounded-lg' },
-  md: { h: 'h-16 sm:h-20', pad: 'px-4 py-2', rounded: 'rounded-xl' },
-  lg: { h: 'h-20 sm:h-24', pad: 'px-5 py-2.5', rounded: 'rounded-2xl' },
+  sm: { h: 'h-14 sm:h-16', pad: 'px-3 py-1.5', rounded: 'rounded-lg' },
+  md: { h: 'h-24 sm:h-28', pad: 'px-4 py-2', rounded: 'rounded-xl' },
+  lg: { h: 'h-32 sm:h-40', pad: 'px-5 py-2.5', rounded: 'rounded-2xl' },
   xl: { h: 'h-32 sm:h-44 lg:h-56', pad: 'px-6 py-3', rounded: 'rounded-3xl' },
 };
 
