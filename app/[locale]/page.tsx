@@ -1,16 +1,15 @@
-import { setRequestLocale } from 'next-intl/server';
-import { Nav } from '@/components/psd/Nav';
-import { Ticker } from '@/components/psd/Ticker';
-import { Hero } from '@/components/psd/Hero';
-import { StatsBand } from '@/components/psd/StatsBand';
-import { Portals } from '@/components/psd/Portals';
-import { TechSection } from '@/components/psd/TechSection';
-import { Platform, VIP, Loyalty, Payments, Testimonials } from '@/components/psd/Showcase';
-import { Pricing, FAQ } from '@/components/psd/Pricing';
-import { Comparison, Security } from '@/components/psd/Lower';
-import { CTA, Footer } from '@/components/psd/Footer';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Nav } from '@/components/v2/marketing/Nav';
+import { Hero } from '@/components/v2/marketing/Hero';
+import { TrustBand } from '@/components/v2/marketing/TrustBand';
+import { PortalsGrid } from '@/components/v2/marketing/PortalsGrid';
+import { HowItWorks } from '@/components/v2/marketing/HowItWorks';
+import { Pricing } from '@/components/v2/marketing/Pricing';
+import { Faq } from '@/components/v2/marketing/Faq';
+import { Cta } from '@/components/v2/marketing/Cta';
+import { Footer } from '@/components/v2/marketing/Footer';
 import { StructuredData } from '@/components/StructuredData';
-import { getBranding, brandingStyle } from '@/lib/branding';
+import { getBranding } from '@/lib/branding';
 
 export default async function Home({
   params,
@@ -19,31 +18,47 @@ export default async function Home({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+
   const branding = await getBranding();
 
+  const [tNav, tFaq] = await Promise.all([
+    getTranslations('nav'),
+    getTranslations('faq'),
+  ]);
+
+  const navLinks = {
+    product: tNav('product'),
+    portals: tNav('solutions'),
+    pricing: tNav('pricing'),
+    security: tNav('security'),
+  };
+
+  const faqItems = [
+    { q: tFaq('q1'), a: tFaq('a1') },
+    { q: tFaq('q2'), a: tFaq('a2') },
+    { q: tFaq('q3'), a: tFaq('a3') },
+    { q: tFaq('q4'), a: tFaq('a4') },
+  ];
+
   return (
-    <div className="psd">
-      <style dangerouslySetInnerHTML={{ __html: brandingStyle(branding) }} />
+    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
       <StructuredData locale={locale} />
-      <Ticker />
-      <Nav logoUrl={branding.logoUrl} />
+      <Nav
+        logoUrl={branding.logoUrl}
+        ctaPrimary={tNav('cta')}
+        ctaSecondary={tNav('login')}
+        links={navLinks}
+      />
       <main>
         <Hero />
-        <StatsBand />
-        <Portals />
-        <TechSection />
-        <Platform />
-        <VIP />
-        <Loyalty />
-        <Payments />
-        <Testimonials />
+        <TrustBand />
+        <PortalsGrid />
+        <HowItWorks />
         <Pricing />
-        <Comparison />
-        <Security />
-        <FAQ />
-        <CTA />
-        <Footer logoUrl={branding.logoUrl} />
+        <Faq title={tFaq('title')} items={faqItems} />
+        <Cta />
       </main>
+      <Footer logoUrl={branding.logoUrl} />
     </div>
   );
 }
