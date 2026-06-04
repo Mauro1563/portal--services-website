@@ -7,6 +7,10 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { requireMarketingAdmin, getDoc } from '@/lib/marketing';
 import { deepMerge, type Json } from '@/lib/deep-merge';
 
+function siteUrl() {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? 'https://portalservices.digital';
+}
+
 export async function signInWithPassword(formData: FormData) {
   const email = ((formData.get('email') as string) ?? '').trim().toLowerCase();
   const password = (formData.get('password') as string) ?? '';
@@ -40,6 +44,52 @@ export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect('/hq/login');
+}
+
+export async function sendPasswordReset(formData: FormData) {
+  const email = ((formData.get('email') as string) ?? '').trim().toLowerCase();
+  if (!email) redirect('/hq/forgot-password?error=missing');
+
+  // Only send reset emails to addresses on the allowlist — both for safety
+  // and to avoid leaking which emails exist.
+  const adminClient = createAdminClient();
+  const { data: row } = await adminClient
+    .from('marketing_admins')
+    .select('email')
+    .eq('email', email)
+    .maybeSingle();
+
+  // Always show the "check your inbox" message even if not on the allowlist,
+  // so an attacker can't enumerate which emails are admins.
+  if (row) {
+    const supabase = await createClient();
+    await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${siteUrl()}/hq/reset-password`,
+    });
+  }
+
+  redirect('/hq/forgot-password?sent=1');
+}
+
+export async function updatePassword(formData: FormData) {
+  const password = (formData.get('password') as string) ?? '';
+  const confirm = (formData.get('confirm') as string) ?? '';
+
+  if (!password || password.length < 8) {
+    redirect('/hq/reset-password?error=too_short');
+  }
+  if (password !== confirm) {
+    redirect('/hq/reset-password?error=mismatch');
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    redirect('/hq/reset-password?error=expired');
+  }
+
+  redirect('/hq');
 }
 
 export async function saveMarketingSection(
