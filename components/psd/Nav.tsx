@@ -38,7 +38,7 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
         </nav>
         <div className="nav-right">
           <LangSwitch />
-          <a className="nav-link desktop-only" href="https://hq.portalservices.digital" style={{ marginLeft: 8 }}>{t('login')}</a>
+          <a className="nav-link" href="/hq/login" style={{ marginLeft: 8 }}>{t('login')}</a>
           <a className="btn btn-primary" href="mailto:hola@portalservices.digital?subject=Demo%20request" style={{ marginLeft: 6 }}>
             {t('demo')} <Icon.arrow />
           </a>
@@ -53,7 +53,7 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
           <a className="nav-link" href="#platform" onClick={() => setOpen(false)}>{t('platform')}</a>
           <a className="nav-link" href="#pricing" onClick={() => setOpen(false)}>{t('pricing')}</a>
           <a className="nav-link" href="#security" onClick={() => setOpen(false)}>{t('security')}</a>
-          <a className="nav-link" href="https://hq.portalservices.digital">{t('login')}</a>
+          <a className="nav-link" href="/hq/login" onClick={() => setOpen(false)}>{t('login')}</a>
           <div className="nav-mobile-actions">
             <LangSwitch />
             <a
