@@ -7,18 +7,15 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { requireMarketingAdmin, getDoc } from '@/lib/marketing';
 import { deepMerge, type Json } from '@/lib/deep-merge';
 
-function siteUrl() {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://portalservices.digital'
-  );
-}
-
-export async function sendMagicLink(formData: FormData) {
+export async function signInWithPassword(formData: FormData) {
   const email = ((formData.get('email') as string) ?? '').trim().toLowerCase();
-  if (!email) redirect('/hq/login?error=missing');
+  const password = (formData.get('password') as string) ?? '';
 
-  // Pre-check the email against the admin allowlist using service role.
-  // Saves us from sending magic links to random people.
+  if (!email || !password) {
+    redirect('/hq/login?error=missing');
+  }
+
+  // Pre-check the allowlist before bothering Supabase Auth.
   const adminClient = createAdminClient();
   const { data: row } = await adminClient
     .from('marketing_admins')
@@ -29,20 +26,14 @@ export async function sendMagicLink(formData: FormData) {
   if (!row) redirect('/hq/login?error=not_admin');
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: `${siteUrl()}/hq/auth/callback`,
-      shouldCreateUser: true,
-    },
-  });
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     if (error.status === 429) redirect('/hq/login?error=rate_limit');
-    redirect('/hq/login?error=unknown');
+    redirect('/hq/login?error=invalid');
   }
 
-  redirect('/hq/login?sent=1');
+  redirect('/hq');
 }
 
 export async function signOut() {

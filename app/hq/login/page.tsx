@@ -1,13 +1,26 @@
 import { ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/Logo';
-import { sendMagicLink } from '../actions';
+import { signInWithPassword } from '../actions';
 
 type Props = {
-  searchParams: Promise<{ sent?: string; error?: string }>;
+  searchParams: Promise<{ error?: string }>;
 };
 
 export default async function HQLogin({ searchParams }: Props) {
-  const { sent, error } = await searchParams;
+  const { error } = await searchParams;
+
+  const errorMessage =
+    error === 'missing'
+      ? 'Completa email y contraseña.'
+      : error === 'not_admin'
+      ? 'Este correo no está autorizado para acceder al panel.'
+      : error === 'rate_limit'
+      ? 'Demasiados intentos. Espera un minuto y vuelve a intentar.'
+      : error === 'invalid'
+      ? 'Email o contraseña incorrectos.'
+      : error
+      ? 'Algo falló. Inténtalo de nuevo.'
+      : null;
 
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-canvas px-6">
@@ -28,34 +41,22 @@ export default async function HQLogin({ searchParams }: Props) {
             </p>
           </div>
           <h1 className="mt-3 font-display text-2xl font-semibold tracking-tight text-graphite-1">
-            Accede al panel.
+            Sign in to your account
           </h1>
           <p className="mt-1 text-sm text-graphite-3">
-            Te enviaremos un enlace mágico al correo. Solo correos autorizados
-            pueden entrar.
+            Acceso restringido. Solo correos autorizados.
           </p>
 
-          {sent ? (
-            <div className="mt-5 rounded-xl bg-emerald-50 px-3 py-2.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-200">
-              Listo. Revisa tu bandeja de entrada — el enlace expira en 15
-              minutos.
-            </div>
-          ) : null}
-
-          {error ? (
+          {errorMessage ? (
             <div className="mt-5 rounded-xl bg-rose-50 px-3 py-2.5 text-xs text-rose-700 ring-1 ring-inset ring-rose-200">
-              {error === 'not_admin'
-                ? 'Este correo no está autorizado para acceder al panel.'
-                : error === 'rate_limit'
-                ? 'Demasiados intentos. Espera un minuto y vuelve a intentar.'
-                : 'Algo falló. Inténtalo de nuevo.'}
+              {errorMessage}
             </div>
           ) : null}
 
-          <form action={sendMagicLink} className="mt-6 space-y-3">
+          <form action={signInWithPassword} className="mt-6 space-y-3">
             <label className="block">
               <span className="text-xs font-medium text-graphite-2">
-                Correo
+                Email
               </span>
               <input
                 type="email"
@@ -66,11 +67,24 @@ export default async function HQLogin({ searchParams }: Props) {
                 className="mt-1.5 block h-11 w-full rounded-xl bg-white px-3.5 text-sm text-graphite-1 placeholder:text-graphite-4 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
               />
             </label>
+            <label className="block">
+              <span className="text-xs font-medium text-graphite-2">
+                Password
+              </span>
+              <input
+                type="password"
+                name="password"
+                required
+                autoComplete="current-password"
+                placeholder="••••••••"
+                className="mt-1.5 block h-11 w-full rounded-xl bg-white px-3.5 text-sm text-graphite-1 placeholder:text-graphite-4 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
+              />
+            </label>
             <button
               type="submit"
               className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
             >
-              Enviar enlace mágico
+              Sign in
             </button>
           </form>
         </div>
