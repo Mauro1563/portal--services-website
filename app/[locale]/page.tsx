@@ -1,7 +1,10 @@
 import { setRequestLocale } from 'next-intl/server';
 import { Nav } from '@/components/psd/Nav';
+import { Ticker } from '@/components/psd/Ticker';
 import { Hero } from '@/components/psd/Hero';
+import { StatsBand } from '@/components/psd/StatsBand';
 import { Portals } from '@/components/psd/Portals';
+import { TechSection } from '@/components/psd/TechSection';
 import { Platform, VIP, Loyalty, Payments, Testimonials } from '@/components/psd/Showcase';
 import { Pricing, FAQ } from '@/components/psd/Pricing';
 import { Comparison, Security } from '@/components/psd/Lower';
@@ -22,10 +25,13 @@ export default async function Home({
     <div className="psd">
       <style dangerouslySetInnerHTML={{ __html: brandingStyle(branding) }} />
       <StructuredData locale={locale} />
+      <Ticker />
       <Nav logoUrl={branding.logoUrl} />
       <main>
         <Hero />
+        <StatsBand />
         <Portals />
+        <TechSection />
         <Platform />
         <VIP />
         <Loyalty />

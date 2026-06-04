@@ -56,7 +56,13 @@ export function Pricing() {
           ))}
         </div>
 
-        <p className="muted" style={{ fontSize: 13, marginTop: 28, textAlign: 'center' }}>{t('pricing.footer_note')}</p>
+        <div className="pricing-trust-row">
+          <span>{t('pricing_trustRow.i1')}</span>
+          <span>{t('pricing_trustRow.i2')}</span>
+          <span>{t('pricing_trustRow.i3')}</span>
+        </div>
+        <p className="muted" style={{ fontSize: 13, marginTop: 18, textAlign: 'center' }}>{t('pricing_vatNote')}</p>
+        <p className="muted" style={{ fontSize: 12, marginTop: 8, textAlign: 'center', opacity: 0.7 }}>{t('pricing.footer_note')}</p>
       </div>
     </section>
   );

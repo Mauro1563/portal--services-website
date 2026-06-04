@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Icon } from './icons';
+import { InteractiveDemo } from './InteractiveDemo';
 
 function PhoneMockup({
   activity,
@@ -87,9 +88,7 @@ export async function Hero() {
       <div className="container">
         <div className="hero-grid">
           <div>
-            <div className="hero-meta">
-              <span className="eyebrow">{t('hero.eyebrow')}</span>
-            </div>
+            <span className="hero-badge">{t('heroBadge')}</span>
             <h1 className="h-display hero-headline">
               {t('hero.title_a')}<br />
               <span className="serif">{t('hero.title_b')}</span><br />
@@ -97,7 +96,7 @@ export async function Hero() {
             </h1>
             <p className="lede hero-sub">{t('hero.sub')}</p>
             <div className="hero-cta">
-              <a className="btn btn-primary btn-lg" href="mailto:hola@portalservices.digital?subject=Demo%20request">
+              <a className="btn btn-primary btn-lg btn-orange" href="mailto:hola@portalservices.digital?subject=Demo%20request">
                 {t('hero.cta_primary')} <Icon.arrow />
               </a>
               <a className="btn btn-secondary btn-lg" href="#portals">
@@ -114,43 +113,8 @@ export async function Hero() {
           </div>
 
           <div className="hero-art">
-            <PhoneMockup activity={t('platform.activity')} ops={t('platform.kpi.ops')} quality={t('platform.kpi.quality')} />
-
-            <div className="float-card" style={{ top: 30, left: -10 }}>
-              <div style={{ width: 30, height: 30, borderRadius: 8, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center' }}>
-                <Icon.zap />
-              </div>
-              <div>
-                <div className="label">{t('platform.kpi.uptime')}</div>
-                <div className="value tabular">99.9%</div>
-              </div>
-            </div>
-
-            <div className="float-card" style={{ bottom: 80, right: -16 }}>
-              <div>
-                <div className="label">{t('platform.kpi.quality')} · 30d</div>
-                <div className="value tabular" style={{ color: 'var(--accent)' }}>+6.2%</div>
-              </div>
-              <svg width="48" height="20" viewBox="0 0 48 20" fill="none">
-                <path d="M2 16 L10 14 L18 11 L26 8 L34 6 L46 3" stroke="var(--accent)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              </svg>
-            </div>
-
-            <div className="float-card" style={{ bottom: -10, left: 0 }}>
-              <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--ink)', color: 'var(--bg)', display: 'grid', placeItems: 'center', fontSize: 11, fontWeight: 600 }}>CM</div>
-              <div>
-                <div className="label">Inspection</div>
-                <div className="value" style={{ fontSize: 14 }}>4.9 <span className="stars"><Icon.star /><Icon.star /><Icon.star /><Icon.star /><Icon.star /></span></div>
-              </div>
-            </div>
+            <InteractiveDemo />
           </div>
-        </div>
-
-        <div className="hero-stats">
-          <div className="hero-stat"><span className="num tabular">2</span><span className="lbl">{t('hero.stat_portals')}</span></div>
-          <div className="hero-stat"><span className="num tabular">99.9%</span><span className="lbl">{t('hero.stat_uptime')}</span></div>
-          <div className="hero-stat"><span className="num tabular">30d</span><span className="lbl">{t('hero.stat_trial')}</span></div>
-          <div className="hero-stat"><span className="num tabular">3</span><span className="lbl">{t('hero.stat_lang')}</span></div>
         </div>
       </div>
     </section>

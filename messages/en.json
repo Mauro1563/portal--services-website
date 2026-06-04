@@ -837,6 +837,166 @@
         "terms": "Terms"
       },
       "copyright": "© 2026 Portal Services. All rights reserved."
+    },
+    "ticker": {
+      "trial": "✓ 30-day free trial",
+      "noCard": "✓ No credit card",
+      "cancel": "✓ Cancel anytime",
+      "support": "✓ Local support",
+      "portals": "✓ Home & Airbnb"
+    },
+    "demo": {
+      "tabs": {
+        "owner": "Owner",
+        "client": "Client",
+        "cleaner": "Cleaner"
+      },
+      "owner": {
+        "header": "Your dashboard today",
+        "kpi1": {
+          "value": "12",
+          "label": "Cleanings today"
+        },
+        "kpi2": {
+          "value": "£1,840",
+          "label": "This month"
+        },
+        "kpi3": {
+          "value": "4.9★",
+          "label": "Quality"
+        },
+        "a1": {
+          "who": "María R.",
+          "what": "Cleaning done · García Home",
+          "when": "2 m"
+        },
+        "a2": {
+          "who": "Carlos L.",
+          "what": "Check-in · Martínez Flat",
+          "when": "8 m"
+        },
+        "a3": {
+          "who": "Ana H.",
+          "what": "5★ review",
+          "when": "22 m"
+        }
+      },
+      "client": {
+        "header": "Your portal",
+        "nextLabel": "Next visit",
+        "nextDate": "Friday · 14:00",
+        "nextCleaner": "Sofia M. — your usual cleaner",
+        "pointsLabel": "Your points",
+        "pointsDetail": "340 pts · 🎁 Free cleaning at 500",
+        "lastLabel": "Last visit",
+        "lastDetail": "Monday · 4 photos · ⭐⭐⭐⭐⭐"
+      },
+      "cleaner": {
+        "header": "Your shift",
+        "shiftLabel": "Today · 09:00",
+        "shiftWhere": "García Home · Gran Vía 45",
+        "bath": "Bathroom",
+        "kitchen": "Kitchen",
+        "lounge": "Living room",
+        "checkin": "📍 GPS check-in"
+      }
+    },
+    "stats": {
+      "portals": {
+        "value": "2",
+        "label": "Connected portals"
+      },
+      "uptime": {
+        "value": "99.9%",
+        "label": "Guaranteed uptime"
+      },
+      "trial": {
+        "value": "30d",
+        "label": "Free trial"
+      },
+      "langs": {
+        "value": "3",
+        "label": "Supported languages"
+      }
+    },
+    "tech": {
+      "eyebrow": "Real tech",
+      "title_a": "Professional tech.",
+      "title_b": "SMB pricing.",
+      "sub": "Built on the same infrastructure that powers products from Google, Stripe and Vercel. Everything here is in your product today.",
+      "items": [
+        {
+          "icon": "⚡",
+          "title": "Real-time data",
+          "desc": "Changes sync instantly across every portal — no refresh needed."
+        },
+        {
+          "icon": "📱",
+          "title": "Mobile-first",
+          "desc": "Works like a native app on iOS and Android. No app store required."
+        },
+        {
+          "icon": "🔒",
+          "title": "GDPR · EU data",
+          "desc": "SSL encryption, PCI DSS compliance and protected data by default."
+        },
+        {
+          "icon": "☁️",
+          "title": "Global deploy",
+          "desc": "99.9% uptime, global edge nodes and automatic HTTPS."
+        },
+        {
+          "icon": "⭐",
+          "title": "Per-visit rating",
+          "desc": "1-5 star feedback after every cleaning, with photo attached."
+        },
+        {
+          "icon": "📅",
+          "title": "Airbnb sync",
+          "desc": "iCal automation with Airbnb and Booking — cleanings created on every checkout."
+        },
+        {
+          "icon": "📸",
+          "title": "Photo evidence",
+          "desc": "Visual proof of every cleaning, with the cleaner's GPS check-in."
+        },
+        {
+          "icon": "🌐",
+          "title": "Multi-language",
+          "desc": "Spanish, English and Portuguese — your client sees it in their language."
+        }
+      ]
+    },
+    "heroBadge": "● Operating system for cleaning businesses",
+    "pricing_trustRow": {
+      "i1": "✓ 30-day free trial",
+      "i2": "✓ No credit card",
+      "i3": "✓ Cancel anytime"
+    },
+    "pricing_vatNote": "All prices in GBP, VAT not included.",
+    "footerV2": {
+      "tagline": "The professional platform for home cleaning and Airbnb businesses.",
+      "colPlatform": "Platform",
+      "colCompany": "Company",
+      "colLegal": "Legal",
+      "platform": {
+        "portals": "Portals",
+        "tech": "Tech",
+        "pricing": "Pricing",
+        "security": "Security"
+      },
+      "company": {
+        "contact": "Contact",
+        "demo": "Request demo",
+        "blog": "Blog"
+      },
+      "legal": {
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "gdpr": "GDPR"
+      },
+      "bottom": "© 2026 Portal Home. All rights reserved.",
+      "langs": "ES · EN · PT"
     }
   }
 }

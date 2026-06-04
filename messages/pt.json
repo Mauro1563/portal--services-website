@@ -837,6 +837,166 @@
         "terms": "Termos"
       },
       "copyright": "© 2026 Portal Services. Todos os direitos reservados."
+    },
+    "ticker": {
+      "trial": "✓ Teste grátis 30 dias",
+      "noCard": "✓ Sem cartão",
+      "cancel": "✓ Cancela quando quiseres",
+      "support": "✓ Apoio local",
+      "portals": "✓ Casa e Airbnb"
+    },
+    "demo": {
+      "tabs": {
+        "owner": "Proprietário",
+        "client": "Cliente",
+        "cleaner": "Limpadora"
+      },
+      "owner": {
+        "header": "O teu painel hoje",
+        "kpi1": {
+          "value": "12",
+          "label": "Limpezas hoje"
+        },
+        "kpi2": {
+          "value": "£1.840",
+          "label": "Este mês"
+        },
+        "kpi3": {
+          "value": "4,9★",
+          "label": "Qualidade"
+        },
+        "a1": {
+          "who": "María R.",
+          "what": "Limpeza concluída · Casa García",
+          "when": "2 m"
+        },
+        "a2": {
+          "who": "Carlos L.",
+          "what": "Check-in · Apto. Martínez",
+          "when": "8 m"
+        },
+        "a3": {
+          "who": "Ana H.",
+          "what": "Avaliação 5★",
+          "when": "22 m"
+        }
+      },
+      "client": {
+        "header": "O teu portal",
+        "nextLabel": "Próxima visita",
+        "nextDate": "Sexta · 14:00",
+        "nextCleaner": "Sofia M. — a tua limpadora habitual",
+        "pointsLabel": "Os teus pontos",
+        "pointsDetail": "340 pts · 🎁 Limpeza grátis aos 500",
+        "lastLabel": "Última visita",
+        "lastDetail": "Segunda · 4 fotos · ⭐⭐⭐⭐⭐"
+      },
+      "cleaner": {
+        "header": "O teu turno",
+        "shiftLabel": "Hoje · 09:00",
+        "shiftWhere": "Casa García · Gran Vía 45",
+        "bath": "Casa de banho",
+        "kitchen": "Cozinha",
+        "lounge": "Sala",
+        "checkin": "📍 Check-in com GPS"
+      }
+    },
+    "stats": {
+      "portals": {
+        "value": "2",
+        "label": "Portais ligados"
+      },
+      "uptime": {
+        "value": "99,9%",
+        "label": "Uptime garantido"
+      },
+      "trial": {
+        "value": "30d",
+        "label": "Teste gratuito"
+      },
+      "langs": {
+        "value": "3",
+        "label": "Idiomas suportados"
+      }
+    },
+    "tech": {
+      "eyebrow": "Tecnologia real",
+      "title_a": "Tecnologia profissional.",
+      "title_b": "Preço para PMEs.",
+      "sub": "Construído na mesma infraestrutura que os produtos da Google, Stripe e Vercel. Tudo o que aparece aqui está hoje no teu produto.",
+      "items": [
+        {
+          "icon": "⚡",
+          "title": "Dados em tempo real",
+          "desc": "Alterações sincronizadas instantaneamente em todos os portais — sem refresh."
+        },
+        {
+          "icon": "📱",
+          "title": "Mobile-first",
+          "desc": "Funciona como app nativa em iOS e Android. Sem app store."
+        },
+        {
+          "icon": "🔒",
+          "title": "RGPD · dados na UE",
+          "desc": "Encriptação SSL, conformidade PCI DSS e dados protegidos por defeito."
+        },
+        {
+          "icon": "☁️",
+          "title": "Implementação global",
+          "desc": "99,9% uptime, edge nodes em todo o mundo e HTTPS automático."
+        },
+        {
+          "icon": "⭐",
+          "title": "Avaliação por visita",
+          "desc": "Sistema 1-5 estrelas após cada limpeza, com foto anexada."
+        },
+        {
+          "icon": "📅",
+          "title": "Sincronização Airbnb",
+          "desc": "iCal automático com Airbnb e Booking — limpezas criadas em cada checkout."
+        },
+        {
+          "icon": "📸",
+          "title": "Foto de cada limpeza",
+          "desc": "Prova visual com check-in GPS da limpadora."
+        },
+        {
+          "icon": "🌐",
+          "title": "Multi-idioma",
+          "desc": "Espanhol, inglês e português — o teu cliente vê no idioma dele."
+        }
+      ]
+    },
+    "heroBadge": "● Sistema operativo para negócios de limpeza",
+    "pricing_trustRow": {
+      "i1": "✓ Teste grátis 30 dias",
+      "i2": "✓ Sem cartão de crédito",
+      "i3": "✓ Cancela quando quiseres"
+    },
+    "pricing_vatNote": "Todos os preços em GBP, sem IVA.",
+    "footerV2": {
+      "tagline": "A plataforma profissional para negócios de limpeza de casas e Airbnb.",
+      "colPlatform": "Plataforma",
+      "colCompany": "Empresa",
+      "colLegal": "Legal",
+      "platform": {
+        "portals": "Portais",
+        "tech": "Tecnologia",
+        "pricing": "Preços",
+        "security": "Segurança"
+      },
+      "company": {
+        "contact": "Contacto",
+        "demo": "Pedir demo",
+        "blog": "Blog"
+      },
+      "legal": {
+        "privacy": "Privacidade",
+        "terms": "Termos",
+        "gdpr": "RGPD"
+      },
+      "bottom": "© 2026 Portal Home. Todos os direitos reservados.",
+      "langs": "ES · EN · PT"
     }
   }
 }
