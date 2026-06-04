@@ -1315,15 +1315,15 @@
    Portal Home upgrade — new sections (Ticker / Demo / Stats / Tech)
    ============================================================ */
 
-/* ---------- Brand orange (Portal Home accent) ---------- */
+/* ---------- Brand accent gradient (electric blue → cyan) ---------- */
 .psd {
-  --orange: #FF6B35;
-  --orange-2: #FF8A5C;
+  --orange: var(--brand-blue);
+  --orange-2: var(--brand-cyan);
 }
 
-/* ---------- Ticker (orange marquee above page) ---------- */
+/* ---------- Ticker (brand marquee above page) ---------- */
 .psd .ticker {
-  background: var(--orange);
+  background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-cyan) 100%);
   color: #fff;
   overflow: hidden;
   font-size: 13px;
@@ -1694,9 +1694,9 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(255,107,53,0.15);
-  border: 1px solid rgba(255,107,53,0.35);
-  color: var(--orange);
+  background: rgba(37,99,235,0.10);
+  border: 1px solid rgba(37,99,235,0.30);
+  color: var(--brand-blue);
   border-radius: 99px;
   font-size: 12px;
   font-weight: 600;
@@ -1706,13 +1706,13 @@
 
 /* ---------- Hero CTAs — orange primary ---------- */
 .psd .btn-primary.btn-orange {
-  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-2) 100%);
+  background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-cyan) 100%);
   color: #fff;
   border: 0;
-  box-shadow: 0 8px 24px rgba(255,107,53,0.30);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.30);
 }
 .psd .btn-primary.btn-orange:hover {
-  box-shadow: 0 12px 32px rgba(255,107,53,0.42);
+  box-shadow: 0 12px 32px rgba(37,99,235,0.42);
   transform: translateY(-1px);
 }
 
