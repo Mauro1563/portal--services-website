@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { Save } from 'lucide-react';
+import { useRef, useState, useTransition } from 'react';
+import { Save, Upload, Loader2 } from 'lucide-react';
 import { saveMarketingSection } from '@/app/hq/actions';
+import { uploadLogo } from '@/app/hq/branding/upload';
 
 type Branding = {
   accent: string;
@@ -32,9 +33,27 @@ const PRESETS: { name: string; accent: string; accent2: string; accentSoft: stri
 export function BrandingEditor({ initial }: { initial: Branding }) {
   const [data, setData] = useState<Branding>(initial);
   const [saving, startSaving] = useTransition();
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const set = (k: keyof Branding, v: string) => setData({ ...data, [k]: v });
+
+  async function handleLogoFile(file: File) {
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.set('file', file);
+      const url = await uploadLogo(fd);
+      setData((d) => ({ ...d, logoUrl: url }));
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -83,19 +102,44 @@ export function BrandingEditor({ initial }: { initial: Branding }) {
             ))}
           </div>
 
-          <label className="block">
-            <span className="text-[11px] font-medium text-graphite-3">URL del logo</span>
-            <input
-              type="text"
-              value={data.logoUrl}
-              onChange={(e) => set('logoUrl', e.target.value)}
-              placeholder="/mi-logo.png o https://…"
-              className="mt-1 h-10 w-full rounded-xl bg-white px-3 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
-            />
+          <div className="block">
+            <span className="text-[11px] font-medium text-graphite-3">Logo</span>
+            <div className="mt-1 flex items-stretch gap-2">
+              <input
+                type="text"
+                value={data.logoUrl}
+                onChange={(e) => set('logoUrl', e.target.value)}
+                placeholder="/mi-logo.png o https://…"
+                className="h-10 w-full rounded-xl bg-white px-3 text-sm text-graphite-1 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-slate-900 px-4 text-xs font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50"
+              >
+                {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                {uploading ? 'Subiendo…' : 'Subir'}
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleLogoFile(f);
+                  e.target.value = '';
+                }}
+              />
+            </div>
+            {uploadError && (
+              <span className="mt-1 block text-[10px] text-rose-600">{uploadError}</span>
+            )}
             <span className="mt-1 block text-[10px] text-graphite-4">
-              Sube el archivo a /public y pon la ruta (ej. /mi-logo.png), o pega una URL completa.
+              PNG, JPG, SVG o WebP (máx 2 MB). Se guarda automáticamente al subir; pulsa &quot;Guardar branding&quot; para publicarlo.
             </span>
-          </label>
+          </div>
         </section>
 
         {/* Live preview */}

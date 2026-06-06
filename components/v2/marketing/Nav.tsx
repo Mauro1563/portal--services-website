@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LogIn } from 'lucide-react';
 
 type Props = {
   logoUrl: string;
@@ -28,9 +28,10 @@ export function Nav({ logoUrl, ctaPrimary, ctaSecondary, links }: Props) {
         </nav>
         <div className="flex items-center gap-2">
           <Link
-            href="/hq/login"
-            className="hidden h-10 items-center rounded-xl px-4 text-sm font-medium text-slate-700 hover:bg-slate-100 sm:inline-flex"
+            href="/login"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
           >
+            <LogIn className="h-4 w-4" />
             {ctaSecondary}
           </Link>
           <a
