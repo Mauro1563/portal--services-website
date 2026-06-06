@@ -21,7 +21,7 @@ export default async function LoginPage({ searchParams }: Props) {
       error={error}
       message={message}
     >
-      <form action={signIn} className="space-y-4">
+      <form action={signIn} className="space-y-3 sm:space-y-4">
         <LoginField label="PIN or Email">
           <div className="relative">
             <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -31,7 +31,7 @@ export default async function LoginPage({ searchParams }: Props) {
               required
               autoComplete="username"
               placeholder="026389  or  name@email.com"
-              className="block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+              className="block h-11 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 sm:h-12"
             />
           </div>
         </LoginField>
@@ -44,7 +44,7 @@ export default async function LoginPage({ searchParams }: Props) {
               name="password"
               autoComplete="current-password"
               placeholder="••••••••"
-              className="block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+              className="block h-11 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 sm:h-12"
             />
           </div>
         </LoginField>
@@ -67,7 +67,7 @@ export default async function LoginPage({ searchParams }: Props) {
           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </button>
 
-        <p className="text-center text-[11px] text-slate-400">
+        <p className="hidden text-center text-[11px] text-slate-400 sm:block">
           Cleaners enter their 6-digit PIN · Owners enter email + password
         </p>
       </form>

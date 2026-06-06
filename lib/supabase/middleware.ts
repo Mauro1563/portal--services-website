@@ -52,6 +52,21 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Owners that signed up via /signup carry must_change_password=true in
+  // their user_metadata. Bounce them to the change-password page on every
+  // /owner request until they update the temporary one.
+  if (
+    user &&
+    user.user_metadata?.must_change_password === true &&
+    pathname.startsWith('/owner') &&
+    pathname !== '/owner/change-password'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/owner/change-password';
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
+
   // Protect /operative routes (except /operative/login) — require PIN session cookie
   if (
     pathname.startsWith('/operative') &&

@@ -34,13 +34,13 @@ export function Nav({ logoUrl, ctaPrimary, ctaSecondary, links }: Props) {
             <LogIn className="h-4 w-4" />
             {ctaSecondary}
           </Link>
-          <a
-            href="#cta"
+          <Link
+            href="/signup"
             className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
           >
             {ctaPrimary}
             <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </header>

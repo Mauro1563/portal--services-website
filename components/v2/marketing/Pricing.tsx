@@ -14,52 +14,7 @@ type Tier = {
 export async function Pricing() {
   const t = await getTranslations('pricing');
 
-  const corporate: Tier[] = [
-    {
-      name: t('corporate_starter_name'),
-      range: t('corporate_starter_range'),
-      price: t('corporate_starter_price'),
-      period: t('corporate_starter_period'),
-      cta: t('corporate_starter_cta'),
-      features: [
-        'Portal supervisor + manager',
-        'Hasta 10 operativos · 3 edificios',
-        'Check-in con GPS y partes diarios',
-        'Inspecciones de calidad',
-        'Soporte email',
-      ],
-    },
-    {
-      name: t('corporate_business_name'),
-      range: t('corporate_business_range'),
-      price: t('corporate_business_price'),
-      period: t('corporate_business_period'),
-      cta: t('corporate_business_cta'),
-      popular: true,
-      features: [
-        'Todo en Starter',
-        'Hasta 40 operativos · 15 edificios',
-        'Portal director con visión 360°',
-        'Reportes ejecutivos y BI',
-        'Soporte prioritario',
-      ],
-    },
-    {
-      name: t('corporate_enterprise_name'),
-      range: t('corporate_enterprise_range'),
-      price: t('corporate_enterprise_price'),
-      period: t('corporate_enterprise_period'),
-      cta: t('corporate_enterprise_cta'),
-      features: [
-        'Edificios y operativos ilimitados',
-        'Branding propio (white-label)',
-        'SSO + integraciones a medida',
-        'SLA dedicado · CSM',
-        'Soporte 24/7',
-      ],
-    },
-  ];
-
+  // Corporate plans hidden — not available yet.
   const home: Tier[] = [
     {
       name: t('home_starter_name'),
@@ -103,12 +58,6 @@ export async function Pricing() {
             {t('subtitle')}
           </p>
         </header>
-
-        <PricingBlock
-          eyebrow={t('corporate_eyebrow')}
-          tiers={corporate}
-          popularLabel={t('popular')}
-        />
 
         <PricingBlock
           eyebrow={t('home_eyebrow')}

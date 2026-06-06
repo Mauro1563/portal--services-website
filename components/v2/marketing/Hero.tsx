@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { ArrowRight, CheckCircle2, Sparkles, Star, TrendingUp, Users2 } from 'lucide-react';
 
@@ -48,14 +49,14 @@ export async function Hero() {
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#cta"
+            <Link
+              href="/signup"
               className="group relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 px-7 text-[15px] font-semibold text-white shadow-[0_24px_48px_-16px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-300 hover:shadow-[0_30px_60px_-16px_rgba(37,99,235,0.65),inset_0_1px_0_rgba(255,255,255,0.3)] hover:brightness-[1.08] active:translate-y-px"
             >
               <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
               {t('cta_primary')}
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
+            </Link>
             <a
               href="#portals"
               className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-slate-300/80 bg-white/80 px-7 text-[15px] font-semibold text-slate-800 shadow-sm backdrop-blur transition hover:-translate-y-px hover:border-slate-400 hover:bg-white hover:shadow"

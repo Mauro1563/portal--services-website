@@ -16,6 +16,7 @@ const APP_PREFIXES = [
   '/owner',
   '/client',
   '/login',
+  '/signup',
   '/forgot-password',
   '/reset-password',
   '/refer',

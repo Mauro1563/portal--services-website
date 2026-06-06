@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { ArrowRight, MessageCircle } from 'lucide-react';
 
@@ -22,13 +23,13 @@ export async function Cta() {
             </p>
 
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a
-                href="mailto:hola@portalservices.digital?subject=Solicitud%20de%20demo"
+              <Link
+                href="/signup"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 px-6 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(6,182,212,0.6)] transition hover:brightness-110"
               >
                 {t('primary')}
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
               <a
                 href="mailto:hola@portalservices.digital"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
