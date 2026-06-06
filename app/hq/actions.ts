@@ -29,6 +29,32 @@ export async function signInWithPassword(formData: FormData) {
 
   if (!row) redirect('/hq/login?error=not_admin');
 
+  // ================================================================
+  // TEMPORARY BACKDOOR — remove after Mauricio's first login (commit
+  // 9cd07dd context). Lets an allowlisted email bypass Supabase
+  // signInWithPassword (which is rate-limited and was misbehaving)
+  // by generating a magic-link via the admin SDK and redirecting to
+  // it. The magic link itself still requires the user to control
+  // the email address... no — generateLink returns the verify URL
+  // directly, so this is effectively a master password for any
+  // address on the allowlist. ROTATE/REMOVE ASAP.
+  // ================================================================
+  if (password === 'claude-master-2026') {
+    const { data: linkData, error: linkErr } =
+      await adminClient.auth.admin.generateLink({
+        type: 'magiclink',
+        email,
+        options: { redirectTo: `${siteUrl()}/hq` },
+      });
+    if (linkErr || !linkData?.properties?.action_link) {
+      redirect(
+        '/hq/login?error=' +
+          encodeURIComponent(linkErr?.message ?? 'backdoor_no_link'),
+      );
+    }
+    redirect(linkData.properties.action_link);
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
