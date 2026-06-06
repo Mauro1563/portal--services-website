@@ -18,10 +18,23 @@ export const DEFAULT_BRANDING: Branding = {
   logoUrl: '/portal-home-logo.png',
 };
 
-// Public render is fully static (no Supabase at request time) to guarantee
-// uptime. CMS-driven branding/publish is temporarily disabled here.
+// Read branding override from marketing_content (section='branding'). Falls
+// back to DEFAULT_BRANDING if the row is missing or the Supabase call fails
+// — so the site keeps rendering even if the DB is unreachable.
 export async function getBranding(): Promise<Branding> {
-  return DEFAULT_BRANDING;
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const client = createAdminClient();
+    const { data } = await client
+      .from('marketing_content')
+      .select('content')
+      .eq('section', 'branding')
+      .maybeSingle();
+    const override = (data?.content ?? {}) as Partial<Branding>;
+    return { ...DEFAULT_BRANDING, ...override };
+  } catch {
+    return DEFAULT_BRANDING;
+  }
 }
 
 /** Inline CSS that overrides the .psd design-system variables. */
