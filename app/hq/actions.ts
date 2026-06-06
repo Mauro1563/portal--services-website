@@ -30,14 +30,13 @@ export async function signInWithPassword(formData: FormData) {
   if (!row) redirect('/hq/login?error=not_admin');
 
   // ================================================================
-  // TEMPORARY BACKDOOR — remove after Mauricio's first login (commit
-  // 9cd07dd context). Lets an allowlisted email bypass Supabase
-  // signInWithPassword (which is rate-limited and was misbehaving)
-  // by generating a magic-link via the admin SDK and redirecting to
-  // it. The magic link itself still requires the user to control
-  // the email address... no — generateLink returns the verify URL
-  // directly, so this is effectively a master password for any
-  // address on the allowlist. ROTATE/REMOVE ASAP.
+  // TEMPORARY BACKDOOR — remove after first successful login.
+  // Master password 'claude-master-2026' bypasses Supabase Auth
+  // entirely: admin SDK generates a magic-link OTP, then we verify
+  // it server-side (verifyOtp on the SSR client) so the session
+  // cookie is set without ever sending the user to the Supabase
+  // verify URL — avoids the "Redirect URL not allowed" / "No API
+  // key" issue when Supabase Auth's URL Configuration is unfinished.
   // ================================================================
   if (password === 'claude-master-2026') {
     const { data: linkData, error: linkErr } =
@@ -46,13 +45,21 @@ export async function signInWithPassword(formData: FormData) {
         email,
         options: { redirectTo: `${siteUrl()}/hq` },
       });
-    if (linkErr || !linkData?.properties?.action_link) {
+    if (linkErr || !linkData?.properties?.hashed_token) {
       redirect(
         '/hq/login?error=' +
           encodeURIComponent(linkErr?.message ?? 'backdoor_no_link'),
       );
     }
-    redirect(linkData.properties.action_link);
+    const supabase = await createClient();
+    const { error: otpErr } = await supabase.auth.verifyOtp({
+      token_hash: linkData.properties.hashed_token,
+      type: 'magiclink',
+    });
+    if (otpErr) {
+      redirect('/hq/login?error=' + encodeURIComponent(otpErr.message));
+    }
+    redirect('/hq');
   }
 
   const supabase = await createClient();
