@@ -1,0 +1,21 @@
+/* Performance + responsiveness tuning for the HQ owner dashboard (.hqx) */
+
+/* Kill the perpetual map-pin pulse rings (8 infinite animations = jank). */
+.hqx .pin::after { display: none !important; }
+.hqx .pin { transition: transform .12s ease, box-shadow .12s ease; }
+.hqx .pin:hover { transform: translate(-50%,-50%) scale(1.12); z-index: 3; }
+
+/* Snappy, tactile feedback on every clickable surface */
+.hqx a, .hqx button, .hqx .nav-item, .hqx .job, .hqx .team-row,
+.hqx .workspace, .hqx .user-card, .hqx .kpi { cursor: pointer; }
+.hqx .btn, .hqx .icon-btn, .hqx .nav-item, .hqx .seg button {
+  transition: background .12s ease, color .12s ease, transform .06s ease, box-shadow .12s ease;
+}
+.hqx .btn:active, .hqx .icon-btn:active, .hqx .nav-item:active { transform: translateY(1px) scale(0.99); }
+.hqx .kpi { transition: box-shadow .15s ease, transform .1s ease; }
+.hqx .kpi:hover { box-shadow: 0 10px 28px -16px rgba(15,23,42,0.22); }
+
+/* Respect reduced-motion: stop all looping animations */
+@media (prefers-reduced-motion: reduce) {
+  .hqx *, .hqx *::before, .hqx *::after { animation: none !important; }
+}

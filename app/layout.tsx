@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
 import './psd.css';
+import { ThemeManager } from '@/components/ThemeManager';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="min-h-screen bg-ink-0 text-white antialiased">
+        <ThemeManager />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareLd) }}

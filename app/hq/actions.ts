@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireMarketingAdmin, getDoc } from '@/lib/marketing';
+import { requireSuperAdmin } from '@/lib/super-admin';
 import { deepMerge, type Json } from '@/lib/deep-merge';
 
 function siteUrl() {
@@ -197,3 +198,129 @@ export async function saveSitePatch(
   revalidatePath('/', 'layout');
   revalidatePath(`/${locale}`);
 }
+
+// ===== Cleaning-app super-admin actions (merged from home-cleaner-services) =====
+
+export async function hqInviteCompany(formData: FormData) {
+  await requireSuperAdmin();
+
+  const email = ((formData.get('email') as string) ?? '').trim().toLowerCase();
+  const businessName =
+    ((formData.get('business_name') as string) ?? '').trim() || null;
+
+  if (!email) {
+    redirect('/hq?error=' + encodeURIComponent('Email is required'));
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    redirect('/hq?error=' + encodeURIComponent('Invalid email'));
+  }
+
+  const admin = createAdminClient();
+
+  // Send invite — Supabase emails a "set up your account" link that lands
+  // back in our app at /auth/callback after they pick a password.
+  const redirectTo =
+    (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hq.portalservices.digital') +
+    '/auth/callback?next=/owner';
+
+  const { data: invited, error } = await admin.auth.admin.inviteUserByEmail(
+    email,
+    { redirectTo },
+  );
+
+  if (error) {
+    const msg = /already|exists/i.test(error.message)
+      ? 'That email is already registered.'
+      : error.message;
+    redirect('/hq?error=' + encodeURIComponent(msg));
+  }
+
+  if (businessName && invited?.user?.id) {
+    await admin.from('owner_profiles').upsert(
+      {
+        owner_id: invited.user.id,
+        business_name: businessName,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'owner_id' },
+    );
+  }
+
+  revalidatePath('/hq');
+  redirect('/hq?message=' + encodeURIComponent(`Invite sent to ${email}`));
+}
+
+/**
+ * Pronounceable temporary password: word-word-NNNN. Easier to read aloud
+ * over WhatsApp/phone than a random base64 string. ~50 bits of entropy.
+ */
+function generateTempPassword(): string {
+  const words = [
+    'apple', 'beach', 'cloud', 'dance', 'eagle', 'flame', 'green', 'happy',
+    'ivory', 'juicy', 'kite', 'lemon', 'mango', 'north', 'ocean', 'paint',
+    'quiet', 'river', 'sunny', 'tiger', 'umbra', 'vivid', 'water', 'xenon',
+    'young', 'zebra', 'blaze', 'cedar', 'delta', 'ember',
+  ];
+  const w1 = words[Math.floor(Math.random() * words.length)];
+  const w2 = words[Math.floor(Math.random() * words.length)];
+  const n = Math.floor(1000 + Math.random() * 9000);
+  return `${w1}-${w2}-${n}`;
+}
+
+/**
+ * Direct-create variant — no email sent. Generates a temporary password
+ * and returns it via the redirect querystring so the super-admin can copy
+ * it and share via WhatsApp / phone. Bypasses Supabase rate limits entirely.
+ */
+export async function hqCreateCompanyDirect(formData: FormData) {
+  await requireSuperAdmin();
+
+  const email = ((formData.get('email') as string) ?? '').trim().toLowerCase();
+  const businessName =
+    ((formData.get('business_name') as string) ?? '').trim() || null;
+
+  if (!email) {
+    redirect('/hq?error=' + encodeURIComponent('Email is required'));
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    redirect('/hq?error=' + encodeURIComponent('Invalid email'));
+  }
+
+  const admin = createAdminClient();
+  const tempPassword = generateTempPassword();
+
+  // Create the auth user with the temp password. email_confirm: true makes
+  // them able to log in immediately without confirming their inbox.
+  const { data: created, error } = await admin.auth.admin.createUser({
+    email,
+    password: tempPassword,
+    email_confirm: true,
+  });
+
+  if (error) {
+    const msg = /already|exists/i.test(error.message)
+      ? 'That email is already registered.'
+      : error.message;
+    redirect('/hq?error=' + encodeURIComponent(msg));
+  }
+
+  if (businessName && created?.user?.id) {
+    await admin.from('owner_profiles').upsert(
+      {
+        owner_id: created.user.id,
+        business_name: businessName,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'owner_id' },
+    );
+  }
+
+  revalidatePath('/hq');
+  redirect(
+    '/hq?created_email=' +
+      encodeURIComponent(email) +
+      '&created_password=' +
+      encodeURIComponent(tempPassword),
+  );
+}
+

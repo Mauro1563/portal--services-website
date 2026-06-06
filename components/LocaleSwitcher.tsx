@@ -1,50 +1,90 @@
 'use client';
-import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
-import { useTransition } from 'react';
 
-const items = [
-  { code: 'en', label: 'EN' },
-  { code: 'es', label: 'ES' },
-  { code: 'pt', label: 'PT' },
-];
+import { useState, useTransition } from 'react';
+import { Check, Globe } from 'lucide-react';
+import { setLocale } from '@/app/i18n/actions';
 
-export function LocaleSwitcher() {
-  const currentLocale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
+const LOCALES = [
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' },
+  { code: 'pt', label: 'Português' },
+] as const;
 
-  const changeLocale = (newLocale: string) => {
-    const segments = pathname.split('/');
-    if (['en', 'es', 'pt'].includes(segments[1])) {
-      segments[1] = newLocale;
-    } else {
-      segments.splice(1, 0, newLocale);
-    }
-    const newPath = segments.join('/') || `/${newLocale}`;
-    startTransition(() => {
-      router.push(newPath);
-    });
-  };
+type Variant = 'dark' | 'light';
+
+export function LocaleSwitcher({
+  current = 'en',
+  variant = 'dark',
+}: {
+  current?: 'en' | 'es' | 'pt';
+  variant?: Variant;
+}) {
+  const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
+
+  const isDark = variant === 'dark';
+  const trigger =
+    'inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-colors ' +
+    (isDark
+      ? 'bg-white/[0.06] text-slate-200 hover:bg-white/[0.10]'
+      : 'bg-white/[0.06] text-white hover:bg-white/[0.12]');
+
+  const panel =
+    'absolute right-0 top-11 z-50 min-w-[150px] overflow-hidden rounded-xl border shadow-lg ' +
+    (isDark
+      ? 'border-white/10 bg-ink-1'
+      : 'border-white/10 bg-navy-900 text-white');
 
   return (
-    <div className="flex items-center gap-0.5 rounded-md bg-slate-100 p-0.5 ring-1 ring-inset ring-slate-200">
-      {items.map((l) => (
-        <button
-          key={l.code}
-          type="button"
-          onClick={() => changeLocale(l.code)}
-          disabled={isPending}
-          className={`rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-wider transition ${
-            currentLocale === l.code
-              ? 'bg-white text-brand-600 shadow-sm'
-              : 'text-graphite-3 hover:text-graphite-1'
-          }`}
-        >
-          {l.label}
-        </button>
-      ))}
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={trigger}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Globe className="h-3.5 w-3.5" />
+        <span className="uppercase">{current}</span>
+      </button>
+      {open ? (
+        <>
+          {/* outside click capture */}
+          <button
+            type="button"
+            aria-hidden
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-40 cursor-default bg-transparent"
+          />
+          <ul role="menu" className={panel}>
+            {LOCALES.map((l) => {
+              const active = l.code === current;
+              return (
+                <li key={l.code} role="none">
+                  <form
+                    action={(fd) => {
+                      startTransition(() => {
+                        setLocale(fd).then(() => setOpen(false));
+                      });
+                    }}
+                  >
+                    <input type="hidden" name="locale" value={l.code} />
+                    <button
+                      type="submit"
+                      role="menuitem"
+                      disabled={pending}
+                      className="flex w-full items-center justify-between gap-2 px-3.5 py-2.5 text-left text-xs text-slate-200 hover:bg-white/[0.06]"
+                    >
+                      <span>{l.label}</span>
+                      {active ? <Check className="h-3.5 w-3.5 text-cyan-300" /> : null}
+                    </button>
+                  </form>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      ) : null}
     </div>
   );
 }

@@ -1,0 +1,108 @@
+'use server';
+
+import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { getSuperAdminEmails } from '@/lib/super-admin';
+
+/**
+ * Unified login. First field accepts either a numeric PIN (cleaner) or an
+ * email (owner / super-admin). We branch on shape, then route the user to
+ * their portal after a successful auth.
+ */
+export async function signIn(formData: FormData) {
+  const identifier = ((formData.get('identifier') as string) ?? '').trim();
+  const password = ((formData.get('password') as string) ?? '').trim();
+
+  if (!identifier) {
+    redirect('/login?error=' + encodeURIComponent('Enter your PIN or email.'));
+  }
+
+  // Cleaner branch: 4–8 digit numeric identifier is treated as a PIN.
+  // The PIN itself is the credential — no separate password column yet.
+  if (/^\d{4,8}$/.test(identifier)) {
+    const admin = createAdminClient();
+    const { data, error } = await admin
+      .from('cleaners')
+      .select('id, name')
+      .eq('pin', identifier)
+      .maybeSingle();
+
+    if (error || !data) {
+      redirect(
+        '/login?error=' +
+          encodeURIComponent('PIN not recognised. Ask your manager.'),
+      );
+    }
+
+    const cookieStore = await cookies();
+    cookieStore.set('cleaner_session', data.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30,
+      path: '/',
+    });
+
+    redirect('/operative');
+  }
+
+  // Owner / HQ branch: email + password via Supabase Auth.
+  if (!identifier.includes('@') || !password) {
+    redirect(
+      '/login?error=' + encodeURIComponent('Enter your email and password.'),
+    );
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({
+    email: identifier.toLowerCase(),
+    password,
+  });
+
+  if (error) {
+    redirect(
+      '/login?error=' +
+        encodeURIComponent('Email or password is incorrect.'),
+    );
+  }
+
+  revalidatePath('/', 'layout');
+
+  if (getSuperAdminEmails().includes(identifier.toLowerCase())) {
+    redirect('/hq');
+  }
+  redirect('/owner');
+}
+
+export async function signup(formData: FormData) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signUp({
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  });
+
+  if (error) {
+    redirect(`/login?error=${encodeURIComponent(error.message)}`);
+  }
+
+  redirect(
+    '/login?message=' +
+      encodeURIComponent(
+        'Account created. If email confirmation is enabled in Supabase, check your inbox before signing in.',
+      ),
+  );
+}
+
+export async function signout() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+
+  const cookieStore = await cookies();
+  cookieStore.delete('cleaner_session');
+
+  revalidatePath('/', 'layout');
+  redirect('/login');
+}
