@@ -2,7 +2,7 @@ type Size = 'sm' | 'md' | 'lg' | 'xl';
 
 // All three variants resolve through /api/logo so an upload in /hq/branding
 // propagates everywhere without a redeploy. The endpoint 302s to the
-// configured URL (or the bundled /portal-home-logo.png fallback).
+// configured URL (or the bundled /portal-home-logo-v2.png fallback).
 const LOGO_DARK_URL = '/api/logo';
 const LOGO_FULL_URL = '/api/logo';
 const LOGO_ICON_URL = '/api/logo';

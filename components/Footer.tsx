@@ -43,7 +43,7 @@ export function Footer() {
               <div className="overflow-hidden" style={{ height: '32px' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/Photoroom_20260522_165921.png"
+                  src="/portal-home-logo-v2.png"
                   alt="Portal Services Digital"
                   className="block w-auto"
                   style={{ height: '46px' }}

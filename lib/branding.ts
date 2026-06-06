@@ -15,7 +15,7 @@ export const DEFAULT_BRANDING: Branding = {
   accentSoft: '#EFF6FF',
   ink: '#0F172A',
   bg: '#F7F9FC',
-  logoUrl: '/portal-home-logo.png',
+  logoUrl: '/portal-home-logo-v2.png',
 };
 
 // Read branding override from marketing_content (section='branding'). Falls

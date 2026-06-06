@@ -41,7 +41,7 @@ function Sidebar({
       <div className="side-top">
         <div className="brand-mark">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/Photoroom_20260522_165921.png" alt="" />
+          <img src="/portal-home-logo-v2.png" alt="Portal Services Digital" />
         </div>
         <div className="name">Portal HQ<span className="sub">v 4.2 · Pro</span></div>
       </div>

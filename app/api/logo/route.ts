@@ -5,7 +5,7 @@ export const revalidate = 60;
 
 /**
  * Redirects to the currently configured marketing logo URL (set in
- * /hq/branding). Falls back to /portal-home-logo.png in /public when no
+ * /hq/branding). Falls back to /portal-home-logo-v2.png in /public when no
  * override is stored. Cached for 60s so uploads propagate quickly but the
  * DB isn't hit on every page render.
  */
