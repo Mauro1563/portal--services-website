@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
+import { notifyNewSignup } from '@/lib/email';
 
 export type SignupInput = {
   name: string;
@@ -77,6 +78,7 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
   });
 
   if (createErr || !created.user) {
+    console.error('[signup] createUser failed', createErr);
     return {
       ok: false,
       error: createErr?.message ?? 'No se pudo crear la cuenta',
@@ -84,12 +86,15 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
   }
 
   // Pre-seed the owner profile so the dashboard shows the business name immediately.
-  await admin
+  const { error: profErr } = await admin
     .from('owner_profiles')
     .upsert({ owner_id: created.user.id, business_name: business });
+  if (profErr) console.error('[signup] owner_profiles upsert failed', profErr);
 
-  // Track in marketing_leads for the HQ dashboard.
-  await admin.from('marketing_leads').insert({
+  // Track in marketing_leads for the HQ dashboard. status='new' is required —
+  // the table has a CHECK constraint that only allows new/contacted/qualified/archived.
+  // We tag the channel via the `source` column instead.
+  const { error: leadErr } = await admin.from('marketing_leads').insert({
     name,
     email,
     company: business,
@@ -97,13 +102,33 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
     source: 'signup_self_serve',
     interest: input.teamSize ? `team:${input.teamSize}` : null,
     message: input.country ? `Country: ${input.country}` : null,
-    status: 'signed_up',
+    status: 'new',
   });
+  if (leadErr) console.error('[signup] marketing_leads insert failed', leadErr);
 
   // Sign them in right away so the success page can offer "Entrar ahora"
   // without re-asking for the password.
   const ssr = await createClient();
-  await ssr.auth.signInWithPassword({ email, password });
+  const { error: signInErr } = await ssr.auth.signInWithPassword({
+    email,
+    password,
+  });
+  if (signInErr) {
+    // User was created but session couldn't be set — they can still log in
+    // manually via /login with the password we'll show them.
+    console.error('[signup] auto signin failed', signInErr);
+  }
+
+  // Fire-and-forget notification to the super-admin. Never block the response
+  // on email — if Resend is down, the signup still succeeds.
+  notifyNewSignup({
+    name,
+    email,
+    business,
+    phone: input.phone || null,
+    country: input.country || null,
+    teamSize: input.teamSize || null,
+  }).catch((err) => console.error('[signup] notify failed', err));
 
   return { ok: true, email, password };
 }

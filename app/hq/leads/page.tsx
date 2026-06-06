@@ -1,5 +1,13 @@
 import { redirect } from 'next/navigation';
-import { Inbox, Mail, Phone, Building, Calendar } from 'lucide-react';
+import {
+  Inbox,
+  Mail,
+  Phone,
+  Building,
+  Calendar,
+  MessageCircle,
+  Send,
+} from 'lucide-react';
 import { requireMarketingAdmin } from '@/lib/marketing';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { HQShell } from '@/components/hq/Shell';
@@ -117,8 +125,14 @@ export default async function HQLeads() {
                         Interés: {l.interest}
                       </p>
                     ) : null}
+                    {l.source ? (
+                      <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-700">
+                        {l.source === 'signup_self_serve' ? 'Auto-registro' : l.source}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
+                <ContactRow lead={l} />
               </li>
             ))}
           </ul>
@@ -131,6 +145,51 @@ export default async function HQLeads() {
         cambio de estado (contactado / cualificado), y exportar a CSV.
       </p>
     </HQShell>
+  );
+}
+
+function ContactRow({ lead }: { lead: Lead }) {
+  // Build a WhatsApp link with a sensible default opener message.
+  const wa = lead.phone
+    ? `https://wa.me/${lead.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
+        `Hola ${lead.name?.split(' ')[0] ?? ''}, soy Mauricio de Portal Home. Vi tu registro de ${lead.company ?? 'tu empresa'} — ¿podemos charlar 10 min sobre cómo te puede ayudar la plataforma?`,
+      )}`
+    : null;
+  const subj = encodeURIComponent(
+    `Sobre tu registro en Portal Home${lead.company ? ` — ${lead.company}` : ''}`,
+  );
+  const body = encodeURIComponent(
+    `Hola ${lead.name?.split(' ')[0] ?? ''},\n\nGracias por registrarte en Portal Home. Quería presentarme y ver cómo te podemos ayudar a sacar el máximo provecho de la plataforma.\n\n¿Tendrías 10 min esta semana para una llamada corta?\n\nUn saludo,\nMauricio`,
+  );
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <a
+        href={`mailto:${lead.email}?subject=${subj}&body=${body}`}
+        className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-semibold text-white transition hover:bg-slate-700"
+      >
+        <Send className="h-3 w-3" /> Email
+      </a>
+      {lead.phone ? (
+        <>
+          <a
+            href={`tel:${lead.phone.replace(/\s+/g, '')}`}
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 text-[11px] font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+          >
+            <Phone className="h-3 w-3" /> Llamar
+          </a>
+          <a
+            href={wa!}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-3 text-[11px] font-semibold text-emerald-700 transition hover:bg-emerald-100"
+          >
+            <MessageCircle className="h-3 w-3" /> WhatsApp
+          </a>
+        </>
+      ) : (
+        <span className="text-[11px] text-graphite-4">Sin teléfono registrado</span>
+      )}
+    </div>
   );
 }
 
