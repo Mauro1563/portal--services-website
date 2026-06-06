@@ -389,7 +389,271 @@ const SitesTable = () => (
   </div>
 );
 
-export function OpsDashboard({ email }: { email: string }) {
+function SignupsCard({
+  data,
+}: {
+  data: { newCount: number; recent: SignupLead[] };
+}) {
+  const hasLeads = data.recent.length > 0;
+  return (
+    <div
+      style={{
+        margin: '16px 24px 0',
+        padding: '20px',
+        background:
+          'linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)',
+        border: '1px solid #e0f2fe',
+        borderRadius: 18,
+        boxShadow:
+          '0 12px 32px -16px rgba(15,23,42,0.10), 0 2px 8px -4px rgba(15,23,42,0.05)',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          gap: 16,
+          marginBottom: hasLeads ? 16 : 0,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 12,
+              background: 'linear-gradient(135deg, #22d3ee, #2563eb)',
+              display: 'grid',
+              placeItems: 'center',
+              color: '#fff',
+              boxShadow: '0 8px 20px -8px rgba(37,99,235,0.5)',
+            }}
+          >
+            <I.msg size={18} />
+          </div>
+          <div>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: '#64748b',
+              }}
+            >
+              Registros desde el sitio
+            </p>
+            <p
+              style={{
+                margin: '2px 0 0',
+                fontSize: 18,
+                fontWeight: 600,
+                color: '#0f172a',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {data.newCount > 0 ? (
+                <>
+                  <span style={{ color: '#0284c7' }}>{data.newCount}</span>{' '}
+                  por contactar
+                </>
+              ) : (
+                'Sin pendientes'
+              )}
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/hq/leads"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '8px 14px',
+            background: '#0f172a',
+            color: '#fff',
+            textDecoration: 'none',
+            fontSize: 12,
+            fontWeight: 600,
+            borderRadius: 10,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Ver todos <I.chev_r size={11} />
+        </Link>
+      </div>
+
+      {hasLeads ? (
+        <ul
+          style={{
+            listStyle: 'none',
+            margin: 0,
+            padding: 0,
+            display: 'grid',
+            gap: 8,
+          }}
+        >
+          {data.recent.slice(0, 3).map((l) => {
+            const firstName = (l.name ?? l.email).split(' ')[0];
+            const wa = l.phone
+              ? `https://wa.me/${l.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
+                  `Hola ${firstName}, soy Mauricio de Portal Home. Vi tu registro de ${l.company ?? 'tu empresa'} — ¿podemos charlar 10 min?`,
+                )}`
+              : null;
+            return (
+              <li
+                key={l.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  padding: '10px 12px',
+                  background: '#fff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: 12,
+                }}
+              >
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 10,
+                    background: '#ecfeff',
+                    color: '#0e7490',
+                    display: 'grid',
+                    placeItems: 'center',
+                    fontSize: 11,
+                    fontWeight: 700,
+                  }}
+                >
+                  {(l.name ?? l.email).slice(0, 2).toUpperCase()}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: '#0f172a',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {l.name ?? l.email}
+                    {l.company ? (
+                      <span style={{ color: '#94a3b8', fontWeight: 400 }}>
+                        {' · '}
+                        {l.company}
+                      </span>
+                    ) : null}
+                  </p>
+                  <p
+                    style={{
+                      margin: '2px 0 0',
+                      fontSize: 11,
+                      color: '#64748b',
+                    }}
+                  >
+                    {l.email}
+                    {l.phone ? ` · ${l.phone}` : ''}
+                    {' · '}
+                    {new Date(l.created_at).toLocaleString('es-ES', {
+                      day: '2-digit',
+                      month: 'short',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <a
+                    href={`mailto:${l.email}`}
+                    title="Email"
+                    style={iconBtnStyle}
+                  >
+                    <I.msg size={13} />
+                  </a>
+                  {l.phone ? (
+                    <>
+                      <a
+                        href={`tel:${l.phone.replace(/\s+/g, '')}`}
+                        title="Llamar"
+                        style={iconBtnStyle}
+                      >
+                        <I.help size={13} />
+                      </a>
+                      <a
+                        href={wa!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="WhatsApp"
+                        style={{
+                          ...iconBtnStyle,
+                          background: '#ecfdf5',
+                          color: '#047857',
+                          border: '1px solid #a7f3d0',
+                        }}
+                      >
+                        <I.msg size={13} />
+                      </a>
+                    </>
+                  ) : null}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p
+          style={{
+            margin: 0,
+            padding: '16px 0',
+            textAlign: 'center',
+            fontSize: 12,
+            color: '#94a3b8',
+          }}
+        >
+          Cuando alguien rellene el formulario de “Pedir demo” / “Crear cuenta”,
+          aparecerá aquí — y te llegará un email a la vez.
+        </p>
+      )}
+    </div>
+  );
+}
+
+const iconBtnStyle: React.CSSProperties = {
+  width: 30,
+  height: 30,
+  borderRadius: 8,
+  background: '#f1f5f9',
+  color: '#475569',
+  display: 'grid',
+  placeItems: 'center',
+  textDecoration: 'none',
+  border: '1px solid #e2e8f0',
+};
+
+export type SignupLead = {
+  id: string;
+  name: string | null;
+  email: string;
+  company: string | null;
+  phone: string | null;
+  source: string | null;
+  status: 'new' | 'contacted' | 'qualified' | 'archived';
+  created_at: string;
+};
+
+export function OpsDashboard({
+  email,
+  leadsData,
+}: {
+  email: string;
+  leadsData?: { newCount: number; recent: SignupLead[] };
+}) {
   const [active, setActive] = useState('overview');
   return (
     <div className="hqx">
@@ -408,13 +672,19 @@ export function OpsDashboard({ email }: { email: string }) {
           <div className="page-h">
             <div>
               <h1>Buenos días, {email.split('@')[0]}</h1>
-              <div className="greeting">Hoy hay 47 servicios programados en 12 sitios.</div>
+              <div className="greeting">
+                {leadsData && leadsData.newCount > 0
+                  ? `Tienes ${leadsData.newCount} ${leadsData.newCount === 1 ? 'registro nuevo' : 'registros nuevos'} por revisar.`
+                  : 'Hoy hay 47 servicios programados en 12 sitios.'}
+              </div>
             </div>
             <div className="actions">
               <button className="btn btn-ghost"><I.download size={13} /> Exportar</button>
               <button className="btn btn-solid"><I.plus size={13} /> Nuevo servicio</button>
             </div>
           </div>
+
+          {leadsData ? <SignupsCard data={leadsData} /> : null}
 
           <div className="kpis">
             <KPI label="Servicios hoy" value="47" delta="+8%" deltaDir="up" icon={I.clipboard} sparkColor="#2563EB" />

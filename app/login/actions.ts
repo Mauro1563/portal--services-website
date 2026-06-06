@@ -63,10 +63,19 @@ export async function signIn(formData: FormData) {
   });
 
   if (error) {
-    redirect(
-      '/login?error=' +
-        encodeURIComponent('Email or password is incorrect.'),
-    );
+    console.error('[login] signInWithPassword failed', {
+      email: identifier.toLowerCase(),
+      code: error.code,
+      status: error.status,
+      message: error.message,
+    });
+    // Surface the actual Supabase error message so we can diagnose
+    // (email-not-confirmed vs wrong password vs rate limit, etc).
+    const detail =
+      error.code === 'email_not_confirmed'
+        ? 'Tu email aún no está confirmado. Pídele al admin que lo verifique.'
+        : error.message || 'Email or password is incorrect.';
+    redirect('/login?error=' + encodeURIComponent(detail));
   }
 
   revalidatePath('/', 'layout');

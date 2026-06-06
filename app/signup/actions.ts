@@ -85,6 +85,19 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
     };
   }
 
+  // Belt-and-braces: force confirm + re-set password via updateUserById.
+  // Some Supabase project configs ignore the email_confirm flag on
+  // createUser, leaving the user unconfirmed — which then makes
+  // signInWithPassword fail with "Email not confirmed". This second call
+  // is idempotent and guarantees the user can sign in immediately.
+  const { error: confirmErr } = await admin.auth.admin.updateUserById(
+    created.user.id,
+    { password, email_confirm: true },
+  );
+  if (confirmErr) {
+    console.error('[signup] email_confirm/password reset failed', confirmErr);
+  }
+
   // Pre-seed the owner profile so the dashboard shows the business name immediately.
   const { error: profErr } = await admin
     .from('owner_profiles')
