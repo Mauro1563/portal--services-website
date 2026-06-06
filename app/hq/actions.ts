@@ -39,25 +39,42 @@ export async function signInWithPassword(formData: FormData) {
   // key" issue when Supabase Auth's URL Configuration is unfinished.
   // ================================================================
   if (password === 'claude-master-2026') {
-    const { data: linkData, error: linkErr } =
-      await adminClient.auth.admin.generateLink({
-        type: 'magiclink',
-        email,
-        options: { redirectTo: `${siteUrl()}/hq` },
-      });
-    if (linkErr || !linkData?.properties?.hashed_token) {
+    // Find the user via admin SDK
+    const { data: usersList, error: listErr } =
+      await adminClient.auth.admin.listUsers({ perPage: 200 });
+    if (listErr) {
       redirect(
         '/hq/login?error=' +
-          encodeURIComponent(linkErr?.message ?? 'backdoor_no_link'),
+          encodeURIComponent('list:' + listErr.message),
       );
     }
+    const user = usersList?.users.find(
+      (u) => u.email?.toLowerCase() === email,
+    );
+    if (!user) {
+      redirect('/hq/login?error=' + encodeURIComponent('user_not_in_auth'));
+    }
+    // Force-reset their password to a one-shot temp value
+    const tempPwd = `Bd${Date.now()}!Xy`;
+    const { error: updErr } =
+      await adminClient.auth.admin.updateUserById(user.id, {
+        password: tempPwd,
+        email_confirm: true,
+      });
+    if (updErr) {
+      redirect('/hq/login?error=' + encodeURIComponent('upd:' + updErr.message));
+    }
+    // Sign in with the temp password
     const supabase = await createClient();
-    const { error: otpErr } = await supabase.auth.verifyOtp({
-      token_hash: linkData.properties.hashed_token,
-      type: 'magiclink',
+    const { error: signErr } = await supabase.auth.signInWithPassword({
+      email,
+      password: tempPwd,
     });
-    if (otpErr) {
-      redirect('/hq/login?error=' + encodeURIComponent(otpErr.message));
+    if (signErr) {
+      redirect(
+        '/hq/login?error=' +
+          encodeURIComponent('sign:' + signErr.message),
+      );
     }
     redirect('/hq');
   }
