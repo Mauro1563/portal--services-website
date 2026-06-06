@@ -33,10 +33,8 @@ export function TopBanner() {
   return (
     <div className="border-b border-slate-200 bg-slate-50">
       <div className="mx-auto flex h-9 max-w-6xl items-center justify-end gap-2 px-5 text-xs text-slate-600">
-        <span className="hidden items-center gap-1.5 sm:inline-flex">
-          <Globe className="h-3.5 w-3.5" />
-          Idioma:
-        </span>
+        <Globe className="hidden h-3.5 w-3.5 sm:inline-block" />
+
         <div className="inline-flex items-center gap-0.5 rounded-full border border-slate-200 bg-white p-0.5">
           {LOCALES.map((l) => (
             <button
