@@ -5,10 +5,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Globe } from 'lucide-react';
 
-const LOCALES = ['es', 'en', 'pt'] as const;
+const LOCALES = ['en', 'es', 'pt'] as const;
 const LABELS: Record<(typeof LOCALES)[number], string> = {
-  es: 'Español',
   en: 'English',
+  es: 'Español',
   pt: 'Português',
 };
 
