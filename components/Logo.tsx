@@ -1,13 +1,12 @@
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
-const LOGO_DARK_URL =
-  'https://raw.githubusercontent.com/Mauro1563/portal--services-website/main/logo%20png%20portal%20.PNG';
+const LOGO_DARK_URL = '/portal-home-logo.png';
 
 /** Light-canvas brand mark with the tagline baked in. Stored in /public. */
-const LOGO_FULL_URL = '/Photoroom_20260522_163830.png';
+const LOGO_FULL_URL = '/portal-home-logo.png';
 
 /** Icon-only mark (no wordmark, no tagline). For nav, favicons, mockups. */
-const LOGO_ICON_URL = '/Photoroom_20260522_165921.png';
+const LOGO_ICON_URL = '/portal-home-logo.png';
 
 const sizeConfig: Record<
   Size,

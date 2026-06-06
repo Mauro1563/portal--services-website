@@ -15,7 +15,7 @@ export const DEFAULT_BRANDING: Branding = {
   accentSoft: '#EFF6FF',
   ink: '#0F172A',
   bg: '#F7F9FC',
-  logoUrl: '/Photoroom_20260522_165921.png',
+  logoUrl: '/portal-home-logo.png',
 };
 
 // Public render is fully static (no Supabase at request time) to guarantee
