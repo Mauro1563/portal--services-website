@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { TopBanner } from '@/components/v2/marketing/TopBanner';
 import { Nav } from '@/components/v2/marketing/Nav';
 import { Hero } from '@/components/v2/marketing/Hero';
 import { TrustBand } from '@/components/v2/marketing/TrustBand';
@@ -43,6 +44,7 @@ export default async function Home({
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
       <StructuredData locale={locale} />
+      <TopBanner />
       <Nav
         logoUrl={branding.logoUrl}
         ctaPrimary={tNav('cta')}
