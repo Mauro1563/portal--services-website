@@ -16,7 +16,11 @@ export async function Footer({ logoUrl }: Props) {
           <div>
             <Link href="/" className="inline-flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logoUrl} alt="Portal Services" className="h-9 w-auto" />
+              <img
+                src={logoUrl}
+                alt="Portal Home Digital"
+                className="h-14 w-auto"
+              />
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-600">
               {t('tagline')}

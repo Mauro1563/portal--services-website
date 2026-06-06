@@ -11,10 +11,14 @@ type Props = {
 export function Nav({ logoUrl, ctaPrimary, ctaSecondary, links }: Props) {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-5">
         <Link href="/" className="flex items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logoUrl} alt="Portal Services" className="h-9 w-auto" />
+          <img
+            src={logoUrl}
+            alt="Portal Home Digital"
+            className="h-14 w-auto sm:h-16"
+          />
         </Link>
         <nav className="hidden items-center gap-8 text-sm font-medium text-slate-700 md:flex">
           <a href="#portals" className="hover:text-slate-950">{links.portals}</a>
