@@ -29,9 +29,9 @@ const config: Config = {
         // Dark text on light surfaces
         graphite: { 1: '#0B1220', 2: '#1E293B', 3: '#475569', 4: '#94A3B8' },
         line: '#E2E8F0',
-        // Old aliases kept for /hq (dark admin) routes
-        surface: { 0: '#0f172a', 1: '#111b30', 2: '#1a2542', 3: '#243044' },
-        text: { 1: '#f8fafc', 2: '#cbd5e1', 3: '#94a3b8' },
+        // Light-theme surfaces for app portales (cleaner, owner, client, HQ).
+        surface: { 0: '#FFFFFF', 1: '#F8FAFC', 2: '#F1F5F9', 3: '#E2E8F0' },
+        text: { 1: '#0F172A', 2: '#475569', 3: '#94A3B8' },
       },
       backgroundImage: {
         'brand-gradient':

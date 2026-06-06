@@ -33,11 +33,22 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Public sub-routes under /hq (auth flow pages themselves) — never redirect
+  const isHqAuthPage =
+    pathname === '/hq/login' ||
+    pathname === '/hq/forgot-password' ||
+    pathname === '/hq/reset-password';
+
   // Protect /owner and /hq routes — require Supabase auth user
-  if (!user && (pathname.startsWith('/owner') || pathname.startsWith('/hq'))) {
+  if (
+    !user &&
+    !isHqAuthPage &&
+    (pathname.startsWith('/owner') || pathname.startsWith('/hq'))
+  ) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    url.searchParams.set('role', 'owner');
+    // Marketing /hq uses its own login at /hq/login. Cleaning /owner uses /login.
+    url.pathname = pathname.startsWith('/hq') ? '/hq/login' : '/login';
+    if (!pathname.startsWith('/hq')) url.searchParams.set('role', 'owner');
     return NextResponse.redirect(url);
   }
 
