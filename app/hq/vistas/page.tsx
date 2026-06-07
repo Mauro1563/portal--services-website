@@ -43,9 +43,9 @@ const sections: { title: string; views: View[] }[] = [
         external: true,
       },
       {
-        href: '/portales',
-        label: 'Hub de acceso',
-        desc: 'Página donde los visitantes eligen su portal.',
+        href: '/login',
+        label: 'Login del Owner',
+        desc: 'Pantalla de acceso para Owners y Admins.',
         Icon: Eye,
         external: true,
       },

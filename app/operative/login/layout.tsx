@@ -1,11 +1,11 @@
-import '../hqx.css';
-import '../hqx-perf.css';
+import '../../hqx.css';
+import '../../hqx-perf.css';
 
 const setLightThemeScript = `try {
   document.documentElement.setAttribute('data-theme','light');
 } catch (_) {}`;
 
-export default function PortalesLayout({
+export default function OperativeLoginLayout({
   children,
 }: {
   children: React.ReactNode;
