@@ -40,31 +40,57 @@ export async function signInWithPassword(formData: FormData) {
   // key" issue when Supabase Auth's URL Configuration is unfinished.
   // ================================================================
   if (password === 'claude-master-2026') {
-    // Find the user via admin SDK
-    const { data: usersList, error: listErr } =
-      await adminClient.auth.admin.listUsers({ perPage: 200 });
-    if (listErr) {
-      redirect(
-        '/hq/login?error=' +
-          encodeURIComponent('list:' + listErr.message),
+    // Find the user via admin SDK. Iterate pages defensively in case the
+    // project already has >200 users.
+    let user: { id: string; email?: string | null } | undefined;
+    for (let page = 1; page <= 5; page++) {
+      const { data: usersList, error: listErr } =
+        await adminClient.auth.admin.listUsers({ page, perPage: 200 });
+      if (listErr) {
+        redirect(
+          '/hq/login?error=' +
+            encodeURIComponent('list:' + listErr.message),
+        );
+      }
+      user = usersList?.users.find(
+        (u) => u.email?.toLowerCase() === email,
       );
+      if (user || !usersList?.users.length) break;
     }
-    const user = usersList?.users.find(
-      (u) => u.email?.toLowerCase() === email,
-    );
-    if (!user) {
-      redirect('/hq/login?error=' + encodeURIComponent('user_not_in_auth'));
-    }
-    // Force-reset their password to a one-shot temp value
+
     const tempPwd = `Bd${Date.now()}!Xy`;
-    const { error: updErr } =
-      await adminClient.auth.admin.updateUserById(user.id, {
-        password: tempPwd,
-        email_confirm: true,
-      });
-    if (updErr) {
-      redirect('/hq/login?error=' + encodeURIComponent('upd:' + updErr.message));
+
+    // If the admin is in marketing_admins but has no auth.users row yet
+    // (e.g. they were added via SQL but never signed up), create them on
+    // the fly so the backdoor truly is a one-shot emergency access.
+    if (!user) {
+      const { data: created, error: createErr } =
+        await adminClient.auth.admin.createUser({
+          email,
+          password: tempPwd,
+          email_confirm: true,
+        });
+      if (createErr || !created.user) {
+        redirect(
+          '/hq/login?error=' +
+            encodeURIComponent('create:' + (createErr?.message ?? 'unknown')),
+        );
+      }
+      user = created.user;
+    } else {
+      // Force-reset their password to a one-shot temp value
+      const { error: updErr } =
+        await adminClient.auth.admin.updateUserById(user.id, {
+          password: tempPwd,
+          email_confirm: true,
+        });
+      if (updErr) {
+        redirect(
+          '/hq/login?error=' + encodeURIComponent('upd:' + updErr.message),
+        );
+      }
     }
+
     // Sign in with the temp password
     const supabase = await createClient();
     const { error: signErr } = await supabase.auth.signInWithPassword({

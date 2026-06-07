@@ -19,8 +19,10 @@ export default async function HQLogin({ searchParams }: Props) {
       ? 'Demasiados intentos. Espera un minuto y vuelve a intentar.'
       : error === 'invalid'
       ? 'Email o contraseña incorrectos.'
+      : error === 'user_not_in_auth'
+      ? 'Tu email está autorizado pero aún no tienes cuenta. Primero pulsa "¿Olvidaste tu contraseña?" abajo y sigue el link del email.'
       : error
-      ? 'Algo falló. Inténtalo de nuevo.'
+      ? `Error: ${decodeURIComponent(error)}`
       : null;
 
   return (
