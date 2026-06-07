@@ -19,7 +19,7 @@ export default async function OperativeLogin({ searchParams }: Props) {
       <form action={signIn} className="space-y-4">
         <LoginField label="PIN">
           <div className="relative">
-            <KeyRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <KeyRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
             <input
               type="text"
               name="identifier"

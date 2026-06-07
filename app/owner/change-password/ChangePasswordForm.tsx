@@ -141,7 +141,7 @@ function PasswordField({
         {label}
       </span>
       <div className="relative mt-2">
-        <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
         <input
           type={show ? 'text' : 'password'}
           value={value}
@@ -150,12 +150,12 @@ function PasswordField({
           required
           minLength={8}
           placeholder="••••••••"
-          className="block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-11 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+          className="block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-11 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-500 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
         />
         <button
           type="button"
           onClick={toggle}
-          className="absolute right-3 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+          className="absolute right-3 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md text-slate-600 transition hover:bg-slate-100 hover:text-slate-700"
           aria-label={show ? 'Ocultar' : 'Mostrar'}
         >
           {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

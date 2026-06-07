@@ -137,7 +137,7 @@ export function SignupForm() {
                   </Field>
 
                   <details className="group rounded-xl">
-                    <summary className="flex cursor-pointer items-center justify-between text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400 transition hover:text-slate-600">
+                    <summary className="flex cursor-pointer items-center justify-between text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:text-slate-600">
                       <span>+ Datos opcionales</span>
                       <span className="text-slate-300 group-open:hidden">Mostrar</span>
                       <span className="hidden text-slate-300 group-open:inline">Ocultar</span>
@@ -194,7 +194,7 @@ export function SignupForm() {
                     )}
                   </button>
 
-                  <p className="text-center text-[11px] text-slate-400">
+                  <p className="text-center text-[11px] text-slate-600">
                     ¿Ya tienes cuenta?{' '}
                     <Link
                       href="/login"
@@ -207,7 +207,7 @@ export function SignupForm() {
 
                 <Link
                   href="/"
-                  className="mt-6 text-center text-xs font-medium text-slate-400 transition hover:text-slate-700 lg:text-left"
+                  className="mt-6 text-center text-xs font-medium text-slate-600 transition hover:text-slate-700 lg:text-left"
                 >
                   ← Volver al inicio
                 </Link>
@@ -222,7 +222,7 @@ export function SignupForm() {
 }
 
 const inputClass =
-  'block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10';
+  'block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-500 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10';
 
 function Field({
   label,
@@ -240,13 +240,13 @@ function Field({
       <span className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
         <span>{label}</span>
         {optional ? (
-          <span className="font-medium normal-case tracking-normal text-slate-400">
+          <span className="font-medium normal-case tracking-normal text-slate-600">
             opcional
           </span>
         ) : null}
       </span>
       <div className="relative mt-2">
-        <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
         {children}
       </div>
     </label>

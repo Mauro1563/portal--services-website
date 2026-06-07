@@ -41,7 +41,7 @@ export default async function ResetPasswordPage({ searchParams }: Props) {
             <h1 className="mt-2 font-display text-2xl font-semibold text-white">
               {t('resetPassword.title')}
             </h1>
-            <p className="mt-1 text-sm text-slate-400">{user.email}</p>
+            <p className="mt-1 text-sm text-slate-600">{user.email}</p>
 
             {error && (
               <p className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-xs text-rose-300">

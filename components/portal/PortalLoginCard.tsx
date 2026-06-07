@@ -94,7 +94,9 @@ export function PortalLoginCard({
                 {title}
               </h1>
               {subtitle ? (
-                <p className="mt-1 text-[13px] text-slate-500">{subtitle}</p>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-slate-700">
+                  {subtitle}
+                </p>
               ) : null}
 
               {/* Alerts */}
@@ -118,7 +120,7 @@ export function PortalLoginCard({
 
               {/* Bottom separator + copyright */}
               <div className="mt-7 border-t border-slate-100 pt-5">
-                <p className="text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                <p className="text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                   © {new Date().getFullYear()} Portal Services UK · All rights
                   reserved
                 </p>
@@ -129,7 +131,7 @@ export function PortalLoginCard({
 
         <Link
           href="/"
-          className="mt-5 text-xs font-medium text-slate-400 transition hover:text-slate-700"
+          className="mt-5 text-xs font-semibold text-slate-600 transition hover:text-slate-900"
         >
           ← Back to home
         </Link>
@@ -230,11 +232,11 @@ export function LoginField({
 }) {
   return (
     <label className="block">
-      <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#94a3b8]">
+      <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-700">
         {label}
       </span>
       <div className="mt-2">{children}</div>
-      {hint ? <p className="mt-1.5 text-[11px] text-slate-400">{hint}</p> : null}
+      {hint ? <p className="mt-1.5 text-[11px] text-slate-600">{hint}</p> : null}
     </label>
   );
 }

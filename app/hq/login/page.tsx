@@ -36,14 +36,14 @@ export default async function HQLogin({ searchParams }: Props) {
       <form action={signInWithPassword} className="space-y-4">
         <LoginField label="Email">
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
             <input
               type="email"
               name="email"
               required
               autoComplete="email"
               placeholder="tu@empresa.com"
-              className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-400 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
+              className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-500 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
             />
           </div>
         </LoginField>
