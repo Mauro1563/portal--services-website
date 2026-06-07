@@ -1,5 +1,6 @@
 'use server';
 
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { notifyNewSignup } from '@/lib/email';
@@ -88,14 +89,35 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
   // Belt-and-braces: force confirm + re-set password via updateUserById.
   // Some Supabase project configs ignore the email_confirm flag on
   // createUser, leaving the user unconfirmed — which then makes
-  // signInWithPassword fail with "Email not confirmed". This second call
-  // is idempotent and guarantees the user can sign in immediately.
+  // signInWithPassword fail with "Email not confirmed".
   const { error: confirmErr } = await admin.auth.admin.updateUserById(
     created.user.id,
     { password, email_confirm: true },
   );
   if (confirmErr) {
     console.error('[signup] email_confirm/password reset failed', confirmErr);
+  }
+
+  // VERIFY the credentials actually work before showing them to the user.
+  // Uses a standalone anon client (no cookie persistence) so we don't pollute
+  // the SSR session — pure shape check.
+  const verify = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+  const { error: verifyErr } = await verify.auth.signInWithPassword({
+    email,
+    password,
+  });
+  if (verifyErr) {
+    console.error('[signup] credential verification FAILED', verifyErr);
+    // Don't strand the user with a non-working password — surface the real
+    // Supabase error so they (or we) can fix the project config.
+    return {
+      ok: false,
+      error: `Cuenta creada pero el login falla: ${verifyErr.message}. Revisa en Supabase → Auth → Settings que 'Confirm email' esté desactivado, o contáctanos.`,
+    };
   }
 
   // Pre-seed the owner profile so the dashboard shows the business name immediately.
