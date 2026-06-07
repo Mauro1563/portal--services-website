@@ -79,6 +79,15 @@ const sections: { title: string; views: View[] }[] = [
         badgeTone: 'emerald',
         external: true,
       },
+      {
+        href: '/client/preview',
+        label: 'Client Portal (demo)',
+        desc: 'Vista previa con datos de ejemplo de lo que ve un cliente.',
+        Icon: Eye,
+        badge: 'Client',
+        badgeTone: 'amber',
+        external: true,
+      },
     ],
   },
   {
