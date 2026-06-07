@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { Globe, MapPin, Users } from 'lucide-react';
+import { Globe, Home, MapPin, Users } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 
 export function PortalLoginCard({
@@ -57,8 +57,12 @@ export function PortalLoginCard({
                 <Logo size="md" />
               </div>
 
-              {/* Pill badges with icons */}
-              {badges && badges.length > 0 ? (
+              {/* Portal-type indicator(s) */}
+              {badges && badges.length === 1 ? (
+                <div className="mt-6 flex justify-center">
+                  <PortalTypeChip label={badges[0]} />
+                </div>
+              ) : badges && badges.length > 1 ? (
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                   <BadgePill icon={Globe} label={badges[0] ?? 'One platform'} />
                   {badges[1] ? (
@@ -134,6 +138,32 @@ function BadgePill({
       <Icon className="h-3 w-3 text-[#2563eb]" />
       {label}
     </span>
+  );
+}
+
+/**
+ * Premium "you are here" chip for single-portal screens (e.g. /login).
+ * Logo-aligned: same cyan→blue→deep-blue gradient as the brand mark, glassy
+ * white shell with brand-tinted glow, gradient-filled circular icon, and
+ * gradient-text wordmark. Includes a live pulse dot to feel active.
+ */
+function PortalTypeChip({ label }: { label: string }) {
+  return (
+    <div className="relative inline-flex items-center gap-2 rounded-full bg-white py-1 pl-1 pr-4 shadow-[0_10px_28px_-12px_rgba(37,99,235,0.45),inset_0_0_0_1px_rgba(37,99,235,0.12)]">
+      {/* Gradient icon disc */}
+      <span className="relative grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)]">
+        <Home className="h-3.5 w-3.5" strokeWidth={2.4} />
+        {/* live pulse dot */}
+        <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+        </span>
+      </span>
+      {/* Gradient text label */}
+      <span className="bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#0891b2] bg-clip-text text-[11px] font-extrabold uppercase tracking-[0.18em] text-transparent">
+        {label}
+      </span>
+    </div>
   );
 }
 
