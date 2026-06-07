@@ -28,3 +28,15 @@ yarn-error.log*
 
 # package manager artifacts not used in this repo
 pnpm-lock.yaml
+
+# Capacitor / iOS — keep the Xcode project files but not local build state
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+ios/App/build/
+ios/DerivedData/
+ios/capacitor-cordova-ios-plugins/
+*.xcuserstate
+*.xcuserdatad
+.cocoapods/
