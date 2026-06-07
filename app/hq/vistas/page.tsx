@@ -109,6 +109,47 @@ const sections: { title: string; views: View[] }[] = [
     ],
   },
   {
+    title: 'Pantallas internas (demo)',
+    views: [
+      {
+        href: '/owner/preview/tasks',
+        label: 'Owner · Tareas',
+        desc: 'Lista de cleanings + detalle con check-in, fotos y cleaner.',
+        Icon: Inbox,
+        badge: 'Owner',
+        badgeTone: 'blue',
+        external: true,
+      },
+      {
+        href: '/owner/preview/properties',
+        label: 'Owner · Propiedades',
+        desc: 'Lista de sitios con plataforma, beds/baths, área y limpiezas.',
+        Icon: Home,
+        badge: 'Owner',
+        badgeTone: 'blue',
+        external: true,
+      },
+      {
+        href: '/client/preview/cleaning',
+        label: 'Client · Detalle de limpieza',
+        desc: 'Cómo ve el cliente una limpieza con fotos antes/después y rating.',
+        Icon: Eye,
+        badge: 'Client',
+        badgeTone: 'amber',
+        external: true,
+      },
+      {
+        href: '/hq/preview-companies',
+        label: 'HQ · Companies / Tenants',
+        desc: 'Lista de empresas registradas con KPIs y plan.',
+        Icon: Users,
+        badge: 'HQ',
+        badgeTone: 'slate',
+        external: true,
+      },
+    ],
+  },
+  {
     title: 'Tu área administrativa',
     views: [
       {

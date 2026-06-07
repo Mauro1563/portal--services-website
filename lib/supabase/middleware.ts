@@ -39,10 +39,23 @@ export async function updateSession(request: NextRequest) {
     pathname === '/hq/forgot-password' ||
     pathname === '/hq/reset-password';
 
+  // Preview / showcase routes are intentionally public so the team can
+  // share screenshots of each portal without spinning up real auth.
+  const isPreviewRoute =
+    pathname === '/owner/preview' ||
+    pathname.startsWith('/owner/preview/') ||
+    pathname === '/operative/preview' ||
+    pathname.startsWith('/operative/preview/') ||
+    pathname === '/hq/preview' ||
+    pathname === '/hq/preview-companies' ||
+    pathname.startsWith('/hq/preview/') ||
+    pathname.startsWith('/hq/preview-');
+
   // Protect /owner and /hq routes — require Supabase auth user
   if (
     !user &&
     !isHqAuthPage &&
+    !isPreviewRoute &&
     (pathname.startsWith('/owner') || pathname.startsWith('/hq'))
   ) {
     const url = request.nextUrl.clone();
