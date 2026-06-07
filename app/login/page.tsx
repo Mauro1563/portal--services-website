@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
   return (
     <PortalLoginCard
-      badges={['One platform', 'One place', 'Everyone connected']}
+      badges={['Home Cleaner Portal']}
       title="Sign in to your account"
       subtitle="Enter your credentials to continue"
       error={error}

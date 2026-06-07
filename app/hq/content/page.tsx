@@ -87,7 +87,7 @@ export default async function HQContentIndex() {
 
       <p className="mt-10 rounded-2xl bg-cyan-50 p-4 text-xs text-graphite-2 ring-1 ring-inset ring-cyan-200">
         <span className="font-semibold text-brand-700">Próximamente:</span>{' '}
-        editor visual de los 7 portales, VIP experience, Club Premium y la
+        editor visual de los portales, VIP experience, Club Premium y la
         comparativa de funciones. Si necesitas tocar algo de eso ahora, dímelo
         y lo añado.
       </p>

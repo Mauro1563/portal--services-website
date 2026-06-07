@@ -37,7 +37,7 @@ export default async function HQPortals() {
       active="portals"
       email={admin.email}
       title="Portales"
-      subtitle="Edita los 7 portales que se muestran en el sitio, por idioma."
+      subtitle="Edita los portales que se muestran en el sitio, por idioma."
     >
       <PortalsEditor initial={initial} />
     </HQShell>
