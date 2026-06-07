@@ -9,10 +9,12 @@ import {
   FileSignature,
   Inbox,
   Settings,
+  Eye,
 } from 'lucide-react';
 
 export type Active =
   | 'dashboard'
+  | 'vistas'
   | 'content'
   | 'site'
   | 'branding'
@@ -29,7 +31,10 @@ export const navGroups: {
 }[] = [
   {
     label: 'General',
-    items: [{ key: 'dashboard', href: '/hq', label: 'Dashboard', Icon: LayoutDashboard }],
+    items: [
+      { key: 'dashboard', href: '/hq', label: 'Dashboard', Icon: LayoutDashboard },
+      { key: 'vistas', href: '/hq/vistas', label: 'Vistas / Preview', Icon: Eye },
+    ],
   },
   {
     label: 'Sitio',

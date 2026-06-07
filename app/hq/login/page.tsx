@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { ShieldCheck } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ChevronRight, Lock, Mail } from 'lucide-react';
+import { PortalLoginCard, LoginField } from '@/components/portal/PortalLoginCard';
+import { PasswordInput } from '@/app/login/PasswordInput';
 import { signInWithPassword } from '../actions';
 
 type Props = {
@@ -20,90 +21,55 @@ export default async function HQLogin({ searchParams }: Props) {
       : error === 'invalid'
       ? 'Email o contraseña incorrectos.'
       : error === 'user_not_in_auth'
-      ? 'Tu email está autorizado pero aún no tienes cuenta. Primero pulsa "¿Olvidaste tu contraseña?" abajo y sigue el link del email.'
+      ? 'Tu email está autorizado pero aún no tienes cuenta. Pulsa "¿Olvidaste tu contraseña?" abajo.'
       : error
       ? `Error: ${decodeURIComponent(error)}`
-      : null;
+      : undefined;
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-canvas px-6">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-mesh-light opacity-70"
-      />
-      <div className="w-full max-w-sm">
-        <div className="rounded-3xl bg-paper p-8 ring-1 ring-line shadow-[0_24px_60px_-20px_rgba(15,23,42,0.18)]">
-          <div className="mb-6 flex justify-center">
-            <Logo size="md" variant="full" />
+    <PortalLoginCard
+      badges={['Portal Services · Admin']}
+      title="Sign in to your account"
+      subtitle="Acceso restringido. Solo correos autorizados."
+      error={errorMessage}
+    >
+      <form action={signInWithPassword} className="space-y-4">
+        <LoginField label="Email">
+          <div className="relative">
+            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="email"
+              name="email"
+              required
+              autoComplete="email"
+              placeholder="tu@empresa.com"
+              className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-400 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
+            />
           </div>
-          <div className="flex items-center gap-2 text-brand-600">
-            <ShieldCheck className="h-4 w-4" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
-              HQ · Panel administrativo
-            </p>
-          </div>
-          <h1 className="mt-3 font-display text-2xl font-semibold tracking-tight text-graphite-1">
-            Sign in to your account
-          </h1>
-          <p className="mt-1 text-sm text-graphite-3">
-            Acceso restringido. Solo correos autorizados.
-          </p>
+        </LoginField>
 
-          {errorMessage ? (
-            <div className="mt-5 rounded-xl bg-rose-50 px-3 py-2.5 text-xs text-rose-700 ring-1 ring-inset ring-rose-200">
-              {errorMessage}
-            </div>
-          ) : null}
+        <LoginField label="Password">
+          <PasswordInput />
+        </LoginField>
 
-          <form action={signInWithPassword} className="mt-6 space-y-3">
-            <label className="block">
-              <span className="text-xs font-medium text-graphite-2">
-                Email
-              </span>
-              <input
-                type="email"
-                name="email"
-                required
-                autoComplete="email"
-                placeholder="tu@empresa.com"
-                className="mt-1.5 block h-11 w-full rounded-xl bg-white px-3.5 text-sm text-graphite-1 placeholder:text-graphite-4 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
-              />
-            </label>
-            <label className="block">
-              <span className="text-xs font-medium text-graphite-2">
-                Password
-              </span>
-              <input
-                type="password"
-                name="password"
-                required
-                autoComplete="current-password"
-                placeholder="••••••••"
-                className="mt-1.5 block h-11 w-full rounded-xl bg-white px-3.5 text-sm text-graphite-1 placeholder:text-graphite-4 ring-1 ring-inset ring-line focus:outline-none focus:ring-2 focus:ring-brand-500/40"
-              />
-            </label>
-            <button
-              type="submit"
-              className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
-            >
-              Sign in
-            </button>
-          </form>
-
-          <div className="mt-5 text-center">
-            <Link
-              href="/hq/forgot-password"
-              className="text-xs font-medium text-graphite-3 hover:text-brand-600"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
+        <div className="flex justify-end">
+          <Link
+            href="/hq/forgot-password"
+            className="text-sm font-bold text-[#2563eb] transition hover:text-[#1d4ed8]"
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-graphite-4">
-          Acceso restringido. Esta zona no aparece en buscadores.
-        </p>
-      </div>
-    </main>
+        <button
+          type="submit"
+          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] active:translate-y-px"
+        >
+          <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+          Sign in
+          <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </button>
+      </form>
+    </PortalLoginCard>
   );
 }
