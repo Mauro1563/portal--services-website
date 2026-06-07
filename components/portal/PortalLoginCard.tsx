@@ -54,12 +54,12 @@ export function PortalLoginCard({
             <div className="px-7 pb-7 pt-8 sm:px-9 sm:pt-10">
               {/* Logo */}
               <div className="flex justify-center">
-                <Logo size="sm" />
+                <Logo size="md" className="!h-20 sm:!h-24" />
               </div>
 
               {/* Portal-type indicator(s) */}
               {badges && badges.length === 1 ? (
-                <div className="mt-6 flex justify-center">
+                <div className="mt-3 flex justify-center">
                   <PortalTypeChip label={badges[0]} />
                 </div>
               ) : badges && badges.length > 1 ? (
@@ -142,65 +142,16 @@ function BadgePill({
 }
 
 /**
- * Premium "you are here" chip for single-portal screens (e.g. /login).
- * Logo-aligned: same cyan→blue→deep-blue gradient as the brand mark, glassy
- * white shell with brand-tinted glow, custom cleaning illustration in a
- * gradient disc, and gradient-text wordmark. Includes a live pulse dot.
+ * Minimal text-only portal indicator, centered under the logo.
+ * Gradient text matches the brand mark; soft brand-tinted ring + glow.
  */
 function PortalTypeChip({ label }: { label: string }) {
   return (
-    <div className="relative inline-flex items-center gap-2.5 rounded-2xl bg-white py-1.5 pl-1.5 pr-5 shadow-[0_14px_36px_-14px_rgba(37,99,235,0.45),inset_0_0_0_1px_rgba(37,99,235,0.14)]">
-      {/* Gradient icon disc with cleaning illustration */}
-      <span className="relative grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-white shadow-[0_8px_18px_-6px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.30)]">
-        <CleaningIllustration />
-        {/* live pulse dot — emerald = active portal */}
-        <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
-        </span>
+    <span className="inline-flex items-center rounded-full bg-white px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.22em] shadow-[0_8px_22px_-10px_rgba(37,99,235,0.40),inset_0_0_0_1px_rgba(37,99,235,0.14)]">
+      <span className="bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#0891b2] bg-clip-text text-transparent">
+        {label}
       </span>
-      {/* Two-line gradient label */}
-      <span className="flex flex-col items-start leading-tight">
-        <span className="text-[8.5px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-          You are entering
-        </span>
-        <span className="bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#0891b2] bg-clip-text text-[12px] font-extrabold tracking-[-0.005em] text-transparent">
-          {label}
-        </span>
-      </span>
-    </div>
-  );
-}
-
-/**
- * Inline illustration: spray bottle + sparkle. Pure SVG so it scales with the
- * disc and stays crisp on any DPR. Both shapes inherit currentColor (white).
- */
-function CleaningIllustration() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      {/* spray bottle nozzle + body */}
-      <path d="M8 4h5" />
-      <path d="M10 4v2" />
-      <path d="M13 6h2l1 2-2 1H9" />
-      <path d="M9 9h7v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h1Z" />
-      <path d="M9 14h5" />
-      {/* sparkle */}
-      <path
-        d="M19 4l.6 1.4L21 6l-1.4.6L19 8l-.6-1.4L17 6l1.4-.6L19 4z"
-        fill="currentColor"
-      />
-    </svg>
+    </span>
   );
 }
 
