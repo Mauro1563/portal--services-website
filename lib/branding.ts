@@ -31,6 +31,19 @@ export async function getBranding(): Promise<Branding> {
       .eq('section', 'branding')
       .maybeSingle();
     const override = (data?.content ?? {}) as Partial<Branding>;
+
+    // One-shot upgrade: older saves still point at the previous logo files.
+    // Quietly map them to the new brand mark so a stale row in marketing_content
+    // doesn't keep serving the old image after the asset swap.
+    const STALE_LOGOS = [
+      '/portal-home-logo.png',
+      '/Photoroom_20260522_165921.png',
+      '/Photoroom_20260522_163830.png',
+    ];
+    if (override.logoUrl && STALE_LOGOS.includes(override.logoUrl)) {
+      override.logoUrl = DEFAULT_BRANDING.logoUrl;
+    }
+
     return { ...DEFAULT_BRANDING, ...override };
   } catch {
     return DEFAULT_BRANDING;
