@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { getT } from '@/lib/i18n';
 import { addTask } from '@/app/owner/actions';
+import { ensureDefaultServices } from '@/lib/default-services';
 
 type Props = {
   searchParams: Promise<{ error?: string }>;
@@ -25,6 +26,9 @@ export default async function NewTaskPage({ searchParams }: Props) {
   if (!user) redirect('/login?role=owner');
 
   const t = await getT();
+
+  // Back-fill defaults for existing owners who signed up before auto-seeding.
+  await ensureDefaultServices(user.id);
 
   const [propertiesRes, cleanersRes, clientsRes, servicesRes] = await Promise.all([
     supabase.from('properties').select('id, name').order('name'),
@@ -163,6 +167,17 @@ export default async function NewTaskPage({ searchParams }: Props) {
                   </option>
                 ))}
               </select>
+              {clients.length === 0 ? (
+                <span className="mt-1.5 block text-[11px] text-text-3">
+                  ¿Aún no tienes clientes registrados?{' '}
+                  <Link
+                    href="/owner/clients/new"
+                    className="font-semibold text-brand-600 hover:underline"
+                  >
+                    Crear cliente
+                  </Link>
+                </span>
+              ) : null}
             </label>
           </div>
         </SectionCard>
@@ -201,17 +216,18 @@ export default async function NewTaskPage({ searchParams }: Props) {
           </div>
 
           <label className="block">
-            <span className={labelTitle}>Duración estimada (minutos)</span>
+            <span className={labelTitle}>Duración estimada (horas)</span>
             <input
               type="number"
-              name="estimated_duration_min"
-              min="15"
-              step="15"
-              placeholder="90"
+              name="estimated_duration_hours"
+              min="0.25"
+              step="0.25"
+              placeholder="1.5"
               className={inputCls}
             />
             <span className="mt-1 block text-[11px] text-text-3">
-              Si dejas el servicio rellenado abajo, se autocompleta desde ahí.
+              En horas (puedes usar decimales: 1, 1.5, 2.5, 3…). Si dejas el
+              servicio rellenado abajo, se autocompleta desde ahí.
             </span>
           </label>
         </SectionCard>
@@ -244,6 +260,18 @@ export default async function NewTaskPage({ searchParams }: Props) {
             <span className="mt-1 block text-[11px] text-text-3">
               El nombre y el precio se guardan en este momento, así el histórico
               no cambia si luego editas el servicio.
+              {services.length === 0 ? (
+                <>
+                  {' '}
+                  <Link
+                    href="/owner/services"
+                    className="font-semibold text-brand-600 hover:underline"
+                  >
+                    Crear tu primer servicio
+                  </Link>
+                  .
+                </>
+              ) : null}
             </span>
           </label>
 

@@ -68,7 +68,10 @@ export async function addTask(formData: FormData) {
   const scheduledFor = (formData.get('scheduled_for') as string)?.trim();
   const startTime = (formData.get('start_time') as string)?.trim() || null;
 
-  // Manual overrides from the form (optional — fall back to service snapshot)
+  // Manual overrides from the form (optional — fall back to service snapshot).
+  // The duration field is now expressed in HOURS (decimals allowed e.g. 1.5)
+  // but the old minutes field is still accepted for backwards compat.
+  const durationHoursRaw = (formData.get('estimated_duration_hours') as string)?.trim();
   const durationOverrideRaw = (formData.get('estimated_duration_min') as string)?.trim();
   const priceOverrideRaw = (formData.get('price') as string)?.trim();
 
@@ -109,8 +112,12 @@ export async function addTask(formData: FormData) {
     }
   }
 
-  // Manual overrides win over the snapshot if filled in
-  if (durationOverrideRaw) {
+  // Manual overrides win over the snapshot if filled in. Hours field takes
+  // priority over the legacy minutes field.
+  if (durationHoursRaw) {
+    const h = Number(durationHoursRaw);
+    if (Number.isFinite(h) && h > 0) estimatedDuration = Math.round(h * 60);
+  } else if (durationOverrideRaw) {
     const n = Number(durationOverrideRaw);
     if (Number.isFinite(n) && n > 0) estimatedDuration = Math.round(n);
   }

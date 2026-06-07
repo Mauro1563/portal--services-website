@@ -4,6 +4,7 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { notifyNewSignup } from '@/lib/email';
+import { ensureDefaultServices } from '@/lib/default-services';
 
 export type SignupInput = {
   name: string;
@@ -125,6 +126,10 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
     .from('owner_profiles')
     .upsert({ owner_id: created.user.id, business_name: business });
   if (profErr) console.error('[signup] owner_profiles upsert failed', profErr);
+
+  // Seed 4 default service types so the new owner can create their first
+  // cleaning right away without having to set up their service catalog first.
+  await ensureDefaultServices(created.user.id);
 
   // Track in marketing_leads for the HQ dashboard. status='new' is required —
   // the table has a CHECK constraint that only allows new/contacted/qualified/archived.
