@@ -185,11 +185,19 @@ export async function completeForcedPasswordChange(
   } = await ssr.auth.getUser();
   if (!user) return { ok: false, error: 'Sesión expirada' };
 
-  const { error: updErr } = await ssr.auth.updateUser({
+  // Use the admin SDK to update the password — bypasses Supabase's
+  // "current password required" reauthentication requirement that hits
+  // ssr.auth.updateUser when the session wasn't established just now.
+  const admin = createAdminClient();
+  const { error: updErr } = await admin.auth.admin.updateUserById(user.id, {
     password: newPassword,
-    data: { ...user.user_metadata, must_change_password: false },
+    user_metadata: { ...user.user_metadata, must_change_password: false },
   });
   if (updErr) return { ok: false, error: updErr.message };
+
+  // Refresh the session so subsequent requests see must_change_password=false
+  // without forcing the user to log out and back in.
+  await ssr.auth.refreshSession();
 
   return { ok: true };
 }
