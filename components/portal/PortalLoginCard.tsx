@@ -21,33 +21,26 @@ export function PortalLoginCard({
   footer?: ReactNode;
 }) {
   return (
-    <main className="relative min-h-[100dvh] overflow-hidden bg-[#0b1320]">
-      {/* Layered dark backdrop suggesting depth/architecture */}
+    <main className="relative min-h-[100dvh] overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/60">
+      {/* Soft brand orbs */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(at 20% 30%, rgba(30, 58, 102, 0.55) 0px, transparent 55%), radial-gradient(at 80% 70%, rgba(15, 28, 56, 0.6) 0px, transparent 60%), radial-gradient(at 50% 100%, rgba(8, 15, 30, 0.7) 0px, transparent 60%)',
-        }}
+        className="pointer-events-none absolute -left-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-cyan-300/40 via-blue-400/30 to-transparent blur-3xl"
       />
-      {/* Vertical light streaks (architecture hallway feel) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        className="pointer-events-none absolute -right-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-blue-500/25 via-cyan-400/20 to-transparent blur-3xl"
+      />
+      {/* Subtle grid mask */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
-            'linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
-          backgroundSize: '180px 100%',
-        }}
-      />
-      {/* Soft vignette at the edges */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.65) 100%)',
+            'linear-gradient(rgba(15,23,42,1) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,1) 1px, transparent 1px)',
+          backgroundSize: '56px 56px',
+          maskImage:
+            'radial-gradient(ellipse at center, black 50%, transparent 80%)',
         }}
       />
 
@@ -55,8 +48,8 @@ export function PortalLoginCard({
         {/* The card */}
         <div className="relative w-full">
           <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_40px_90px_-20px_rgba(0,0,0,0.55),0_12px_30px_-12px_rgba(0,0,0,0.30)]">
-            {/* Orange accent stripe at the very top */}
-            <div className="h-1 w-full bg-gradient-to-r from-[#ff6b35] via-[#f7931e] to-[#ff6b35]" />
+            {/* Brand-blue accent stripe at the very top */}
+            <div className="h-1 w-full bg-gradient-to-r from-[#22d3ee] via-[#2563eb] to-[#1d4ed8]" />
 
             <div className="px-7 pb-7 pt-8 sm:px-9 sm:pt-10">
               {/* Logo */}
@@ -120,7 +113,7 @@ export function PortalLoginCard({
 
         <Link
           href="/"
-          className="mt-5 text-xs font-medium text-slate-400 transition hover:text-white"
+          className="mt-5 text-xs font-medium text-slate-400 transition hover:text-slate-700"
         >
           ← Back to home
         </Link>
@@ -137,8 +130,8 @@ function BadgePill({
   label: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#fff4ec] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#0b1d3a] ring-1 ring-[#ffe0cc]">
-      <Icon className="h-3 w-3 text-[#ff6b35]" />
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-blue-50 to-cyan-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#0b1d3a] ring-1 ring-blue-100">
+      <Icon className="h-3 w-3 text-[#2563eb]" />
       {label}
     </span>
   );

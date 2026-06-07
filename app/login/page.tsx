@@ -44,7 +44,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-bold text-[#ff6b35] transition hover:text-[#e65a26]"
+            className="text-sm font-bold text-[#2563eb] transition hover:text-[#1d4ed8]"
           >
             Forgot password?
           </Link>
@@ -52,8 +52,9 @@ export default async function LoginPage({ searchParams }: Props) {
 
         <button
           type="submit"
-          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#0b1d3a] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(11,29,58,0.55),inset_0_1px_0_rgba(255,255,255,0.15)] transition-all duration-300 hover:bg-[#152a52] hover:shadow-[0_24px_48px_-12px_rgba(11,29,58,0.65)] active:translate-y-px"
+          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] hover:shadow-[0_24px_48px_-12px_rgba(37,99,235,0.65)] active:translate-y-px"
         >
+          <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
           Sign in
           <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </button>
