@@ -115,7 +115,14 @@ export default async function OwnerHome() {
       : (ratings.reduce((s, r) => s + r.stars, 0) / ratings.length).toFixed(1);
 
   const profile = await getOwnerProfile(user.id);
-  const fullName = displayNameFrom(profile, user.email ?? null) ?? 'Owner';
+  // Prefer the name the owner entered in the /signup form (stored in
+  // user_metadata.name) — that's what they registered with. Fall back to
+  // the business name on owner_profiles, then to the email local-part.
+  const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
+  const fullName =
+    metadataName ||
+    displayNameFrom(profile, user.email ?? null) ||
+    'Owner';
   const firstName = fullName.split(/\s+/)[0];
 
   const hour = new Date().getHours();
@@ -149,7 +156,10 @@ export default async function OwnerHome() {
         chips={[
           {
             kind: 'text',
-            label: profile?.business_name ?? 'Your business',
+            label:
+              profile?.business_name ||
+              (user.user_metadata?.business as string | undefined) ||
+              'Your business',
             icon: Building2,
           },
           { kind: 'status', status: 'online', label: 'online' },
