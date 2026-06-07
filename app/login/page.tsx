@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChevronRight, Lock, User } from 'lucide-react';
+import { ChevronRight, Mail } from 'lucide-react';
 import { PortalLoginCard, LoginField } from '@/components/portal/PortalLoginCard';
 import { PasswordInput } from './PasswordInput';
 import { signIn } from './actions';
@@ -23,15 +23,15 @@ export default async function LoginPage({ searchParams }: Props) {
       message={message}
     >
       <form action={signIn} className="space-y-4">
-        <LoginField label="Payroll No. or Email">
+        <LoginField label="Email">
           <div className="relative">
-            <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
-              type="text"
+              type="email"
               name="identifier"
               required
-              autoComplete="username"
-              placeholder="026389  or  name@email.com"
+              autoComplete="email"
+              placeholder="name@email.com"
               className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-400 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
             />
           </div>

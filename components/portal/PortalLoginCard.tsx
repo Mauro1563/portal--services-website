@@ -78,11 +78,11 @@ export function PortalLoginCard({
               <div className="mt-6 border-t border-slate-100" />
 
               {/* Heading */}
-              <h1 className="mt-6 text-[1.625rem] font-bold leading-tight tracking-[-0.02em] text-[#0b1d3a]">
+              <h1 className="mt-6 text-base font-semibold leading-tight tracking-[-0.01em] text-[#0b1d3a]">
                 {title}
               </h1>
               {subtitle ? (
-                <p className="mt-1.5 text-[15px] text-slate-500">{subtitle}</p>
+                <p className="mt-1 text-[13px] text-slate-500">{subtitle}</p>
               ) : null}
 
               {/* Alerts */}
