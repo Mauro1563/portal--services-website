@@ -29,40 +29,44 @@ export async function PortalsGrid() {
         </header>
 
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          {PORTALS.map(({ key, icon: Icon, accent }) => (
-            <article
-              key={key}
-              className="group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-xl"
-            >
-              <div
-                className={`grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${accent} text-white shadow-[0_12px_24px_-10px_rgba(0,0,0,0.3)]`}
+          {PORTALS.map(({ key, icon: Icon, accent }) => {
+            // next-intl returns the array as Messages — cast through unknown.
+            const features = t.raw(`${key}.features`) as string[];
+            return (
+              <article
+                key={key}
+                className="group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-xl"
               >
-                <Icon className="h-7 w-7" />
-              </div>
+                <div
+                  className={`grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${accent} text-white shadow-[0_12px_24px_-10px_rgba(0,0,0,0.3)]`}
+                >
+                  <Icon className="h-7 w-7" />
+                </div>
 
-              <div>
-                <h3 className="font-display text-2xl font-semibold tracking-tight text-slate-950">
-                  {t(`${key}_title` as const)}
-                </h3>
-                <p className="mt-1 text-sm font-medium text-slate-500">
-                  {t(`${key}_tag` as const)}
+                <div>
+                  <h3 className="font-display text-2xl font-semibold tracking-tight text-slate-950">
+                    {t(`${key}.name`)}
+                  </h3>
+                  <p className="mt-1 text-sm font-medium text-slate-500">
+                    {t(`${key}.tagline`)}
+                  </p>
+                </div>
+
+                <p className="text-base leading-relaxed text-slate-600">
+                  {t(`${key}.description`)}
                 </p>
-              </div>
 
-              <p className="text-base leading-relaxed text-slate-600">
-                {t(`${key}_desc` as const)}
-              </p>
-
-              <ul className="mt-1 space-y-2 border-t border-slate-100 pt-5 text-sm text-slate-700">
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <li key={n} className="flex items-start gap-2">
-                    <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500" />
-                    <span>{t(`${key}_f${n}` as const)}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
+                <ul className="mt-1 space-y-2 border-t border-slate-100 pt-5 text-sm text-slate-700">
+                  {features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

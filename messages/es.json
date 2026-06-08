@@ -48,7 +48,7 @@
   "portals": {
     "eyebrow": "Dos portales · una plataforma",
     "title": "Nuestros portales.",
-    "subtitle": "Dos portales especializados — uno para equipos de limpieza de hogar, otro para operaciones Airbnb / alquiler turístico. Todo en una sola plataforma.",
+    "subtitle": "Dos portales especializados — uno para equipos de limpieza de hogar y otro para operaciones de Airbnb. Todo lo que necesitas en una sola plataforma.",
     "supervisor_title": "Portal Supervisor",
     "supervisor_tag": "El mando del equipo sobre el terreno",
     "supervisor_who": "Supervisores de turno en edificios corporativos, coworkings y centros de trabajo",
@@ -101,16 +101,30 @@
     "airbnb_f5": "Registro de incidencias con descripción por estancia",
     "airbnb_f6": "Asignación de personal limpiador por propiedad y fecha",
     "airbnb_cities": "Ideal para propiedades en Londres, Madrid, Barcelona, Lisboa y cualquier ciudad con mercado de alquiler vacacional activo.",
-    "home_title": "Portal Limpiezas de Hogar",
-    "home_tag": "Tu hogar, siempre impecable. Tu experiencia, siempre excepcional.",
-    "home_who": "Empresas de limpieza doméstica que quieren un servicio premium para sus clientes",
-    "home_desc": "Una plataforma completa que conecta a tu equipo de limpieza con cada cliente de forma elegante y profesional. Dos mundos en uno: la gestión operativa para tu empresa y una experiencia premium para el cliente.",
-    "home_f1": "Gestión de clientes y direcciones",
-    "home_f2": "Programación de visitas recurrentes o puntuales",
-    "home_f3": "Asignación de limpiador/a por cliente y fecha",
-    "home_f4": "Checklist personalizado por hogar",
-    "home_f5": "Informe de calidad tras cada visita",
-    "home_f6": "Portal cliente premium incluido"
+    "home": {
+      "name": "Portal Hogar",
+      "tagline": "Tu casa, siempre impecable. Tu experiencia, siempre excepcional.",
+      "description": "Una plataforma completa que conecta a tu equipo de limpieza con cada cliente de forma elegante y profesional. Dos mundos en uno: gestión operativa para tu negocio y una experiencia premium para el cliente.",
+      "features": [
+        "Gestión de clientes y direcciones",
+        "Limpiezas recurrentes o puntuales",
+        "Asignación de limpiadora por cliente y fecha",
+        "Checklist personalizado por casa",
+        "Reporte de calidad tras cada visita"
+      ]
+    },
+    "airbnb": {
+      "name": "Portal Airbnb",
+      "tagline": "Gestión profesional de propiedades de alquiler corto.",
+      "description": "Organiza y controla la limpieza de tus propiedades de Airbnb entre huéspedes. Cada propiedad tiene su checklist, su registro de accesos y un reporte automático al anfitrión cuando la propiedad está lista.",
+      "features": [
+        "Checklist de limpieza por habitación con puntuación",
+        "Reporte automático por propiedad — historial, quién limpió y cuándo",
+        "Gestión de accesos y códigos de caja de llaves",
+        "Aviso al anfitrión cuando la propiedad está lista para el próximo huésped",
+        "Reporte de incidencias por habitación con descripción"
+      ]
+    }
   },
   "vip": {
     "eyebrow": "Para tu cliente · la experiencia VIP",
@@ -287,14 +301,24 @@
   },
   "faq": {
     "title": "Preguntas frecuentes.",
-    "q1": "¿Necesito instalar algo?",
-    "a1": "No. Es 100% web — funciona en cualquier móvil moderno, ordenador o tablet. Los operativos abren la URL, entran con un PIN de 6 dígitos y listo.",
-    "q2": "¿Puedo importar mis datos actuales?",
-    "a2": "Sí. Tenemos importadores de CSV para clientes, edificios y empleados. En la mayoría de casos te subimos los datos nosotros durante el onboarding.",
-    "q3": "¿Funciona sin conexión?",
-    "a3": "El operativo puede registrar el check-in y subir fotos aunque pierda señal — todo se sincroniza cuando vuelve a tener internet.",
-    "q4": "¿Puedo tener mi marca en el portal del cliente?",
-    "a4": "Sí. Logo, colores y dominio propio están incluidos en Premium y Enterprise. En Professional puedes subir tu logo."
+    "items": {
+      "install": {
+        "q": "¿Necesito instalar algo?",
+        "a": "No. Es 100% web — funciona en cualquier móvil, ordenador o tablet moderno. La limpiadora abre la URL, entra con un PIN de 6 dígitos y ya está dentro."
+      },
+      "import": {
+        "q": "¿Puedo importar mis datos actuales?",
+        "a": "Sí. Puedes cargar tus clientes, propiedades y equipo desde un archivo CSV o añadirlos directamente en el panel. Te ayudamos en la puesta en marcha si lo necesitas."
+      },
+      "offline": {
+        "q": "¿Funciona sin conexión?",
+        "a": "Sí. La limpiadora puede hacer check-in y subir fotos aunque la casa no tenga internet; todo se sincroniza solo en cuanto recupera la señal. No se pierde nada."
+      },
+      "branding": {
+        "q": "¿Puedo poner mi marca en el portal del cliente?",
+        "a": "Sí. En el plan Professional puedes personalizar la marca de forma parcial y en Premium de forma completa, con tu logo, tus colores y tu propio dominio."
+      }
+    }
   },
   "cta_banner": {
     "title": "Empieza hoy. Sin tarjeta. Sin compromiso.",

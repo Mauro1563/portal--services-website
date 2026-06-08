@@ -90,27 +90,31 @@
     "hq_f1": "User and permission management",
     "hq_f2": "Building setup and branding",
     "hq_f3": "Security, passwords and access",
-    "airbnb_title": "Airbnb Portal",
-    "airbnb_tag": "Professional short-let property management",
-    "airbnb_who": "Airbnb hosts with multiple properties, holiday-let managers and property managers",
-    "airbnb_desc": "Organise and control cleaning of your Airbnb properties between guests. Each property has its own checklist, access log and automatic report to the host when the property is ready.",
-    "airbnb_f1": "Per-room cleaning checklist with scoring",
-    "airbnb_f2": "Automatic per-property report — history, who cleaned and when",
-    "airbnb_f3": "Access management and key-box codes",
-    "airbnb_f4": "Notify the host when the property is ready for the next guest",
-    "airbnb_f5": "Per-room incident reports with description",
-    "airbnb_f6": "Assign a cleaner per property and date",
     "airbnb_cities": "Ideal for properties in London, Madrid, Barcelona, Lisbon and any city with an active short-let market.",
-    "home_title": "Home Cleaning Portal",
-    "home_tag": "Your home, always spotless. Your experience, always exceptional.",
-    "home_who": "Home-cleaning companies that want a premium experience for their clients",
-    "home_desc": "A complete platform that connects your cleaning team with every client elegantly and professionally. Two worlds in one: operational management for your business and a premium experience for the client.",
-    "home_f1": "Client and address management",
-    "home_f2": "Recurring or one-off visit scheduling",
-    "home_f3": "Cleaner assignment per client and date",
-    "home_f4": "Per-home custom checklist",
-    "home_f5": "Quality report after every visit",
-    "home_f6": "Premium client portal included"
+    "home": {
+      "name": "Home Portal",
+      "tagline": "Your home, always spotless. Your experience, always exceptional.",
+      "description": "A complete platform that connects your cleaning team with every client elegantly and professionally. Two worlds in one: operational management for your business and a premium experience for the client.",
+      "features": [
+        "Client and address management",
+        "Recurring or one-off cleanings",
+        "Cleaner assignment per client and date",
+        "Per-home custom checklist",
+        "Quality report after every visit"
+      ]
+    },
+    "airbnb": {
+      "name": "Airbnb Portal",
+      "tagline": "Professional short-let property management.",
+      "description": "Organise and control cleaning of your Airbnb properties between guests. Each property has its own checklist, access log and an automatic report to the host when the property is ready.",
+      "features": [
+        "Per-room cleaning checklist with scoring",
+        "Automatic per-property report — history, who cleaned and when",
+        "Access management and key-box codes",
+        "Notify the host when the property is ready for the next guest",
+        "Per-room incident reports with description"
+      ]
+    }
   },
   "vip": {
     "eyebrow": "For your client · the VIP experience",
@@ -287,14 +291,24 @@
   },
   "faq": {
     "title": "Frequently asked questions.",
-    "q1": "Do I need to install anything?",
-    "a1": "No. It's 100% web — works on any modern phone, computer or tablet. Operatives open the URL, sign in with a 6-digit PIN and they're in.",
-    "q2": "Can I import my existing data?",
-    "a2": "Yes. We have CSV importers for clients, buildings and employees. In most cases we upload the data for you during onboarding.",
-    "q3": "Does it work offline?",
-    "a3": "The operative can check in and upload photos even with no signal — everything syncs the moment they're back online.",
-    "q4": "Can I put my brand on the client portal?",
-    "a4": "Yes. Logo, colours and custom domain are included in Premium and Enterprise. On Professional you can upload your logo."
+    "items": {
+      "install": {
+        "q": "Do I need to install anything?",
+        "a": "No. It's 100% web — works on any modern phone, computer or tablet. The cleaner opens the URL, signs in with a 6-digit PIN and they're in."
+      },
+      "import": {
+        "q": "Can I import my existing data?",
+        "a": "Yes. You can upload your clients, properties and team from a CSV file or add them directly from the dashboard. We'll help you set up if you need it."
+      },
+      "offline": {
+        "q": "Does it work offline?",
+        "a": "Yes. The cleaner can check in and upload photos even if the house has no internet; everything syncs the moment they're back online. Nothing is lost."
+      },
+      "branding": {
+        "q": "Can I put my brand on the client portal?",
+        "a": "Yes. On Professional you get partial branding, and on Premium full branding — your logo, your colours and your own domain."
+      }
+    }
   },
   "cta_banner": {
     "title": "Start today. No card. No commitment.",
