@@ -1629,13 +1629,12 @@
     "haveAccount": "Already have an account?",
     "signIn": "Sign in",
     "backHome": "← Back to home",
-    "successTitle": "Welcome!",
-    "successSubtitle": "Your account is ready. Save these details — you’ll need them to sign in.",
-    "emailLabel": "Email",
-    "tempPassword": "Temporary password",
-    "tempPasswordNote": "We’ll ask you to change this password the first time you sign in.",
-    "enterPortal": "Enter my portal",
-    "copy": "Copy",
-    "copied": "Copied"
+    "pendingTitle": "Request received",
+    "pendingSubtitle": "We'll review {email} and email you when your portal is ready — usually under 24 hours.",
+    "pendingStep1": "Your request was registered",
+    "pendingStep2": "Our team reviews it",
+    "pendingStep3": "You receive a sign-in email",
+    "pendingNote": "No need to keep this tab open — everything will arrive at your inbox.",
+    "pendingBack": "← Back to home"
   }
 }

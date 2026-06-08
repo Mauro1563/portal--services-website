@@ -1,19 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import {
   ArrowRight,
   Building2,
-  Check,
   CheckCircle2,
-  Copy,
+  Clock,
   Globe,
   Loader2,
   Mail,
   Phone,
-  ShieldCheck,
   User,
   Users2,
 } from 'lucide-react';
@@ -47,21 +44,19 @@ export type SignupDict = {
   haveAccount: string;
   signIn: string;
   backHome: string;
-  successTitle: string;
-  successSubtitle: string;
-  emailLabel: string;
-  tempPassword: string;
-  tempPasswordNote: string;
-  enterPortal: string;
-  copy: string;
-  copied: string;
+  pendingTitle: string;
+  pendingSubtitle: string;
+  pendingStep1: string;
+  pendingStep2: string;
+  pendingStep3: string;
+  pendingNote: string;
+  pendingBack: string;
 };
 
 export function SignupForm({ dict }: { dict: SignupDict }) {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<SignupResult | null>(null);
-  const [copied, setCopied] = useState<'email' | 'pwd' | null>(null);
+  const [submittedEmail, setSubmittedEmail] = useState('');
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -74,16 +69,11 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
       country: String(fd.get('country') ?? ''),
       teamSize: String(fd.get('teamSize') ?? ''),
     };
+    setSubmittedEmail(input.email);
     startTransition(async () => {
       const r = await signupOwner(input);
       setResult(r);
     });
-  }
-
-  function copy(text: string, which: 'email' | 'pwd') {
-    void navigator.clipboard.writeText(text);
-    setCopied(which);
-    setTimeout(() => setCopied((c) => (c === which ? null : c)), 1500);
   }
 
   return (
@@ -96,17 +86,6 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
         aria-hidden
         className="pointer-events-none absolute -right-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-blue-500/25 via-cyan-400/20 to-transparent blur-3xl"
       />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(15,23,42,1) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,1) 1px, transparent 1px)',
-          backgroundSize: '56px 56px',
-          maskImage:
-            'radial-gradient(ellipse at center, black 50%, transparent 80%)',
-        }}
-      />
 
       <div className="relative mx-auto flex min-h-[100dvh] max-w-md flex-col items-center justify-center px-4 py-6 sm:py-10">
         <div className="relative w-full">
@@ -118,14 +97,7 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
             </div>
 
             {result?.ok ? (
-              <SuccessPanel
-                dict={dict}
-                email={result.email}
-                password={result.password}
-                onEnter={() => router.push('/owner')}
-                copied={copied}
-                onCopy={copy}
-              />
+              <PendingPanel email={submittedEmail} dict={dict} />
             ) : (
               <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
                 <h1 className="text-[1.375rem] font-semibold tracking-[-0.015em] text-slate-900">
@@ -293,120 +265,55 @@ function Field({
   );
 }
 
-function SuccessPanel({
-  dict,
-  email,
-  password,
-  onEnter,
-  copied,
-  onCopy,
-}: {
-  dict: SignupDict;
-  email: string;
-  password: string;
-  onEnter: () => void;
-  copied: 'email' | 'pwd' | null;
-  onCopy: (text: string, which: 'email' | 'pwd') => void;
-}) {
+function PendingPanel({ email, dict }: { email: string; dict: SignupDict }) {
+  const steps = [
+    { Icon: CheckCircle2, label: dict.pendingStep1, done: true },
+    { Icon: Clock, label: dict.pendingStep2, done: false },
+    { Icon: Mail, label: dict.pendingStep3, done: false },
+  ];
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
       <div className="flex justify-center">
-        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-600 shadow-inner ring-1 ring-emerald-200/70">
-          <CheckCircle2 className="h-7 w-7" />
+        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-50 text-blue-600 shadow-inner ring-1 ring-cyan-200/70">
+          <Clock className="h-7 w-7" />
         </span>
       </div>
       <h1 className="mt-5 text-center text-[1.375rem] font-semibold tracking-[-0.015em] text-slate-900">
-        {dict.successTitle}
+        {dict.pendingTitle}
       </h1>
       <p className="mt-1.5 text-center text-[13px] leading-relaxed text-slate-500">
-        {dict.successSubtitle}
+        {dict.pendingSubtitle.replace('{email}', email)}
       </p>
 
-      <div className="mt-7 space-y-3 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-5 shadow-sm">
-        <CopyableRow
-          label={dict.emailLabel}
-          value={email}
-          onCopy={() => onCopy(email, 'email')}
-          copied={copied === 'email'}
-          copyText={dict.copy}
-          copiedText={dict.copied}
-          mono
-        />
-        <CopyableRow
-          label={dict.tempPassword}
-          value={password}
-          onCopy={() => onCopy(password, 'pwd')}
-          copied={copied === 'pwd'}
-          copyText={dict.copy}
-          copiedText={dict.copied}
-          mono
-        />
-      </div>
+      <ol className="mt-7 space-y-3 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-5 shadow-sm">
+        {steps.map((s, i) => (
+          <li key={i} className="flex items-start gap-3">
+            <span
+              className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${
+                s.done
+                  ? 'bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200'
+                  : 'bg-slate-100 text-slate-400 ring-1 ring-slate-200'
+              }`}
+            >
+              <s.Icon className="h-3.5 w-3.5" />
+            </span>
+            <span className={`pt-1 text-[13px] ${s.done ? 'text-slate-900 font-medium' : 'text-slate-600'}`}>
+              {s.label}
+            </span>
+          </li>
+        ))}
+      </ol>
 
-      <p className="mt-5 flex items-start gap-2 rounded-xl border border-amber-200/70 bg-amber-50/80 px-3.5 py-2.5 text-xs text-amber-800 shadow-sm">
-        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        {dict.tempPasswordNote}
+      <p className="mt-5 rounded-xl border border-cyan-200/70 bg-cyan-50/70 px-3.5 py-2.5 text-center text-xs text-slate-700">
+        {dict.pendingNote}
       </p>
 
-      <button
-        type="button"
-        onClick={onEnter}
-        className="group relative mt-6 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-300 hover:brightness-[1.08]"
+      <Link
+        href="/"
+        className="mt-6 text-center text-xs font-medium text-slate-600 transition hover:text-slate-700"
       >
-        <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-        {dict.enterPortal}
-        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-      </button>
-    </div>
-  );
-}
-
-function CopyableRow({
-  label,
-  value,
-  onCopy,
-  copied,
-  copyText,
-  copiedText,
-  mono,
-}: {
-  label: string;
-  value: string;
-  onCopy: () => void;
-  copied: boolean;
-  copyText: string;
-  copiedText: string;
-  mono?: boolean;
-}) {
-  return (
-    <div>
-      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-        {label}
-      </p>
-      <div className="mt-1.5 flex items-stretch gap-2">
-        <div
-          className={`flex h-11 flex-1 items-center rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 ${
-            mono ? 'font-mono tracking-wide' : 'font-medium'
-          }`}
-        >
-          {value}
-        </div>
-        <button
-          type="button"
-          onClick={onCopy}
-          className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-        >
-          {copied ? (
-            <>
-              <Check className="h-3.5 w-3.5 text-emerald-600" /> {copiedText}
-            </>
-          ) : (
-            <>
-              <Copy className="h-3.5 w-3.5" /> {copyText}
-            </>
-          )}
-        </button>
-      </div>
+        {dict.pendingBack}
+      </Link>
     </div>
   );
 }

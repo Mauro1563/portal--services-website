@@ -35,14 +35,13 @@ export default async function SignupPage() {
     haveAccount: t('signup.haveAccount'),
     signIn: t('signup.signIn'),
     backHome: t('signup.backHome'),
-    successTitle: t('signup.successTitle'),
-    successSubtitle: t('signup.successSubtitle'),
-    emailLabel: t('signup.emailLabel'),
-    tempPassword: t('signup.tempPassword'),
-    tempPasswordNote: t('signup.tempPasswordNote'),
-    enterPortal: t('signup.enterPortal'),
-    copy: t('signup.copy'),
-    copied: t('signup.copied'),
+    pendingTitle: t('signup.pendingTitle'),
+    pendingSubtitle: t('signup.pendingSubtitle'),
+    pendingStep1: t('signup.pendingStep1'),
+    pendingStep2: t('signup.pendingStep2'),
+    pendingStep3: t('signup.pendingStep3'),
+    pendingNote: t('signup.pendingNote'),
+    pendingBack: t('signup.pendingBack'),
   };
   return <SignupForm dict={dict} />;
 }

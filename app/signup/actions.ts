@@ -1,10 +1,8 @@
 'use server';
 
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { notifyNewSignup } from '@/lib/email';
-import { ensureDefaultServices } from '@/lib/default-services';
 
 export type SignupInput = {
   name: string;
@@ -16,29 +14,16 @@ export type SignupInput = {
 };
 
 export type SignupResult =
-  | { ok: true; email: string; password: string }
+  | { ok: true }
   | { ok: false; error: string };
 
 /**
- * Generates a memorable-but-random password: 4 letters + 4 digits + 1 symbol.
- * e.g. "Bdkz3719!". Crypto-secure via Web Crypto.
+ * Owner self-serve signup:
+ * - Record the request as a marketing_lead (source=signup_self_serve, status=new)
+ * - Notify super-admin so they can review and Authorize from /hq/leads
+ * - DO NOT create the Supabase auth user yet — that happens in the
+ *   `approveOwnerSignup` HQ action so the team controls who gets access
  */
-function generatePassword(): string {
-  const upper = 'ABCDEFGHJKMNPQRSTUVWXYZ'; // skip O / I to avoid confusion
-  const lower = 'abcdefghjkmnpqrstuvwxyz';
-  const digits = '23456789';
-  const symbols = '!#$%';
-
-  const buf = new Uint32Array(10);
-  crypto.getRandomValues(buf);
-  let out = '';
-  out += upper[buf[0] % upper.length];
-  for (let i = 1; i < 4; i++) out += lower[buf[i] % lower.length];
-  for (let i = 4; i < 8; i++) out += digits[buf[i] % digits.length];
-  out += symbols[buf[8] % symbols.length];
-  return out;
-}
-
 export async function signupOwner(input: SignupInput): Promise<SignupResult> {
   const name = (input.name ?? '').trim();
   const email = (input.email ?? '').trim().toLowerCase();
@@ -52,7 +37,7 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
 
   const admin = createAdminClient();
 
-  // Reject if the email already exists in auth — they should use /login instead.
+  // Reject if there's already an auth user for that email — they should login.
   const { data: existing } = await admin.auth.admin.listUsers({ perPage: 200 });
   if (existing?.users.some((u) => u.email?.toLowerCase() === email)) {
     return {
@@ -62,78 +47,22 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
     };
   }
 
-  const password = generatePassword();
-
-  const { data: created, error: createErr } = await admin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: {
-      name,
-      business,
-      phone: input.phone || null,
-      country: input.country || null,
-      team_size: input.teamSize || null,
-      must_change_password: true,
-      signed_up_at: new Date().toISOString(),
-    },
-  });
-
-  if (createErr || !created.user) {
-    console.error('[signup] createUser failed', createErr);
+  // Reject if there's already a pending request for this email.
+  const { data: dup } = await admin
+    .from('marketing_leads')
+    .select('id, status')
+    .eq('email', email)
+    .eq('source', 'signup_self_serve')
+    .in('status', ['new', 'contacted'])
+    .limit(1);
+  if (dup && dup.length > 0) {
     return {
       ok: false,
-      error: createErr?.message ?? 'No se pudo crear la cuenta',
+      error:
+        'Ya tienes una solicitud pendiente con este email. Te contactaremos pronto.',
     };
   }
 
-  // Belt-and-braces: force confirm + re-set password via updateUserById.
-  // Some Supabase project configs ignore the email_confirm flag on
-  // createUser, leaving the user unconfirmed — which then makes
-  // signInWithPassword fail with "Email not confirmed".
-  const { error: confirmErr } = await admin.auth.admin.updateUserById(
-    created.user.id,
-    { password, email_confirm: true },
-  );
-  if (confirmErr) {
-    console.error('[signup] email_confirm/password reset failed', confirmErr);
-  }
-
-  // VERIFY the credentials actually work before showing them to the user.
-  // Uses a standalone anon client (no cookie persistence) so we don't pollute
-  // the SSR session — pure shape check.
-  const verify = createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false } },
-  );
-  const { error: verifyErr } = await verify.auth.signInWithPassword({
-    email,
-    password,
-  });
-  if (verifyErr) {
-    console.error('[signup] credential verification FAILED', verifyErr);
-    // Don't strand the user with a non-working password — surface the real
-    // Supabase error so they (or we) can fix the project config.
-    return {
-      ok: false,
-      error: `Cuenta creada pero el login falla: ${verifyErr.message}. Revisa en Supabase → Auth → Settings que 'Confirm email' esté desactivado, o contáctanos.`,
-    };
-  }
-
-  // Pre-seed the owner profile so the dashboard shows the business name immediately.
-  const { error: profErr } = await admin
-    .from('owner_profiles')
-    .upsert({ owner_id: created.user.id, business_name: business });
-  if (profErr) console.error('[signup] owner_profiles upsert failed', profErr);
-
-  // Seed 4 default service types so the new owner can create their first
-  // cleaning right away without having to set up their service catalog first.
-  await ensureDefaultServices(created.user.id);
-
-  // Track in marketing_leads for the HQ dashboard. status='new' is required —
-  // the table has a CHECK constraint that only allows new/contacted/qualified/archived.
-  // We tag the channel via the `source` column instead.
   const { error: leadErr } = await admin.from('marketing_leads').insert({
     name,
     email,
@@ -144,23 +73,14 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
     message: input.country ? `Country: ${input.country}` : null,
     status: 'new',
   });
-  if (leadErr) console.error('[signup] marketing_leads insert failed', leadErr);
-
-  // Sign them in right away so the success page can offer "Entrar ahora"
-  // without re-asking for the password.
-  const ssr = await createClient();
-  const { error: signInErr } = await ssr.auth.signInWithPassword({
-    email,
-    password,
-  });
-  if (signInErr) {
-    // User was created but session couldn't be set — they can still log in
-    // manually via /login with the password we'll show them.
-    console.error('[signup] auto signin failed', signInErr);
+  if (leadErr) {
+    console.error('[signup] marketing_leads insert failed', leadErr);
+    return {
+      ok: false,
+      error: 'No pudimos registrar tu solicitud. Inténtalo de nuevo en un momento.',
+    };
   }
 
-  // Fire-and-forget notification to the super-admin. Never block the response
-  // on email — if Resend is down, the signup still succeeds.
   notifyNewSignup({
     name,
     email,
@@ -170,7 +90,7 @@ export async function signupOwner(input: SignupInput): Promise<SignupResult> {
     teamSize: input.teamSize || null,
   }).catch((err) => console.error('[signup] notify failed', err));
 
-  return { ok: true, email, password };
+  return { ok: true };
 }
 
 /**
@@ -190,9 +110,6 @@ export async function completeForcedPasswordChange(
   } = await ssr.auth.getUser();
   if (!user) return { ok: false, error: 'Sesión expirada' };
 
-  // Use the admin SDK to update the password — bypasses Supabase's
-  // "current password required" reauthentication requirement that hits
-  // ssr.auth.updateUser when the session wasn't established just now.
   const admin = createAdminClient();
   const { error: updErr } = await admin.auth.admin.updateUserById(user.id, {
     password: newPassword,
@@ -200,8 +117,6 @@ export async function completeForcedPasswordChange(
   });
   if (updErr) return { ok: false, error: updErr.message };
 
-  // Refresh the session so subsequent requests see must_change_password=false
-  // without forcing the user to log out and back in.
   await ssr.auth.refreshSession();
 
   return { ok: true };

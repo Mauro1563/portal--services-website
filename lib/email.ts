@@ -165,6 +165,55 @@ export async function notifyNewSignup(input: {
   }
 }
 
+/**
+ * Sends the welcome email to a newly-approved owner with their temporary
+ * password and a button to enter the portal. They'll be forced to change
+ * the password on first login.
+ */
+export async function notifyOwnerApproved(input: {
+  to: string;
+  name: string;
+  business: string;
+  password: string;
+}) {
+  try {
+    const loginUrl = `${SITE_URL}/login`;
+    const subject = `Tu portal de ${input.business} está listo`;
+    const html = `
+      <div style="background:#f8fafc;padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+        <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e2e8f0;">
+          <div style="background:linear-gradient(135deg,#22d3ee,#2563eb);padding:24px;color:#fff;">
+            <p style="margin:0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.16em;opacity:0.85;">Portal aprobado</p>
+            <h1 style="margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-0.01em;">¡Bienvenido${input.name ? `, ${escapeHtml(input.name.split(/\s+/)[0])}` : ''}!</h1>
+            <p style="margin:6px 0 0;font-size:13px;opacity:0.9;">Tu cuenta en Portal Home Digital ya está activa.</p>
+          </div>
+          <div style="padding:24px;">
+            <p style="margin:0 0 14px;font-size:14px;line-height:1.55;color:#334155;">
+              Estos son tus datos de acceso. <strong>Por seguridad te pediremos cambiar la contraseña</strong> la primera vez que entres.
+            </p>
+            <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;font-family:ui-monospace,Menlo,Monaco,Consolas,monospace;font-size:13px;color:#0f172a;">
+              <div style="color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Email</div>
+              <div style="font-weight:600;">${escapeHtml(input.to)}</div>
+              <div style="color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;margin:12px 0 4px;">Contraseña temporal</div>
+              <div style="font-weight:600;letter-spacing:0.04em;">${escapeHtml(input.password)}</div>
+            </div>
+            <a href="${escapeAttr(loginUrl)}"
+               style="display:inline-block;margin-top:20px;background:linear-gradient(135deg,#22d3ee,#2563eb);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:11px 22px;border-radius:10px;">
+              Entrar a mi portal
+            </a>
+            <p style="margin:22px 0 0;color:#64748b;font-size:12px;line-height:1.5;">
+              Si no solicitaste esta cuenta, puedes ignorar este mensaje. Si tienes dudas, responde a este email y te ayudamos.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+    await sendEmail({ to: input.to, subject, html });
+  } catch (err) {
+    console.error('[email] notifyOwnerApproved failed', err);
+  }
+}
+
 function escapeHtml(s: string) {
   return s
     .replace(/&/g, '&amp;')

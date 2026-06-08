@@ -11,6 +11,7 @@ import {
 import { requireMarketingAdmin } from '@/lib/marketing';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { HQShell } from '@/components/hq/Shell';
+import { ApproveSignupButton } from './ApproveSignupButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -133,6 +134,19 @@ export default async function HQLeads() {
                   </div>
                 </div>
                 <ContactRow lead={l} />
+                {l.source === 'signup_self_serve' && l.status === 'new' ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-cyan-200 bg-cyan-50/60 p-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-bold uppercase tracking-wider text-brand-700">
+                        Auto-registro pendiente
+                      </p>
+                      <p className="mt-0.5 text-[12px] text-graphite-2">
+                        Al autorizar, se crea la cuenta y se le envía la contraseña temporal por email.
+                      </p>
+                    </div>
+                    <ApproveSignupButton leadId={l.id} />
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>

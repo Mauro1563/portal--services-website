@@ -1629,13 +1629,12 @@
     "haveAccount": "¿Ya tienes cuenta?",
     "signIn": "Inicia sesión",
     "backHome": "← Volver al inicio",
-    "successTitle": "¡Bienvenido!",
-    "successSubtitle": "Tu cuenta está lista. Guarda estos datos — los necesitarás para volver a entrar.",
-    "emailLabel": "Email",
-    "tempPassword": "Contraseña temporal",
-    "tempPasswordNote": "Te pediremos cambiar esta contraseña la primera vez que entres.",
-    "enterPortal": "Entrar a mi portal",
-    "copy": "Copiar",
-    "copied": "Copiado"
+    "pendingTitle": "Solicitud recibida",
+    "pendingSubtitle": "Vamos a revisar {email} y te enviaremos un email cuando tu portal esté listo — normalmente en menos de 24 horas.",
+    "pendingStep1": "Tu solicitud quedó registrada",
+    "pendingStep2": "Nuestro equipo la revisa",
+    "pendingStep3": "Recibes un email para entrar",
+    "pendingNote": "No hace falta que dejes esta pestaña abierta — todo te llegará al correo.",
+    "pendingBack": "← Volver al inicio"
   }
 }

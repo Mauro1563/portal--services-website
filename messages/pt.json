@@ -1629,13 +1629,12 @@
     "haveAccount": "Já tens conta?",
     "signIn": "Inicia sessão",
     "backHome": "← Voltar ao início",
-    "successTitle": "Bem-vindo!",
-    "successSubtitle": "A tua conta está pronta. Guarda estes dados — vais precisar deles para entrar de novo.",
-    "emailLabel": "Email",
-    "tempPassword": "Palavra-passe temporária",
-    "tempPasswordNote": "Vamos pedir-te para mudar esta palavra-passe na primeira vez que entrares.",
-    "enterPortal": "Entrar no meu portal",
-    "copy": "Copiar",
-    "copied": "Copiado"
+    "pendingTitle": "Pedido recebido",
+    "pendingSubtitle": "Vamos rever {email} e enviar-te um email assim que o teu portal estiver pronto — normalmente em menos de 24 horas.",
+    "pendingStep1": "O teu pedido foi registado",
+    "pendingStep2": "A nossa equipa está a rever",
+    "pendingStep3": "Recebes um email para entrar",
+    "pendingNote": "Não precisas de manter esta página aberta — tudo chega ao teu email.",
+    "pendingBack": "← Voltar ao início"
   }
 }
