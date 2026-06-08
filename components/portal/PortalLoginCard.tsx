@@ -22,13 +22,21 @@ export function PortalLoginCard({
 }) {
   return (
     <main
-      className="relative isolate flex h-[100dvh] w-screen max-w-[100vw] flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60 px-4 py-6 sm:py-10"
+      className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60 px-4"
       style={{
+        // Lock the screen completely — no scroll, no rubber-band, no drift.
+        // `position: fixed` + `inset: 0` pins the layout to the viewport edges
+        // so iOS can't slide it. `touch-action: none` blocks scroll gestures
+        // (taps + typing still work via the inputs' own touch-action: auto).
+        position: 'fixed',
+        inset: 0,
+        overflow: 'hidden',
+        overscrollBehavior: 'none',
+        touchAction: 'none',
         paddingTop: 'max(env(safe-area-inset-top), 1rem)',
         paddingBottom: 'max(env(safe-area-inset-bottom), 1.5rem)',
         paddingLeft: 'max(env(safe-area-inset-left), 1rem)',
         paddingRight: 'max(env(safe-area-inset-right), 1rem)',
-        overscrollBehavior: 'none',
       }}
     >
       {/* Decorative orbs — clipped by main's overflow-hidden so they never push width */}

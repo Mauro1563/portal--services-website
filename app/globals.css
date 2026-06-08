@@ -49,6 +49,14 @@ html, body {
   overscroll-behavior-y: none;
 }
 
+/* Inputs and textareas inside a locked-screen container must keep their
+   native touch behavior so users can still type / select text. */
+input,
+textarea,
+[contenteditable='true'] {
+  touch-action: auto;
+}
+
 /* The /hq admin panel restores the dark canvas */
 .dark-shell, .dark-shell body { background-color: var(--psd-bg-0); color: #f8fafc; }
 
