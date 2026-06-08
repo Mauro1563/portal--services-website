@@ -76,7 +76,10 @@ export async function LightLayout({
   const isActive = (it: NavItem) => it.tab === activeTab;
 
   return (
-    <div className="flex min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#F4F6FB] text-text-1">
+    <div
+      className="flex min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#F4F6FB] text-text-1"
+      style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}
+    >
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col bg-[#0F172A] px-3 py-4 text-white lg:flex">
         <div className="flex items-center gap-2.5 px-2 pb-4">

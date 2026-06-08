@@ -29,11 +29,15 @@ export function PortalShell({
   const BadgeIcon = badge?.icon;
   return (
     <main
-      className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-surface-1 pb-16"
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 64px)' }}
+      className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-surface-1"
+      style={{
+        paddingBottom: 'calc(env(safe-area-inset-bottom) + 64px)',
+        touchAction: 'pan-y',
+        overscrollBehaviorX: 'none',
+      }}
     >
       <header
-        className="sticky top-0 z-40 w-full border-b border-surface-2 bg-surface-0/95 backdrop-blur"
+        className="sticky top-0 z-40 w-full max-w-[100vw] overflow-hidden border-b border-surface-2 bg-surface-0/95 backdrop-blur"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="mx-auto flex h-14 w-full max-w-md items-center justify-between gap-2 px-4">
@@ -66,7 +70,7 @@ export function PortalShell({
           </div>
         </div>
       </header>
-      <div className="mx-auto w-full max-w-md px-4 py-5">{children}</div>
+      <div className="mx-auto w-full max-w-md min-w-0 px-4 py-5">{children}</div>
     </main>
   );
 }
@@ -92,40 +96,49 @@ export function PortalHero({
   const Icon = portalIcon;
   const TopIcon = topRightChip?.icon;
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-navy-800/40 bg-gradient-to-br from-navy-900 via-navy-800 to-ink-2 p-5 text-white shadow-card-lg">
-      <div className="absolute inset-0 bg-mesh-1 opacity-40" aria-hidden />
-      <div className="relative">
-        <div className="flex items-start justify-between gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-200">
-            {Icon ? <Icon className="h-3 w-3" /> : null}
-            {portalLabel}
+    <section className="relative w-full min-w-0 max-w-full overflow-hidden rounded-[1.75rem] border border-white/[0.06] bg-gradient-to-br from-[#0b1d3a] via-[#0f2447] to-[#0a1730] p-4 text-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-5">
+      {/* soft cyan glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-blue-500/20 blur-3xl"
+      />
+      <div className="absolute inset-0 bg-mesh-1 opacity-30" aria-hidden />
+      <div className="relative min-w-0">
+        <div className="flex min-w-0 items-center justify-between gap-2">
+          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-cyan-200">
+            {Icon ? <Icon className="h-3 w-3 shrink-0" /> : null}
+            <span className="truncate">{portalLabel}</span>
           </span>
           {topRightChip ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-amber-200">
-              {TopIcon ? <TopIcon className="h-3 w-3" /> : null}
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-amber-200">
+              {TopIcon ? <TopIcon className="h-3 w-3 shrink-0" /> : null}
               {topRightChip.label}
             </span>
           ) : null}
         </div>
-        <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300">
+        <p className="mt-5 text-[9.5px] font-bold uppercase tracking-[0.20em] text-slate-300/90">
           {greeting}
         </p>
-        <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight">
+        <h1 className="mt-1 truncate font-display text-[28px] font-semibold leading-tight tracking-tight">
           {displayName}
         </h1>
         {chips && chips.length > 0 ? (
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          <div className="mt-4 flex min-w-0 flex-wrap items-center gap-1.5">
             {chips.map((c, i) => {
               if (c.kind === 'status') {
                 return (
                   <span
                     key={i}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.08] px-3 py-1 text-[11px] font-medium text-white ring-1 ring-inset ring-white/10"
+                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10.5px] font-medium text-white ring-1 ring-inset ring-white/10"
                   >
                     <span
-                      className={`h-1.5 w-1.5 rounded-full ${statusDot[c.status]}`}
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusDot[c.status]}`}
                     />
-                    {c.label}
+                    <span className="truncate">{c.label}</span>
                   </span>
                 );
               }
@@ -133,10 +146,10 @@ export function PortalHero({
               return (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.08] px-3 py-1 text-[11px] font-medium text-white ring-1 ring-inset ring-white/10"
+                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10.5px] font-medium text-white ring-1 ring-inset ring-white/10"
                 >
-                  {ChipIcon ? <ChipIcon className="h-3 w-3" /> : null}
-                  {c.label}
+                  {ChipIcon ? <ChipIcon className="h-3 w-3 shrink-0" /> : null}
+                  <span className="truncate">{c.label}</span>
                 </span>
               );
             })}
