@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
+import { getT } from '@/lib/i18n';
 import { signout } from '@/app/login/actions';
 import {
   CorporateBanner,
@@ -45,12 +46,17 @@ type TaskListItem = {
 type RatingRow = { stars: number };
 type PaidRow = { paid_amount_pence: number | null; price_pence: number | null };
 
+type T = (k: string) => string;
+
 export default async function OwnerHome() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
+
+  const t = await getT();
+  const tx = (k: string) => t(`ownerHome.${k}`);
 
   const today = new Date().toISOString().split('T')[0];
   const monthStart = `${today.slice(0, 7)}-01`;
@@ -115,9 +121,6 @@ export default async function OwnerHome() {
       : (ratings.reduce((s, r) => s + r.stars, 0) / ratings.length).toFixed(1);
 
   const profile = await getOwnerProfile(user.id);
-  // Prefer the name the owner entered in the /signup form (stored in
-  // user_metadata.name) — that's what they registered with. Fall back to
-  // the business name on owner_profiles, then to the email local-part.
   const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
   const fullName =
     metadataName ||
@@ -127,7 +130,11 @@ export default async function OwnerHome() {
 
   const hour = new Date().getHours();
   const greeting =
-    hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    hour < 12
+      ? tx('greetingMorning')
+      : hour < 18
+      ? tx('greetingAfternoon')
+      : tx('greetingEvening');
   const isDay = hour < 18;
 
   const fmtPrice = (p: number) =>
@@ -135,22 +142,25 @@ export default async function OwnerHome() {
 
   return (
     <PortalShell
-      badge={{ label: 'Owner portal', icon: Briefcase }}
+      badge={{ label: tx('portalLabel'), icon: Briefcase }}
       rightSlot={
         <form action={signout}>
           <button
             type="submit"
             className="text-[11px] font-semibold text-text-3 hover:text-text-1"
           >
-            Sign out
+            {tx('signOut')}
           </button>
         </form>
       }
     >
       <PortalHero
-        portalLabel="Owner portal"
+        portalLabel={tx('portalLabel')}
         portalIcon={Briefcase}
-        topRightChip={{ label: isDay ? 'Day' : 'Night', icon: isDay ? Sun : Moon }}
+        topRightChip={{
+          label: isDay ? tx('dayChip') : tx('nightChip'),
+          icon: isDay ? Sun : Moon,
+        }}
         greeting={greeting}
         displayName={firstName}
         chips={[
@@ -159,116 +169,121 @@ export default async function OwnerHome() {
             label:
               profile?.business_name ||
               (user.user_metadata?.business as string | undefined) ||
-              'Your business',
+              tx('yourBusiness'),
             icon: Building2,
           },
-          { kind: 'status', status: 'online', label: 'online' },
+          { kind: 'status', status: 'online', label: tx('online') },
         ]}
       />
 
-      {/* ============ Quick actions ============ */}
-      <QuickActions />
+      <QuickActions tx={tx} />
 
       <StatRow
         items={[
-          { label: 'Today', value: todayCount, sub: 'cleanings' },
-          { label: 'Pending', value: pendingCount, sub: 'to complete' },
+          { label: tx('kpiToday'), value: todayCount, sub: tx('subCleanings') },
           {
-            label: 'Revenue',
-            value: monthRevenuePence > 0 ? fmtPrice(monthRevenuePence) : '£0',
-            sub: 'this month',
+            label: tx('kpiPending'),
+            value: pendingCount,
+            sub: tx('subToComplete'),
           },
           {
-            label: 'Rating',
+            label: tx('kpiRevenue'),
+            value: monthRevenuePence > 0 ? fmtPrice(monthRevenuePence) : '£0',
+            sub: tx('subThisMonth'),
+          },
+          {
+            label: tx('kpiRating'),
             value: avgRating ?? '—',
-            sub: ratings.length > 0 ? `${ratings.length} this month` : 'no data',
+            sub:
+              ratings.length > 0
+                ? `${ratings.length} ${tx('subRatingsThisMonth')}`
+                : tx('subNoData'),
           },
         ]}
       />
 
-      {/* ============ Today's tasks ============ */}
-      <TodayTasksPanel tasks={todayTasks} />
+      <TodayTasksPanel tasks={todayTasks} tx={tx} />
 
       <ToolGrid>
         <ToolCard
           href="/owner/tasks"
           icon={ListChecks}
-          title="Cleanings"
-          subtitle={`${todayCount} today`}
+          title={tx('toolCleanings')}
+          subtitle={tx('subToday').replace('{n}', String(todayCount))}
           accent="brand"
         />
         <ToolCard
           href="/owner/properties"
           icon={Building2}
-          title="Properties"
-          subtitle={`${propertiesCount} total`}
+          title={tx('toolProperties')}
+          subtitle={tx('subTotal').replace('{n}', String(propertiesCount))}
           accent="emerald"
         />
         <ToolCard
           href="/owner/cleaners"
           icon={Users}
-          title="Cleaners"
-          subtitle={`${cleanersCount} team`}
+          title={tx('toolCleaners')}
+          subtitle={tx('subTeam').replace('{n}', String(cleanersCount))}
           accent="amber"
         />
         <ToolCard
           href="/owner/clients"
           icon={MessageSquare}
-          title="Clients"
-          subtitle={`${clientsCount} active`}
+          title={tx('toolClients')}
+          subtitle={tx('subActive').replace('{n}', String(clientsCount))}
           accent="navy"
         />
         <ToolCard
           href="/owner/calendar"
           icon={CalendarDays}
-          title="Calendar"
-          subtitle="Schedule view"
+          title={tx('toolCalendar')}
+          subtitle={tx('subScheduleView')}
           accent="brand"
         />
         <ToolCard
           href="/owner/analytics"
           icon={BarChart3}
-          title="Analytics"
-          subtitle="Ops dashboard"
+          title={tx('toolAnalytics')}
+          subtitle={tx('subOpsDashboard')}
           accent="emerald"
         />
         <ToolCard
           href="/owner/billing"
           icon={CreditCard}
-          title="Billing"
-          subtitle="Plan & invoices"
+          title={tx('toolBilling')}
+          subtitle={tx('subPlanInvoices')}
           accent="rose"
         />
         <ToolCard
           href="/owner/settings"
           icon={Settings}
-          title="Settings"
-          subtitle="Business profile"
+          title={tx('toolSettings')}
+          subtitle={tx('subBusinessProfile')}
           accent="navy"
         />
       </ToolGrid>
 
       <CorporateBanner
         href="/owner/analytics"
-        eyebrow="Live operations"
-        title="Today's run-rate · Team status"
-        subtitle="Real-time view of jobs, cleaners and map"
+        eyebrow={tx('bannerEyebrow')}
+        title={tx('bannerTitle')}
+        subtitle={tx('bannerSubtitle')}
       />
     </PortalShell>
   );
 }
 
-function QuickActions() {
+function QuickActions({ tx }: { tx: T }) {
   const actions = [
-    { href: '/owner/tasks/new', label: 'Nueva limpieza', Icon: Plus, primary: true },
-    { href: '/owner/clients/new', label: 'Nuevo cliente', Icon: UserPlus },
-    { href: '/owner/properties/new', label: 'Nueva propiedad', Icon: Building2 },
-    { href: '/owner/cleaners/new', label: 'Nueva limpiadora', Icon: Users },
+    { href: '/owner/tasks/new', label: tx('qaNewCleaning'), Icon: Plus, primary: true },
+    { href: '/owner/clients/new', label: tx('qaNewClient'), Icon: UserPlus },
+    { href: '/owner/properties/new', label: tx('qaNewProperty'), Icon: Building2 },
+    { href: '/owner/cleaners/new', label: tx('qaNewCleaner'), Icon: Users },
   ];
   return (
     <section className="my-5">
       <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-        Acciones rápidas
+        {tx('quickActionsTitle')}
       </p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {actions.map((a) => {
@@ -298,35 +313,54 @@ function QuickActions() {
   );
 }
 
-function TodayTasksPanel({ tasks }: { tasks: TaskListItem[] }) {
+function TodayTasksPanel({ tasks, tx }: { tasks: TaskListItem[]; tx: T }) {
   const statusChip: Record<
     string,
     { label: string; cls: string; Icon: typeof Circle }
   > = {
-    pending: { label: 'Pendiente', cls: 'bg-slate-100 text-slate-700', Icon: Circle },
-    in_progress: { label: 'En curso', cls: 'bg-amber-100 text-amber-800', Icon: Clock },
-    completed: { label: 'Hecha', cls: 'bg-emerald-100 text-emerald-800', Icon: CheckCircle2 },
-    cancelled: { label: 'Cancelada', cls: 'bg-rose-100 text-rose-700', Icon: Circle },
+    pending: {
+      label: tx('statusPending'),
+      cls: 'bg-slate-100 text-slate-700',
+      Icon: Circle,
+    },
+    in_progress: {
+      label: tx('statusInProgress'),
+      cls: 'bg-amber-100 text-amber-800',
+      Icon: Clock,
+    },
+    completed: {
+      label: tx('statusCompleted'),
+      cls: 'bg-emerald-100 text-emerald-800',
+      Icon: CheckCircle2,
+    },
+    cancelled: {
+      label: tx('statusCancelled'),
+      cls: 'bg-rose-100 text-rose-700',
+      Icon: Circle,
+    },
   };
+
+  const countLabel =
+    tasks.length === 0
+      ? tx('todayEmpty')
+      : tasks.length === 1
+      ? tx('todayCountOne')
+      : tx('todayCountMany').replace('{n}', String(tasks.length));
 
   return (
     <section className="mt-5 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="font-display text-base font-semibold text-text-1">
-            Hoy
+            {tx('todayPanelTitle')}
           </h2>
-          <p className="text-[11px] text-text-3">
-            {tasks.length === 0
-              ? 'Sin limpiezas programadas para hoy.'
-              : `${tasks.length} ${tasks.length === 1 ? 'tarea' : 'tareas'} en agenda`}
-          </p>
+          <p className="text-[11px] text-text-3">{countLabel}</p>
         </div>
         <Link
           href="/owner/tasks"
           className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-700"
         >
-          Ver todas <ChevronRight className="h-3 w-3" />
+          {tx('viewAll')} <ChevronRight className="h-3 w-3" />
         </Link>
       </div>
 
@@ -335,38 +369,38 @@ function TodayTasksPanel({ tasks }: { tasks: TaskListItem[] }) {
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 text-brand-600">
             <ListChecks className="h-5 w-5" />
           </span>
-          <p className="text-sm text-text-2">Aprovecha el día tranquilo.</p>
+          <p className="text-sm text-text-2">{tx('todayEnjoy')}</p>
           <Link
             href="/owner/tasks/new"
             className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-3 text-xs font-semibold text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.5)]"
           >
-            <Plus className="h-3.5 w-3.5" /> Crear limpieza
+            <Plus className="h-3.5 w-3.5" /> {tx('createCleaning')}
           </Link>
         </div>
       ) : (
         <ul className="mt-4 space-y-2">
-          {tasks.map((t) => {
-            const st = statusChip[t.status] ?? statusChip.pending;
+          {tasks.map((task) => {
+            const st = statusChip[task.status] ?? statusChip.pending;
             const Icon = st.Icon;
             return (
-              <li key={t.id}>
+              <li key={task.id}>
                 <Link
-                  href={`/owner/tasks/${t.id}`}
+                  href={`/owner/tasks/${task.id}`}
                   className="group flex items-center gap-3 rounded-xl border border-surface-2 px-3 py-2.5 transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow"
                 >
                   <div className="flex h-10 w-12 shrink-0 flex-col items-center justify-center rounded-lg bg-gradient-to-br from-cyan-50 to-blue-50">
                     <span className="text-[10px] font-bold text-brand-700">
-                      {t.start_time?.slice(0, 5) ?? '—'}
+                      {task.start_time?.slice(0, 5) ?? '—'}
                     </span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-text-1">
-                      {t.property?.name ?? 'Propiedad'}
+                      {task.property?.name ?? '—'}
                     </p>
                     <p className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-text-3">
                       <MapPin className="h-3 w-3 shrink-0" />
-                      {t.cleaner?.name ?? 'Sin asignar'}
-                      {t.client?.name ? ` · ${t.client.name}` : ''}
+                      {task.cleaner?.name ?? tx('unassigned')}
+                      {task.client?.name ? ` · ${task.client.name}` : ''}
                     </p>
                   </div>
                   <span
