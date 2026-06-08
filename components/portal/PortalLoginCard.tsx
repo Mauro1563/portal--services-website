@@ -22,12 +22,13 @@ export function PortalLoginCard({
 }) {
   return (
     <main
-      className="relative isolate flex min-h-[100dvh] w-screen max-w-[100vw] flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60 px-4 py-6 sm:py-10"
+      className="relative isolate flex h-[100dvh] w-screen max-w-[100vw] flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60 px-4 py-6 sm:py-10"
       style={{
         paddingTop: 'max(env(safe-area-inset-top), 1rem)',
         paddingBottom: 'max(env(safe-area-inset-bottom), 1.5rem)',
         paddingLeft: 'max(env(safe-area-inset-left), 1rem)',
         paddingRight: 'max(env(safe-area-inset-right), 1rem)',
+        overscrollBehavior: 'none',
       }}
     >
       {/* Decorative orbs — clipped by main's overflow-hidden so they never push width */}
