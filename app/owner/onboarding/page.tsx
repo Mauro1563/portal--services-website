@@ -363,7 +363,7 @@ function StepDone({ pin, t }: { pin: string; t: T }) {
           <div className="mt-4 flex justify-center">
             <a
               href={`https://wa.me/?text=${encodeURIComponent(
-                `Hi! Your Portal Services Digital login PIN is:\n\n${pin}\n\nOpen https://hq.portalservices.digital on your phone, tap "I'm a cleaner" and type the PIN.`,
+                `Hi! Your Portal Services Digital login PIN is:\n\n${pin}\n\nOpen https://hq.portalservices.digital/operative/login on your phone and type the PIN.`,
               )}`}
               target="_blank"
               rel="noopener noreferrer"

@@ -15,7 +15,7 @@ export function PinShareActions({ cleanerName, pin, phone }: Props) {
   const message =
     `Hi ${cleanerName}, your Portal Services Digital login PIN is:\n\n` +
     `${pin}\n\n` +
-    `Open https://hq.portalservices.digital on your phone, tap "I'm a cleaner" and type the PIN. ` +
+    `Open https://hq.portalservices.digital/operative/login on your phone and type the PIN. ` +
     `Add to home screen for an app-like experience.`;
 
   const waUrl = phone
