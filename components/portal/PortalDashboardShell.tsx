@@ -96,17 +96,21 @@ export function PortalHero({
   const Icon = portalIcon;
   const TopIcon = topRightChip?.icon;
   return (
-    <section className="relative w-full min-w-0 max-w-full overflow-hidden rounded-[1.75rem] border border-white/[0.06] bg-gradient-to-br from-[#0b1d3a] via-[#0f2447] to-[#0a1730] p-4 text-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-5">
-      {/* soft cyan glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-blue-500/20 blur-3xl"
-      />
-      <div className="absolute inset-0 bg-mesh-1 opacity-30" aria-hidden />
+    <section
+      className="relative w-full min-w-0 max-w-full rounded-[1.75rem] border border-white/[0.06] p-4 text-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-5"
+      style={{
+        // Glows are baked into the background so there are no absolutely
+        // positioned children that could leak past the section and trigger
+        // horizontal scroll on iOS Safari (where overflow-hidden doesn't
+        // always contain abs-positioned overflow).
+        backgroundImage: [
+          'radial-gradient(110% 80% at 100% 0%, rgba(34, 211, 238, 0.22) 0%, transparent 55%)',
+          'radial-gradient(90% 70% at 0% 100%, rgba(37, 99, 235, 0.22) 0%, transparent 60%)',
+          'linear-gradient(135deg, #0b1d3a 0%, #0f2447 55%, #0a1730 100%)',
+        ].join(', '),
+        overflow: 'clip',
+      }}
+    >
       <div className="relative min-w-0">
         <div className="flex min-w-0 items-center justify-between gap-2">
           <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-cyan-200">
