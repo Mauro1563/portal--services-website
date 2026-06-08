@@ -1584,5 +1584,17 @@
     "heroSubtitle": "Escolhe a propriedade, atribui a alguém e regista o pagamento — tudo num só ecrã.",
     "optional": "opcional",
     "fieldCleanerLabel": "Faxineira"
+  },
+  "welcome": {
+    "subtitle": "Escolhe como queres entrar no teu portal.",
+    "bullet1": "PIN de 6 dígitos",
+    "bullet2": "Sem App Store",
+    "bullet3": "Entras em 5 segundos",
+    "ownerTitle": "Iniciar sessão",
+    "ownerSubtitle": "Dono ou gestor · email + palavra-passe",
+    "cleanerTitle": "Sou faxineira",
+    "cleanerSubtitle": "PIN de 6 dígitos · acesso rápido",
+    "newQuestion": "És novo aqui?",
+    "learnMore": "Conhecer a plataforma"
   }
 }

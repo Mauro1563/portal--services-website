@@ -1584,5 +1584,17 @@
     "heroSubtitle": "Elige la propiedad, asigna a alguien y deja anotado el cobro — todo en una pantalla.",
     "optional": "opcional",
     "fieldCleanerLabel": "Limpiadora"
+  },
+  "welcome": {
+    "subtitle": "Elige cómo quieres ingresar a tu portal.",
+    "bullet1": "PIN de 6 dígitos",
+    "bullet2": "Sin App Store",
+    "bullet3": "Entrás en 5 segundos",
+    "ownerTitle": "Iniciar sesión",
+    "ownerSubtitle": "Dueño o manager · email + contraseña",
+    "cleanerTitle": "Soy limpiadora",
+    "cleanerSubtitle": "PIN de 6 dígitos · acceso rápido",
+    "newQuestion": "¿Eres nuevo?",
+    "learnMore": "Conocer la plataforma"
   }
 }

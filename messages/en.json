@@ -1584,5 +1584,17 @@
     "heroSubtitle": "Pick the property, assign someone and log the payment — all in one screen.",
     "optional": "optional",
     "fieldCleanerLabel": "Cleaner"
+  },
+  "welcome": {
+    "subtitle": "Choose how you want to enter your portal.",
+    "bullet1": "6-digit PIN",
+    "bullet2": "No App Store",
+    "bullet3": "Sign in in 5 seconds",
+    "ownerTitle": "Sign in",
+    "ownerSubtitle": "Owner or manager · email + password",
+    "cleanerTitle": "I'm a cleaner",
+    "cleanerSubtitle": "6-digit PIN · fast access",
+    "newQuestion": "New here?",
+    "learnMore": "Discover the platform"
   }
 }
