@@ -92,6 +92,7 @@ export default async function OperativeHome({ searchParams }: Props) {
   return (
     <PortalShell
       badge={{ label: 'Cleaner portal', icon: Hammer }}
+      settingsHref="/operative/profile"
       rightSlot={
         <form action={signOutOperative}>
           <button

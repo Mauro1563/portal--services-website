@@ -17,6 +17,8 @@ export function PortalShell({
   backHref,
   backLabel,
   rightSlot,
+  settingsHref,
+  notificationsHref,
   children,
 }: {
   badge?: { label: string; icon?: LucideIcon };
@@ -24,6 +26,8 @@ export function PortalShell({
   backHref?: string;
   backLabel?: string;
   rightSlot?: React.ReactNode;
+  settingsHref?: string;
+  notificationsHref?: string;
   children: React.ReactNode;
 }) {
   const BadgeIcon = badge?.icon;
@@ -60,12 +64,24 @@ export function PortalShell({
                 <span className="max-w-[120px] truncate">{badge.label}</span>
               </span>
             ) : null}
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
-              <Bell className="h-4 w-4" />
-            </span>
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
-              <Settings className="h-4 w-4" />
-            </span>
+            {notificationsHref ? (
+              <Link
+                href={notificationsHref}
+                aria-label="Notifications"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2 transition hover:border-brand-600/30 hover:text-brand-600"
+              >
+                <Bell className="h-4 w-4" />
+              </Link>
+            ) : null}
+            {settingsHref ? (
+              <Link
+                href={settingsHref}
+                aria-label="Settings"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2 transition hover:border-brand-600/30 hover:text-brand-600"
+              >
+                <Settings className="h-4 w-4" />
+              </Link>
+            ) : null}
             {rightSlot}
           </div>
         </div>
@@ -97,47 +113,43 @@ export function PortalHero({
   const TopIcon = topRightChip?.icon;
   return (
     <section
-      className="relative w-full min-w-0 max-w-full rounded-[1.75rem] border border-white/[0.06] p-4 text-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-5"
+      className="relative w-full min-w-0 max-w-full overflow-hidden rounded-2xl p-3.5 text-white shadow-[0_12px_28px_-14px_rgba(37,99,235,0.45)] sm:p-4"
       style={{
-        // Glows are baked into the background so there are no absolutely
-        // positioned children that could leak past the section and trigger
-        // horizontal scroll on iOS Safari (where overflow-hidden doesn't
-        // always contain abs-positioned overflow).
         backgroundImage: [
-          'radial-gradient(110% 80% at 100% 0%, rgba(34, 211, 238, 0.22) 0%, transparent 55%)',
-          'radial-gradient(90% 70% at 0% 100%, rgba(37, 99, 235, 0.22) 0%, transparent 60%)',
-          'linear-gradient(135deg, #0b1d3a 0%, #0f2447 55%, #0a1730 100%)',
+          // Subtle highlight on top to add depth without darkening.
+          'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 35%)',
+          // Brand gradient (matches the marketing site + brand-gradient utility).
+          'linear-gradient(135deg, #3DC5F0 0%, #2563EB 55%, #1D4ED8 100%)',
         ].join(', '),
-        overflow: 'clip',
       }}
     >
       <div className="relative min-w-0">
         <div className="flex min-w-0 items-center justify-between gap-2">
-          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-cyan-200">
-            {Icon ? <Icon className="h-3 w-3 shrink-0" /> : null}
+          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/20">
+            {Icon ? <Icon className="h-2.5 w-2.5 shrink-0" /> : null}
             <span className="truncate">{portalLabel}</span>
           </span>
           {topRightChip ? (
-            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-amber-200">
-              {TopIcon ? <TopIcon className="h-3 w-3 shrink-0" /> : null}
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/20">
+              {TopIcon ? <TopIcon className="h-2.5 w-2.5 shrink-0" /> : null}
               {topRightChip.label}
             </span>
           ) : null}
         </div>
-        <p className="mt-5 text-[9.5px] font-bold uppercase tracking-[0.20em] text-slate-300/90">
+        <p className="mt-3 text-[9px] font-bold uppercase tracking-[0.18em] text-white/80">
           {greeting}
         </p>
-        <h1 className="mt-1 truncate font-display text-[28px] font-semibold leading-tight tracking-tight">
+        <h1 className="mt-0.5 truncate font-display text-[22px] font-semibold leading-tight tracking-tight">
           {displayName}
         </h1>
         {chips && chips.length > 0 ? (
-          <div className="mt-4 flex min-w-0 flex-wrap items-center gap-1.5">
+          <div className="mt-2.5 flex min-w-0 flex-wrap items-center gap-1.5">
             {chips.map((c, i) => {
               if (c.kind === 'status') {
                 return (
                   <span
                     key={i}
-                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10.5px] font-medium text-white ring-1 ring-inset ring-white/10"
+                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white ring-1 ring-inset ring-white/20"
                   >
                     <span
                       className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusDot[c.status]}`}
@@ -150,7 +162,7 @@ export function PortalHero({
               return (
                 <span
                   key={i}
-                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10.5px] font-medium text-white ring-1 ring-inset ring-white/10"
+                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white ring-1 ring-inset ring-white/20"
                 >
                   {ChipIcon ? <ChipIcon className="h-3 w-3 shrink-0" /> : null}
                   <span className="truncate">{c.label}</span>

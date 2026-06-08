@@ -143,6 +143,7 @@ export default async function OwnerHome() {
   return (
     <PortalShell
       badge={{ label: tx('portalLabel'), icon: Briefcase }}
+      settingsHref="/owner/settings"
       rightSlot={
         <form action={signout}>
           <button
