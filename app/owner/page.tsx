@@ -165,6 +165,7 @@ export default async function OwnerHome() {
         }}
         greeting={greeting}
         displayName={firstName}
+        brandColor={profile?.brand_color}
         chips={[
           {
             kind: 'text',

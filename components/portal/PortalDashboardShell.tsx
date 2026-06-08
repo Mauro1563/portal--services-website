@@ -104,6 +104,7 @@ export function PortalHero({
   greeting,
   displayName,
   chips,
+  brandColor,
 }: {
   portalLabel: string;
   portalIcon?: LucideIcon;
@@ -114,18 +115,23 @@ export function PortalHero({
     | { kind: 'text'; label: string; icon?: LucideIcon }
     | { kind: 'status'; label: string; status: Status }
   >;
+  brandColor?: string | null;
 }) {
   const Icon = portalIcon;
   const TopIcon = topRightChip?.icon;
+  // If the owner picked a brand color, build the gradient from it; otherwise
+  // fall back to the default brand gradient (cyan → blue).
+  const heroGradient =
+    brandColor && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(brandColor)
+      ? `linear-gradient(135deg, ${heroLighten(brandColor, 20)} 0%, ${brandColor} 55%, ${heroLighten(brandColor, -22)} 100%)`
+      : 'linear-gradient(135deg, #3DC5F0 0%, #2563EB 55%, #1D4ED8 100%)';
   return (
     <section
       className="relative w-full min-w-0 max-w-full overflow-hidden rounded-2xl p-3.5 text-white shadow-[0_12px_28px_-14px_rgba(37,99,235,0.45)] sm:p-4"
       style={{
         backgroundImage: [
-          // Subtle highlight on top to add depth without darkening.
           'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 35%)',
-          // Brand gradient (matches the marketing site + brand-gradient utility).
-          'linear-gradient(135deg, #3DC5F0 0%, #2563EB 55%, #1D4ED8 100%)',
+          heroGradient,
         ].join(', '),
       }}
     >
@@ -179,6 +185,20 @@ export function PortalHero({
         ) : null}
       </div>
     </section>
+  );
+}
+
+// Adjust a hex toward white (positive pct) or black (negative pct).
+function heroLighten(hex: string, pct: number): string {
+  const c = hex.replace('#', '');
+  const full = c.length === 3 ? c.split('').map((x) => x + x).join('') : c;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  const adj = (v: number) =>
+    Math.max(0, Math.min(255, Math.round(v + (pct / 100) * (pct < 0 ? v : 255 - v))));
+  return (
+    '#' + [adj(r), adj(g), adj(b)].map((v) => v.toString(16).padStart(2, '0')).join('')
   );
 }
 
