@@ -20,7 +20,44 @@ import {
 import { Logo } from '@/components/Logo';
 import { signupOwner, type SignupResult } from './actions';
 
-export function SignupForm() {
+export type SignupDict = {
+  title: string;
+  subtitle: string;
+  fullName: string;
+  fullNamePh: string;
+  workEmail: string;
+  workEmailPh: string;
+  businessName: string;
+  businessNamePh: string;
+  optional: string;
+  optionalToggle: string;
+  show: string;
+  hide: string;
+  phone: string;
+  phonePh: string;
+  country: string;
+  countryPh: string;
+  teamSize: string;
+  teamSizePh: string;
+  team1: string;
+  team2: string;
+  team3: string;
+  submit: string;
+  submitting: string;
+  haveAccount: string;
+  signIn: string;
+  backHome: string;
+  successTitle: string;
+  successSubtitle: string;
+  emailLabel: string;
+  tempPassword: string;
+  tempPasswordNote: string;
+  enterPortal: string;
+  copy: string;
+  copied: string;
+};
+
+export function SignupForm({ dict }: { dict: SignupDict }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<SignupResult | null>(null);
@@ -82,6 +119,7 @@ export function SignupForm() {
 
             {result?.ok ? (
               <SuccessPanel
+                dict={dict}
                 email={result.email}
                 password={result.password}
                 onEnter={() => router.push('/owner')}
@@ -91,10 +129,10 @@ export function SignupForm() {
             ) : (
               <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
                 <h1 className="text-[1.375rem] font-semibold tracking-[-0.015em] text-slate-900">
-                  Crea tu cuenta
+                  {dict.title}
                 </h1>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-slate-500">
-                  Tu acceso al portal queda listo en segundos.
+                  {dict.subtitle}
                 </p>
 
                 {result && !result.ok ? (
@@ -105,72 +143,72 @@ export function SignupForm() {
                 ) : null}
 
                 <form className="mt-7 space-y-4" onSubmit={onSubmit}>
-                  <Field label="Nombre completo" icon={User}>
+                  <Field label={dict.fullName} icon={User}>
                     <input
                       type="text"
                       name="name"
                       required
                       autoComplete="name"
-                      placeholder="María García"
+                      placeholder={dict.fullNamePh}
                       className={inputClass}
                     />
                   </Field>
-                  <Field label="Email de trabajo" icon={Mail}>
+                  <Field label={dict.workEmail} icon={Mail}>
                     <input
                       type="email"
                       name="email"
                       required
                       autoComplete="email"
-                      placeholder="maria@miempresa.com"
+                      placeholder={dict.workEmailPh}
                       className={inputClass}
                     />
                   </Field>
-                  <Field label="Nombre de tu empresa" icon={Building2}>
+                  <Field label={dict.businessName} icon={Building2}>
                     <input
                       type="text"
                       name="business"
                       required
                       autoComplete="organization"
-                      placeholder="Limpiezas García"
+                      placeholder={dict.businessNamePh}
                       className={inputClass}
                     />
                   </Field>
 
                   <details className="group rounded-xl">
                     <summary className="flex cursor-pointer items-center justify-between text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:text-slate-600">
-                      <span>+ Datos opcionales</span>
-                      <span className="text-slate-300 group-open:hidden">Mostrar</span>
-                      <span className="hidden text-slate-300 group-open:inline">Ocultar</span>
+                      <span>{dict.optionalToggle}</span>
+                      <span className="text-slate-300 group-open:hidden">{dict.show}</span>
+                      <span className="hidden text-slate-300 group-open:inline">{dict.hide}</span>
                     </summary>
                     <div className="mt-4 space-y-4">
-                      <Field label="Teléfono" icon={Phone} optional>
+                      <Field label={dict.phone} icon={Phone} optional optionalLabel={dict.optional}>
                         <input
                           type="tel"
                           name="phone"
                           autoComplete="tel"
-                          placeholder="+34 600 000 000"
+                          placeholder={dict.phonePh}
                           className={inputClass}
                         />
                       </Field>
-                      <Field label="País" icon={Globe} optional>
+                      <Field label={dict.country} icon={Globe} optional optionalLabel={dict.optional}>
                         <input
                           type="text"
                           name="country"
                           autoComplete="country-name"
-                          placeholder="España"
+                          placeholder={dict.countryPh}
                           className={inputClass}
                         />
                       </Field>
-                      <Field label="Tamaño del equipo" icon={Users2} optional>
+                      <Field label={dict.teamSize} icon={Users2} optional optionalLabel={dict.optional}>
                         <select
                           name="teamSize"
                           defaultValue=""
                           className={`${inputClass} appearance-none`}
                         >
-                          <option value="">Elige una opción…</option>
-                          <option value="1-5">1 a 5 personas</option>
-                          <option value="6-20">6 a 20 personas</option>
-                          <option value="20+">Más de 20 personas</option>
+                          <option value="">{dict.teamSizePh}</option>
+                          <option value="1-5">{dict.team1}</option>
+                          <option value="6-20">{dict.team2}</option>
+                          <option value="20+">{dict.team3}</option>
                         </select>
                       </Field>
                     </div>
@@ -184,23 +222,23 @@ export function SignupForm() {
                     <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                     {pending ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin" /> Creando…
+                        <Loader2 className="h-4 w-4 animate-spin" /> {dict.submitting}
                       </>
                     ) : (
                       <>
-                        Crear mi cuenta
+                        {dict.submit}
                         <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </>
                     )}
                   </button>
 
                   <p className="text-center text-[11px] text-slate-600">
-                    ¿Ya tienes cuenta?{' '}
+                    {dict.haveAccount}{' '}
                     <Link
                       href="/login"
                       className="font-semibold text-blue-600 transition hover:text-blue-700"
                     >
-                      Inicia sesión
+                      {dict.signIn}
                     </Link>
                   </p>
                 </form>
@@ -209,7 +247,7 @@ export function SignupForm() {
                   href="/"
                   className="mt-6 text-center text-xs font-medium text-slate-600 transition hover:text-slate-700 lg:text-left"
                 >
-                  ← Volver al inicio
+                  {dict.backHome}
                 </Link>
               </div>
             )}
@@ -228,11 +266,13 @@ function Field({
   label,
   icon: Icon,
   optional,
+  optionalLabel,
   children,
 }: {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   optional?: boolean;
+  optionalLabel?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -241,7 +281,7 @@ function Field({
         <span>{label}</span>
         {optional ? (
           <span className="font-medium normal-case tracking-normal text-slate-600">
-            opcional
+            {optionalLabel ?? 'optional'}
           </span>
         ) : null}
       </span>
@@ -254,12 +294,14 @@ function Field({
 }
 
 function SuccessPanel({
+  dict,
   email,
   password,
   onEnter,
   copied,
   onCopy,
 }: {
+  dict: SignupDict;
   email: string;
   password: string;
   onEnter: () => void;
@@ -274,33 +316,36 @@ function SuccessPanel({
         </span>
       </div>
       <h1 className="mt-5 text-center text-[1.375rem] font-semibold tracking-[-0.015em] text-slate-900">
-        ¡Bienvenido!
+        {dict.successTitle}
       </h1>
       <p className="mt-1.5 text-center text-[13px] leading-relaxed text-slate-500">
-        Tu cuenta está lista. Guarda estos datos — los necesitarás para volver
-        a entrar.
+        {dict.successSubtitle}
       </p>
 
       <div className="mt-7 space-y-3 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-5 shadow-sm">
         <CopyableRow
-          label="Email"
+          label={dict.emailLabel}
           value={email}
           onCopy={() => onCopy(email, 'email')}
           copied={copied === 'email'}
+          copyText={dict.copy}
+          copiedText={dict.copied}
           mono
         />
         <CopyableRow
-          label="Contraseña temporal"
+          label={dict.tempPassword}
           value={password}
           onCopy={() => onCopy(password, 'pwd')}
           copied={copied === 'pwd'}
+          copyText={dict.copy}
+          copiedText={dict.copied}
           mono
         />
       </div>
 
       <p className="mt-5 flex items-start gap-2 rounded-xl border border-amber-200/70 bg-amber-50/80 px-3.5 py-2.5 text-xs text-amber-800 shadow-sm">
         <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        Te pediremos cambiar esta contraseña la primera vez que entres.
+        {dict.tempPasswordNote}
       </p>
 
       <button
@@ -309,7 +354,7 @@ function SuccessPanel({
         className="group relative mt-6 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-300 hover:brightness-[1.08]"
       >
         <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-        Entrar a mi portal
+        {dict.enterPortal}
         <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
       </button>
     </div>
@@ -321,12 +366,16 @@ function CopyableRow({
   value,
   onCopy,
   copied,
+  copyText,
+  copiedText,
   mono,
 }: {
   label: string;
   value: string;
   onCopy: () => void;
   copied: boolean;
+  copyText: string;
+  copiedText: string;
   mono?: boolean;
 }) {
   return (
@@ -349,11 +398,11 @@ function CopyableRow({
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5 text-emerald-600" /> Copiado
+              <Check className="h-3.5 w-3.5 text-emerald-600" /> {copiedText}
             </>
           ) : (
             <>
-              <Copy className="h-3.5 w-3.5" /> Copiar
+              <Copy className="h-3.5 w-3.5" /> {copyText}
             </>
           )}
         </button>

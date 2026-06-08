@@ -3,8 +3,9 @@ import type { ReactNode } from 'react';
 import { Globe, MapPin, Users } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { ScrollLock } from '@/components/ScrollLock';
+import { getT } from '@/lib/i18n';
 
-export function PortalLoginCard({
+export async function PortalLoginCard({
   badges,
   title,
   subtitle,
@@ -21,6 +22,7 @@ export function PortalLoginCard({
   children: ReactNode;
   footer?: ReactNode;
 }) {
+  const t = await getT();
   return (
     <>
       <ScrollLock />
@@ -123,7 +125,7 @@ export function PortalLoginCard({
           href="/"
           className="mt-3 block text-center text-[11px] font-semibold text-slate-600 transition hover:text-slate-900"
         >
-          ← Back to home
+          {t('login.backHome')}
         </Link>
       </div>
       </main>
