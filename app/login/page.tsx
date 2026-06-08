@@ -22,17 +22,17 @@ export default async function LoginPage({ searchParams }: Props) {
       error={error}
       message={message}
     >
-      <form action={signIn} className="space-y-4">
+      <form action={signIn} className="space-y-3.5">
         <LoginField label="Email">
-          <div className="relative">
-            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
+          <div className="relative w-full">
+            <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <input
               type="email"
               name="identifier"
               required
               autoComplete="email"
               placeholder="name@email.com"
-              className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-500 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
+              className="block h-11 w-full min-w-0 rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-500 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
             />
           </div>
         </LoginField>
@@ -44,7 +44,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-bold text-[#2563eb] transition hover:text-[#1d4ed8]"
+            className="text-xs font-bold text-[#2563eb] transition hover:text-[#1d4ed8]"
           >
             Forgot password?
           </Link>
@@ -52,7 +52,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
         <button
           type="submit"
-          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] hover:shadow-[0_24px_48px_-12px_rgba(37,99,235,0.65)] active:translate-y-px"
+          className="group relative inline-flex h-12 w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-[13px] font-bold uppercase tracking-[0.20em] text-white shadow-[0_14px_28px_-10px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] active:translate-y-px"
         >
           <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
           Sign in
