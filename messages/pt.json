@@ -303,12 +303,34 @@
     "secondary": "Falar com um humano"
   },
   "footer": {
-    "tagline": "A gente não vende limpezas. A gente vende tranquilidade, confiança e a sensação de chegar em casa e tudo estar perfeito.",
-    "rights": "Todos os direitos reservados.",
+    "tagline": "Não vendemos limpezas. Vendemos tranquilidade, confiança e a sensação de chegar a casa e estar tudo perfeito.",
     "platform": "Plataforma",
+    "platformLinks": { "portals": "Portais", "how": "Como funciona", "pricing": "Preços", "faq": "FAQ" },
     "company": "Empresa",
-    "legal": "Legal",
-    "contact": "Contato"
+    "companyLinks": { "hq": "Acesso HQ", "privacy": "Privacidade", "terms": "Termos" },
+    "contact": "Contacto",
+    "rights": "© 2026 Portal Home. Todos os direitos reservados.",
+    "madeWith": "Feito com ♥ em Madrid · Londres · Lisboa"
+  },
+  "howItWorks": {
+    "eyebrow": "Como funciona",
+    "title": "De WhatsApp e Excel a tempo real, numa tarde.",
+    "subtitle": "Sem instalar nada, sem formação, sem equipa de IT. Três passos e estás a operar.",
+    "steps": {
+      "one": {
+        "title": "Adiciona a tua equipa em minutos",
+        "description": "Carrega as tuas limpadoras, propriedades e clientes a partir de um CSV ou do painel. Cada limpadora recebe um PIN de 6 dígitos para entrar — sem palavras-passe, sem instalar nada."
+      },
+      "two": {
+        "title": "A limpadora trabalha desde o telemóvel",
+        "description": "Check-in com GPS ao chegar, foto do trabalho terminado e comunicação direta contigo. Tudo em tempo real, mesmo sem ligação."
+      },
+      "three": {
+        "title": "Vês tudo a partir de um único sítio",
+        "description": "Limpezas, qualidade, incidências, clientes e propriedades — um único painel para o dono. Se algo correr mal, sabes no instante."
+      }
+    },
+    "cta": "Começar período gratuito"
   },
   "psd": {
     "nav": {

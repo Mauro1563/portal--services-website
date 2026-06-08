@@ -7,7 +7,6 @@ type Props = {
 
 export async function Footer({ logoUrl }: Props) {
   const t = await getTranslations('footer');
-  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-slate-200 bg-slate-50">
@@ -30,19 +29,19 @@ export async function Footer({ logoUrl }: Props) {
           <FooterColumn
             title={t('platform')}
             links={[
-              { label: 'Portales', href: '#portals' },
-              { label: 'Cómo funciona', href: '#how' },
-              { label: 'Precios', href: '#pricing' },
-              { label: 'FAQ', href: '#faq' },
+              { label: t('platformLinks.portals'), href: '#portals' },
+              { label: t('platformLinks.how'), href: '#how' },
+              { label: t('platformLinks.pricing'), href: '#pricing' },
+              { label: t('platformLinks.faq'), href: '#faq' },
             ]}
           />
 
           <FooterColumn
             title={t('company')}
             links={[
-              { label: 'Acceso HQ', href: '/hq/login' },
-              { label: 'Privacidad', href: '/privacy' },
-              { label: 'Términos', href: '/terms' },
+              { label: t('companyLinks.hq'), href: '/hq/login' },
+              { label: t('companyLinks.privacy'), href: '/privacy' },
+              { label: t('companyLinks.terms'), href: '/terms' },
             ]}
           />
 
@@ -58,8 +57,8 @@ export async function Footer({ logoUrl }: Props) {
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-slate-200 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center">
-          <p>© {year} Portal Services Digital. {t('rights')}</p>
-          <p>Hecho con ♥ en Madrid · London · Lisboa</p>
+          <p>{t('rights')}</p>
+          <p>{t('madeWith')}</p>
         </div>
       </div>
     </footer>

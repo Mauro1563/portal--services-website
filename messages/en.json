@@ -304,11 +304,33 @@
   },
   "footer": {
     "tagline": "We don't sell cleanings. We sell peace of mind, trust, and the feeling of coming home to a perfect place.",
-    "rights": "All rights reserved.",
     "platform": "Platform",
+    "platformLinks": { "portals": "Portals", "how": "How it works", "pricing": "Pricing", "faq": "FAQ" },
     "company": "Company",
-    "legal": "Legal",
-    "contact": "Contact"
+    "companyLinks": { "hq": "HQ access", "privacy": "Privacy", "terms": "Terms" },
+    "contact": "Contact",
+    "rights": "© 2026 Portal Home. All rights reserved.",
+    "madeWith": "Made with ♥ in Madrid · London · Lisbon"
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "From WhatsApp and Excel to real time, in one afternoon.",
+    "subtitle": "Nothing to install, no training, no IT team. Three steps and you're up and running.",
+    "steps": {
+      "one": {
+        "title": "Add your team in minutes",
+        "description": "Load your cleaners, properties and clients from a CSV or the dashboard. Each cleaner gets a 6-digit PIN to sign in — no passwords, nothing to install."
+      },
+      "two": {
+        "title": "Your cleaner works from their phone",
+        "description": "GPS check-in on arrival, a photo of the finished job and direct messaging with you. All in real time, even offline."
+      },
+      "three": {
+        "title": "You see everything from one place",
+        "description": "Cleanings, quality, incidents, clients and properties — a single dashboard for the owner. If something goes wrong, you know instantly."
+      }
+    },
+    "cta": "Start free trial"
   },
   "psd": {
     "nav": {

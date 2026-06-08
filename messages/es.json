@@ -303,12 +303,34 @@
     "secondary": "Hablar con un humano"
   },
   "footer": {
-    "tagline": "No vendemos limpiezas. Vendemos tranquilidad, confianza y la sensación de llegar a casa y que todo esté perfecto.",
-    "rights": "Todos los derechos reservados.",
+    "tagline": "No vendemos limpiezas. Vendemos tranquilidad, confianza y la sensación de volver a casa a un lugar perfecto.",
     "platform": "Plataforma",
-    "company": "Compañía",
-    "legal": "Legal",
-    "contact": "Contacto"
+    "platformLinks": { "portals": "Portales", "how": "Cómo funciona", "pricing": "Precios", "faq": "FAQ" },
+    "company": "Empresa",
+    "companyLinks": { "hq": "Acceso HQ", "privacy": "Privacidad", "terms": "Términos" },
+    "contact": "Contacto",
+    "rights": "© 2026 Portal Home. Todos los derechos reservados.",
+    "madeWith": "Hecho con ♥ en Madrid · Londres · Lisboa"
+  },
+  "howItWorks": {
+    "eyebrow": "Cómo funciona",
+    "title": "De WhatsApp y Excel a tiempo real, en una tarde.",
+    "subtitle": "No necesitas instalar nada, ni formación, ni un equipo de IT. Tres pasos y estás operando.",
+    "steps": {
+      "one": {
+        "title": "Da de alta a tu equipo en minutos",
+        "description": "Carga tus limpiadoras, propiedades y clientes con un CSV o desde el panel. Cada limpiadora recibe un PIN de 6 dígitos para entrar — sin contraseñas, sin instalar nada."
+      },
+      "two": {
+        "title": "La limpiadora trabaja desde el móvil",
+        "description": "Check-in con GPS al llegar a la casa, foto del trabajo terminado y comunicación contigo. Todo en tiempo real, también sin conexión."
+      },
+      "three": {
+        "title": "Tú lo ves todo desde un solo lugar",
+        "description": "Limpiezas, calidad, incidencias, clientes y propiedades — un único panel para el dueño. Si algo no va bien, te enteras al instante."
+      }
+    },
+    "cta": "Empezar prueba gratis"
   },
   "psd": {
     "nav": {
