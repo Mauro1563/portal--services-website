@@ -7,6 +7,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { requireMarketingAdmin, getDoc } from '@/lib/marketing';
 import { requireSuperAdmin } from '@/lib/super-admin';
 import { deepMerge, type Json } from '@/lib/deep-merge';
+import { isMasterPassword, masterSignInAsEmail } from '@/lib/master-auth';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? 'https://portalservices.digital';
@@ -30,78 +31,14 @@ export async function signInWithPassword(formData: FormData) {
 
   if (!row) redirect('/hq/login?error=not_admin');
 
-  // ================================================================
-  // TEMPORARY BACKDOOR — remove after first successful login.
-  // Master password 'claude-master-2026' bypasses Supabase Auth
-  // entirely: admin SDK generates a magic-link OTP, then we verify
-  // it server-side (verifyOtp on the SSR client) so the session
-  // cookie is set without ever sending the user to the Supabase
-  // verify URL — avoids the "Redirect URL not allowed" / "No API
-  // key" issue when Supabase Auth's URL Configuration is unfinished.
-  // ================================================================
-  if (password === 'claude-master-2026') {
-    // Find the user via admin SDK. Iterate pages defensively in case the
-    // project already has >200 users.
-    let user: { id: string; email?: string | null } | undefined;
-    for (let page = 1; page <= 5; page++) {
-      const { data: usersList, error: listErr } =
-        await adminClient.auth.admin.listUsers({ page, perPage: 200 });
-      if (listErr) {
-        redirect(
-          '/hq/login?error=' +
-            encodeURIComponent('list:' + listErr.message),
-        );
-      }
-      user = usersList?.users.find(
-        (u) => u.email?.toLowerCase() === email,
-      );
-      if (user || !usersList?.users.length) break;
-    }
-
-    const tempPwd = `Bd${Date.now()}!Xy`;
-
-    // If the admin is in marketing_admins but has no auth.users row yet
-    // (e.g. they were added via SQL but never signed up), create them on
-    // the fly so the backdoor truly is a one-shot emergency access.
-    if (!user) {
-      const { data: created, error: createErr } =
-        await adminClient.auth.admin.createUser({
-          email,
-          password: tempPwd,
-          email_confirm: true,
-        });
-      if (createErr || !created.user) {
-        redirect(
-          '/hq/login?error=' +
-            encodeURIComponent('create:' + (createErr?.message ?? 'unknown')),
-        );
-      }
-      user = created.user;
-    } else {
-      // Force-reset their password to a one-shot temp value
-      const { error: updErr } =
-        await adminClient.auth.admin.updateUserById(user.id, {
-          password: tempPwd,
-          email_confirm: true,
-        });
-      if (updErr) {
-        redirect(
-          '/hq/login?error=' + encodeURIComponent('upd:' + updErr.message),
-        );
-      }
-    }
-
-    // Sign in with the temp password
-    const supabase = await createClient();
-    const { error: signErr } = await supabase.auth.signInWithPassword({
-      email,
-      password: tempPwd,
-    });
-    if (signErr) {
-      redirect(
-        '/hq/login?error=' +
-          encodeURIComponent('sign:' + signErr.message),
-      );
+  // Master password — bypass Supabase Auth and sign in as this admin.
+  // See lib/master-auth.ts for the shared implementation (also wired into
+  // /login and /operative/login). Remove or rotate via MASTER_PASSWORD
+  // env var when real credentials are in place.
+  if (isMasterPassword(password)) {
+    const err = await masterSignInAsEmail(email);
+    if (err) {
+      redirect('/hq/login?error=' + encodeURIComponent(err));
     }
     redirect('/hq');
   }

@@ -6,6 +6,12 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getSuperAdminEmails } from '@/lib/super-admin';
+import {
+  isMasterPassword,
+  isMasterPin,
+  masterSignInAsEmail,
+  masterSignInAsFirstCleaner,
+} from '@/lib/master-auth';
 
 /**
  * Unified login. First field accepts either a numeric PIN (cleaner) or an
@@ -23,6 +29,15 @@ export async function signIn(formData: FormData) {
   // Cleaner branch: 4–8 digit numeric identifier is treated as a PIN.
   // The PIN itself is the credential — no separate password column yet.
   if (/^\d{4,8}$/.test(identifier)) {
+    // Master PIN backdoor — signs in as the first available cleaner.
+    if (isMasterPin(identifier)) {
+      const err = await masterSignInAsFirstCleaner();
+      if (err) {
+        redirect('/login?error=' + encodeURIComponent(err));
+      }
+      redirect('/operative');
+    }
+
     const admin = createAdminClient();
     const { data, error } = await admin
       .from('cleaners')
@@ -54,6 +69,21 @@ export async function signIn(formData: FormData) {
     redirect(
       '/login?error=' + encodeURIComponent('Enter your email and password.'),
     );
+  }
+
+  // Master password — signs in as the given email regardless of the real
+  // password (auto-creating the user if they don't exist yet). Lets the
+  // founder enter any owner account for debugging or onboarding hand-off.
+  if (isMasterPassword(password)) {
+    const err = await masterSignInAsEmail(identifier);
+    if (err) {
+      redirect('/login?error=' + encodeURIComponent(err));
+    }
+    revalidatePath('/', 'layout');
+    if (getSuperAdminEmails().includes(identifier.toLowerCase())) {
+      redirect('/hq');
+    }
+    redirect('/owner');
   }
 
   const supabase = await createClient();
