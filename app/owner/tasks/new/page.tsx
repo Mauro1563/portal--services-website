@@ -78,11 +78,10 @@ export default async function NewTaskPage({ searchParams }: Props) {
               {t('tasks.newTitle')}
             </p>
             <h1 className="mt-1 font-display text-xl font-semibold tracking-tight sm:text-2xl">
-              Programa una limpieza en segundos.
+              {t('taskNew.heroTitle')}
             </h1>
             <p className="mt-1.5 text-sm text-white/85">
-              Elige la propiedad, asigna a alguien y deja anotado el cobro —
-              todo en una pantalla.
+              {t('taskNew.heroSubtitle')}
             </p>
           </div>
         </div>
@@ -95,15 +94,15 @@ export default async function NewTaskPage({ searchParams }: Props) {
           </span>
           <div className="flex-1">
             <p className="font-display font-semibold">
-              Aún no tienes propiedades.
+              {t('taskNew.noProperties')}
             </p>
             <p className="mt-0.5 text-xs">
-              Necesitas al menos una propiedad para crear limpiezas.{' '}
+              {t('taskNew.noPropertiesHint')}{' '}
               <Link
                 href="/owner/properties/new"
                 className="font-semibold underline underline-offset-2 hover:text-amber-900"
               >
-                Añadir propiedad →
+                {t('taskNew.addPropertyBtn')}
               </Link>
             </p>
           </div>
@@ -121,12 +120,11 @@ export default async function NewTaskPage({ searchParams }: Props) {
         <SectionCard
           accent="cyan"
           icon={MapPin}
-          title="Quién y dónde"
-          desc="Propiedad, limpiadora y cliente (si aplica)."
+          title={t('taskNew.whoWhereTitle')}
+          desc={t('taskNew.whoWhereDesc')}
         >
           <label className="block">
-            <span className={labelTitle}>
-              Propiedad
+            <span className={labelTitle}>{t('taskNew.fieldProperty')}
               <span className="ml-0.5 text-rose-500">*</span>
             </span>
             <select
@@ -146,9 +144,9 @@ export default async function NewTaskPage({ searchParams }: Props) {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className={labelTitle}>Limpiadora (opcional)</span>
+              <span className={labelTitle}>{t('taskNew.fieldCleaner') + ' (' + t('taskNew.optional') + ')'}</span>
               <select name="cleaner_id" className={inputCls}>
-                <option value="">Sin asignar</option>
+                <option value="">{t('taskNew.cleanerUnassigned')}</option>
                 {cleaners.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -158,9 +156,9 @@ export default async function NewTaskPage({ searchParams }: Props) {
             </label>
 
             <label className="block">
-              <span className={labelTitle}>Cliente (opcional)</span>
+              <span className={labelTitle}>{t('taskNew.fieldClient')}</span>
               <select name="client_id" className={inputCls}>
-                <option value="">Sin cliente / huésped Airbnb</option>
+                <option value="">{t('taskNew.clientNone')}</option>
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -169,12 +167,11 @@ export default async function NewTaskPage({ searchParams }: Props) {
               </select>
               {clients.length === 0 ? (
                 <span className="mt-1.5 block text-[11px] text-text-3">
-                  ¿Aún no tienes clientes registrados?{' '}
+                  {t('taskNew.noClients')}{' '}
                   <Link
                     href="/owner/clients/new"
                     className="font-semibold text-brand-600 hover:underline"
-                  >
-                    Crear cliente
+                  >{t('taskNew.createClientLink')}
                   </Link>
                 </span>
               ) : null}
@@ -186,13 +183,13 @@ export default async function NewTaskPage({ searchParams }: Props) {
         <SectionCard
           accent="violet"
           icon={CalendarClock}
-          title="Fecha y hora"
-          desc="Cuándo se hace y cuánto se estima que dure."
+          title={t('taskNew.whenTitle')}
+          desc={t('taskNew.whenDesc')}
         >
           <div className="grid grid-cols-2 gap-3">
             <label className="block">
               <span className={labelTitle}>
-                Fecha
+                {t('taskNew.fieldDate')}
                 <span className="ml-0.5 text-rose-500">*</span>
               </span>
               <input
@@ -206,7 +203,7 @@ export default async function NewTaskPage({ searchParams }: Props) {
             </label>
 
             <label className="block">
-              <span className={labelTitle}>Hora de inicio</span>
+              <span className={labelTitle}>{t('taskNew.fieldStartTime')}</span>
               <input
                 type="time"
                 name="start_time"
@@ -216,7 +213,7 @@ export default async function NewTaskPage({ searchParams }: Props) {
           </div>
 
           <label className="block">
-            <span className={labelTitle}>Duración estimada (horas)</span>
+            <span className={labelTitle}>{t('taskNew.fieldDuration')}</span>
             <input
               type="number"
               name="estimated_duration_hours"
@@ -236,13 +233,13 @@ export default async function NewTaskPage({ searchParams }: Props) {
         <SectionCard
           accent="emerald"
           icon={Tag}
-          title="Servicio y precio"
-          desc="Tipo de servicio y precio. El manual gana sobre el del servicio."
+          title={t('taskNew.serviceTitle')}
+          desc={t('taskNew.serviceDesc')}
         >
           <label className="block">
-            <span className={labelTitle}>Tipo de servicio (opcional)</span>
+            <span className={labelTitle}>{t('taskNew.serviceField')}</span>
             <select name="service_type_id" className={inputCls}>
-              <option value="">Sin tipo de servicio</option>
+              <option value="">{t('taskNew.noService')}</option>
               {services.map((s) => {
                 const price = s.price_pence
                   ? `£${(s.price_pence / 100).toFixed(2)}`
@@ -276,7 +273,7 @@ export default async function NewTaskPage({ searchParams }: Props) {
           </label>
 
           <label className="block">
-            <span className={labelTitle}>Precio (£) — opcional</span>
+            <span className={labelTitle}>{t('taskNew.priceField')}</span>
             <div className="relative mt-1.5">
               <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-sm font-medium text-text-3">
                 £
@@ -297,40 +294,40 @@ export default async function NewTaskPage({ searchParams }: Props) {
         <SectionCard
           accent="amber"
           icon={CreditCard}
-          title="Pago"
-          desc="Registra cómo y cuándo se cobró este servicio."
+          title={t('taskNew.paymentTitle')}
+          desc={t('taskNew.paymentDesc')}
         >
           <label className="block">
-            <span className={labelTitle}>Estado del pago</span>
+            <span className={labelTitle}>{t('taskNew.paymentStatus')}</span>
             <select
               name="payment_status"
               defaultValue="pending"
               className={inputCls}
             >
-              <option value="pending">⏳ Pendiente</option>
-              <option value="paid">✅ Pagado</option>
-              <option value="partial">⚖️ Pago parcial</option>
-              <option value="waived">🆓 No se cobra</option>
+              <option value="pending">⏳ {t('taskNew.payPending')}</option>
+              <option value="paid">✅ {t('taskNew.payPaid')}</option>
+              <option value="partial">⚖️ {t('taskNew.payPartial')}</option>
+              <option value="waived">🆓 {t('taskNew.payWaived')}</option>
             </select>
           </label>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className={labelTitle}>Método</span>
+              <span className={labelTitle}>{t('taskNew.payMethod')}</span>
               <select name="payment_method" className={inputCls}>
                 <option value="">—</option>
-                <option value="cash">💵 Efectivo</option>
-                <option value="card">💳 Tarjeta</option>
-                <option value="transfer">🏦 Transferencia</option>
-                <option value="bacs">📮 BACS</option>
-                <option value="apple_pay">🍎 Apple Pay</option>
-                <option value="google_pay">🔵 Google Pay</option>
-                <option value="other">📋 Otro</option>
+                <option value="cash">💵 {t('taskNew.mCash')}</option>
+                <option value="card">💳 {t('taskNew.mCard')}</option>
+                <option value="transfer">🏦 {t('taskNew.mTransfer')}</option>
+                <option value="bacs">📮 {t('taskNew.mBacs')}</option>
+                <option value="apple_pay">🍎 {t('taskNew.mApplePay')}</option>
+                <option value="google_pay">🔵 {t('taskNew.mGooglePay')}</option>
+                <option value="other">📋 {t('taskNew.mOther')}</option>
               </select>
             </label>
 
             <label className="block">
-              <span className={labelTitle}>Cantidad cobrada (£)</span>
+              <span className={labelTitle}>{t('taskNew.payAmount')}</span>
               <div className="relative mt-1.5">
                 <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-sm font-medium text-text-3">
                   £
@@ -349,13 +346,13 @@ export default async function NewTaskPage({ searchParams }: Props) {
         </SectionCard>
 
         {/* ───────── Notas ───────── */}
-        <SectionCard accent="slate" icon={ArrowLeft} title="Notas internas" hideIcon>
+        <SectionCard accent="slate" icon={ArrowLeft} title={t('taskNew.notesTitle')} hideIcon>
           <label className="block">
-            <span className={labelTitle}>Cualquier instrucción extra</span>
+            <span className={labelTitle}>{t('taskNew.notesField')}</span>
             <textarea
               name="notes"
               rows={3}
-              placeholder="Clave wifi, ubicación de llaves, instrucciones especiales…"
+              placeholder={t('taskNew.notesPlaceholder')}
               className={textareaCls}
             />
           </label>
