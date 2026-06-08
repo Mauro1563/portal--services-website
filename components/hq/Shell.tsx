@@ -1,8 +1,10 @@
 import { Sidebar } from './Sidebar';
 import { MobileNav } from './MobileNav';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 import type { Active } from './nav-items';
 
-export function HQShell({
+export async function HQShell({
   active,
   email,
   title,
@@ -17,6 +19,7 @@ export function HQShell({
   actions?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
   return (
     <div className="flex min-h-screen">
       <Sidebar active={active} email={email} />
@@ -32,7 +35,10 @@ export function HQShell({
                 <p className="mt-0.5 text-sm text-graphite-3">{subtitle}</p>
               ) : null}
             </div>
-            {actions ? <div className="shrink-0">{actions}</div> : null}
+            <div className="flex shrink-0 items-center gap-2">
+              <LocaleSwitcher current={locale} variant="onLight" />
+              {actions}
+            </div>
           </div>
         </header>
         <main className="px-6 py-8 lg:px-10 lg:py-10">{children}</main>

@@ -1483,6 +1483,7 @@
   },
   "ownerHome": {
     "portalLabel": "Owner portal",
+    "welcomeFallback": "Welcome",
     "dayChip": "Day",
     "nightChip": "Night",
     "greetingMorning": "Good morning",

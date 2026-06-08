@@ -59,16 +59,13 @@ function shape(row: {
 
 export function displayNameFrom(
   profile: OwnerProfile,
-  fallbackEmail: string | null,
+  _fallbackEmail: string | null,
 ): string | null {
   if (profile.business_name && profile.business_name.trim().length > 0) {
     return profile.business_name.trim();
   }
-  if (fallbackEmail) {
-    const local = fallbackEmail.split('@')[0]?.split(/[.+]/)[0];
-    if (local && local.length <= 16 && /^[a-z]/i.test(local)) {
-      return local.charAt(0).toUpperCase() + local.slice(1);
-    }
-  }
+  // Intentionally no email-derived fallback — showing "Mauro541423"
+  // (the email local-part) feels impersonal and exposes credentials.
+  // Callers should render a generic greeting when this returns null.
   return null;
 }

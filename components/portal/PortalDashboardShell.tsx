@@ -2,6 +2,8 @@ import Link from 'next/link';
 import type { LucideIcon } from 'lucide-react';
 import { Bell, ChevronRight, Settings } from 'lucide-react';
 import { Logo } from '@/components/Logo';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
 type Status = 'online' | 'offline' | 'idle';
 
@@ -11,7 +13,7 @@ const statusDot: Record<Status, string> = {
   idle: 'bg-amber-400',
 };
 
-export function PortalShell({
+export async function PortalShell({
   badge,
   badgeHref,
   backHref,
@@ -19,6 +21,7 @@ export function PortalShell({
   rightSlot,
   settingsHref,
   notificationsHref,
+  showLocaleSwitcher = true,
   children,
 }: {
   badge?: { label: string; icon?: LucideIcon };
@@ -28,9 +31,11 @@ export function PortalShell({
   rightSlot?: React.ReactNode;
   settingsHref?: string;
   notificationsHref?: string;
+  showLocaleSwitcher?: boolean;
   children: React.ReactNode;
 }) {
   const BadgeIcon = badge?.icon;
+  const locale = showLocaleSwitcher ? await getLocale() : null;
   return (
     <main
       className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-surface-1"
@@ -64,6 +69,7 @@ export function PortalShell({
                 <span className="max-w-[120px] truncate">{badge.label}</span>
               </span>
             ) : null}
+            {locale ? <LocaleSwitcher current={locale} variant="onLight" /> : null}
             {notificationsHref ? (
               <Link
                 href={notificationsHref}
