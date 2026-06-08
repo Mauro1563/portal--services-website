@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import { Logo } from '@/components/Logo';
-import { LocaleSwitcher } from '@/components/LocaleSwitcher';
-import { getLocale, getT } from '@/lib/i18n';
+import { ArrowRight, Mail } from 'lucide-react';
+import { PortalLoginCard, LoginField } from '@/components/portal/PortalLoginCard';
+import { getT } from '@/lib/i18n';
 import { requestPasswordReset } from './actions';
 
 type Props = {
@@ -12,71 +11,46 @@ type Props = {
 export default async function ForgotPasswordPage({ searchParams }: Props) {
   const { sent, error } = await searchParams;
   const t = await getT();
-  const locale = await getLocale();
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0 bg-mesh-1 opacity-90" />
-      <div className="absolute inset-0 bg-grid" />
-
-      <div className="relative mx-auto flex min-h-screen max-w-md flex-col px-6 py-6">
-        <div className="flex justify-end">
-          <LocaleSwitcher current={locale} variant="dark" />
-        </div>
-        <div className="flex flex-1 flex-col items-center justify-center">
-          <Logo />
-
-          <div className="mt-10 w-full rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
-              {t('forgotPassword.title')}
-            </p>
-            <h1 className="mt-2 font-display text-2xl font-semibold text-white">
-              {t('forgotPassword.title')}
-            </h1>
-            <p className="mt-1 text-sm text-slate-600">
-              {t('forgotPassword.subtitle')}
-            </p>
-
-            {sent && (
-              <p className="mt-4 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300">
-                {t('forgotPassword.sentMessage')}
-              </p>
-            )}
-            {error && (
-              <p className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-xs text-rose-300">
-                {error}
-              </p>
-            )}
-
-            <form action={requestPasswordReset} className="mt-6 space-y-4">
-              <label className="block text-sm text-slate-300">
-                {t('forgotPassword.emailLabel')}
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  autoComplete="email"
-                  placeholder={t('login.emailPlaceholder')}
-                  className="mt-1.5 block w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-                />
-              </label>
-              <button
-                type="submit"
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow"
-              >
-                {t('forgotPassword.sendLink')} <ArrowRight className="h-4 w-4" />
-              </button>
-            </form>
+    <PortalLoginCard
+      title={t('forgotPassword.title')}
+      subtitle={t('forgotPassword.subtitle')}
+      error={error}
+      message={sent ? t('forgotPassword.sentMessage') : undefined}
+      footer={
+        <Link
+          href="/login?role=owner"
+          className="block text-center text-[12px] font-semibold text-slate-600 transition hover:text-[#0b1d3a]"
+        >
+          ← {t('forgotPassword.backToLogin')}
+        </Link>
+      }
+    >
+      <form action={requestPasswordReset} className="space-y-3.5">
+        <LoginField label={t('forgotPassword.emailLabel')}>
+          <div className="relative w-full">
+            <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <input
+              type="email"
+              name="email"
+              required
+              autoComplete="email"
+              placeholder={t('login.emailPh')}
+              className="block h-11 w-full min-w-0 rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-500 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
+            />
           </div>
+        </LoginField>
 
-          <Link
-            href="/login?role=owner"
-            className="mt-6 text-xs text-slate-500 transition hover:text-slate-300"
-          >
-            ← {t('forgotPassword.backToLogin')}
-          </Link>
-        </div>
-      </div>
-    </main>
+        <button
+          type="submit"
+          className="group relative inline-flex h-12 w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-[13px] font-bold uppercase tracking-[0.20em] text-white shadow-[0_14px_28px_-10px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] active:translate-y-px"
+        >
+          <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+          {t('forgotPassword.sendLink')}
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </button>
+      </form>
+    </PortalLoginCard>
   );
 }
