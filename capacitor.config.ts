@@ -9,7 +9,6 @@ const config: CapacitorConfig = {
   appId: 'com.portalservices.digital',
   appName: 'Portal Services',
   webDir: 'public',
-  bundledWebRuntime: false,
   server: {
     url: 'https://portalservices.digital',
     cleartext: false,
@@ -23,13 +22,9 @@ const config: CapacitorConfig = {
     preferredContentMode: 'mobile',
     limitsNavigationsToAppBoundDomains: false,
     scrollEnabled: true,
-    // Disable the bounce overscroll so the webview feels like a fixed app
-    // instead of a webpage. Pages with their own scroll containers handle
-    // momentum scrolling natively.
-    handleApplicationNotifications: true,
-    // Show a translucent webview while React Server Components stream so we
-    // don't flash a white square between routes.
-    webContentsDebuggingEnabled: false,
+    // Bounce overscroll handled via CSS (overscroll-behavior) so the
+    // webview feels like a fixed app instead of a webpage. Pages with
+    // their own scroll containers keep momentum scrolling natively.
   },
   plugins: {
     SplashScreen: {
