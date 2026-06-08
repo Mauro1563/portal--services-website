@@ -63,69 +63,69 @@ export function PortalLoginCard({
         }}
       />
 
-      {/* The card. Width capped to whichever is smaller: 24rem OR viewport minus 2rem. */}
-      <div className="relative w-full" style={{ maxWidth: 'min(24rem, calc(100vw - 2rem))' }}>
+      {/* The card. Width capped to whichever is smaller: 21rem OR viewport minus 2rem. */}
+      <div className="relative w-full" style={{ maxWidth: 'min(21rem, calc(100vw - 2rem))' }}>
         <div className="absolute inset-x-10 -top-px h-px bg-gradient-to-r from-transparent via-cyan-400/80 to-transparent" />
 
-        <div className="w-full overflow-hidden rounded-[1.5rem] bg-white shadow-[0_24px_60px_-24px_rgba(15,23,42,0.30),0_8px_20px_-12px_rgba(15,23,42,0.10)] ring-1 ring-slate-200/70">
-          <div className="px-6 pb-6 pt-7 sm:px-7 sm:pt-8">
+        <div className="w-full overflow-hidden rounded-[1.25rem] bg-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25),0_6px_16px_-10px_rgba(15,23,42,0.08)] ring-1 ring-slate-200/70">
+          <div className="px-5 pb-5 pt-5 sm:px-6">
             <div className="flex justify-center">
-              <Logo size="md" className="!h-16 sm:!h-20" />
+              <Logo size="md" className="!h-12 sm:!h-14" />
             </div>
 
             {badges && badges.length === 1 ? (
-              <div className="mt-3 flex justify-center">
+              <div className="mt-2.5 flex justify-center">
                 <PortalTypeChip label={badges[0]} />
               </div>
             ) : badges && badges.length > 1 ? (
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5">
                 <BadgePill icon={Globe} label={badges[0] ?? 'One platform'} />
                 {badges[1] ? <BadgePill icon={MapPin} label={badges[1]} /> : null}
                 {badges[2] ? <BadgePill icon={Users} label={badges[2]} /> : null}
               </div>
             ) : null}
 
-            <div className="mt-5 border-t border-slate-100 pt-5 text-center">
-              <h1 className="text-base font-semibold leading-tight tracking-[-0.01em] text-[#0b1d3a]">
+            <div className="mt-3.5 border-t border-slate-100 pt-3.5 text-center">
+              <h1 className="text-[15px] font-semibold leading-tight tracking-[-0.01em] text-[#0b1d3a]">
                 {title}
               </h1>
               {subtitle ? (
-                <p className="mt-1.5 text-[13px] leading-relaxed text-slate-700">
+                <p className="mt-1 text-[12px] leading-snug text-slate-700">
                   {subtitle}
                 </p>
               ) : null}
             </div>
 
             {error ? (
-              <p className="mt-4 flex items-start gap-2 rounded-xl border border-rose-200/70 bg-rose-50/80 px-3 py-2 text-[11px] leading-relaxed text-rose-700 shadow-sm">
+              <p className="mt-3 flex items-start gap-2 rounded-lg border border-rose-200/70 bg-rose-50/80 px-3 py-2 text-[11px] leading-relaxed text-rose-700 shadow-sm">
                 <span className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500" />
                 <span className="min-w-0 break-words">{error}</span>
               </p>
             ) : null}
             {message ? (
-              <p className="mt-4 flex items-start gap-2 rounded-xl border border-emerald-200/70 bg-emerald-50/80 px-3 py-2 text-[11px] leading-relaxed text-emerald-700 shadow-sm">
+              <p className="mt-3 flex items-start gap-2 rounded-lg border border-emerald-200/70 bg-emerald-50/80 px-3 py-2 text-[11px] leading-relaxed text-emerald-700 shadow-sm">
                 <span className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                 <span className="min-w-0 break-words">{message}</span>
               </p>
             ) : null}
 
-            <div className="mt-5">{children}</div>
+            <div className="mt-3.5">{children}</div>
 
-            {footer ? <div className="mt-4">{footer}</div> : null}
+            {footer ? <div className="mt-3">{footer}</div> : null}
 
-            <p className="mt-6 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <p className="mt-4 text-center text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-500">
               © {new Date().getFullYear()} Portal Services UK
             </p>
           </div>
         </div>
-      </div>
 
-      <Link
-        href="/"
-        className="mt-4 text-xs font-semibold text-slate-600 transition hover:text-slate-900"
-      >
-        ← Back to home
-      </Link>
+        <Link
+          href="/"
+          className="mt-3 block text-center text-[11px] font-semibold text-slate-600 transition hover:text-slate-900"
+        >
+          ← Back to home
+        </Link>
+      </div>
       </main>
     </>
   );
