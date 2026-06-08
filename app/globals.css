@@ -37,6 +37,11 @@ html, body {
   background-color: var(--psd-bg-canvas);
   color: var(--psd-graphite-1);
   -webkit-font-smoothing: antialiased;
+  /* Lock horizontal scroll everywhere — fixes the 'page slides to the right'
+     bug on narrow iPhones when a child has padding/margins that nudge past
+     100vw. Each scrollable area still scrolls vertically. */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* The /hq admin panel restores the dark canvas */
@@ -87,4 +92,63 @@ html[data-theme='light'],
 html[data-theme='light'] body {
   background-color: #f8fafc !important;
   color: #0f172a !important;
+}
+
+/* ============================================================================
+   Native iOS feel when running inside Capacitor.
+   The bridge script in layout.tsx adds .capacitor and .capacitor-ios to <html>
+   so we can target only the native app context (no effect on the web).
+   ============================================================================ */
+html.capacitor {
+  /* Lock font scaling — no surprise reflows from iOS Dynamic Type. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Kill the gray tap highlight on every button/link. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.capacitor body {
+  /* Disable text selection in chrome UI — only inputs/textareas allow it. */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  /* Stop rubber-band bounce on overscroll; the inner scroll containers keep
+     their momentum because they declare their own overflow. */
+  overscroll-behavior-y: contain;
+}
+
+/* Re-enable selection where users actually need it. */
+html.capacitor input,
+html.capacitor textarea,
+html.capacitor [contenteditable='true'],
+html.capacitor .selectable {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Hide the webview scrollbar on iOS — momentum scrolling stays, the bar goes. */
+html.capacitor-ios ::-webkit-scrollbar {
+  display: none;
+}
+
+/* Respect the notch + home indicator. Pages with fixed bottom bars apply
+   these utility classes to keep the UI clear of system gestures. */
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.safe-left { padding-left: env(safe-area-inset-left); }
+.safe-right { padding-right: env(safe-area-inset-right); }
+
+/* Smooth-scroll inside scrollable containers (the body declarations above
+   only kill overscroll bounce; this brings momentum back to legit panels). */
+html.capacitor [data-scroll],
+html.capacitor .overflow-y-auto,
+html.capacitor .overflow-y-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Solid status bar surface — prevents the brief flash of white the webview
+   shows during route transitions in iOS. */
+html.capacitor {
+  background-color: #0b1d3a;
 }

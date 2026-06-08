@@ -28,45 +28,45 @@ export function PortalShell({
 }) {
   const BadgeIcon = badge?.icon;
   return (
-    <main className="relative min-h-screen bg-surface-1 pb-16">
-      <header className="sticky top-0 z-40 border-b border-surface-2 bg-surface-0/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-2 px-4">
-          <Logo size="sm" />
-          <div className="flex items-center gap-2">
+    <main
+      className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-surface-1 pb-16"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 64px)' }}
+    >
+      <header
+        className="sticky top-0 z-40 w-full border-b border-surface-2 bg-surface-0/95 backdrop-blur"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
+        <div className="mx-auto flex h-14 w-full max-w-md items-center justify-between gap-2 px-4">
+          <div className="flex min-w-0 shrink items-center gap-2">
+            <Logo size="sm" className="max-h-10" />
+          </div>
+          <div className="flex shrink-0 items-center gap-1.5">
             {backHref ? (
               <Link
                 href={backHref}
-                className="inline-flex items-center gap-1 rounded-full border border-brand-600/30 bg-brand-600/[0.06] px-3 py-1 text-[11px] font-semibold text-brand-700 hover:bg-brand-600/[0.10]"
+                className="inline-flex items-center gap-1 rounded-full border border-brand-600/30 bg-brand-600/[0.06] px-2.5 py-1 text-[11px] font-semibold text-brand-700"
               >
                 ← {backLabel ?? 'Back'}
               </Link>
             ) : badge ? (
-              badgeHref ? (
-                <Link
-                  href={badgeHref}
-                  className="inline-flex items-center gap-1 rounded-full border border-surface-2 bg-surface-0 px-3 py-1 text-[11px] font-semibold text-text-2 hover:border-brand-600/30 hover:text-brand-700"
-                >
-                  {BadgeIcon ? <BadgeIcon className="h-3 w-3" /> : null}
-                  {badge.label}
-                </Link>
-              ) : (
-                <span className="inline-flex items-center gap-1 rounded-full border border-surface-2 bg-surface-0 px-3 py-1 text-[11px] font-semibold text-text-2">
-                  {BadgeIcon ? <BadgeIcon className="h-3 w-3" /> : null}
-                  {badge.label}
-                </span>
-              )
+              <span
+                className={`hidden items-center gap-1 rounded-full border border-surface-2 bg-surface-0 px-2.5 py-1 text-[11px] font-semibold text-text-2 sm:inline-flex`}
+              >
+                {BadgeIcon ? <BadgeIcon className="h-3 w-3" /> : null}
+                <span className="max-w-[120px] truncate">{badge.label}</span>
+              </span>
             ) : null}
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
               <Bell className="h-4 w-4" />
             </span>
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
               <Settings className="h-4 w-4" />
             </span>
             {rightSlot}
           </div>
         </div>
       </header>
-      <div className="mx-auto max-w-md px-4 py-5">{children}</div>
+      <div className="mx-auto w-full max-w-md px-4 py-5">{children}</div>
     </main>
   );
 }
@@ -152,21 +152,32 @@ export function StatRow({
 }: {
   items: Array<{ label: string; value: string | number; sub?: string }>;
 }) {
+  // Pick a grid that always fits the viewport. 4 items wrap to 2×2 on
+  // mobile (instead of 4×1 which overflows on narrow iPhones), then opens
+  // back to 4×1 from sm: upward.
+  const cols =
+    items.length >= 4
+      ? 'grid-cols-2 sm:grid-cols-4'
+      : items.length === 3
+      ? 'grid-cols-3'
+      : items.length === 2
+      ? 'grid-cols-2'
+      : 'grid-cols-1';
   return (
-    <section className="mt-5 grid grid-cols-3 gap-3">
+    <section className={`mt-5 grid ${cols} gap-3`}>
       {items.map((it, i) => (
         <div
           key={i}
-          className="rounded-2xl border border-surface-2 bg-surface-0 p-3 text-center shadow-card"
+          className="min-w-0 rounded-2xl border border-surface-2 bg-surface-0 p-3 text-center shadow-card"
         >
-          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-text-3">
+          <p className="truncate text-[10px] font-bold uppercase tracking-[0.16em] text-text-3">
             {it.label}
           </p>
-          <p className="mt-2 font-display text-xl font-bold text-text-1 tabular-nums">
+          <p className="mt-2 truncate font-display text-xl font-bold text-text-1 tabular-nums">
             {it.value}
           </p>
           {it.sub ? (
-            <p className="mt-0.5 text-[10px] text-text-3">{it.sub}</p>
+            <p className="mt-0.5 truncate text-[10px] text-text-3">{it.sub}</p>
           ) : null}
         </div>
       ))}

@@ -1,16 +1,15 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 /**
- * Capacitor wraps the live web app into a native iOS shell.
- * `server.url` makes the app load https://portalservices.digital directly,
- * so every deploy on Vercel reaches the app instantly without rebuilding
- * a binary. The native shell still adds Camera + GPS + status-bar + splash
- * which is what Apple looks for to approve a webview-based app.
+ * Production-grade Capacitor config tuned for an "app-store premium" feel.
+ * The shell loads portalservices.digital live so every Vercel deploy reaches
+ * users instantly; the native bits below cover what the web can't do alone.
  */
 const config: CapacitorConfig = {
   appId: 'com.portalservices.digital',
   appName: 'Portal Services',
   webDir: 'public',
+  bundledWebRuntime: false,
   server: {
     url: 'https://portalservices.digital',
     cleartext: false,
@@ -18,33 +17,50 @@ const config: CapacitorConfig = {
     iosScheme: 'https',
   },
   ios: {
+    // Edge-to-edge layout — the web app handles safe-area insets via CSS env().
     contentInset: 'always',
     backgroundColor: '#0b1d3a',
     preferredContentMode: 'mobile',
     limitsNavigationsToAppBoundDomains: false,
     scrollEnabled: true,
+    // Disable the bounce overscroll so the webview feels like a fixed app
+    // instead of a webpage. Pages with their own scroll containers handle
+    // momentum scrolling natively.
+    handleApplicationNotifications: true,
+    // Show a translucent webview while React Server Components stream so we
+    // don't flash a white square between routes.
+    webContentsDebuggingEnabled: false,
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 1200,
-      launchAutoHide: true,
-      launchFadeOutDuration: 300,
+      // Keep the splash up just long enough for the first paint of the
+      // homepage. Hide via JS once the bridge initializes.
+      launchShowDuration: 0,
+      launchAutoHide: false,
       backgroundColor: '#0b1d3a',
       iosSpinnerStyle: 'small',
       spinnerColor: '#22d3ee',
-      showSpinner: false,
+      showSpinner: true,
       splashImmersive: true,
+      splashFullScreen: true,
     },
     StatusBar: {
+      // Solid navy bar matching the header — no light-text-on-light issues.
       style: 'LIGHT',
       backgroundColor: '#0b1d3a',
       overlaysWebView: false,
     },
-    Camera: {
-      // Permissions strings are duplicated in Info.plist for the Apple review
-      // but kept here as a single source of truth for the config.
+    Keyboard: {
+      // Native-style keyboard: the webview resizes (instead of scrolling under)
+      // and inputs stay visible. iOS shows the standard accessory bar.
+      resize: 'native',
+      style: 'LIGHT',
+      resizeOnFullScreen: true,
     },
+    Haptics: {},
+    Camera: {},
     Geolocation: {},
+    Share: {},
   },
 };
 

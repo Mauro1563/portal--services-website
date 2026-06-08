@@ -3,6 +3,7 @@ import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
 import './psd.css';
 import { ThemeManager } from '@/components/ThemeManager';
+import { CapacitorBridge } from '@/components/CapacitorBridge';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -97,8 +98,15 @@ const softwareLd = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"
+        />
+      </head>
       <body className="min-h-screen bg-ink-0 text-white antialiased">
         <ThemeManager />
+        <CapacitorBridge />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareLd) }}
