@@ -41,11 +41,10 @@ export function CapacitorBridge() {
 
     // Tap haptics — runs on every click that lands inside a button-like element.
     // Cheap: only fires on actual interaction, and degrades silently on web.
-    let hapticsLoaded: { impact: (o: { style: string }) => Promise<void> } | null = null;
+    let hapticsTrigger: (() => Promise<void>) | null = null;
     void import('@capacitor/haptics').then((mod) => {
-      hapticsLoaded = {
-        impact: (o) => mod.Haptics.impact({ style: o.style as 'LIGHT' | 'MEDIUM' | 'HEAVY' }),
-      };
+      hapticsTrigger = () =>
+        mod.Haptics.impact({ style: mod.ImpactStyle.Light });
     });
 
     const onTap = (e: MouseEvent) => {
@@ -55,10 +54,9 @@ export function CapacitorBridge() {
         'button, a[href], [data-haptic], .btn-primary, [type="submit"]',
       );
       if (!btn) return;
-      // Skip nested toggles inside a form (text inputs etc).
       const tag = btn.tagName.toLowerCase();
       if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
-      hapticsLoaded?.impact({ style: 'LIGHT' }).catch(() => {});
+      hapticsTrigger?.().catch(() => {});
     };
     document.addEventListener('click', onTap, true);
 
