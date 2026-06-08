@@ -53,8 +53,9 @@ const config: CapacitorConfig = {
     Keyboard: {
       // Native-style keyboard: the webview resizes (instead of scrolling under)
       // and inputs stay visible. iOS shows the standard accessory bar.
-      resize: 'native',
-      style: 'LIGHT',
+      // 'native' enum lives in @capacitor/keyboard at runtime.
+      resize: 'native' as never,
+      style: 'LIGHT' as never,
       resizeOnFullScreen: true,
     },
     Haptics: {},
