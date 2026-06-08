@@ -197,7 +197,7 @@ export function ToolGrid({
       <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
         {label}
       </h2>
-      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">{children}</div>
+      <div className="mt-3 grid grid-cols-2 gap-2 min-w-0 max-w-full sm:gap-3 sm:grid-cols-3">{children}</div>
     </section>
   );
 }
@@ -229,7 +229,7 @@ export function ToolCard({
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col justify-between rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card transition active:scale-[0.99] hover:border-brand-600/30 hover:shadow-card-lg"
+      className="group flex h-full min-w-0 flex-col justify-between rounded-2xl border border-surface-2 bg-surface-0 p-3 shadow-card transition active:scale-[0.99] hover:border-brand-600/30 hover:shadow-card-lg sm:p-4"
     >
       <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${a.bg}`}>
         <Icon className={`h-5 w-5 ${a.fg}`} />

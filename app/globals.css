@@ -37,16 +37,20 @@ html, body {
   background-color: var(--psd-bg-canvas);
   color: var(--psd-graphite-1);
   -webkit-font-smoothing: antialiased;
-  /* Lock horizontal scroll everywhere — fixes the 'page slides to the right'
-     bug on narrow iPhones when a child has padding/margins that nudge past
-     100vw. Each scrollable area still scrolls vertically. */
   overflow-x: hidden;
   max-width: 100vw;
-  /* Kill iOS rubber-band bounce on the document body so pages that fit in
-     the viewport (login, splash) feel static instead of "drifting". Pages
-     with real scroll containers opt back in with overscroll-behavior: auto
-     on their own scroller. */
+  width: 100vw;
   overscroll-behavior-y: none;
+  /* Stop iOS from horizontally rubber-banding the whole document. */
+  overscroll-behavior-x: none;
+}
+
+/* Hard belt-and-braces: every direct child of body is forced inside the
+   viewport. Stops a rogue child with explicit width > 100vw from making
+   the whole document scrollable. */
+body > * {
+  max-width: 100vw;
+  overflow-x: clip;
 }
 
 /* Inputs and textareas inside a locked-screen container must keep their

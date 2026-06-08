@@ -76,7 +76,7 @@ export async function LightLayout({
   const isActive = (it: NavItem) => it.tab === activeTab;
 
   return (
-    <div className="flex min-h-screen bg-[#F4F6FB] text-text-1">
+    <div className="flex min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#F4F6FB] text-text-1">
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col bg-[#0F172A] px-3 py-4 text-white lg:flex">
         <div className="flex items-center gap-2.5 px-2 pb-4">
@@ -183,7 +183,7 @@ export async function LightLayout({
           </div>
         </header>
 
-        <main className="min-w-0 flex-1 px-4 py-5 pb-24 lg:px-8 lg:py-7 lg:pb-10">{children}</main>
+        <main className="min-w-0 w-full max-w-[100vw] flex-1 overflow-x-hidden px-3 py-4 pb-24 sm:px-4 sm:py-5 lg:px-8 lg:py-7 lg:pb-10">{children}</main>
       </div>
 
       {/* Mobile bottom tabs */}
