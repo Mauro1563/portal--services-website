@@ -115,15 +115,15 @@ export default async function OperativeWeekPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden pb-16">
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-ink-0/85 backdrop-blur-xl">
+    <main className="relative min-h-screen overflow-hidden bg-canvas pb-16">
+      <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-2 px-4">
           <Link
             href="/operative"
             aria-label="Back"
-            className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full hover:bg-white/[0.06]"
+            className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-graphite-1 hover:bg-surface-2"
           >
-            <ArrowLeft className="h-5 w-5 text-white" />
+            <ArrowLeft className="h-5 w-5" />
           </Link>
           <Logo size="sm" />
           <span className="-mr-2 flex h-9 w-9" aria-hidden />
@@ -131,10 +131,10 @@ export default async function OperativeWeekPage() {
       </header>
 
       <div className="mx-auto max-w-md px-4 py-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-500">
           This week
         </p>
-        <h1 className="mt-1 font-display text-2xl font-semibold">
+        <h1 className="mt-1 font-display text-2xl font-semibold text-graphite-1">
           {weekStart.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}{' '}
           – {weekEnd.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
         </h1>
@@ -142,17 +142,17 @@ export default async function OperativeWeekPage() {
         {/* KPIs */}
         <div className="mt-4 grid grid-cols-3 gap-2">
           <Kpi
-            icon={<Clock className="h-3.5 w-3.5 text-cyan-300" />}
+            icon={<Clock className="h-3.5 w-3.5 text-brand-500" />}
             label="Worked"
             value={formatHours(minutesWorked)}
           />
           <Kpi
-            icon={<PoundSterling className="h-3.5 w-3.5 text-emerald-400" />}
+            icon={<PoundSterling className="h-3.5 w-3.5 text-emerald-600" />}
             label="Earnings"
             value={formatMoney(earningsPence)}
           />
           <Kpi
-            icon={<Star className="h-3.5 w-3.5 text-amber-400" />}
+            icon={<Star className="h-3.5 w-3.5 text-amber-500" />}
             label={`Rating (${ratingCount})`}
             value={avgStars == null ? '—' : avgStars.toFixed(1)}
           />
@@ -167,7 +167,7 @@ export default async function OperativeWeekPage() {
               <div key={iso}>
                 <h2
                   className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider ${
-                    isToday ? 'text-cyan-300' : 'text-slate-500'
+                    isToday ? 'text-brand-600' : 'text-graphite-3'
                   }`}
                 >
                   <Calendar className="h-3 w-3" />
@@ -180,20 +180,20 @@ export default async function OperativeWeekPage() {
                   {isToday ? ' · TODAY' : ''}
                 </h2>
                 {dayTasks.length === 0 ? (
-                  <p className="mt-1 ml-5 text-[11px] text-slate-600">No cleanings</p>
+                  <p className="mt-1 ml-5 text-[11px] text-graphite-3">No cleanings</p>
                 ) : (
                   <ul className="mt-2 space-y-2">
                     {dayTasks.map((t, idx) => (
                       <li key={t.id}>
                         <Link
                           href={`/operative`}
-                          className="flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3 hover:border-cyan-400/30"
+                          className="flex items-start gap-3 rounded-2xl border border-line bg-paper p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
                         >
-                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-[11px] font-semibold text-cyan-300">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
                             {idx + 1}
                           </span>
                           <div className="min-w-0 flex-1">
-                            <p className="font-display text-sm font-semibold text-white">
+                            <p className="font-display text-sm font-semibold text-graphite-1">
                               {t.property?.name ?? 'Property'}
                             </p>
                             {t.property?.address ? (
@@ -202,12 +202,12 @@ export default async function OperativeWeekPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-cyan-300 hover:text-cyan-200"
+                                className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600 hover:text-brand-700"
                               >
                                 <MapPin className="h-3 w-3" /> {t.property.address}
                               </a>
                             ) : null}
-                            <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-slate-400">
+                            <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-graphite-3">
                               {t.service_name ? (
                                 <span>{t.service_name}</span>
                               ) : null}
@@ -218,7 +218,7 @@ export default async function OperativeWeekPage() {
                                 </span>
                               ) : null}
                               {t.price_pence ? (
-                                <span className="inline-flex items-center gap-1 text-emerald-300">
+                                <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
                                   <PoundSterling className="h-3 w-3" />
                                   {formatMoney(t.price_pence)}
                                 </span>
@@ -226,7 +226,7 @@ export default async function OperativeWeekPage() {
                             </div>
                           </div>
                           {t.status === 'completed' ? (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                           ) : null}
                         </Link>
                       </li>
@@ -252,12 +252,12 @@ function Kpi({
   value: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 text-center">
+    <div className="rounded-xl border border-line bg-paper p-3 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex justify-center">{icon}</div>
-      <p className="mt-1.5 font-display text-base font-bold text-white tabular-nums">
+      <p className="mt-1.5 font-display text-base font-bold text-graphite-1 tabular-nums">
         {value}
       </p>
-      <p className="mt-0.5 text-[9px] uppercase tracking-wider text-slate-500">
+      <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-graphite-3">
         {label}
       </p>
     </div>
