@@ -4,6 +4,17 @@ import { ArrowRight, CheckCircle2, Sparkles, Star, TrendingUp, Users2 } from 'lu
 
 export async function Hero() {
   const t = await getTranslations('hero');
+  const tp = await getTranslations('heroPreview');
+  const preview = {
+    today: tp('today'),
+    yourCleanings: tp('yourCleanings'),
+    liveToday: tp('liveToday'),
+    tasks: tp('tasks'),
+    quality: tp('quality'),
+    checkIn: tp('checkIn'),
+    onSite: tp('onSite'),
+    pending: tp('pending'),
+  };
 
   return (
     <section className="relative isolate overflow-hidden bg-white">
@@ -104,7 +115,7 @@ export async function Hero() {
 
         {/* ====== Right: phone + floating cards ====== */}
         <div className="relative mt-20 lg:mt-0">
-          <PhoneMockup />
+          <PhoneMockup preview={preview} />
         </div>
       </div>
     </section>
@@ -143,12 +154,23 @@ function BackgroundLayers() {
   );
 }
 
-function PhoneMockup() {
+type PreviewStrings = {
+  today: string;
+  yourCleanings: string;
+  liveToday: string;
+  tasks: string;
+  quality: string;
+  checkIn: string;
+  onSite: string;
+  pending: string;
+};
+
+function PhoneMockup({ preview }: { preview: PreviewStrings }) {
   const checkins = [
-    { n: 'María R.', s: 'On site · 08:02', ok: true },
-    { n: 'Carlos M.', s: 'On site · 08:05', ok: true },
-    { n: 'Lucía V.', s: 'On site · 08:11', ok: true },
-    { n: 'Pedro K.', s: 'Pending', ok: false },
+    { n: 'María R.', s: `${preview.onSite} · 08:02`, ok: true },
+    { n: 'Carlos M.', s: `${preview.onSite} · 08:05`, ok: true },
+    { n: 'Lucía V.', s: `${preview.onSite} · 08:11`, ok: true },
+    { n: 'Pedro K.', s: preview.pending, ok: false },
   ];
 
   return (
@@ -206,10 +228,10 @@ function PhoneMockup() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-                  Hoy
+                  {preview.today}
                 </p>
                 <p className="mt-0.5 font-display text-lg font-semibold tracking-tight text-slate-950">
-                  Tus limpiezas
+                  {preview.yourCleanings}
                 </p>
               </div>
               <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-cyan-100 to-cyan-50 text-xs font-bold text-cyan-700 ring-1 ring-cyan-200/60">
@@ -219,7 +241,7 @@ function PhoneMockup() {
 
             <div className="mt-4 rounded-2xl bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 px-4 py-3.5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
               <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.18em]">
-                <span className="text-slate-400">Operativa hoy</span>
+                <span className="text-slate-400">{preview.liveToday}</span>
                 <span className="flex items-center gap-1 text-cyan-300">
                   <Sparkles className="h-2.5 w-2.5" />
                   LIVE
@@ -229,7 +251,7 @@ function PhoneMockup() {
                 <div>
                   <p className="text-2xl font-semibold tracking-tight">12 / 14</p>
                   <p className="text-[9px] uppercase tracking-[0.16em] text-slate-400">
-                    Tareas
+                    {preview.tasks}
                   </p>
                 </div>
                 <div className="h-8 w-px bg-white/10" />
@@ -238,14 +260,14 @@ function PhoneMockup() {
                     4.9
                   </p>
                   <p className="text-[9px] uppercase tracking-[0.16em] text-slate-400">
-                    Calidad
+                    {preview.quality}
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-              Check-in
+              {preview.checkIn}
             </p>
             <ul className="mt-2 divide-y divide-slate-100">
               {checkins.map((p) => (

@@ -1,4 +1,25 @@
 {
+  "metadata": {
+    "title": "Portal Home — Platform for home cleaning and Airbnb businesses",
+    "description": "Run your team, your clients and your Airbnb properties in real time. A photo for every cleaning, GPS check-in, ratings and a client portal. Replace WhatsApp and Excel.",
+    "keywords": "home cleaning software, Airbnb cleaning management, cleaning business platform, cleaner app, Airbnb turnovers, Portal Home",
+    "ogTitle": "Portal Home — The platform for your cleaning business",
+    "ogDescription": "Run your team, your clients and your Airbnb properties from one place. A photo for every cleaning, GPS check-in, ratings and a client portal.",
+    "ogImageAlt": "Portal Home — Platform for home cleaning and Airbnb"
+  },
+  "social": {
+    "trust": "The platform chosen by home-cleaning and Airbnb teams across the UK, Spain and Portugal."
+  },
+  "heroPreview": {
+    "today": "Today",
+    "yourCleanings": "Your cleanings",
+    "liveToday": "Live today",
+    "tasks": "Tasks",
+    "quality": "Quality",
+    "checkIn": "Check-in",
+    "onSite": "On site",
+    "pending": "Pending"
+  },
   "nav": {
     "product": "Platform",
     "solutions": "Portals",

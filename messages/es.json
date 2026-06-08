@@ -1,4 +1,25 @@
 {
+  "metadata": {
+    "title": "Portal Home — Plataforma para empresas de limpieza de hogar y Airbnb",
+    "description": "Gestiona tu equipo, tus clientes y tus propiedades de Airbnb en tiempo real. Foto de cada limpieza, check-in con GPS, valoraciones y portal del cliente. Reemplaza WhatsApp y Excel.",
+    "keywords": "software gestión limpieza hogar, gestión limpieza Airbnb, plataforma empresa de limpieza, app limpiadoras, rotaciones Airbnb, Portal Home",
+    "ogTitle": "Portal Home — La plataforma para tu empresa de limpieza",
+    "ogDescription": "Gestiona tu equipo, tus clientes y tus propiedades de Airbnb desde un solo lugar. Foto de cada limpieza, check-in con GPS, valoraciones y portal del cliente.",
+    "ogImageAlt": "Portal Home — Plataforma para limpieza de hogar y Airbnb"
+  },
+  "social": {
+    "trust": "La plataforma elegida por equipos de limpieza de hogar y Airbnb en Reino Unido, España y Portugal."
+  },
+  "heroPreview": {
+    "today": "Hoy",
+    "yourCleanings": "Tus limpiezas",
+    "liveToday": "En operación hoy",
+    "tasks": "Tareas",
+    "quality": "Calidad",
+    "checkIn": "Check-in",
+    "onSite": "En sitio",
+    "pending": "Pendiente"
+  },
   "nav": {
     "product": "Plataforma",
     "solutions": "Portales",
