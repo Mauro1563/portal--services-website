@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Globe, MapPin, Users } from 'lucide-react';
 import { Logo } from '@/components/Logo';
+import { ScrollLock } from '@/components/ScrollLock';
 
 export function PortalLoginCard({
   badges,
@@ -21,8 +22,10 @@ export function PortalLoginCard({
   footer?: ReactNode;
 }) {
   return (
-    <main
-      className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60 px-4"
+    <>
+      <ScrollLock />
+      <main
+        className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60 px-4"
       style={{
         // Lock the screen completely — no scroll, no rubber-band, no drift.
         // `position: fixed` + `inset: 0` pins the layout to the viewport edges
@@ -123,7 +126,8 @@ export function PortalLoginCard({
       >
         ← Back to home
       </Link>
-    </main>
+      </main>
+    </>
   );
 }
 
