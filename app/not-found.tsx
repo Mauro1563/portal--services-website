@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Página no encontrada · Portal Services Digital',
+  title: 'Página no encontrada · Portal Home',
   robots: { index: false, follow: false },
 };
 
@@ -103,7 +103,7 @@ export default function NotFound() {
                 Volver al inicio
               </Link>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                © {new Date().getFullYear()} Portal Services UK
+                © {new Date().getFullYear()} Portal Home
               </p>
             </div>
           </div>
