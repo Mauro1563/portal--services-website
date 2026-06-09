@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { ArrowRight, CheckCircle2, Sparkles, Star, TrendingUp, Users2 } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export async function Hero() {
   const t = await getTranslations('hero');
@@ -17,140 +17,80 @@ export async function Hero() {
   };
 
   return (
-    <section className="relative isolate overflow-hidden bg-white">
-      {/* ====== Decorative background ====== */}
-      <BackgroundLayers />
+    <section className="relative isolate overflow-hidden bg-ink-0 text-white">
+      {/* The signature curved-white shape sweeping in from the right.
+          Hidden on mobile where the layout stacks. Sits behind everything
+          so text + product preview still render on top. */}
+      <svg
+        aria-hidden
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
+      >
+        <path
+          d="M 1440 0 L 1440 900 L 700 900 Q 870 700 850 480 Q 830 250 1100 100 Q 1280 -30 1440 0 Z"
+          fill="#FFFFFF"
+        />
+      </svg>
 
-      <div className="relative mx-auto max-w-7xl px-5 pb-24 pt-14 sm:pt-20 lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:pb-36 lg:pt-28">
+      {/* Cyan accent glow behind the product preview for depth on the curve. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[-8%] top-[18%] -z-0 hidden h-[42rem] w-[42rem] rounded-full bg-gradient-to-br from-cyan-400/30 via-blue-500/15 to-transparent blur-3xl lg:block"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-5 pb-20 pt-14 sm:pt-20 lg:grid lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-12 lg:pb-28 lg:pt-28">
         {/* ====== Left: copy ====== */}
         <div className="max-w-2xl">
-          <span className="group inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-700 shadow-sm backdrop-blur transition hover:border-slate-300">
+          <div className="inline-flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white/70">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_0_4px_rgba(34,211,238,0.2)]" />
             </span>
             {t('audience_chip')}
-          </span>
+          </div>
 
-          <h1 className="mt-7 font-display text-[2.75rem] font-semibold leading-[1.02] tracking-[-0.03em] text-slate-950 sm:text-6xl lg:text-[4.25rem]">
+          <h1 className="mt-7 font-display text-[2.75rem] font-semibold leading-[1.02] tracking-[-0.03em] text-white sm:text-6xl lg:text-[4.5rem]">
             {t('title_a')}{' '}
-            <span className="relative inline-block">
-              <span className="relative bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 bg-clip-text text-transparent">
-                {t('title_b')}
-              </span>
-              <svg
-                aria-hidden
-                className="absolute -bottom-2 left-0 h-3 w-full text-blue-200/70"
-                viewBox="0 0 200 12"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M2 9 Q 50 2, 100 6 T 198 7"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                />
-              </svg>
+            <span className="bg-gradient-to-br from-cyan-300 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+              {t('title_b')}
             </span>
           </h1>
 
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-slate-600 sm:text-xl">
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-slate-300 sm:text-xl">
             {t('subtitle')}
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/signup"
-              className="group relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 px-7 text-[15px] font-semibold text-white shadow-[0_24px_48px_-16px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-300 hover:shadow-[0_30px_60px_-16px_rgba(37,99,235,0.65),inset_0_1px_0_rgba(255,255,255,0.3)] hover:brightness-[1.08] active:translate-y-px"
+              className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-7 text-[15px] font-bold text-ink-0 shadow-[0_18px_36px_-12px_rgba(255,255,255,0.25)] transition hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
               {t('cta_primary')}
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-ink-0 text-white transition group-hover:translate-x-0.5">
+                <ArrowRight className="h-4 w-4" />
+              </span>
             </Link>
             <a
               href="#portals"
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-slate-300/80 bg-white/80 px-7 text-[15px] font-semibold text-slate-800 shadow-sm backdrop-blur transition hover:-translate-y-px hover:border-slate-400 hover:bg-white hover:shadow"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-7 text-[15px] font-semibold text-white backdrop-blur transition hover:border-white/30 hover:bg-white/[0.08]"
             >
               {t('cta_secondary')}
             </a>
           </div>
 
-          {/* Trust signal row */}
-          <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {[
-                  { bg: 'bg-gradient-to-br from-cyan-400 to-blue-500', label: 'MR' },
-                  { bg: 'bg-gradient-to-br from-violet-400 to-purple-600', label: 'CM' },
-                  { bg: 'bg-gradient-to-br from-amber-400 to-orange-500', label: 'LV' },
-                  { bg: 'bg-gradient-to-br from-emerald-400 to-teal-600', label: 'PK' },
-                ].map((a) => (
-                  <span
-                    key={a.label}
-                    className={`grid h-9 w-9 place-items-center rounded-full text-[10px] font-bold text-white ring-2 ring-white ${a.bg}`}
-                  >
-                    {a.label}
-                  </span>
-                ))}
-              </div>
-              <div className="text-xs">
-                <div className="flex items-center gap-0.5 text-amber-400">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                  ))}
-                </div>
-                <p className="mt-0.5 font-medium text-slate-600">{t('trust')}</p>
-              </div>
-            </div>
-
-            <div className="hidden h-10 w-px bg-slate-200 sm:block" />
-
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-              <span className="font-medium">No credit card · Cancel anytime</span>
-            </div>
-          </div>
+          <p className="mt-10 hidden text-xs font-bold uppercase tracking-[0.18em] text-white/40 lg:block">
+            <span className="mr-2 inline-block h-1.5 w-1.5 translate-y-[-2px] rounded-full bg-cyan-400" />
+            {t('trust')}
+          </p>
         </div>
 
-        {/* ====== Right: phone + floating cards ====== */}
-        <div className="relative mt-20 lg:mt-0">
-          <PhoneMockup preview={preview} />
+        {/* ====== Right: product preview ====== */}
+        <div className="relative mt-16 lg:mt-0">
+          <ProductPreview preview={preview} />
         </div>
       </div>
     </section>
-  );
-}
-
-function BackgroundLayers() {
-  return (
-    <>
-      {/* Soft gradient canvas */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-50/60 via-white to-white" />
-      {/* Mesh gradients (top-left + top-right) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(at 18% 12%, rgba(34,211,238,0.18) 0px, transparent 45%), radial-gradient(at 82% 24%, rgba(59,130,246,0.20) 0px, transparent 50%), radial-gradient(at 50% 60%, rgba(139,92,246,0.08) 0px, transparent 60%)',
-        }}
-      />
-      {/* Subtle grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(15,23,42,1) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,1) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse at top, black 50%, transparent 80%)',
-        }}
-      />
-      {/* Floating orbs */}
-      <div className="pointer-events-none absolute -left-24 top-40 h-72 w-72 rounded-full bg-gradient-to-br from-cyan-200/50 to-transparent blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 top-20 h-96 w-96 rounded-full bg-gradient-to-bl from-blue-300/40 to-transparent blur-3xl" />
-    </>
   );
 }
 
@@ -165,7 +105,7 @@ type PreviewStrings = {
   pending: string;
 };
 
-function PhoneMockup({ preview }: { preview: PreviewStrings }) {
+function ProductPreview({ preview }: { preview: PreviewStrings }) {
   const checkins = [
     { n: 'María R.', s: `${preview.onSite} · 08:02`, ok: true },
     { n: 'Carlos M.', s: `${preview.onSite} · 08:05`, ok: true },
@@ -174,46 +114,9 @@ function PhoneMockup({ preview }: { preview: PreviewStrings }) {
   ];
 
   return (
-    <div className="relative mx-auto w-full max-w-[340px]">
-      {/* Big diffuse glow behind */}
-      <div
-        aria-hidden
-        className="absolute -inset-12 -z-10 rounded-[60px] bg-gradient-to-br from-cyan-300/40 via-blue-400/30 to-violet-300/20 blur-3xl"
-      />
-
-      {/* Floating stat card — top-left */}
-      <div className="absolute -left-14 -top-8 z-20 hidden rotate-[-6deg] sm:block">
-        <div className="flex items-center gap-2.5 rounded-2xl bg-white px-3.5 py-2.5 shadow-[0_20px_40px_-12px_rgba(15,23,42,0.18),0_4px_10px_-4px_rgba(15,23,42,0.08)] ring-1 ring-slate-200/60">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-600">
-            <TrendingUp className="h-4 w-4" />
-          </div>
-          <div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-slate-400">
-              On-time rate
-            </p>
-            <p className="text-sm font-semibold text-slate-900">98.7%</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Floating stat card — bottom-right */}
-      <div className="absolute -bottom-6 -right-12 z-20 hidden rotate-[5deg] sm:block">
-        <div className="flex items-center gap-2.5 rounded-2xl bg-white px-3.5 py-2.5 shadow-[0_20px_40px_-12px_rgba(15,23,42,0.18),0_4px_10px_-4px_rgba(15,23,42,0.08)] ring-1 ring-slate-200/60">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-100 to-blue-50 text-blue-600">
-            <Users2 className="h-4 w-4" />
-          </div>
-          <div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-slate-400">
-              Active crews
-            </p>
-            <p className="text-sm font-semibold text-slate-900">14 · live</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Phone itself */}
-      <div className="relative overflow-hidden rounded-[44px] border border-slate-200 bg-slate-950 p-1.5 shadow-[0_50px_100px_-20px_rgba(15,23,42,0.40),0_20px_40px_-12px_rgba(15,23,42,0.20)]">
-        {/* Camera notch */}
+    <div className="relative mx-auto w-full max-w-[340px] lg:max-w-[380px]">
+      {/* Phone */}
+      <div className="relative overflow-hidden rounded-[44px] border border-slate-200/30 bg-slate-950 p-1.5 shadow-[0_60px_120px_-20px_rgba(0,0,0,0.6),0_20px_40px_-12px_rgba(15,23,42,0.4)]">
         <div className="absolute left-1/2 top-2 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-slate-950" />
         <div className="relative overflow-hidden rounded-[38px] bg-white">
           <div className="flex items-center justify-between px-6 pt-3 text-[10px] font-semibold text-slate-700">
