@@ -13,7 +13,7 @@ import { ScrollLock } from '@/components/ScrollLock';
 import { getLocale, getT } from '@/lib/i18n';
 
 export const metadata = {
-  title: 'Bienvenido · Portal Services Digital',
+  title: 'Bienvenido · Portal Home',
   robots: { index: false, follow: false },
 };
 

@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ?? 'Portal Services Digital <onboarding@resend.dev>';
+  process.env.RESEND_FROM_EMAIL ?? 'Portal Home <onboarding@resend.dev>';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hq.portalservices.digital';
 
 async function sendEmail(opts: { to: string; subject: string; html: string }) {
@@ -90,7 +90,7 @@ export async function notifyOwnerOfCompletion(taskId: string) {
              style="display:inline-block;margin-top:22px;background:linear-gradient(135deg,#22d3ee,#2563eb);color:#fff;text-decoration:none;font-weight:500;font-size:14px;padding:10px 18px;border-radius:10px;">
             View task
           </a>
-          <p style="margin:28px 0 0;color:#475569;font-size:11px;">Portal Services Digital · You're receiving this because you own this property in your dashboard.</p>
+          <p style="margin:28px 0 0;color:#475569;font-size:11px;">Portal Home · You're receiving this because you own this property in your dashboard.</p>
         </div>
       </div>
     `;

@@ -23,12 +23,12 @@ const area = 'mt-1 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-inse
 
 function buildBody(c: Omit<Contract, 'id' | 'body' | 'createdAt'>): string {
   return `CONTRATO DE PRESTACIÓN DE SERVICIOS
-PORTAL SERVICES DIGITAL
+PORTAL HOME
 
-Entre Portal Services Digital ("el Proveedor") y ${c.client || '[Cliente]'} ("el Cliente"), con fecha de inicio ${c.startDate || '[fecha]'}, se acuerda lo siguiente:
+Entre Portal Home ("el Proveedor") y ${c.client || '[Cliente]'} ("el Cliente"), con fecha de inicio ${c.startDate || '[fecha]'}, se acuerda lo siguiente:
 
 1. OBJETO
-El Proveedor concede al Cliente acceso a la plataforma Portal Services Digital bajo el plan ${c.plan || '[plan]'}, incluyendo los portales y funciones correspondientes a dicho plan.
+El Proveedor concede al Cliente acceso a la plataforma Portal Home bajo el plan ${c.plan || '[plan]'}, incluyendo los portales y funciones correspondientes a dicho plan.
 
 2. PRECIO Y FACTURACIÓN
 El Cliente abonará ${c.value || '[importe]'} con periodicidad mensual. La facturación se emitirá de forma digital tras cada periodo.
@@ -49,7 +49,7 @@ Y en prueba de conformidad, ambas partes firman el presente contrato.
 
 
 _____________________________            _____________________________
-Portal Services Digital                  ${c.client || '[Cliente]'}
+Portal Home                  ${c.client || '[Cliente]'}
 `;
 }
 

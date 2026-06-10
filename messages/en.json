@@ -1063,7 +1063,7 @@
     }
   },
   "common": {
-    "appName": "Portal Services Digital",
+    "appName": "Portal Home",
     "save": "Save",
     "saveChanges": "Save changes",
     "cancel": "Cancel",
@@ -1117,7 +1117,7 @@
     "iAmCleaner": "I'm a cleaner",
     "newHere": "New here?",
     "learnMore": "Learn about the platform",
-    "goodbye": "Account deleted. Thanks for using Portal Services Digital."
+    "goodbye": "Account deleted. Thanks for using Portal Home."
   },
   "welcome": {
     "title": "Welcome",

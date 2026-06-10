@@ -14,7 +14,7 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 
 export const metadata = {
-  title: 'Quick start guide — Portal Services Digital',
+  title: 'Quick start guide — Portal Home',
   description:
     'Set up your first property, invite a cleaner and schedule a cleaning in under 15 minutes.',
 };

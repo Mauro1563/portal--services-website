@@ -1073,7 +1073,7 @@
     }
   },
   "common": {
-    "appName": "Portal Services Digital",
+    "appName": "Portal Home",
     "save": "Guardar",
     "saveChanges": "Guardar alterações",
     "cancel": "Cancelar",
@@ -1127,7 +1127,7 @@
     "iAmCleaner": "Sou limpadora",
     "newHere": "És novo?",
     "learnMore": "Conhecer a plataforma",
-    "goodbye": "Conta eliminada. Obrigado por usares Portal Services Digital."
+    "goodbye": "Conta eliminada. Obrigado por usares Portal Home."
   },
   "welcome": {
     "title": "Bem-vindo",
@@ -1157,7 +1157,7 @@
     "createAccountBtn": "Criar conta",
     "forgotPassword": "Esqueceste a senha?",
     "back": "Voltar",
-    "badge": "Portal Home Cleaner",
+    "badge": "Portal Home",
     "pageTitle": "Inicia sessão na tua conta",
     "pageSubtitle": "Introduz as tuas credenciais para continuar",
     "emailPh": "nome@email.com",

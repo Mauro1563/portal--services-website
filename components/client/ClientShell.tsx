@@ -7,7 +7,7 @@ type Tab = 'home' | 'messages' | 'reviews' | 'refer';
 
 /**
  * Mobile-first shell for the client portal. Uses the owner's white-label
- * logo if available; otherwise falls back to the Portal Services Digital
+ * logo if available; otherwise falls back to the Portal Home
  * brand. Light theme. Fixed bottom tab bar for the four primary views.
  */
 export function ClientShell({
@@ -71,7 +71,7 @@ export function ClientShell({
       <div className="mx-auto max-w-md px-4 pt-5">{children}</div>
 
       <footer className="mx-auto mt-8 max-w-md px-4 pb-4 text-center text-[10px] text-text-3">
-        Con tecnología de Portal Services Digital
+        Con tecnología de Portal Home
       </footer>
 
       {showTabs && token && activeTab ? (

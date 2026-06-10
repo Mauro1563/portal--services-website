@@ -21,7 +21,7 @@ export async function StructuredData({ locale }: { locale: string }) {
   const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Portal Services Digital',
+    name: 'Portal Home',
     url: SITE_URL,
     logo: `${SITE_URL}/icon`,
     sameAs: [] as string[],
@@ -36,7 +36,7 @@ export async function StructuredData({ locale }: { locale: string }) {
   const softwareApplication = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Portal Services Digital',
+    name: 'Portal Home',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     description:

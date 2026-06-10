@@ -45,7 +45,7 @@ export function Footer() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/portal-home-logo-v2.png"
-                  alt="Portal Services Digital"
+                  alt="Portal Home"
                   className="block w-auto"
                   style={{ height: '46px' }}
                 />

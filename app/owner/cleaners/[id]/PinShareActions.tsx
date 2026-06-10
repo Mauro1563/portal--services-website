@@ -19,7 +19,7 @@ export function PinShareActions({ cleanerName, pin, phone, loginUrl }: Props) {
   const [copied, setCopied] = useState(false);
 
   const message =
-    `Hi ${cleanerName}, your Portal Services Digital login PIN is:\n\n` +
+    `Hi ${cleanerName}, your Portal Home login PIN is:\n\n` +
     `${pin}\n\n` +
     `Tap to sign in (PIN pre-filled): ${loginUrl}\n\n` +
     `Add to home screen for an app-like experience.`;
