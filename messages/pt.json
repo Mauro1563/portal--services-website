@@ -1129,6 +1129,19 @@
     "learnMore": "Conhecer a plataforma",
     "goodbye": "Conta eliminada. Obrigado por usares Portal Services Digital."
   },
+  "welcome": {
+    "title": "Bem-vindo",
+    "subtitle": "Escolhe como queres entrar no teu portal.",
+    "bullet1": "PIN de 6 dígitos",
+    "bullet2": "Sem App Store",
+    "bullet3": "Entras em 5 segundos",
+    "ownerTitle": "Iniciar sessão",
+    "ownerSubtitle": "Dono ou gestor · email + palavra-passe",
+    "cleanerTitle": "Sou limpador/a",
+    "cleanerSubtitle": "PIN de 6 dígitos · acesso rápido",
+    "newQuestion": "És novo?",
+    "learnMore": "Conhecer a plataforma"
+  },
   "login": {
     "ownerSignIn": "Acesso do proprietário",
     "operativeSignIn": "Acesso operacional",

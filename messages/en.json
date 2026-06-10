@@ -1119,6 +1119,19 @@
     "learnMore": "Learn about the platform",
     "goodbye": "Account deleted. Thanks for using Portal Services Digital."
   },
+  "welcome": {
+    "title": "Welcome",
+    "subtitle": "Choose how you want to sign in.",
+    "bullet1": "6-digit PIN",
+    "bullet2": "No App Store",
+    "bullet3": "In in 5 seconds",
+    "ownerTitle": "Sign in",
+    "ownerSubtitle": "Owner or manager · email + password",
+    "cleanerTitle": "I'm a cleaner",
+    "cleanerSubtitle": "6-digit PIN · quick access",
+    "newQuestion": "New here?",
+    "learnMore": "See the platform"
+  },
   "login": {
     "ownerSignIn": "Owner sign in",
     "operativeSignIn": "Operative sign in",
