@@ -33,7 +33,9 @@ export async function GET(req: Request) {
   if (kind === 'properties') {
     const { data } = await supabase
       .from('properties')
-      .select('id, name, address, airbnb_ical_url, notes, created_at')
+      .select(
+        'id, name, address, platform, guests, floor_area_sqm, airbnb_ical_url, notes, created_at',
+      )
       .eq('owner_id', user.id)
       .order('created_at', { ascending: false });
     rows = data ?? [];
@@ -45,10 +47,14 @@ export async function GET(req: Request) {
       .order('created_at', { ascending: false });
     rows = data ?? [];
   } else if (kind === 'tasks') {
+    // Column names: checkin_lat / checkin_lng (no underscore between check/in) —
+    // the older version used the wrong identifier and Supabase returned an
+    // error that the route swallowed with `data ?? []`, so the export was
+    // silently shipping CSVs without GPS columns.
     const { data } = await supabase
       .from('tasks')
       .select(
-        'id, scheduled_for, status, notes, photo_url, checked_in_at, checked_in_lat, checked_in_lng, completed_at, property_id, cleaner_id, created_at',
+        'id, scheduled_for, start_time, status, service_name, price_pence, payment_status, payment_method, paid_amount_pence, paid_at, estimated_duration_min, notes, photo_url, checked_in_at, checkin_lat, checkin_lng, completed_at, property_id, cleaner_id, client_id, created_at',
       )
       .eq('owner_id', user.id)
       .order('scheduled_for', { ascending: false });
