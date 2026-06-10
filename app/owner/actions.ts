@@ -12,12 +12,19 @@ export async function addProperty(formData: FormData) {
     redirect('/owner/properties/new?error=' + encodeURIComponent('Property name is required'));
   }
 
+  const guestsRaw = (formData.get('guests') as string)?.trim();
+  const sqmRaw = (formData.get('floor_area_sqm') as string)?.trim();
+  const platformRaw = (formData.get('platform') as string)?.trim();
+
   const { error } = await supabase.from('properties').insert({
     owner_id: user.id,
     name,
     address: (formData.get('address') as string)?.trim() || null,
     airbnb_ical_url: (formData.get('airbnb_ical_url') as string)?.trim() || null,
     notes: (formData.get('notes') as string)?.trim() || null,
+    platform: platformRaw || null,
+    guests: guestsRaw ? Number(guestsRaw) : null,
+    floor_area_sqm: sqmRaw ? Number(sqmRaw) : null,
   });
 
   if (error) {
