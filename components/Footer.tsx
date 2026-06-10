@@ -12,8 +12,9 @@ export function Footer() {
       title: t('platform'),
       links: [
         { label: tNav('solutions'), href: `/${locale}#portals` },
+        { label: tNav('product'), href: `/${locale}#how` },
         { label: tNav('pricing'), href: `/${locale}#pricing` },
-        { label: tNav('security'), href: `/${locale}#security` },
+        { label: 'FAQ', href: `/${locale}#faq` },
       ],
     },
     {

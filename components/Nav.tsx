@@ -8,9 +8,9 @@ export function Nav() {
   const locale = useLocale();
   const links = [
     { href: `/${locale}#portals`, label: t('solutions') },
-    { href: `/${locale}#vip`, label: t('product') },
+    { href: `/${locale}#how`, label: t('product') },
     { href: `/${locale}#pricing`, label: t('pricing') },
-    { href: `/${locale}#security`, label: t('security') },
+    { href: `/${locale}#faq`, label: 'FAQ' },
   ];
 
   return (
