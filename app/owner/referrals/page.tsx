@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { Gift, Trash2, Users } from 'lucide-react';
+import { Trash2, Users } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { RewardForm } from './RewardForm';
