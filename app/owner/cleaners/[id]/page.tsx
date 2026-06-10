@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { cleanerLoginUrl } from '@/lib/cleaner-link';
 import { deleteCleaner, regeneratePin } from './actions';
 import { PinShareActions } from './PinShareActions';
 
@@ -165,6 +166,7 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
               cleanerName={cleaner.name}
               pin={cleaner.pin}
               phone={cleaner.phone ?? null}
+              loginUrl={cleanerLoginUrl(cleaner.pin)}
             />
           </div>
         )}

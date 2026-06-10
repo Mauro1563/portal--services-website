@@ -7,15 +7,21 @@ type Props = {
   cleanerName: string;
   pin: string;
   phone: string | null;
+  /**
+   * Deep-link to the operative login screen with the PIN pre-filled.
+   * Computed server-side in the page (uses lib/cleaner-link.ts) so the
+   * 'server-only' boundary stays intact in this client component.
+   */
+  loginUrl: string;
 };
 
-export function PinShareActions({ cleanerName, pin, phone }: Props) {
+export function PinShareActions({ cleanerName, pin, phone, loginUrl }: Props) {
   const [copied, setCopied] = useState(false);
 
   const message =
     `Hi ${cleanerName}, your Portal Services Digital login PIN is:\n\n` +
     `${pin}\n\n` +
-    `Open https://hq.portalservices.digital/operative/login on your phone and type the PIN. ` +
+    `Tap to sign in (PIN pre-filled): ${loginUrl}\n\n` +
     `Add to home screen for an app-like experience.`;
 
   const waUrl = phone
