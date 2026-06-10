@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import {
+  BadgePoundSterling,
   Camera,
   CheckCircle2,
   Maximize2,
@@ -11,7 +12,12 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
-import { cancelTaskDetail, deleteTaskDetail, quickAssignCleaner } from './actions';
+import {
+  cancelTaskDetail,
+  deleteTaskDetail,
+  markTaskPaid,
+  quickAssignCleaner,
+} from './actions';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -32,6 +38,12 @@ type TaskRow = {
   checkin_lat: number | null;
   checkin_lng: number | null;
   photo_url: string | null;
+  service_name: string | null;
+  price_pence: number | null;
+  payment_status: string;
+  payment_method: string | null;
+  paid_amount_pence: number | null;
+  paid_at: string | null;
   property: { id: string; name: string; address: string | null } | null;
   cleaner: { id: string; name: string } | null;
 };
@@ -121,7 +133,7 @@ export default async function TaskDetail({ params, searchParams }: Props) {
       supabase
         .from('tasks')
         .select(
-          'id, scheduled_for, status, notes, checked_in_at, completed_at, checkin_lat, checkin_lng, photo_url, property:properties (id, name, address), cleaner:cleaners (id, name)',
+          'id, scheduled_for, status, notes, checked_in_at, completed_at, checkin_lat, checkin_lng, photo_url, service_name, price_pence, payment_status, payment_method, paid_amount_pence, paid_at, property:properties (id, name, address), cleaner:cleaners (id, name)',
         )
         .eq('id', id)
         .maybeSingle(),
@@ -311,6 +323,14 @@ export default async function TaskDetail({ params, searchParams }: Props) {
         </section>
       )}
 
+      {/* Pago */}
+      <section className="mt-5">
+        <h2 className="px-1 text-xs font-semibold uppercase tracking-wider text-text-3">
+          Pago
+        </h2>
+        <PaymentCard task={task} />
+      </section>
+
       {/* Limpiadora — quick assign */}
       <section className="mt-5">
         <h2 className="px-1 text-xs font-semibold uppercase tracking-wider text-text-3">
@@ -422,6 +442,112 @@ export default async function TaskDetail({ params, searchParams }: Props) {
         </div>
       </section>
     </LightLayout>
+  );
+}
+
+function money(pence: number | null) {
+  if (pence == null) return null;
+  return `£${(pence / 100).toFixed(2)}`;
+}
+
+const PAYMENT_PILL: Record<string, string> = {
+  paid: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  partial: 'bg-amber-50 text-amber-700 ring-amber-200',
+  waived: 'bg-slate-100 text-slate-600 ring-slate-200',
+  pending: 'bg-rose-50 text-rose-700 ring-rose-200',
+};
+
+const PAYMENT_LABEL: Record<string, string> = {
+  paid: 'Pagada',
+  partial: 'Pago parcial',
+  waived: 'Sin cobro',
+  pending: 'Pendiente',
+};
+
+const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  cash: '💵 Efectivo',
+  card: '💳 Tarjeta',
+  transfer: '🏦 Transferencia',
+  bacs: '📮 BACS',
+  apple_pay: '🍎 Apple Pay',
+  google_pay: '🔵 Google Pay',
+  other: '📋 Otro',
+};
+
+function PaymentCard({ task }: { task: TaskRow }) {
+  const price = money(task.price_pence);
+  const paid = money(task.paid_amount_pence);
+  const status = task.payment_status || 'pending';
+  const pill = PAYMENT_PILL[status] ?? PAYMENT_PILL.pending;
+  const label = PAYMENT_LABEL[status] ?? status;
+  const isClosed = status === 'paid' || status === 'waived';
+
+  return (
+    <div className="mt-2 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          {task.service_name ? (
+            <p className="truncate text-[11px] uppercase tracking-wider text-text-3">
+              {task.service_name}
+            </p>
+          ) : null}
+          <p className="mt-0.5 font-display text-xl font-semibold tabular-nums text-text-1">
+            {price ?? '—'}
+          </p>
+          {status === 'partial' && paid ? (
+            <p className="mt-1 text-[11px] text-text-2">
+              Pagado: <span className="font-semibold tabular-nums">{paid}</span>
+              {price ? ` de ${price}` : ''}
+            </p>
+          ) : null}
+          {task.payment_method && isClosed ? (
+            <p className="mt-1 text-[11px] text-text-2">
+              {PAYMENT_METHOD_LABEL[task.payment_method] ?? task.payment_method}
+              {task.paid_at
+                ? ` · ${new Date(task.paid_at).toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'short',
+                  })}`
+                : ''}
+            </p>
+          ) : null}
+        </div>
+        <span
+          className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${pill}`}
+        >
+          {label}
+        </span>
+      </div>
+
+      {!isClosed ? (
+        <form
+          action={markTaskPaid}
+          className="mt-3 flex flex-wrap items-center gap-2 border-t border-surface-2 pt-3"
+        >
+          <input type="hidden" name="task_id" value={task.id} />
+          <select
+            name="payment_method"
+            defaultValue={task.payment_method ?? ''}
+            className="h-9 min-w-0 flex-1 rounded-xl border border-surface-2 bg-surface-0 px-3 text-xs text-text-1 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+          >
+            <option value="">Método…</option>
+            <option value="cash">💵 Efectivo</option>
+            <option value="card">💳 Tarjeta</option>
+            <option value="transfer">🏦 Transferencia</option>
+            <option value="bacs">📮 BACS</option>
+            <option value="apple_pay">🍎 Apple Pay</option>
+            <option value="google_pay">🔵 Google Pay</option>
+            <option value="other">📋 Otro</option>
+          </select>
+          <button
+            type="submit"
+            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-emerald-500/10 px-3 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/30 hover:bg-emerald-500/15"
+          >
+            <BadgePoundSterling className="h-3.5 w-3.5" /> Marcar pagada
+          </button>
+        </form>
+      ) : null}
+    </div>
   );
 }
 

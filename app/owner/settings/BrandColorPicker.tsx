@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Check } from 'lucide-react';
-import { BRAND_COLOR_PRESETS, DEFAULT_BRAND_COLOR } from '@/lib/owner-profile';
+import { BRAND_COLOR_PRESETS, DEFAULT_BRAND_COLOR } from '@/lib/brand-colors';
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
