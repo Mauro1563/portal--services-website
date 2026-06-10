@@ -10,7 +10,7 @@ const LOCALES = [
   { code: 'pt', label: 'Português' },
 ] as const;
 
-type Variant = 'dark' | 'light';
+type Variant = 'dark' | 'light' | 'onLight';
 
 export function LocaleSwitcher({
   current = 'en',
@@ -22,18 +22,30 @@ export function LocaleSwitcher({
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
-  const isDark = variant === 'dark';
   const trigger =
     'inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-colors ' +
-    (isDark
+    (variant === 'onLight'
+      ? 'border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+      : variant === 'dark'
       ? 'bg-white/[0.06] text-slate-200 hover:bg-white/[0.10]'
       : 'bg-white/[0.06] text-white hover:bg-white/[0.12]');
 
   const panel =
     'absolute right-0 top-11 z-50 min-w-[150px] overflow-hidden rounded-xl border shadow-lg ' +
-    (isDark
+    (variant === 'onLight'
+      ? 'border-slate-200 bg-white'
+      : variant === 'dark'
       ? 'border-white/10 bg-ink-1'
       : 'border-white/10 bg-navy-900 text-white');
+
+  const itemClass =
+    'flex w-full items-center justify-between gap-2 px-3.5 py-2.5 text-left text-xs ' +
+    (variant === 'onLight'
+      ? 'text-slate-700 hover:bg-slate-50'
+      : 'text-slate-200 hover:bg-white/[0.06]');
+
+  const checkClass =
+    variant === 'onLight' ? 'h-3.5 w-3.5 text-blue-600' : 'h-3.5 w-3.5 text-cyan-300';
 
   return (
     <div className="relative">
@@ -73,10 +85,10 @@ export function LocaleSwitcher({
                       type="submit"
                       role="menuitem"
                       disabled={pending}
-                      className="flex w-full items-center justify-between gap-2 px-3.5 py-2.5 text-left text-xs text-slate-200 hover:bg-white/[0.06]"
+                      className={itemClass}
                     >
                       <span>{l.label}</span>
-                      {active ? <Check className="h-3.5 w-3.5 text-cyan-300" /> : null}
+                      {active ? <Check className={checkClass} /> : null}
                     </button>
                   </form>
                 </li>

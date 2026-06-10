@@ -12,8 +12,9 @@ export function Footer() {
       title: t('platform'),
       links: [
         { label: tNav('solutions'), href: `/${locale}#portals` },
+        { label: tNav('product'), href: `/${locale}#how` },
         { label: tNav('pricing'), href: `/${locale}#pricing` },
-        { label: tNav('security'), href: `/${locale}#security` },
+        { label: 'FAQ', href: `/${locale}#faq` },
       ],
     },
     {
@@ -44,7 +45,7 @@ export function Footer() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/portal-home-logo-v2.png"
-                  alt="Portal Services Digital"
+                  alt="Portal Home"
                   className="block w-auto"
                   style={{ height: '46px' }}
                 />

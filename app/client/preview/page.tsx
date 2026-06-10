@@ -44,6 +44,7 @@ const MOCK_CTX = {
     business_name: 'Limpiezas Premium',
     business_logo_url: null,
     business_type: 'hybrid' as const,
+    brand_color: null,
     email: null,
   },
 };

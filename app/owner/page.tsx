@@ -123,10 +123,11 @@ export default async function OwnerHome() {
   const profile = await getOwnerProfile(user.id);
   const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
   const fullName =
-    metadataName ||
-    displayNameFrom(profile, user.email ?? null) ||
-    'Owner';
-  const firstName = fullName.split(/\s+/)[0];
+    metadataName || displayNameFrom(profile, user.email ?? null);
+  // Greet by first name when we know it; otherwise just "Bienvenido" — never
+  // fall back to the email local-part, which is impersonal and exposes
+  // credentials in a screenshot.
+  const firstName = fullName ? fullName.split(/\s+/)[0] : tx('welcomeFallback');
 
   const hour = new Date().getHours();
   const greeting =
@@ -143,6 +144,7 @@ export default async function OwnerHome() {
   return (
     <PortalShell
       badge={{ label: tx('portalLabel'), icon: Briefcase }}
+      settingsHref="/owner/settings"
       rightSlot={
         <form action={signout}>
           <button
@@ -163,6 +165,7 @@ export default async function OwnerHome() {
         }}
         greeting={greeting}
         displayName={firstName}
+        brandColor={profile?.brand_color}
         chips={[
           {
             kind: 'text',

@@ -13,7 +13,7 @@ import { ScrollLock } from '@/components/ScrollLock';
 import { getLocale, getT } from '@/lib/i18n';
 
 export const metadata = {
-  title: 'Bienvenido · Portal Services Digital',
+  title: 'Bienvenido · Portal Home',
   robots: { index: false, follow: false },
 };
 
@@ -22,24 +22,9 @@ export default async function WelcomePage() {
   const t = await getT();
 
   const valueProps = [
-    {
-      icon: KeyRound,
-      label: t('welcome.bullet1') !== 'welcome.bullet1'
-        ? t('welcome.bullet1')
-        : 'PIN de 6 dígitos',
-    },
-    {
-      icon: Sparkles,
-      label: t('welcome.bullet2') !== 'welcome.bullet2'
-        ? t('welcome.bullet2')
-        : 'Sin App Store',
-    },
-    {
-      icon: Zap,
-      label: t('welcome.bullet3') !== 'welcome.bullet3'
-        ? t('welcome.bullet3')
-        : 'Entrás en 5 segundos',
-    },
+    { icon: KeyRound, label: t('welcome.bullet1') },
+    { icon: Sparkles, label: t('welcome.bullet2') },
+    { icon: Zap, label: t('welcome.bullet3') },
   ];
 
   return (
@@ -94,12 +79,10 @@ export default async function WelcomePage() {
           <div className="flex flex-col items-center text-center">
             <Logo size="md" className="!h-20 sm:!h-24" />
             <h1 className="mt-5 text-[1.625rem] font-bold tracking-[-0.02em] text-[#0b1d3a]">
-              Bienvenido
+              {t('welcome.title')}
             </h1>
             <p className="mt-1.5 text-[13px] text-slate-700">
-              {t('welcome.subtitle') !== 'welcome.subtitle'
-                ? t('welcome.subtitle')
-                : 'Elige cómo quieres ingresar a tu portal.'}
+              {t('welcome.subtitle')}
             </p>
           </div>
 
@@ -124,46 +107,26 @@ export default async function WelcomePage() {
             <RoleCard
               href="/login"
               icon={Home}
-              title={
-                t('welcome.ownerTitle') !== 'welcome.ownerTitle'
-                  ? t('welcome.ownerTitle')
-                  : 'Iniciar sesión'
-              }
-              subtitle={
-                t('welcome.ownerSubtitle') !== 'welcome.ownerSubtitle'
-                  ? t('welcome.ownerSubtitle')
-                  : 'Dueño o manager · email + contraseña'
-              }
+              title={t('welcome.ownerTitle')}
+              subtitle={t('welcome.ownerSubtitle')}
               primary
             />
             <RoleCard
               href="/operative/login"
               icon={Sparkles}
-              title={
-                t('welcome.cleanerTitle') !== 'welcome.cleanerTitle'
-                  ? t('welcome.cleanerTitle')
-                  : 'Soy limpiadora'
-              }
-              subtitle={
-                t('welcome.cleanerSubtitle') !== 'welcome.cleanerSubtitle'
-                  ? t('welcome.cleanerSubtitle')
-                  : 'PIN de 6 dígitos · acceso rápido'
-              }
+              title={t('welcome.cleanerTitle')}
+              subtitle={t('welcome.cleanerSubtitle')}
             />
           </div>
 
           {/* Footer link */}
           <p className="mt-6 text-center text-[11px] text-slate-700">
-            {t('welcome.newQuestion') !== 'welcome.newQuestion'
-              ? t('welcome.newQuestion')
-              : '¿Eres nuevo?'}{' '}
+            {t('welcome.newQuestion')}{' '}
             <Link
               href="/"
               className="font-bold text-[#2563eb] underline-offset-2 hover:underline"
             >
-              {t('welcome.learnMore') !== 'welcome.learnMore'
-                ? t('welcome.learnMore')
-                : 'Conocer la plataforma'}
+              {t('welcome.learnMore')}
             </Link>
           </p>
         </div>

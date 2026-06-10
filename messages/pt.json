@@ -1,4 +1,25 @@
 {
+  "metadata": {
+    "title": "Portal Home — Plataforma para empresas de limpeza de casa e Airbnb",
+    "description": "Faça a gestão da sua equipa, dos seus clientes e das suas propriedades de Airbnb em tempo real. Foto de cada limpeza, check-in com GPS, avaliações e portal do cliente. Substitua o WhatsApp e o Excel.",
+    "keywords": "software de gestão de limpeza, gestão de limpeza Airbnb, plataforma para empresas de limpeza, app para profissionais de limpeza, rotações Airbnb, Portal Home",
+    "ogTitle": "Portal Home — A plataforma para a sua empresa de limpeza",
+    "ogDescription": "Faça a gestão da sua equipa, dos seus clientes e das suas propriedades de Airbnb num único sítio. Foto de cada limpeza, check-in com GPS, avaliações e portal do cliente.",
+    "ogImageAlt": "Portal Home — Plataforma para limpeza de casa e Airbnb"
+  },
+  "social": {
+    "trust": "A plataforma escolhida por equipas de limpeza de casa e Airbnb no Reino Unido, Espanha e Portugal."
+  },
+  "heroPreview": {
+    "today": "Hoje",
+    "yourCleanings": "As suas limpezas",
+    "liveToday": "Em operação hoje",
+    "tasks": "Tarefas",
+    "quality": "Qualidade",
+    "checkIn": "Check-in",
+    "onSite": "No local",
+    "pending": "Pendente"
+  },
   "nav": {
     "product": "Plataforma",
     "solutions": "Portais",
@@ -47,8 +68,8 @@
   },
   "portals": {
     "eyebrow": "Dois portais · uma plataforma",
-    "title": "Nossos portais.",
-    "subtitle": "Dois portais especializados — um para equipas de limpeza residencial, outro para operações Airbnb / alojamento local. Tudo numa só plataforma.",
+    "title": "Os nossos portais.",
+    "subtitle": "Dois portais especializados — um para equipas de limpeza de casa e outro para operações de Airbnb. Tudo o que precisa numa só plataforma.",
     "supervisor_title": "Portal Supervisor",
     "supervisor_tag": "Comando da equipe no campo",
     "supervisor_who": "Supervisores de turno em edifícios corporativos, coworkings e centros de trabalho",
@@ -100,17 +121,31 @@
     "airbnb_f4": "Notificação ao anfitrião quando a propriedade está pronta",
     "airbnb_f5": "Registro de incidentes com descrição por cômodo",
     "airbnb_f6": "Atribuição de limpador por propriedade e data",
-    "airbnb_cities": "Ideal para propriedades em Londres, Madrid, Barcelona, Lisboa e qualquer cidade com mercado de aluguel de temporada ativo.",
-    "home_title": "Portal Limpeza Residencial",
-    "home_tag": "A sua casa, sempre impecável. A sua experiência, sempre excepcional.",
-    "home_who": "Empresas de limpeza residencial que querem um serviço premium para os clientes",
-    "home_desc": "Uma plataforma completa que conecta a sua equipe a cada cliente de forma elegante e profissional. Dois mundos em um: gestão operacional para o seu negócio e experiência premium para o cliente.",
-    "home_f1": "Gestão de clientes e endereços",
-    "home_f2": "Agendamento de visitas recorrentes ou pontuais",
-    "home_f3": "Atribuição de limpador por cliente e data",
-    "home_f4": "Checklist personalizado por residência",
-    "home_f5": "Relatório de qualidade após cada visita",
-    "home_f6": "Portal cliente premium incluso"
+    "airbnb_cities": "Ideal para propriedades em Londres, Madrid, Barcelona, Lisboa e qualquer cidade com mercado de alojamento local ativo.",
+    "home": {
+      "name": "Portal Casa",
+      "tagline": "A sua casa, sempre impecável. A sua experiência, sempre excecional.",
+      "description": "Uma plataforma completa que liga a sua equipa de limpeza a cada cliente de forma elegante e profissional. Dois mundos num só: gestão operacional para o seu negócio e uma experiência premium para o cliente.",
+      "features": [
+        "Gestão de clientes e moradas",
+        "Limpezas recorrentes ou pontuais",
+        "Atribuição de profissional por cliente e data",
+        "Checklist personalizado por casa",
+        "Relatório de qualidade após cada visita"
+      ]
+    },
+    "airbnb": {
+      "name": "Portal Airbnb",
+      "tagline": "Gestão profissional de propriedades de alojamento local.",
+      "description": "Organize e controle a limpeza das suas propriedades de Airbnb entre hóspedes. Cada propriedade tem o seu checklist, o seu registo de acessos e um relatório automático ao anfitrião quando a propriedade está pronta.",
+      "features": [
+        "Checklist de limpeza por divisão com pontuação",
+        "Relatório automático por propriedade — histórico, quem limpou e quando",
+        "Gestão de acessos e códigos da caixa de chaves",
+        "Aviso ao anfitrião quando a propriedade está pronta para o próximo hóspede",
+        "Relatório de incidentes por divisão com descrição"
+      ]
+    }
   },
   "vip": {
     "eyebrow": "Para o seu cliente · a experiência VIP",
@@ -287,14 +322,24 @@
   },
   "faq": {
     "title": "Perguntas frequentes.",
-    "q1": "Preciso instalar alguma coisa?",
-    "a1": "Não. É 100% web — funciona em qualquer celular moderno, computador ou tablet. Os operativos abrem a URL, entram com um PIN de 6 dígitos e estão dentro.",
-    "q2": "Posso importar os meus dados atuais?",
-    "a2": "Sim. Temos importadores CSV para clientes, edifícios e empregados. Na maioria dos casos a gente sobe os dados durante o onboarding.",
-    "q3": "Funciona offline?",
-    "a3": "O operativo pode bater ponto e enviar fotos mesmo sem sinal — tudo sincroniza assim que volta a internet.",
-    "q4": "Posso colocar a minha marca no portal do cliente?",
-    "a4": "Sim. Logo, cores e domínio próprio estão inclusos no Premium e Enterprise. No Professional dá pra subir o seu logo."
+    "items": {
+      "install": {
+        "q": "Preciso de instalar alguma coisa?",
+        "a": "Não. É 100% web — funciona em qualquer telemóvel, computador ou tablet moderno. A profissional abre o URL, entra com um PIN de 6 dígitos e já está dentro."
+      },
+      "import": {
+        "q": "Posso importar os meus dados atuais?",
+        "a": "Sim. Pode carregar os seus clientes, propriedades e equipa a partir de um ficheiro CSV ou adicioná-los diretamente no painel. Ajudamos na configuração inicial se precisar."
+      },
+      "offline": {
+        "q": "Funciona sem ligação?",
+        "a": "Sim. A profissional pode fazer check-in e carregar fotos mesmo que a casa não tenha internet; tudo sincroniza sozinho assim que recupera o sinal. Não se perde nada."
+      },
+      "branding": {
+        "q": "Posso colocar a minha marca no portal do cliente?",
+        "a": "Sim. No plano Professional pode personalizar a marca de forma parcial e no Premium de forma completa, com o seu logótipo, as suas cores e o seu próprio domínio."
+      }
+    }
   },
   "cta_banner": {
     "title": "Comece hoje. Sem cartão. Sem compromisso.",
@@ -303,12 +348,35 @@
     "secondary": "Falar com um humano"
   },
   "footer": {
-    "tagline": "A gente não vende limpezas. A gente vende tranquilidade, confiança e a sensação de chegar em casa e tudo estar perfeito.",
-    "rights": "Todos os direitos reservados.",
+    "tagline": "Não vendemos limpezas. Vendemos tranquilidade, confiança e a sensação de chegar a casa e estar tudo perfeito.",
     "platform": "Plataforma",
+    "platformLinks": { "portals": "Portais", "how": "Como funciona", "pricing": "Preços", "faq": "FAQ" },
     "company": "Empresa",
+    "companyLinks": { "hq": "Acesso HQ", "privacy": "Privacidade", "terms": "Termos" },
+    "contact": "Contacto",
     "legal": "Legal",
-    "contact": "Contato"
+    "rights": "© 2026 Portal Home. Todos os direitos reservados.",
+    "madeWith": "Feito com ♥ em Madrid · Londres · Lisboa"
+  },
+  "howItWorks": {
+    "eyebrow": "Como funciona",
+    "title": "De WhatsApp e Excel a tempo real, numa tarde.",
+    "subtitle": "Sem instalar nada, sem formação, sem equipa de IT. Três passos e estás a operar.",
+    "steps": {
+      "one": {
+        "title": "Adiciona a tua equipa em minutos",
+        "description": "Carrega as tuas limpadoras, propriedades e clientes a partir de um CSV ou do painel. Cada limpadora recebe um PIN de 6 dígitos para entrar — sem palavras-passe, sem instalar nada."
+      },
+      "two": {
+        "title": "A limpadora trabalha desde o telemóvel",
+        "description": "Check-in com GPS ao chegar, foto do trabalho terminado e comunicação direta contigo. Tudo em tempo real, mesmo sem ligação."
+      },
+      "three": {
+        "title": "Vês tudo a partir de um único sítio",
+        "description": "Limpezas, qualidade, incidências, clientes e propriedades — um único painel para o dono. Se algo correr mal, sabes no instante."
+      }
+    },
+    "cta": "Começar período gratuito"
   },
   "psd": {
     "nav": {
@@ -1005,7 +1073,7 @@
     }
   },
   "common": {
-    "appName": "Portal Services Digital",
+    "appName": "Portal Home",
     "save": "Guardar",
     "saveChanges": "Guardar alterações",
     "cancel": "Cancelar",
@@ -1059,7 +1127,20 @@
     "iAmCleaner": "Sou limpadora",
     "newHere": "És novo?",
     "learnMore": "Conhecer a plataforma",
-    "goodbye": "Conta eliminada. Obrigado por usares Portal Services Digital."
+    "goodbye": "Conta eliminada. Obrigado por usares Portal Home."
+  },
+  "welcome": {
+    "title": "Bem-vindo",
+    "subtitle": "Escolhe como queres entrar no teu portal.",
+    "bullet1": "PIN de 6 dígitos",
+    "bullet2": "Sem App Store",
+    "bullet3": "Entras em 5 segundos",
+    "ownerTitle": "Iniciar sessão",
+    "ownerSubtitle": "Dono ou gestor · email + palavra-passe",
+    "cleanerTitle": "Sou limpador/a",
+    "cleanerSubtitle": "PIN de 6 dígitos · acesso rápido",
+    "newQuestion": "És novo?",
+    "learnMore": "Conhecer a plataforma"
   },
   "login": {
     "ownerSignIn": "Acesso do proprietário",
@@ -1076,11 +1157,23 @@
     "createAccountBtn": "Criar conta",
     "forgotPassword": "Esqueceste a senha?",
     "back": "Voltar",
-    "badge": "Portal Home Cleaner",
+    "badge": "Portal Home",
     "pageTitle": "Inicia sessão na tua conta",
     "pageSubtitle": "Introduz as tuas credenciais para continuar",
     "emailPh": "nome@email.com",
-    "backHome": "← Voltar ao início"
+    "backHome": "← Voltar ao início",
+    "heroEyebrow": "Tempo real · Operações",
+    "heroTitleA": "Uma plataforma.",
+    "heroTitleB": "Um só lugar.",
+    "heroTitleC": "Tudo ligado.",
+    "heroSubtitle": "O centro de operações para empresas de limpeza, anfitriões e facility management. Atribui, supervisiona e cobra a partir de um único sítio.",
+    "statsServicesValue": "100K+",
+    "statsServicesLabel": "Serviços mensais",
+    "statsSlaValue": "98%",
+    "statsSlaLabel": "SLA cumprido",
+    "statsLiveValue": "24/7",
+    "statsLiveLabel": "Operações ao vivo",
+    "encryptedConnection": "Ligação cifrada · ISO 27001"
   },
   "forgotPassword": {
     "title": "Repor senha",
@@ -1144,7 +1237,7 @@
     "phonePh": "+44 7…",
     "phoneHint": "Útil para enviar o PIN por WhatsApp depois.",
     "doneTitle": "Está tudo pronto!",
-    "doneHint": "Aqui está o PIN da tua limpadora. Partilha por WhatsApp — ela entra em hq.portalservices.digital e toca em \"Sou limpadora\".",
+    "doneHint": "Aqui está o PIN da tua limpadora. Partilha por WhatsApp — ela entra em hq.portalservices.digital/operative/login e escreve o PIN.",
     "shareWhatsapp": "Partilhar por WhatsApp",
     "scheduleFirstCleaning": "Marcar primeira limpeza",
     "goToDashboard": "Ir para o dashboard",
@@ -1239,7 +1332,7 @@
     "noMatches": "Sem resultados.",
     "noContact": "Sem contacto",
     "operativePin": "PIN operacional",
-    "pinSubHint": "A limpadora usa-o em hq.portalservices.digital → Sou limpadora.",
+    "pinSubHint": "A limpadora usa-o em hq.portalservices.digital/operative/login.",
     "regenerate": "Regenerar",
     "regeneratedMessage": "Novo PIN gerado. Partilha-o com {name} — o anterior já não funciona.",
     "perfSnapshot": "Desempenho recente",
@@ -1483,6 +1576,7 @@
   },
   "ownerHome": {
     "portalLabel": "Portal do dono",
+    "welcomeFallback": "Bem-vindo",
     "dayChip": "Dia",
     "nightChip": "Noite",
     "greetingMorning": "Bom dia",

@@ -22,6 +22,7 @@ import {
   updateEmail,
   updatePassword,
 } from './actions';
+import { BrandColorPicker } from './BrandColorPicker';
 
 type SearchParams = Promise<{ message?: string; error?: string }>;
 
@@ -112,6 +113,16 @@ export default async function SettingsPage({
             <p className="mt-2 text-[11px] text-text-3">
               PNG, JPG, WebP or SVG · max 2 MB · square preferred.
             </p>
+          </div>
+
+          <div className="border-t border-surface-2 pt-4">
+            <span className="text-xs font-medium text-text-2">Color de marca</span>
+            <p className="mt-0.5 text-[11px] text-text-3">
+              Se aplica al hero del portal y a los botones primarios que ve tu equipo.
+            </p>
+            <div className="mt-3">
+              <BrandColorPicker defaultValue={profile.brand_color} />
+            </div>
           </div>
 
           <SubmitButton>{t('common.saveChanges')}</SubmitButton>

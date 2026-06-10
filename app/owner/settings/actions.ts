@@ -46,6 +46,8 @@ export async function updateBusinessProfile(formData: FormData) {
   const { user } = await requireOwner();
   const businessName = ((formData.get('business_name') as string) ?? '').trim() || null;
   const logoFile = formData.get('business_logo') as File | null;
+  const rawColor = ((formData.get('brand_color') as string) ?? '').trim();
+  const brandColor = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(rawColor) ? rawColor : null;
 
   let logoUrl: string | null | undefined = undefined; // undefined = keep existing
 
@@ -85,6 +87,7 @@ export async function updateBusinessProfile(formData: FormData) {
     updated_at: new Date().toISOString(),
   };
   if (logoUrl !== undefined) payload.business_logo_url = logoUrl;
+  if (brandColor) payload.hero_color = brandColor;
 
   // Persist via admin client too, so the row is created even when the
   // owner_profiles RLS policies aren't in place yet.

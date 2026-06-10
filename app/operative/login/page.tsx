@@ -3,11 +3,18 @@ import { PortalLoginCard, LoginField } from '@/components/portal/PortalLoginCard
 import { signIn } from '@/app/login/actions';
 
 type Props = {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; pin?: string }>;
 };
 
 export default async function OperativeLogin({ searchParams }: Props) {
-  const { error } = await searchParams;
+  const { error, pin } = await searchParams;
+
+  // Pre-fill from the deep-link the owner shares via WhatsApp/SMS so the
+  // cleaner only needs to tap "Enter" instead of typing six digits. We
+  // validate against the same shape the field's `pattern` enforces (4–8
+  // digits) to keep garbage out of the input. The signIn action will still
+  // reject anything that isn't a valid PIN, so this is just UX, not auth.
+  const prefillPin = pin && /^\d{4,8}$/.test(pin) ? pin : '';
 
   return (
     <PortalLoginCard
@@ -28,6 +35,7 @@ export default async function OperativeLogin({ searchParams }: Props) {
               pattern="[0-9]{4,8}"
               autoFocus
               autoComplete="one-time-code"
+              defaultValue={prefillPin}
               placeholder="026389"
               className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-center font-mono text-lg tracking-[0.4em] text-[#0b1d3a] placeholder:font-normal placeholder:tracking-[0.3em] placeholder:text-slate-300 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
             />

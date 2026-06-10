@@ -42,7 +42,7 @@ export function Logo({
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={LOGO_ICON_URL}
-        alt="Portal Services Digital"
+        alt="Portal Home"
         className={`block w-auto ${cfg.h} ${className}`}
       />
     );
@@ -53,7 +53,7 @@ export function Logo({
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={LOGO_FULL_URL}
-        alt="Portal Services Digital — One platform. One place. Everyone connected."
+        alt="Portal Home — One platform. One place. Everyone connected."
         className={`block w-auto ${cfg.h} ${className}`}
       />
     );
@@ -64,7 +64,7 @@ export function Logo({
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={LOGO_DARK_URL}
-        alt="Portal Services Digital"
+        alt="Portal Home"
         className={`block w-auto ${cfg.h} ${className}`}
       />
     );
@@ -77,7 +77,7 @@ export function Logo({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={LOGO_DARK_URL}
-        alt="Portal Services Digital"
+        alt="Portal Home"
         className={`block w-auto ${cfg.h}`}
       />
     </span>

@@ -20,11 +20,11 @@ export function Nav({ logoUrl = LOGO_FULL_URL }: { logoUrl?: string }) {
     <header className={`nav ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-inner">
         <div className="nav-left">
-          <a href="#" className="brand" aria-label="Portal Services Digital">
+          <a href="#" className="brand" aria-label="Portal Home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={logoUrl}
-              alt="Portal Services Digital"
+              alt="Portal Home"
               className="nav-logo"
               style={{ filter: 'saturate(1.25) contrast(1.18) brightness(0.82)' }}
             />

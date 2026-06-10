@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import {
-  CalendarDays,
   Gift,
   Home,
   ListChecks,
@@ -120,7 +119,11 @@ export default async function ClientHome({
           href={`/client/${token}/cleanings`}
           icon={ListChecks}
           title="Mis limpiezas"
-          subtitle={`${upcoming.length} próximas`}
+          subtitle={
+            upcoming.length > 0
+              ? `${upcoming.length} próximas · ${visitsTotal} históricas`
+              : `${visitsTotal} históricas`
+          }
           accent="brand"
         />
         <ToolCard
@@ -134,9 +137,7 @@ export default async function ClientHome({
           href={`/client/${token}/reviews`}
           icon={Star}
           title="Valoraciones"
-          subtitle={
-            avgRating ? `Media ${avgRating} ★` : 'Tus opiniones'
-          }
+          subtitle={avgRating ? `Media ${avgRating} ★` : 'Tus opiniones'}
           accent="amber"
         />
         <ToolCard
@@ -145,20 +146,6 @@ export default async function ClientHome({
           title="Refer & Earn"
           subtitle="Invita y gana"
           accent="rose"
-        />
-        <ToolCard
-          href={`/client/${token}/cleanings`}
-          icon={CalendarDays}
-          title="Agenda"
-          subtitle="Próximas visitas"
-          accent="navy"
-        />
-        <ToolCard
-          href={`/client/${token}/cleanings`}
-          icon={Sparkles}
-          title="Historial"
-          subtitle={`${visitsTotal} limpiezas`}
-          accent="brand"
         />
       </ToolGrid>
 

@@ -149,7 +149,7 @@ export default async function MorePage() {
               HQ super-admin
             </p>
             <p className="mt-0.5 text-[11px] text-text-2">
-              Manage every company that uses Portal Services Digital.
+              Manage every company that uses Portal Home.
             </p>
           </div>
         </Link>

@@ -35,10 +35,10 @@ export default async function Home({
   };
 
   const faqItems = [
-    { q: tFaq('q1'), a: tFaq('a1') },
-    { q: tFaq('q2'), a: tFaq('a2') },
-    { q: tFaq('q3'), a: tFaq('a3') },
-    { q: tFaq('q4'), a: tFaq('a4') },
+    { q: tFaq('items.install.q'), a: tFaq('items.install.a') },
+    { q: tFaq('items.import.q'), a: tFaq('items.import.a') },
+    { q: tFaq('items.offline.q'), a: tFaq('items.offline.a') },
+    { q: tFaq('items.branding.q'), a: tFaq('items.branding.a') },
   ];
 
   return (

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import type { LucideIcon } from 'lucide-react';
 import { Bell, ChevronRight, Settings } from 'lucide-react';
 import { Logo } from '@/components/Logo';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
 type Status = 'online' | 'offline' | 'idle';
 
@@ -11,12 +13,15 @@ const statusDot: Record<Status, string> = {
   idle: 'bg-amber-400',
 };
 
-export function PortalShell({
+export async function PortalShell({
   badge,
   badgeHref,
   backHref,
   backLabel,
   rightSlot,
+  settingsHref,
+  notificationsHref,
+  showLocaleSwitcher = true,
   children,
 }: {
   badge?: { label: string; icon?: LucideIcon };
@@ -24,9 +29,13 @@ export function PortalShell({
   backHref?: string;
   backLabel?: string;
   rightSlot?: React.ReactNode;
+  settingsHref?: string;
+  notificationsHref?: string;
+  showLocaleSwitcher?: boolean;
   children: React.ReactNode;
 }) {
   const BadgeIcon = badge?.icon;
+  const locale = showLocaleSwitcher ? await getLocale() : null;
   return (
     <main
       className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-surface-1"
@@ -60,12 +69,25 @@ export function PortalShell({
                 <span className="max-w-[120px] truncate">{badge.label}</span>
               </span>
             ) : null}
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
-              <Bell className="h-4 w-4" />
-            </span>
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2">
-              <Settings className="h-4 w-4" />
-            </span>
+            {locale ? <LocaleSwitcher current={locale} variant="onLight" /> : null}
+            {notificationsHref ? (
+              <Link
+                href={notificationsHref}
+                aria-label="Notifications"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2 transition hover:border-brand-600/30 hover:text-brand-600"
+              >
+                <Bell className="h-4 w-4" />
+              </Link>
+            ) : null}
+            {settingsHref ? (
+              <Link
+                href={settingsHref}
+                aria-label="Settings"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-surface-2 bg-surface-0 text-text-2 transition hover:border-brand-600/30 hover:text-brand-600"
+              >
+                <Settings className="h-4 w-4" />
+              </Link>
+            ) : null}
             {rightSlot}
           </div>
         </div>
@@ -82,6 +104,7 @@ export function PortalHero({
   greeting,
   displayName,
   chips,
+  brandColor,
 }: {
   portalLabel: string;
   portalIcon?: LucideIcon;
@@ -92,52 +115,53 @@ export function PortalHero({
     | { kind: 'text'; label: string; icon?: LucideIcon }
     | { kind: 'status'; label: string; status: Status }
   >;
+  brandColor?: string | null;
 }) {
   const Icon = portalIcon;
   const TopIcon = topRightChip?.icon;
+  // If the owner picked a brand color, build the gradient from it; otherwise
+  // fall back to the default brand gradient (cyan → blue).
+  const heroGradient =
+    brandColor && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(brandColor)
+      ? `linear-gradient(135deg, ${heroLighten(brandColor, 20)} 0%, ${brandColor} 55%, ${heroLighten(brandColor, -22)} 100%)`
+      : 'linear-gradient(135deg, #3DC5F0 0%, #2563EB 55%, #1D4ED8 100%)';
   return (
     <section
-      className="relative w-full min-w-0 max-w-full rounded-[1.75rem] border border-white/[0.06] p-4 text-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-5"
+      className="relative w-full min-w-0 max-w-full overflow-hidden rounded-2xl p-3.5 text-white shadow-[0_12px_28px_-14px_rgba(37,99,235,0.45)] sm:p-4"
       style={{
-        // Glows are baked into the background so there are no absolutely
-        // positioned children that could leak past the section and trigger
-        // horizontal scroll on iOS Safari (where overflow-hidden doesn't
-        // always contain abs-positioned overflow).
         backgroundImage: [
-          'radial-gradient(110% 80% at 100% 0%, rgba(34, 211, 238, 0.22) 0%, transparent 55%)',
-          'radial-gradient(90% 70% at 0% 100%, rgba(37, 99, 235, 0.22) 0%, transparent 60%)',
-          'linear-gradient(135deg, #0b1d3a 0%, #0f2447 55%, #0a1730 100%)',
+          'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 35%)',
+          heroGradient,
         ].join(', '),
-        overflow: 'clip',
       }}
     >
       <div className="relative min-w-0">
         <div className="flex min-w-0 items-center justify-between gap-2">
-          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-cyan-200">
-            {Icon ? <Icon className="h-3 w-3 shrink-0" /> : null}
+          <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/20">
+            {Icon ? <Icon className="h-2.5 w-2.5 shrink-0" /> : null}
             <span className="truncate">{portalLabel}</span>
           </span>
           {topRightChip ? (
-            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-400/10 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-amber-200">
-              {TopIcon ? <TopIcon className="h-3 w-3 shrink-0" /> : null}
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white ring-1 ring-inset ring-white/20">
+              {TopIcon ? <TopIcon className="h-2.5 w-2.5 shrink-0" /> : null}
               {topRightChip.label}
             </span>
           ) : null}
         </div>
-        <p className="mt-5 text-[9.5px] font-bold uppercase tracking-[0.20em] text-slate-300/90">
+        <p className="mt-3 text-[9px] font-bold uppercase tracking-[0.18em] text-white/80">
           {greeting}
         </p>
-        <h1 className="mt-1 truncate font-display text-[28px] font-semibold leading-tight tracking-tight">
+        <h1 className="mt-0.5 truncate font-display text-[22px] font-semibold leading-tight tracking-tight">
           {displayName}
         </h1>
         {chips && chips.length > 0 ? (
-          <div className="mt-4 flex min-w-0 flex-wrap items-center gap-1.5">
+          <div className="mt-2.5 flex min-w-0 flex-wrap items-center gap-1.5">
             {chips.map((c, i) => {
               if (c.kind === 'status') {
                 return (
                   <span
                     key={i}
-                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10.5px] font-medium text-white ring-1 ring-inset ring-white/10"
+                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white ring-1 ring-inset ring-white/20"
                   >
                     <span
                       className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusDot[c.status]}`}
@@ -150,7 +174,7 @@ export function PortalHero({
               return (
                 <span
                   key={i}
-                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1 text-[10.5px] font-medium text-white ring-1 ring-inset ring-white/10"
+                  className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white ring-1 ring-inset ring-white/20"
                 >
                   {ChipIcon ? <ChipIcon className="h-3 w-3 shrink-0" /> : null}
                   <span className="truncate">{c.label}</span>
@@ -161,6 +185,20 @@ export function PortalHero({
         ) : null}
       </div>
     </section>
+  );
+}
+
+// Adjust a hex toward white (positive pct) or black (negative pct).
+function heroLighten(hex: string, pct: number): string {
+  const c = hex.replace('#', '');
+  const full = c.length === 3 ? c.split('').map((x) => x + x).join('') : c;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  const adj = (v: number) =>
+    Math.max(0, Math.min(255, Math.round(v + (pct / 100) * (pct < 0 ? v : 255 - v))));
+  return (
+    '#' + [adj(r), adj(g), adj(b)].map((v) => v.toString(16).padStart(2, '0')).join('')
   );
 }
 

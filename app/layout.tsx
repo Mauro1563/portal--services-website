@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     'Airbnb cleaning management',
     'Portal Home',
   ],
-  authors: [{ name: 'Portal Services Digital' }],
+  authors: [{ name: 'Portal Home' }],
   openGraph: {
     title: 'Portal Home — La plataforma para tu empresa de limpieza',
     description:
@@ -90,7 +90,7 @@ const softwareLd = {
   },
   publisher: {
     '@type': 'Organization',
-    name: 'Portal Services Digital',
+    name: 'Portal Home',
     url: SITE_URL,
   },
 };

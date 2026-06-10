@@ -5,19 +5,23 @@ const SITE_URL = 'https://portalservices.digital';
 export async function StructuredData({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'faq' });
 
-  const faqQuestions = [1, 2, 3, 4].map((i) => ({
-    '@type': 'Question',
-    name: t(`q${i}` as 'q1'),
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: t(`a${i}` as 'a1'),
-    },
-  }));
+  // Keep these in sync with messages/{locale}.json → faq.items.*
+  // and with the FAQ rendered on the homepage (app/[locale]/page.tsx).
+  const faqQuestions = (['install', 'import', 'offline', 'branding'] as const).map(
+    (key) => ({
+      '@type': 'Question',
+      name: t(`items.${key}.q`),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: t(`items.${key}.a`),
+      },
+    }),
+  );
 
   const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Portal Services Digital',
+    name: 'Portal Home',
     url: SITE_URL,
     logo: `${SITE_URL}/icon`,
     sameAs: [] as string[],
@@ -32,7 +36,7 @@ export async function StructuredData({ locale }: { locale: string }) {
   const softwareApplication = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'Portal Services Digital',
+    name: 'Portal Home',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     description:

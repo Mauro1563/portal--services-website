@@ -46,6 +46,36 @@ export default async function NewPropertyPage({ searchParams }: Props) {
           name="address"
           placeholder={t('onboarding.addressPh')}
         />
+
+        <div className="grid grid-cols-2 gap-3">
+          <Select
+            label="Plataforma"
+            name="platform"
+            options={[
+              { value: '', label: '—' },
+              { value: 'airbnb', label: 'Airbnb' },
+              { value: 'booking', label: 'Booking.com' },
+              { value: 'direct', label: 'Directo' },
+              { value: 'other', label: 'Otra' },
+            ]}
+          />
+          <Field
+            label="Huéspedes"
+            name="guests"
+            type="number"
+            min={1}
+            placeholder="2"
+          />
+        </div>
+
+        <Field
+          label="Superficie (m²)"
+          name="floor_area_sqm"
+          type="number"
+          min={1}
+          placeholder="45"
+        />
+
         <Field
           label={t('onboarding.icalUrl')}
           name="airbnb_ical_url"
@@ -53,7 +83,12 @@ export default async function NewPropertyPage({ searchParams }: Props) {
           placeholder={t('onboarding.icalUrlPh')}
           hint={t('onboarding.icalHint')}
         />
-        <Field label={t('properties.notes')} name="notes" textarea placeholder="…" />
+        <Field
+          label={t('properties.notes')}
+          name="notes"
+          textarea
+          placeholder="Clave wifi, ubicación de llaves, instrucciones especiales..."
+        />
 
         <div className="flex gap-3 pt-2">
           <button
@@ -82,6 +117,7 @@ function Field({
   placeholder,
   hint,
   textarea,
+  min,
 }: {
   label: string;
   name: string;
@@ -90,6 +126,7 @@ function Field({
   placeholder?: string;
   hint?: string;
   textarea?: boolean;
+  min?: number;
 }) {
   return (
     <label className="block">
@@ -109,11 +146,39 @@ function Field({
           name={name}
           type={type}
           required={required}
+          min={min}
           placeholder={placeholder}
           className="mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 placeholder:text-text-3 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
         />
       )}
       {hint ? <span className="mt-1 block text-[11px] text-text-3">{hint}</span> : null}
+    </label>
+  );
+}
+
+function Select({
+  label,
+  name,
+  options,
+}: {
+  label: string;
+  name: string;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs font-medium text-text-2">{label}</span>
+      <select
+        name={name}
+        defaultValue=""
+        className="mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
     </label>
   );
 }

@@ -37,10 +37,19 @@ export async function getMessages(): Promise<Messages> {
  * Server-side translator. Pass a dot-path into messages JSON; falls back to
  * the key string when the path is missing so missing translations are visible
  * at runtime instead of silently empty.
+ *
+ * Optional second argument substitutes `{name}` placeholders, so
+ * `t('greeting', { name: 'Maria' })` resolves "Hi, {name}" → "Hi, Maria".
+ * Call sites that still pass a single argument keep working unchanged.
  */
-export async function getT(): Promise<(key: string) => string> {
+export async function getT(): Promise<
+  (key: string, params?: Record<string, string | number>) => string
+> {
   const messages = await getMessages();
-  return (key: string) => translate(messages, key);
+  return (key, params) => {
+    const raw = translate(messages, key);
+    return params ? interpolate(raw, params) : raw;
+  };
 }
 
 export function translate(messages: Messages, key: string): string {
@@ -54,4 +63,15 @@ export function translate(messages: Messages, key: string): string {
     }
   }
   return typeof cur === 'string' ? cur : key;
+}
+
+// Simple {name} placeholder substitution. Missing keys leave the placeholder
+// in place so a typo in the translation file is visible at runtime.
+function interpolate(
+  template: string,
+  params: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (match, name) =>
+    name in params ? String(params[name]) : match,
+  );
 }

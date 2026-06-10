@@ -15,7 +15,13 @@ import { addTask } from '@/app/owner/actions';
 import { ensureDefaultServices } from '@/lib/default-services';
 
 type Props = {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    date?: string;
+    property?: string;
+    client?: string;
+    cleaner?: string;
+  }>;
 };
 
 export default async function NewTaskPage({ searchParams }: Props) {
@@ -45,10 +51,21 @@ export default async function NewTaskPage({ searchParams }: Props) {
   const cleaners = cleanersRes.data ?? [];
   const clients = clientsRes.data ?? [];
   const services = servicesRes.data ?? [];
-  const { error } = await searchParams;
+  const {
+    error,
+    date: dateParam,
+    property: propertyParam,
+    client: clientParam,
+    cleaner: cleanerParam,
+  } = await searchParams;
 
   const noResources = properties.length === 0;
   const today = new Date().toISOString().split('T')[0];
+
+  // Pre-fill date from deep-link (calendar day click). Only accept ISO YYYY-MM-DD;
+  // anything else falls back to today so we never inject garbage into the date input.
+  const presetDate =
+    dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) ? dateParam : today;
 
   const inputCls =
     'mt-1.5 block h-11 w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 text-sm text-text-1 placeholder:text-text-3 transition focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/25';
@@ -131,6 +148,7 @@ export default async function NewTaskPage({ searchParams }: Props) {
               name="property_id"
               required
               disabled={noResources}
+              defaultValue={propertyParam ?? ''}
               className={`${inputCls} disabled:opacity-50`}
             >
               <option value="">{t('tasks.pickProperty')}…</option>
@@ -145,7 +163,11 @@ export default async function NewTaskPage({ searchParams }: Props) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="block">
               <span className={labelTitle}>{t('taskNew.fieldCleaner') + ' (' + t('taskNew.optional') + ')'}</span>
-              <select name="cleaner_id" className={inputCls}>
+              <select
+                name="cleaner_id"
+                defaultValue={cleanerParam ?? ''}
+                className={inputCls}
+              >
                 <option value="">{t('taskNew.cleanerUnassigned')}</option>
                 {cleaners.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -157,7 +179,11 @@ export default async function NewTaskPage({ searchParams }: Props) {
 
             <label className="block">
               <span className={labelTitle}>{t('taskNew.fieldClient')}</span>
-              <select name="client_id" className={inputCls}>
+              <select
+                name="client_id"
+                defaultValue={clientParam ?? ''}
+                className={inputCls}
+              >
                 <option value="">{t('taskNew.clientNone')}</option>
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -196,8 +222,7 @@ export default async function NewTaskPage({ searchParams }: Props) {
                 type="date"
                 name="scheduled_for"
                 required
-                defaultValue={today}
-                min={today}
+                defaultValue={presetDate}
                 className={inputCls}
               />
             </label>

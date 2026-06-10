@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import {
   BarChart3,
+  BadgePoundSterling,
   Building2,
   Calendar,
   CheckCircle2,
@@ -21,9 +22,16 @@ type TaskAnalytics = {
   completed_at: string | null;
   property_id: string | null;
   cleaner_id: string | null;
+  price_pence: number | null;
+  paid_amount_pence: number | null;
+  payment_status: string;
   property: { name: string } | null;
   cleaner: { name: string } | null;
 };
+
+function pence(n: number) {
+  return `£${(n / 100).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
 
 function startOfMonth(d = new Date()) {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
@@ -66,7 +74,7 @@ export default async function AnalyticsPage() {
   const { data: raw } = await supabase
     .from('tasks')
     .select(
-      'id, scheduled_for, status, checked_in_at, completed_at, property_id, cleaner_id, property:properties (name), cleaner:cleaners (name)',
+      'id, scheduled_for, status, checked_in_at, completed_at, property_id, cleaner_id, price_pence, paid_amount_pence, payment_status, property:properties (name), cleaner:cleaners (name)',
     )
     .gte('scheduled_for', toIso(ninety))
     .order('scheduled_for', { ascending: true });
@@ -103,6 +111,43 @@ export default async function AnalyticsPage() {
             const end = new Date(x.completed_at!).getTime();
             return sum + Math.max(0, (end - start) / 60000);
           }, 0) / withDuration.length,
+        );
+
+  // Money: revenue is what got billed for jobs this month (uses price_pence;
+  // we exclude cancelled so a phantom-priced cancellation doesn't inflate it).
+  // Outstanding sums pending + the unpaid remainder of partial across the
+  // whole 90-day window, not just this month — owners want to chase old debt.
+  const billable = (x: TaskAnalytics) =>
+    x.status !== 'cancelled' && (x.price_pence ?? 0) > 0;
+  const revenueThis = inMonth
+    .filter(billable)
+    .reduce((s, x) => s + (x.price_pence ?? 0), 0);
+  const revenuePrev = inPrev
+    .filter(billable)
+    .reduce((s, x) => s + (x.price_pence ?? 0), 0);
+
+  const paidThis = inMonth
+    .filter((x) => billable(x) && x.payment_status === 'paid')
+    .reduce((s, x) => s + (x.price_pence ?? 0), 0);
+  const paidRate =
+    revenueThis === 0 ? 0 : Math.round((paidThis / revenueThis) * 100);
+
+  let outstanding = 0;
+  for (const x of tasks) {
+    if (!billable(x)) continue;
+    if (x.payment_status === 'paid' || x.payment_status === 'waived') continue;
+    const price = x.price_pence ?? 0;
+    const paid = x.paid_amount_pence ?? 0;
+    outstanding += Math.max(0, price - paid);
+  }
+
+  const billedThis = inMonth.filter(billable);
+  const avgTicket =
+    billedThis.length === 0
+      ? 0
+      : Math.round(
+          billedThis.reduce((s, x) => s + (x.price_pence ?? 0), 0) /
+            billedThis.length,
         );
 
   const completed90 = tasks.filter((x) => x.status === 'completed');
@@ -175,7 +220,48 @@ export default async function AnalyticsPage() {
         />
       </div>
 
-      <section className="mt-6 rounded-2xl border border-surface-2 bg-surface-0 p-5 shadow-card">
+      {/* Revenue — current month, last 90d outstanding */}
+      <section className="mt-6 overflow-hidden rounded-2xl border border-surface-2 bg-surface-0 shadow-card">
+        <div className="bg-gradient-to-br from-emerald-500/[0.04] via-brand-600/[0.04] to-amber-500/[0.04] p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-text-3">
+                Este mes
+              </p>
+              <p className="mt-1 font-display text-3xl font-bold tabular-nums text-text-1">
+                {pence(revenueThis)}
+              </p>
+              <p className="mt-1 text-[11px] text-text-2">
+                facturado · {pence(revenuePrev)} mes anterior
+              </p>
+            </div>
+            <BadgePoundSterling className="h-6 w-6 text-emerald-600" />
+          </div>
+
+          <div className="mt-4 grid grid-cols-3 gap-3 border-t border-surface-2 pt-4">
+            <MoneyCell
+              label="Cobrado"
+              value={pence(paidThis)}
+              sub={`${paidRate}% del facturado`}
+              tone="emerald"
+            />
+            <MoneyCell
+              label="Pendiente"
+              value={pence(outstanding)}
+              sub="últimos 90 días"
+              tone="amber"
+            />
+            <MoneyCell
+              label="Ticket promedio"
+              value={pence(avgTicket)}
+              sub={`${billedThis.length} servicios`}
+              tone="brand"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-5 rounded-2xl border border-surface-2 bg-surface-0 p-5 shadow-card">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-display text-base font-semibold text-text-1">
@@ -274,6 +360,36 @@ function Kpi({
         </span>
       </div>
       {sub ? <p className="mt-1 text-[10px] text-text-3">{sub}</p> : null}
+    </div>
+  );
+}
+
+function MoneyCell({
+  label,
+  value,
+  sub,
+  tone,
+}: {
+  label: string;
+  value: string;
+  sub: string;
+  tone: 'emerald' | 'amber' | 'brand';
+}) {
+  const accent =
+    tone === 'emerald'
+      ? 'text-emerald-700'
+      : tone === 'amber'
+      ? 'text-amber-700'
+      : 'text-brand-700';
+  return (
+    <div>
+      <p className="text-[10px] font-medium uppercase tracking-wider text-text-3">
+        {label}
+      </p>
+      <p className={`mt-1 font-display text-base font-bold tabular-nums ${accent}`}>
+        {value}
+      </p>
+      <p className="mt-0.5 text-[10px] text-text-3">{sub}</p>
     </div>
   );
 }

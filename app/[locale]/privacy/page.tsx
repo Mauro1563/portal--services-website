@@ -4,8 +4,8 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 
 export const metadata = {
-  title: 'Privacy Policy — Portal Services Digital',
-  description: 'How Portal Services Digital collects, uses and protects your data.',
+  title: 'Privacy Policy — Portal Home',
+  description: 'How Portal Home collects, uses and protects your data.',
 };
 
 export default async function PrivacyPage({
@@ -39,7 +39,7 @@ export default async function PrivacyPage({
         <div className="mx-auto max-w-3xl space-y-8 px-6 text-slate-300">
           <Section title="1. Who we are">
             <p>
-              Portal Services Digital ("we", "us", "our") provides an operational
+              Portal Home ("we", "us", "our") provides an operational
               platform for cleaning, facilities and property-management teams,
               accessible at <strong>portalservices.digital</strong> and{' '}
               <strong>hq.portalservices.digital</strong>. For privacy enquiries
