@@ -1137,7 +1137,19 @@
     "pageTitle": "Sign in to your account",
     "pageSubtitle": "Enter your credentials to continue",
     "emailPh": "name@email.com",
-    "backHome": "← Back to home"
+    "backHome": "← Back to home",
+    "heroEyebrow": "Real-time · Operations",
+    "heroTitleA": "One platform.",
+    "heroTitleB": "One place.",
+    "heroTitleC": "All connected.",
+    "heroSubtitle": "The operations hub for cleaning companies, Airbnb hosts and facility managers. Assign, supervise and bill from a single place.",
+    "statsServicesValue": "100K+",
+    "statsServicesLabel": "Monthly services",
+    "statsSlaValue": "98%",
+    "statsSlaLabel": "SLA met",
+    "statsLiveValue": "24/7",
+    "statsLiveLabel": "Live operations",
+    "encryptedConnection": "Encrypted connection · ISO 27001"
   },
   "forgotPassword": {
     "title": "Reset password",

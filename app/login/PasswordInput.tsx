@@ -13,7 +13,7 @@ export function PasswordInput() {
         name="password"
         autoComplete="current-password"
         placeholder="••••••••"
-        className="block h-11 w-full min-w-0 rounded-xl border border-slate-200 bg-white pl-10 pr-11 text-sm font-medium text-[#0b1d3a] placeholder:font-normal placeholder:text-slate-500 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
+        className="block h-12 w-full min-w-0 rounded-xl border border-slate-200 bg-white pl-10 pr-11 text-sm font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-600/15"
       />
       <button
         type="button"
