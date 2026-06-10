@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Clock,
   Hammer,
-  ListChecks,
   MapPin,
   Moon,
   Sun,
@@ -138,22 +137,8 @@ export default async function OperativeHome({ searchParams }: Props) {
           href="/operative/week"
           icon={CalendarDays}
           title="My week"
-          subtitle="Schedule"
+          subtitle={`Schedule · earnings · rating`}
           accent="brand"
-        />
-        <ToolCard
-          href="/operative"
-          icon={ListChecks}
-          title="Today"
-          subtitle={`${totalToday} task${totalToday === 1 ? '' : 's'}`}
-          accent="emerald"
-        />
-        <ToolCard
-          href="/operative/week"
-          icon={Clock}
-          title="Hours"
-          subtitle="Check-ins"
-          accent="amber"
         />
         <ToolCard
           href="/operative/profile"
@@ -217,6 +202,49 @@ export default async function OperativeHome({ searchParams }: Props) {
         </div>
       ) : null}
 
+      {/* The hero card highlights one task; the rest of today's queue would
+          otherwise be invisible until that one is finished. */}
+      {heroTask && todayTasks.length > 1 ? (
+        <section className="mt-6">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
+            More today ({todayTasks.length - 1})
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {todayTasks
+              .filter((task) => task.id !== heroTask.id)
+              .map((task) => (
+                <li key={task.id}>
+                  <Link
+                    href={`/operative/tasks/${task.id}`}
+                    className="flex items-center gap-3 rounded-2xl border border-surface-2 bg-surface-0 px-4 py-3 shadow-card transition hover:border-brand-600/30 hover:shadow-card-lg"
+                  >
+                    <span
+                      className={`h-2 w-2 shrink-0 rounded-full ${
+                        task.status === 'completed'
+                          ? 'bg-emerald-500'
+                          : task.status === 'in_progress'
+                          ? 'bg-amber-500'
+                          : 'bg-brand-600/40'
+                      }`}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-display text-sm font-semibold text-text-1">
+                        {task.property?.name ?? 'Property removed'}
+                      </p>
+                      <p className="mt-0.5 truncate text-[11px] text-text-3">
+                        {task.property?.address ?? 'No address on file'}
+                      </p>
+                    </div>
+                    {task.status === 'completed' ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    ) : null}
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </section>
+      ) : null}
+
       <CorporateBanner
         href="/operative/week"
         eyebrow="Cleaner hub"
@@ -233,7 +261,7 @@ export default async function OperativeHome({ searchParams }: Props) {
             {upcomingTasks.slice(0, 6).map((task) => (
               <li key={task.id}>
                 <Link
-                  href={`/operative/week`}
+                  href={`/operative/tasks/${task.id}`}
                   className="flex items-center gap-3 rounded-2xl border border-surface-2 bg-surface-0 px-4 py-3 shadow-card transition hover:border-brand-600/30 hover:shadow-card-lg"
                 >
                   <span className="h-2 w-2 shrink-0 rounded-full bg-brand-600/40" />

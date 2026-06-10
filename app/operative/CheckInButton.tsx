@@ -41,7 +41,7 @@ export function CheckInButton({ taskId }: { taskId: string }) {
         type="button"
         onClick={handleClick}
         disabled={isPending}
-        className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] text-sm font-medium text-white transition hover:bg-white/[0.08] disabled:opacity-60"
+        className="inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-sm font-bold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99] disabled:opacity-60"
       >
         {isPending ? (
           <>
@@ -54,7 +54,7 @@ export function CheckInButton({ taskId }: { taskId: string }) {
         )}
       </button>
       {error && (
-        <p className="mt-1.5 text-center text-xs text-rose-300">{error}</p>
+        <p className="mt-1.5 text-center text-xs text-rose-700">{error}</p>
       )}
     </div>
   );

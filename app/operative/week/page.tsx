@@ -186,7 +186,7 @@ export default async function OperativeWeekPage() {
                     {dayTasks.map((t, idx) => (
                       <li key={t.id}>
                         <Link
-                          href={`/operative`}
+                          href={`/operative/tasks/${t.id}`}
                           className="flex items-start gap-3 rounded-2xl border border-line bg-paper p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
                         >
                           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
