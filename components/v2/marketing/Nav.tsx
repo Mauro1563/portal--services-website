@@ -39,13 +39,15 @@ export function Nav({ logoUrl, ctaPrimary, ctaSecondary, links }: Props) {
           <img
             src={logoUrl}
             alt="Portal Home Digital"
-            className={[
-              'h-14 w-auto transition sm:h-16',
-              // White logo bg looks fine over either state; just invert
-              // brightness slightly when over the dark hero so the logo
-              // still reads even if its artwork is dark-on-light.
-              scrolled ? '' : 'brightness-0 invert',
-            ].join(' ')}
+            className="h-14 w-auto transition sm:h-16"
+            style={
+              scrolled
+                ? undefined
+                : {
+                    filter:
+                      'brightness(0) saturate(100%) invert(72%) sepia(64%) saturate(2589%) hue-rotate(163deg) brightness(103%) contrast(96%)',
+                  }
+            }
           />
         </Link>
 
