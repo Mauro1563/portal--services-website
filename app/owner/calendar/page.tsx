@@ -67,6 +67,13 @@ export default async function CalendarPage({
   const { month: monthParam, property: propertyId } = await searchParams;
   const { year, month } = parseMonth(monthParam);
 
+  // The form below posts back to this page (GET), so the property filter
+  // and the month are both reflected in the URL — back/forward + share work.
+  const { data: propertiesList } = await supabase
+    .from('properties')
+    .select('id, name')
+    .order('name');
+
   const firstOfMonth = new Date(Date.UTC(year, month - 1, 1));
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
   const startWeekday = firstOfMonth.getUTCDay();
@@ -117,6 +124,27 @@ export default async function CalendarPage({
 
   const weekdayShort = t('calendar.weekdayShort').split(',');
 
+  // Helper: build a deep-link that preserves the active property filter so
+  // clicking a day cell doesn't lose context.
+  const dayLink = (iso: string, hasTasks: boolean) => {
+    const qs = new URLSearchParams();
+    if (hasTasks) {
+      qs.set('from', iso);
+      qs.set('to', iso);
+      if (propertyId) qs.set('property', propertyId);
+      return `/owner/tasks?${qs.toString()}`;
+    }
+    qs.set('date', iso);
+    if (propertyId) qs.set('property', propertyId);
+    return `/owner/tasks/new?${qs.toString()}`;
+  };
+
+  const monthLinkPreserving = (y: number, m: number) => {
+    const qs = new URLSearchParams({ month: fmtMonthParam(y, m) });
+    if (propertyId) qs.set('property', propertyId);
+    return `/owner/calendar?${qs.toString()}`;
+  };
+
   return (
     <LightLayout activeTab="tasks" title={t('calendar.title')} showBack backHref="/owner/tasks">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -139,7 +167,7 @@ export default async function CalendarPage({
 
       <nav className="mt-5 flex items-center justify-between gap-3">
         <Link
-          href={`/owner/calendar?month=${fmtMonthParam(prev.year, prev.month)}`}
+          href={monthLinkPreserving(prev.year, prev.month)}
           className="inline-flex h-9 items-center gap-1 rounded-xl border border-surface-2 bg-surface-0 px-3 text-xs font-medium text-text-1 hover:bg-surface-1"
         >
           <ChevronLeft className="h-3.5 w-3.5" />{' '}
@@ -149,13 +177,13 @@ export default async function CalendarPage({
           })}
         </Link>
         <Link
-          href="/owner/calendar"
+          href={propertyId ? `/owner/calendar?property=${propertyId}` : '/owner/calendar'}
           className="text-xs font-medium text-brand-600 hover:text-brand-700"
         >
           {t('calendar.todayBtn')}
         </Link>
         <Link
-          href={`/owner/calendar?month=${fmtMonthParam(next.year, next.month)}`}
+          href={monthLinkPreserving(next.year, next.month)}
           className="inline-flex h-9 items-center gap-1 rounded-xl border border-surface-2 bg-surface-0 px-3 text-xs font-medium text-text-1 hover:bg-surface-1"
         >
           {new Date(Date.UTC(next.year, next.month - 1, 1)).toLocaleDateString('en-GB', {
@@ -165,6 +193,35 @@ export default async function CalendarPage({
           <ChevronRight className="h-3.5 w-3.5" />
         </Link>
       </nav>
+
+      {/* Property filter — GET form so the choice round-trips through the URL. */}
+      <form
+        method="get"
+        className="mt-3 flex items-center gap-2 rounded-xl border border-surface-2 bg-surface-0 px-3 py-2 shadow-card"
+      >
+        <input type="hidden" name="month" value={fmtMonthParam(year, month)} />
+        <label className="text-[11px] font-medium text-text-3">
+          {t('tasks.allProperties').replace('All ', '').replace('Todas las ', '')}
+        </label>
+        <select
+          name="property"
+          defaultValue={propertyId ?? ''}
+          className="h-8 flex-1 rounded-lg border border-surface-2 bg-surface-0 px-2 text-xs text-text-1 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+        >
+          <option value="">{t('tasks.allProperties')}</option>
+          {(propertiesList ?? []).map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+        <button
+          type="submit"
+          className="inline-flex h-8 items-center rounded-full bg-brand-600/10 px-3 text-[11px] font-medium text-brand-700 ring-1 ring-inset ring-brand-600/30 hover:bg-brand-600/15"
+        >
+          {t('common.apply')}
+        </button>
+      </form>
 
       <div className="mt-5 grid grid-cols-7 gap-1 text-[10px] font-semibold uppercase tracking-wider text-text-3">
         {weekdayShort.map((d) => (
@@ -186,10 +243,12 @@ export default async function CalendarPage({
           }
           const items = byDate.get(c.iso) ?? [];
           const isToday = c.iso === todayIso;
+          const cellHref = dayLink(c.iso, items.length > 0);
           return (
-            <div
+            <Link
               key={c.iso}
-              className={`min-h-[70px] rounded-lg border bg-surface-0 p-1 ${
+              href={cellHref}
+              className={`group block min-h-[70px] rounded-lg border bg-surface-0 p-1 transition hover:border-brand-600/40 hover:shadow-card ${
                 isToday
                   ? 'border-brand-600 ring-1 ring-inset ring-brand-600/30'
                   : 'border-surface-2'
@@ -205,19 +264,21 @@ export default async function CalendarPage({
                 </span>
                 {items.length > 0 ? (
                   <span className="text-[9px] text-text-3">{items.length}</span>
-                ) : null}
+                ) : (
+                  <span className="text-[10px] leading-none text-text-3 opacity-0 transition group-hover:opacity-100">
+                    +
+                  </span>
+                )}
               </div>
               <ul className="mt-1 space-y-0.5">
                 {items.slice(0, 2).map((x) => {
                   const tone = STATUS_TONE[x.status] ?? STATUS_TONE.scheduled;
                   return (
-                    <li key={x.id}>
-                      <Link
-                        href={`/owner/tasks/${x.id}`}
-                        className={`block truncate rounded px-1 py-0.5 text-[9px] font-medium ring-1 ring-inset ${tone}`}
-                      >
-                        {x.property?.name ?? '·'}
-                      </Link>
+                    <li
+                      key={x.id}
+                      className={`block truncate rounded px-1 py-0.5 text-[9px] font-medium ring-1 ring-inset ${tone}`}
+                    >
+                      {x.property?.name ?? '·'}
                     </li>
                   );
                 })}
@@ -227,7 +288,7 @@ export default async function CalendarPage({
                   </li>
                 ) : null}
               </ul>
-            </div>
+            </Link>
           );
         })}
       </div>
