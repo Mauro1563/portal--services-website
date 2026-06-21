@@ -1730,5 +1730,77 @@
     "pendingStep3": "Recebes um email para entrar",
     "pendingNote": "Não precisas de manter esta página aberta — tudo chega ao teu email.",
     "pendingBack": "← Voltar ao início"
+  },
+  "book": {
+    "eyebrow": "Reserva a tua limpeza",
+    "title": "Conta-nos como vives e nós tratamos do resto.",
+    "subtitle": "Escolhe um serviço, o tamanho da casa, junta extras e fecha o horário. O preço atualiza-se ao vivo.",
+    "sections": {
+      "service": "Serviço",
+      "size": "Tamanho da casa",
+      "baths": "Casas de banho",
+      "extras": "Extras",
+      "frequency": "Frequência",
+      "when": "Quando",
+      "address": "Endereço"
+    },
+    "sizes": {
+      "studio": "Estúdio",
+      "1": "1 quarto",
+      "2": "2 quartos",
+      "3": "3 quartos",
+      "4": "4+ quartos"
+    },
+    "freqs": {
+      "once": "Pontual",
+      "weekly": "Semanal",
+      "biweekly": "Quinzenal",
+      "monthly": "Mensal"
+    },
+    "slots": {
+      "morning": "Manhã",
+      "afternoon": "Tarde",
+      "evening": "Noite"
+    },
+    "placeholders": {
+      "addressLine": "Rua, número, código postal…",
+      "addressLabel": "Etiqueta (Casa, Escritório…)"
+    },
+    "total": {
+      "eyebrow": "Total"
+    },
+    "summary": {
+      "service": "Serviço",
+      "size": "Tamanho",
+      "baths": "Casas de banho",
+      "extras": "Extras",
+      "frequency": "Frequência",
+      "date": "Data",
+      "slot": "Horário",
+      "status": "Estado"
+    },
+    "cta": {
+      "confirm": "Confirmar reserva",
+      "submitting": "A reservar…",
+      "footnote": "Ainda não cobramos — pagamento no próximo passo."
+    },
+    "errors": {
+      "auth_required": "Inicia sessão para reservar.",
+      "service_required": "Escolhe um serviço.",
+      "invalid_size": "Escolhe um tamanho válido.",
+      "invalid_baths": "As casas de banho devem ser entre 1 e 10.",
+      "invalid_frequency": "Escolhe uma frequência válida.",
+      "unknown_service": "Serviço não encontrado.",
+      "address_required": "Indica o teu endereço.",
+      "address_save_failed": "Não conseguimos guardar o endereço — tenta de novo.",
+      "booking_save_failed": "Não conseguimos criar a reserva — tenta de novo."
+    },
+    "success": {
+      "title": "Reserva confirmada",
+      "subtitle": "A tua reserva está pendente. Vamos atribuir-te um profissional e enviar os detalhes por email.",
+      "newBooking": "Reservar outra",
+      "home": "Ir ao início",
+      "refId": "Referência"
+    }
   }
 }
