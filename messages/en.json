@@ -1720,5 +1720,77 @@
     "pendingStep3": "You receive a sign-in email",
     "pendingNote": "No need to keep this tab open — everything will arrive at your inbox.",
     "pendingBack": "← Back to home"
+  },
+  "book": {
+    "eyebrow": "Book your cleaning",
+    "title": "Tell us how you live and we sort the rest.",
+    "subtitle": "Pick a service, choose your home size, add extras and lock in your time slot. Price updates as you go.",
+    "sections": {
+      "service": "Service",
+      "size": "Home size",
+      "baths": "Bathrooms",
+      "extras": "Extras",
+      "frequency": "Frequency",
+      "when": "When",
+      "address": "Address"
+    },
+    "sizes": {
+      "studio": "Studio",
+      "1": "1 bedroom",
+      "2": "2 bedrooms",
+      "3": "3 bedrooms",
+      "4": "4+ bedrooms"
+    },
+    "freqs": {
+      "once": "One-off",
+      "weekly": "Weekly",
+      "biweekly": "Bi-weekly",
+      "monthly": "Monthly"
+    },
+    "slots": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "placeholders": {
+      "addressLine": "Street, number, postcode…",
+      "addressLabel": "Label (Home, Office…)"
+    },
+    "total": {
+      "eyebrow": "Total"
+    },
+    "summary": {
+      "service": "Service",
+      "size": "Size",
+      "baths": "Baths",
+      "extras": "Extras",
+      "frequency": "Frequency",
+      "date": "Date",
+      "slot": "Slot",
+      "status": "Status"
+    },
+    "cta": {
+      "confirm": "Confirm booking",
+      "submitting": "Booking…",
+      "footnote": "You won't be charged yet — payment in next step."
+    },
+    "errors": {
+      "auth_required": "Please sign in to book.",
+      "service_required": "Pick a service.",
+      "invalid_size": "Pick a valid home size.",
+      "invalid_baths": "Number of bathrooms must be 1–10.",
+      "invalid_frequency": "Pick a valid frequency.",
+      "unknown_service": "Service not found.",
+      "address_required": "Enter your address.",
+      "address_save_failed": "Couldn't save the address — try again.",
+      "booking_save_failed": "Couldn't create the booking — try again."
+    },
+    "success": {
+      "title": "Booking confirmed",
+      "subtitle": "Your booking is pending. We'll match you with a professional and email the details.",
+      "newBooking": "Book another",
+      "home": "Go home",
+      "refId": "Reference"
+    }
   }
 }
