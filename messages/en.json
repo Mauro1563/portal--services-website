@@ -1783,14 +1783,24 @@
       "unknown_service": "Service not found.",
       "address_required": "Enter your address.",
       "address_save_failed": "Couldn't save the address — try again.",
-      "booking_save_failed": "Couldn't create the booking — try again."
+      "booking_save_failed": "Couldn't create the booking — try again.",
+      "stripe_session_failed": "Couldn't start payment — try again."
     },
     "success": {
-      "title": "Booking confirmed",
-      "subtitle": "Your booking is pending. We'll match you with a professional and email the details.",
+      "title": "Booking received",
+      "subtitle": "We're confirming your payment. You'll see it as paid here once Stripe finishes.",
+      "titlePaid": "Booking confirmed",
+      "subtitlePaid": "Payment received. We'll match you with a professional and email the details.",
       "newBooking": "Book another",
       "home": "Go home",
       "refId": "Reference"
+    },
+    "cancel": {
+      "title": "Payment canceled",
+      "subtitle": "Nothing was charged. Your booking is on hold — finish it whenever you're ready.",
+      "retry": "Try again",
+      "home": "Go home",
+      "refId": "Booking on hold"
     }
   }
 }

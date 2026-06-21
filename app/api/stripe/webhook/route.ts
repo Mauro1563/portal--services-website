@@ -65,16 +65,57 @@ export async function POST(request: Request) {
     );
   };
 
+  // Update a booking row when its checkout session / payment intent /
+  // subscription invoice settles. Routed via metadata.kind === 'booking'
+  // (or by falling back to the persisted stripe_checkout_session_id).
+  const markBookingPaid = async (params: {
+    bookingId: string;
+    paymentIntentId?: string | null;
+    subscriptionId?: string | null;
+  }) => {
+    await admin
+      .from('bookings')
+      .update({
+        status: 'paid',
+        paid_at: new Date().toISOString(),
+        ...(params.paymentIntentId && {
+          stripe_payment_intent: params.paymentIntentId,
+        }),
+        ...(params.subscriptionId && {
+          stripe_subscription_id: params.subscriptionId,
+        }),
+      })
+      .eq('id', params.bookingId);
+  };
+
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session;
-      const ownerId = session.metadata?.owner_id;
-      const tier = session.metadata?.tier ?? null;
+      const kind = session.metadata?.kind;
       const subscriptionId = (session.subscription as string) ?? null;
       const customerId = (session.customer as string) ?? null;
 
+      // ── Booking checkout (consumer flow) ─────────────────────────
+      if (kind === 'booking') {
+        const bookingId = session.metadata?.booking_id;
+        const paymentIntentId =
+          typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : null;
+        if (bookingId) {
+          await markBookingPaid({
+            bookingId,
+            paymentIntentId,
+            subscriptionId,
+          });
+        }
+        break;
+      }
+
+      // ── Owner subscription flow (pre-existing behaviour) ─────────
+      const ownerId = session.metadata?.owner_id;
+      const tier = session.metadata?.tier ?? null;
       if (ownerId && subscriptionId) {
-        // Fetch the subscription to know status + period
         const sub = await stripe.subscriptions.retrieve(subscriptionId);
         await upsertSubscription({
           ownerId,
@@ -87,10 +128,27 @@ export async function POST(request: Request) {
       }
       break;
     }
+
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
       const sub = event.data.object as Stripe.Subscription;
+      const kind = sub.metadata?.kind;
+
+      // Booking subscriptions are tracked on the booking row itself,
+      // not in the owner-level `subscriptions` table. We surface the
+      // sub id but don't write to subscriptions.
+      if (kind === 'booking') {
+        const bookingId = sub.metadata?.booking_id;
+        if (bookingId && event.type === 'customer.subscription.created') {
+          await admin
+            .from('bookings')
+            .update({ stripe_subscription_id: sub.id })
+            .eq('id', bookingId);
+        }
+        break;
+      }
+
       const ownerId = sub.metadata?.owner_id;
       const tier = sub.metadata?.tier ?? null;
       if (ownerId) {
@@ -105,6 +163,7 @@ export async function POST(request: Request) {
       }
       break;
     }
+
     default:
       break;
   }
