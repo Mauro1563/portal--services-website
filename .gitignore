@@ -28,6 +28,7 @@ yarn-error.log*
 
 # package manager artifacts not used in this repo
 pnpm-lock.yaml
+package-lock.json
 
 # Capacitor / iOS — keep the Xcode project files but not local build state
 ios/App/Pods/
