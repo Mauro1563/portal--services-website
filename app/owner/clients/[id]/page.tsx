@@ -148,20 +148,23 @@ export default async function ClientDetail({ params, searchParams }: Props) {
         </p>
       )}
 
-      {/* In-portal chat link */}
+      {/* Portal Chat link */}
       <Link
         href={`/owner/clients/${client.id}/messages`}
         className="relative mt-6 flex items-center gap-3 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card transition hover:border-brand-600/30 hover:shadow-card-lg"
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600/10 text-brand-700">
-          <MessageCircle className="h-5 w-5" />
-        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/portal-chat-icon.png"
+          alt="Portal Chat"
+          className="h-10 w-10 shrink-0 rounded-xl object-cover"
+        />
         <div className="min-w-0 flex-1">
           <p className="font-display text-sm font-semibold text-text-1">
-            Messages
+            Portal Chat
           </p>
           <p className="text-[11px] text-text-2">
-            In-portal chat with {client.name.split(/\s+/)[0]}
+            Chat with {client.name.split(/\s+/)[0]}
           </p>
         </div>
         {unread > 0 ? (
