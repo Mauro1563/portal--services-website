@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+import { Calendar, FileText, Home, Info, User } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { updateProperty } from '../actions';
@@ -22,7 +23,7 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
   const { data: property } = await supabase
     .from('properties')
     .select(
-      'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm',
+      'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, contact_name, contact_phone, contact_email',
     )
     .eq('id', id)
     .maybeSingle();
@@ -42,69 +43,114 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
         </p>
       )}
 
-      <form action={updateProperty} className="space-y-4">
+      <form action={updateProperty} className="space-y-5">
         <input type="hidden" name="property_id" value={property.id} />
 
-        <Field
-          label="Nombre"
-          name="name"
-          defaultValue={property.name}
-          required
-        />
-        <Field
-          label="Dirección"
-          name="address"
-          defaultValue={property.address ?? ''}
-        />
-
-        <div className="grid grid-cols-2 gap-3">
-          <Select
-            label="Plataforma"
-            name="platform"
-            defaultValue={property.platform ?? ''}
-            options={[
-              { value: '', label: '—' },
-              { value: 'airbnb', label: 'Airbnb' },
-              { value: 'booking', label: 'Booking.com' },
-              { value: 'direct', label: 'Directo' },
-              { value: 'other', label: 'Otra' },
-            ]}
+        {/* ── Datos básicos ─────────────────────────────────────────── */}
+        <Section icon={Home} title="Datos básicos">
+          <Field
+            label="Nombre"
+            name="name"
+            defaultValue={property.name}
+            required
           />
           <Field
-            label="Huéspedes"
-            name="guests"
+            label="Dirección"
+            name="address"
+            defaultValue={property.address ?? ''}
+          />
+        </Section>
+
+        {/* ── Contacto del dueño ────────────────────────────────────── */}
+        <Section
+          icon={User}
+          title="Contacto del dueño"
+          subtitle="La persona a quien escribir si pasa algo en la casa."
+        >
+          <Field
+            label="Nombre"
+            name="contact_name"
+            defaultValue={property.contact_name ?? ''}
+            placeholder="Ej. María García"
+          />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Field
+              label="Teléfono / WhatsApp"
+              name="contact_phone"
+              type="tel"
+              defaultValue={property.contact_phone ?? ''}
+              placeholder="+34 600 000 000"
+            />
+            <Field
+              label="Email"
+              name="contact_email"
+              type="email"
+              defaultValue={property.contact_email ?? ''}
+              placeholder="maria@email.com"
+            />
+          </div>
+        </Section>
+
+        {/* ── Detalles de la propiedad ──────────────────────────────── */}
+        <Section icon={Info} title="Detalles de la propiedad">
+          <div className="grid grid-cols-2 gap-3">
+            <Select
+              label="Plataforma"
+              name="platform"
+              defaultValue={property.platform ?? ''}
+              options={[
+                { value: '', label: '—' },
+                { value: 'airbnb', label: 'Airbnb' },
+                { value: 'booking', label: 'Booking.com' },
+                { value: 'direct', label: 'Directo' },
+                { value: 'other', label: 'Otra' },
+              ]}
+            />
+            <Field
+              label="Huéspedes"
+              name="guests"
+              type="number"
+              min={1}
+              defaultValue={property.guests?.toString() ?? ''}
+              placeholder="2"
+            />
+          </div>
+          <Field
+            label="Superficie (m²)"
+            name="floor_area_sqm"
             type="number"
             min={1}
-            defaultValue={property.guests?.toString() ?? ''}
-            placeholder="2"
+            defaultValue={property.floor_area_sqm?.toString() ?? ''}
+            placeholder="45"
           />
-        </div>
+        </Section>
 
-        <Field
-          label="Superficie (m²)"
-          name="floor_area_sqm"
-          type="number"
-          min={1}
-          defaultValue={property.floor_area_sqm?.toString() ?? ''}
-          placeholder="45"
-        />
+        {/* ── Integración Airbnb / Booking ──────────────────────────── */}
+        <Section
+          icon={Calendar}
+          title="Sincronización de calendario"
+          subtitle="Opcional. Si la propiedad está en Airbnb / Booking, pegá la URL iCal y las reservas aparecen solas."
+        >
+          <Field
+            label="URL iCal Airbnb / Booking"
+            name="airbnb_ical_url"
+            type="url"
+            defaultValue={property.airbnb_ical_url ?? ''}
+            placeholder="https://www.airbnb.com/calendar/ical/..."
+            hint="Airbnb: Calendario → Configuración de disponibilidad → Sincronizar."
+          />
+        </Section>
 
-        <Field
-          label="URL iCal Airbnb / Booking"
-          name="airbnb_ical_url"
-          type="url"
-          defaultValue={property.airbnb_ical_url ?? ''}
-          placeholder="https://www.airbnb.com/calendar/ical/..."
-          hint="Airbnb: Calendario → Configuración de disponibilidad → Sincronizar."
-        />
-
-        <Field
-          label="Notas"
-          name="notes"
-          textarea
-          defaultValue={property.notes ?? ''}
-          placeholder="Clave wifi, ubicación de llaves, instrucciones especiales..."
-        />
+        {/* ── Notas ─────────────────────────────────────────────────── */}
+        <Section icon={FileText} title="Notas">
+          <Field
+            label="Notas"
+            name="notes"
+            textarea
+            defaultValue={property.notes ?? ''}
+            placeholder="Clave wifi, ubicación de llaves, instrucciones especiales..."
+          />
+        </Section>
 
         <div className="flex gap-3 pt-2">
           <button
@@ -122,6 +168,37 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
         </div>
       </form>
     </LightLayout>
+  );
+}
+
+function Section({
+  icon: Icon,
+  title,
+  subtitle,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card">
+      <header className="mb-3 flex items-start gap-2.5">
+        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-600/10 text-brand-700">
+          <Icon className="h-4 w-4" />
+        </span>
+        <div className="min-w-0">
+          <h2 className="font-display text-sm font-semibold text-text-1">
+            {title}
+          </h2>
+          {subtitle ? (
+            <p className="mt-0.5 text-[11px] text-text-3">{subtitle}</p>
+          ) : null}
+        </div>
+      </header>
+      <div className="space-y-3">{children}</div>
+    </section>
   );
 }
 
