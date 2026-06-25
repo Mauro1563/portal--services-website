@@ -152,16 +152,20 @@ export default async function LoginPage({ searchParams }: Props) {
           <form action={signIn} className="mt-7 space-y-4">
             <label className="block">
               <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-700">
-                {t('login.email')}
+                Email o PIN
               </span>
               <div className="relative mt-1.5">
                 <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                {/* type="text" instead of "email" so 4–8 digit operative
+                    PINs aren't rejected by the browser's email validator
+                    before the server action gets a chance to branch. */}
                 <input
-                  type="email"
+                  type="text"
                   name="identifier"
                   required
-                  autoComplete="email"
-                  placeholder={t('login.emailPh')}
+                  autoComplete="username"
+                  inputMode="text"
+                  placeholder="tucorreo@ejemplo.com — o tu PIN"
                   className="block h-12 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-600/15"
                 />
               </div>
@@ -174,6 +178,9 @@ export default async function LoginPage({ searchParams }: Props) {
               <div className="mt-1.5">
                 <PasswordInput />
               </div>
+              <span className="mt-1.5 block text-[11px] text-slate-500">
+                ¿Operativo? Dejá la contraseña vacía — tu PIN ya alcanza.
+              </span>
             </label>
 
             <div className="flex items-center justify-end">
