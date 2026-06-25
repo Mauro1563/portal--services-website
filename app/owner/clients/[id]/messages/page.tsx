@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
-import { Send, MessageCircle } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { sendOwnerMessage } from '../../actions';
@@ -60,15 +60,18 @@ export default async function OwnerClientMessages({ params, searchParams }: Prop
     >
       <section className="rounded-2xl border border-surface-2 bg-gradient-to-br from-brand-600/[0.06] to-brand-600/[0.02] p-4 shadow-card">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-600/15 text-brand-700">
-            <MessageCircle className="h-5 w-5" />
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/portal-chat-icon.png"
+            alt="Portal Chat"
+            className="h-11 w-11 shrink-0 rounded-xl object-cover"
+          />
           <div className="min-w-0 flex-1">
             <p className="font-display text-sm font-semibold text-text-1">
               {client.name}
             </p>
             <p className="text-[11px] text-text-2">
-              In-portal chat · they see this in their phone
+              Portal Chat · they see this in their phone
             </p>
           </div>
         </div>
