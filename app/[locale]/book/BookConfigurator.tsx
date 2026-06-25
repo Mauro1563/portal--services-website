@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Check, Loader2, Minus, Plus } from 'lucide-react';
 import {
@@ -33,7 +32,6 @@ const SLOTS = ['morning', 'afternoon', 'evening'] as const;
 export function BookConfigurator({ services, extras, pricing }: Props) {
   const t = useTranslations('book');
   const locale = useLocale();
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -77,7 +75,11 @@ export function BookConfigurator({ services, extras, pricing }: Props) {
         setError(result.error);
         return;
       }
-      router.push(`/${locale}/book/success/${result.id}`);
+      // Stripe Checkout (external redirect). The success_url passed to
+      // Stripe will land the user on /book/success/{id}, where the
+      // webhook will have already flipped status to 'paid' (or be about
+      // to — the success page handles both cases).
+      window.location.href = result.checkoutUrl;
     });
   };
 
@@ -94,6 +96,7 @@ export function BookConfigurator({ services, extras, pricing }: Props) {
     if (slot) fd.set('slot', slot);
     fd.set('addressLine', addressLine);
     if (addressLabel) fd.set('addressLabel', addressLabel);
+    fd.set('locale', locale);
     onSubmit(fd);
   };
 

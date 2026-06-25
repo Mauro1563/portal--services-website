@@ -1793,14 +1793,24 @@
       "unknown_service": "Servicio no encontrado.",
       "address_required": "Indica tu dirección.",
       "address_save_failed": "No pudimos guardar la dirección — inténtalo de nuevo.",
-      "booking_save_failed": "No pudimos crear la reserva — inténtalo de nuevo."
+      "booking_save_failed": "No pudimos crear la reserva — inténtalo de nuevo.",
+      "stripe_session_failed": "No pudimos iniciar el pago — inténtalo de nuevo."
     },
     "success": {
-      "title": "Reserva confirmada",
-      "subtitle": "Tu reserva queda en pendiente. Te asignamos un profesional y te enviamos los detalles por email.",
+      "title": "Reserva recibida",
+      "subtitle": "Estamos confirmando tu pago. Cuando Stripe termine, lo verás como pagado aquí.",
+      "titlePaid": "Reserva confirmada",
+      "subtitlePaid": "Pago recibido. Te asignamos un profesional y te enviamos los detalles por email.",
       "newBooking": "Reservar otra",
       "home": "Ir al inicio",
       "refId": "Referencia"
+    },
+    "cancel": {
+      "title": "Pago cancelado",
+      "subtitle": "No se cobró nada. Tu reserva queda en espera — termínala cuando quieras.",
+      "retry": "Intentar de nuevo",
+      "home": "Ir al inicio",
+      "refId": "Reserva en espera"
     }
   }
 }

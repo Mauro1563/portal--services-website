@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
@@ -41,17 +41,31 @@ export default async function BookSuccessPage({
   const svcName =
     svc?.name_i18n?.[locale] ?? svc?.name_i18n?.en ?? svc?.key ?? '';
 
+  const isPaid = booking.status === 'paid';
+
   return (
     <main className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-xl px-4 py-16">
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="grid h-12 w-12 place-items-center rounded-full bg-emerald-100 text-emerald-600">
-            <CheckCircle2 className="h-6 w-6" />
+          <div
+            className={`grid h-12 w-12 place-items-center rounded-full ${
+              isPaid
+                ? 'bg-emerald-100 text-emerald-600'
+                : 'bg-amber-100 text-amber-600'
+            }`}
+          >
+            {isPaid ? (
+              <CheckCircle2 className="h-6 w-6" />
+            ) : (
+              <Clock className="h-6 w-6" />
+            )}
           </div>
           <h1 className="mt-4 text-2xl font-bold text-slate-900">
-            {t('success.title')}
+            {isPaid ? t('success.titlePaid') : t('success.title')}
           </h1>
-          <p className="mt-1 text-slate-600">{t('success.subtitle')}</p>
+          <p className="mt-1 text-slate-600">
+            {isPaid ? t('success.subtitlePaid') : t('success.subtitle')}
+          </p>
 
           <dl className="mt-6 space-y-2 border-t border-slate-100 pt-5 text-sm">
             <Row label={t('summary.service')} value={svcName} />
