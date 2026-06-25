@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
-import { defaultLocale } from '../i18n';
 
+// Marketing landing is disabled — anyone hitting the root domain goes
+// straight to the unified login. Legal pages (/[locale]/privacy,
+// /[locale]/terms, /[locale]/docs) remain accessible for compliance.
 export default function RootPage() {
-  redirect(`/${defaultLocale}`);
+  redirect('/login');
 }
