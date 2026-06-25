@@ -25,6 +25,9 @@ export async function addProperty(formData: FormData) {
     platform: platformRaw || null,
     guests: guestsRaw ? Number(guestsRaw) : null,
     floor_area_sqm: sqmRaw ? Number(sqmRaw) : null,
+    contact_name: (formData.get('contact_name') as string)?.trim() || null,
+    contact_phone: (formData.get('contact_phone') as string)?.trim() || null,
+    contact_email: (formData.get('contact_email') as string)?.trim() || null,
   });
 
   if (error) {
