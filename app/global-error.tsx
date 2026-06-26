@@ -104,7 +104,7 @@ export default function GlobalError({
             Ir al login
           </a>
 
-          <details style={{ marginTop: 28 }}>
+          <details open style={{ marginTop: 28 }}>
             <summary
               style={{
                 cursor: 'pointer',
