@@ -1,57 +1,64 @@
 import Link from 'next/link';
-import { Building2, Home, ListChecks, MoreHorizontal, Users } from 'lucide-react';
-import { getT } from '@/lib/i18n';
+import {
+  Building2,
+  LayoutGrid,
+  ListChecks,
+  MoreHorizontal,
+  Users,
+} from 'lucide-react';
 
 export type Tab = 'home' | 'properties' | 'tasks' | 'cleaners' | 'more';
 
 const ITEMS: Array<{
   key: Tab;
   href: string;
+  label: string;
   Icon: React.ComponentType<{ className?: string }>;
 }> = [
-  { key: 'home', href: '/owner', Icon: Home },
-  { key: 'properties', href: '/owner/properties', Icon: Building2 },
-  { key: 'tasks', href: '/owner/tasks', Icon: ListChecks },
-  { key: 'cleaners', href: '/owner/cleaners', Icon: Users },
-  { key: 'more', href: '/owner/more', Icon: MoreHorizontal },
+  { key: 'home', href: '/owner', label: 'Dashboard', Icon: LayoutGrid },
+  { key: 'tasks', href: '/owner/tasks', label: 'Limpiezas', Icon: ListChecks },
+  { key: 'cleaners', href: '/owner/cleaners', label: 'Cleaners', Icon: Users },
+  { key: 'properties', href: '/owner/properties', label: 'Sitios', Icon: Building2 },
+  { key: 'more', href: '/owner/more', label: 'Más', Icon: MoreHorizontal },
 ];
 
-export async function BottomTabBar({ active }: { active: Tab }) {
-  const t = await getT();
-  const labels: Record<Tab, string> = {
-    home: t('nav.home'),
-    properties: t('nav.properties'),
-    tasks: t('nav.tasks'),
-    cleaners: t('nav.cleaners'),
-    more: t('nav.more'),
-  };
-
+/**
+ * Bottom navigation for the owner portal in the Corporate Trust style —
+ * uppercase labels, brand underline on active, safe-area-inset for iOS.
+ * Keys kept as the original union so every existing page (~30 of them)
+ * keeps highlighting the right tab without code changes.
+ */
+export function BottomTabBar({ active }: { active: Tab }) {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-2 bg-surface-0 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-1.5"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-2 bg-surface-0/95 backdrop-blur"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       aria-label="Primary"
     >
       <ul className="mx-auto flex max-w-md items-stretch justify-around">
-        {ITEMS.map(({ key, href, Icon }) => {
+        {ITEMS.map(({ key, href, label, Icon }) => {
           const isActive = key === active;
           return (
             <li key={key} className="flex-1">
               <Link
                 href={href}
-                className={
-                  'flex flex-col items-center gap-1 py-1.5 text-[11px] font-medium transition-colors ' +
-                  (isActive ? 'text-brand-600' : 'text-text-3 hover:text-text-2')
-                }
+                className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider transition ${
+                  isActive
+                    ? 'text-brand-700'
+                    : 'text-text-3 hover:text-text-1'
+                }`}
                 aria-current={isActive ? 'page' : undefined}
               >
+                {isActive ? (
+                  <span
+                    aria-hidden
+                    className="absolute top-0 h-[3px] w-10 rounded-b bg-brand-600"
+                  />
+                ) : null}
                 <Icon
-                  className={
-                    'h-5 w-5 ' + (isActive ? 'text-brand-600' : 'text-text-3')
-                  }
+                  className={`h-5 w-5 ${isActive ? 'stroke-[2.25]' : 'stroke-[1.75]'}`}
                 />
-                <span className={isActive ? 'text-brand-600' : ''}>
-                  {labels[key]}
-                </span>
+                <span>{label}</span>
               </Link>
             </li>
           );
