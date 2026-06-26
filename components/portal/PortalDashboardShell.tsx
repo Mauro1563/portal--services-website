@@ -38,7 +38,7 @@ export async function PortalShell({
   const locale = showLocaleSwitcher ? await getLocale() : null;
   return (
     <main
-      className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-surface-1"
+      className="relative mx-auto min-h-screen w-screen max-w-[100vw] overflow-x-hidden bg-surface-1"
       style={{
         paddingBottom: 'calc(env(safe-area-inset-bottom) + 64px)',
         touchAction: 'pan-y',
