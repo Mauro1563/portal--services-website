@@ -91,6 +91,41 @@ export async function checkInTask(formData: FormData) {
   revalidatePath('/operative');
 }
 
+export async function saveCleanerNote(formData: FormData) {
+  const cleanerId = await requireCleaner();
+  const taskId = ((formData.get('task_id') as string) ?? '').trim();
+  const note = ((formData.get('note') as string) ?? '').trim();
+  if (!taskId) redirect('/operative');
+
+  const admin = createAdminClient();
+  // Owner-side authoritative check happens via RLS / admin client. We
+  // also confirm the cleaner is the one assigned to this task so a
+  // cleaner can't write notes on someone else's job.
+  const { data: task } = await admin
+    .from('tasks')
+    .select('id, cleaner_id')
+    .eq('id', taskId)
+    .maybeSingle();
+  if (!task || task.cleaner_id !== cleanerId) {
+    redirect('/operative');
+  }
+
+  const { error } = await admin
+    .from('tasks')
+    .update({ cleaner_note: note || null })
+    .eq('id', taskId);
+
+  if (error) {
+    redirect(
+      `/operative/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
+
+  revalidatePath(`/operative/tasks/${taskId}`);
+  revalidatePath(`/owner/tasks/${taskId}`);
+  redirect(`/operative/tasks/${taskId}?note_saved=1`);
+}
+
 export async function signOutOperative() {
   const cookieStore = await cookies();
   cookieStore.delete('cleaner_session');
