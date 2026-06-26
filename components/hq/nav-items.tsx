@@ -10,6 +10,7 @@ import {
   Inbox,
   Settings,
   Eye,
+  Mail,
 } from 'lucide-react';
 
 export type Active =
@@ -23,7 +24,8 @@ export type Active =
   | 'sales'
   | 'contracts'
   | 'leads'
-  | 'settings';
+  | 'settings'
+  | 'email-test';
 
 export const navGroups: {
   label: string;
@@ -56,6 +58,9 @@ export const navGroups: {
   },
   {
     label: 'Sistema',
-    items: [{ key: 'settings', href: '/hq/settings', label: 'Ajustes', Icon: Settings }],
+    items: [
+      { key: 'settings', href: '/hq/settings', label: 'Ajustes', Icon: Settings },
+      { key: 'email-test', href: '/hq/email-test', label: 'Email · Test', Icon: Mail },
+    ],
   },
 ];
