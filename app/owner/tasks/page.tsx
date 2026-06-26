@@ -1,12 +1,28 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { CalendarDays, ChevronRight, ListChecks, MapPin, Plus, Search, SearchX, X } from 'lucide-react';
+import {
+  Calendar,
+  CalendarDays,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  ListChecks,
+  MapPin,
+  Plus,
+  Search,
+  SearchX,
+  Sparkles,
+  StickyNote,
+  X,
+  XCircle,
+} from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import { CsvExportButton } from '@/components/CsvExportButton';
 import { getT } from '@/lib/i18n';
+import { acceptBookingRequest, rejectBookingRequest } from './actions';
 
 type SearchParams = Promise<{
   q?: string;
@@ -15,6 +31,8 @@ type SearchParams = Promise<{
   cleaner?: string;
   from?: string;
   to?: string;
+  flash?: string;
+  error?: string;
 }>;
 
 type TaskRow = {
@@ -29,11 +47,13 @@ type TaskRow = {
   photo_url: string | null;
   property_id: string | null;
   cleaner_id: string | null;
+  service_name: string | null;
   price_pence: number | null;
   payment_status: string | null;
   paid_at: string | null;
   property: { name: string } | null;
   cleaner: { name: string } | null;
+  client: { name: string } | null;
 };
 
 export default async function TasksPage({
@@ -48,7 +68,8 @@ export default async function TasksPage({
   if (!user) redirect('/login?role=owner');
 
   const t = await getT();
-  const { q, status, property, cleaner, from, to } = await searchParams;
+  const { q, status, property, cleaner, from, to, flash, error: flashError } =
+    await searchParams;
   const effectiveStatus = status && status !== 'all' ? status : null;
 
   const STATUS_OPTIONS = [
@@ -68,7 +89,7 @@ export default async function TasksPage({
   let query = supabase
     .from('tasks')
     .select(
-      'id, scheduled_for, start_time, status, notes, checked_in_at, checkin_lat, checkin_lng, photo_url, property_id, cleaner_id, price_pence, payment_status, paid_at, property:properties (name), cleaner:cleaners (name)',
+      'id, scheduled_for, start_time, status, notes, checked_in_at, checkin_lat, checkin_lng, photo_url, property_id, cleaner_id, service_name, price_pence, payment_status, paid_at, property:properties (name), cleaner:cleaners (name), client:clients (name)',
     )
     .order('scheduled_for', { ascending: true });
 
@@ -149,6 +170,21 @@ export default async function TasksPage({
           </Link>
         </div>
       </div>
+
+      {flash === 'accepted' ? (
+        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
+          ✓ Solicitud aceptada. La tarea ya está en agenda — asígnale un cleaner desde el detalle.
+        </p>
+      ) : flash === 'rejected' ? (
+        <p className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700">
+          Solicitud rechazada (status: cancelled).
+        </p>
+      ) : null}
+      {flashError ? (
+        <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+          {flashError}
+        </p>
+      ) : null}
 
       {/* Filters card */}
       <form
@@ -275,64 +311,135 @@ export default async function TasksPage({
         </div>
       ) : (
         <ul className="mt-5 space-y-2">
-          {tasks.map((x) => (
-            <li key={x.id}>
-              <Link
-                href={`/owner/tasks/${x.id}`}
-                className="flex items-start gap-3 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card transition hover:border-brand-600/30 hover:shadow-card-lg"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="font-display text-sm font-semibold text-text-1">
-                    {x.property?.name ?? t('dashboard.propertyRemoved')}
-                  </p>
-                  <p className="mt-0.5 text-xs text-text-2">
-                    {new Date(x.scheduled_for).toLocaleDateString('en-GB', {
-                      weekday: 'long',
-                      day: 'numeric',
-                      month: 'long',
-                    })}
-                    {x.cleaner?.name
-                      ? ` · ${x.cleaner.name}`
-                      : ` · ${t('common.unassigned')}`}
-                  </p>
-                  {x.notes && (
-                    <p className="mt-2 text-[11px] text-text-3">{x.notes}</p>
-                  )}
-                  {x.checked_in_at && (
-                    <p className="mt-2 inline-flex items-center gap-1 text-[11px] text-brand-700">
-                      <MapPin className="h-3 w-3" />
-                      {t('tasks.checkedInAt').replace(
-                        '{time}',
-                        new Date(x.checked_in_at).toLocaleString('en-GB', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          day: 'numeric',
-                          month: 'short',
-                        }),
-                      )}
+          {tasks.map((x) =>
+            x.status === 'requested' ? (
+              <RequestedRow key={x.id} task={x} />
+            ) : (
+              <li key={x.id}>
+                <Link
+                  href={`/owner/tasks/${x.id}`}
+                  className="flex items-start gap-3 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card transition hover:border-brand-600/30 hover:shadow-card-lg"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="font-display text-sm font-semibold text-text-1">
+                      {x.property?.name ?? t('dashboard.propertyRemoved')}
                     </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-3">
-                  {x.photo_url && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={x.photo_url}
-                      alt="Evidence"
-                      className="h-14 w-14 rounded-lg object-cover"
-                    />
-                  )}
-                  <StatusPill status={x.status} t={t} />
-                  <ChevronRight className="h-4 w-4 shrink-0 text-text-3" />
-                </div>
-              </Link>
-            </li>
-          ))}
+                    <p className="mt-0.5 text-xs text-text-2">
+                      {new Date(x.scheduled_for).toLocaleDateString('en-GB', {
+                        weekday: 'long',
+                        day: 'numeric',
+                        month: 'long',
+                      })}
+                      {x.cleaner?.name
+                        ? ` · ${x.cleaner.name}`
+                        : ` · ${t('common.unassigned')}`}
+                    </p>
+                    {x.notes && (
+                      <p className="mt-2 text-[11px] text-text-3">{x.notes}</p>
+                    )}
+                    {x.checked_in_at && (
+                      <p className="mt-2 inline-flex items-center gap-1 text-[11px] text-brand-700">
+                        <MapPin className="h-3 w-3" />
+                        {t('tasks.checkedInAt').replace(
+                          '{time}',
+                          new Date(x.checked_in_at).toLocaleString('en-GB', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            day: 'numeric',
+                            month: 'short',
+                          }),
+                        )}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {x.photo_url && (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={x.photo_url}
+                        alt="Evidence"
+                        className="h-14 w-14 rounded-lg object-cover"
+                      />
+                    )}
+                    <StatusPill status={x.status} t={t} />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-text-3" />
+                  </div>
+                </Link>
+              </li>
+            ),
+          )}
         </ul>
       )}
 
       </div>
     </LightLayout>
+  );
+}
+
+function RequestedRow({ task }: { task: TaskRow }) {
+  const dateLabel = new Date(task.scheduled_for + 'T00:00:00').toLocaleDateString(
+    'es-ES',
+    { weekday: 'long', day: 'numeric', month: 'short' },
+  );
+  return (
+    <li>
+      <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50/70 via-white to-white p-4 shadow-card">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.18em] text-violet-700">
+              <Sparkles className="h-3 w-3" /> Solicitud nueva
+            </p>
+            <p className="mt-1 font-display text-sm font-semibold text-text-1">
+              {task.client?.name ?? 'Cliente'} ·{' '}
+              <span className="text-text-2">
+                {task.service_name ?? 'Limpieza'}
+              </span>
+            </p>
+            <p className="mt-0.5 text-[11.5px] text-text-3">
+              <Calendar className="-mt-0.5 mr-1 inline h-3 w-3" />
+              {dateLabel}
+              {task.start_time ? ` · ${task.start_time.slice(0, 5)}` : ''}
+            </p>
+            {task.notes ? (
+              <p className="mt-2 inline-flex items-start gap-1.5 rounded-lg bg-violet-100/50 px-2.5 py-1.5 text-[11px] text-violet-900">
+                <StickyNote className="mt-0.5 h-3 w-3 shrink-0" />
+                <span className="line-clamp-3">{task.notes}</span>
+              </p>
+            ) : null}
+          </div>
+          <Link
+            href={`/owner/tasks/${task.id}`}
+            className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-violet-300 px-2.5 text-[10px] font-semibold text-violet-700 hover:bg-violet-100/60"
+          >
+            Ver
+          </Link>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-2 border-t border-violet-100 pt-3">
+          <form action={acceptBookingRequest}>
+            <input type="hidden" name="task_id" value={task.id} />
+            <button
+              type="submit"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 px-3.5 text-[12px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(5,150,105,0.45)] transition hover:brightness-110"
+            >
+              <CheckCircle2 className="h-3.5 w-3.5" /> Aceptar
+            </button>
+          </form>
+          <form action={rejectBookingRequest}>
+            <input type="hidden" name="task_id" value={task.id} />
+            <button
+              type="submit"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-200 bg-white px-3.5 text-[12px] font-semibold text-rose-700 transition hover:bg-rose-50"
+            >
+              <XCircle className="h-3.5 w-3.5" /> Rechazar
+            </button>
+          </form>
+          <p className="ml-auto self-center text-[10.5px] text-violet-700/70">
+            Aceptar deja la tarea en agenda — asigna cleaner desde el detalle.
+          </p>
+        </div>
+      </div>
+    </li>
   );
 }
 

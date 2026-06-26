@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientByToken } from '@/lib/client-auth';
+import { notifyOwnerOfBookingRequest } from '@/lib/email';
 
 /**
  * Client-initiated booking request. Creates a `tasks` row with
@@ -69,6 +70,26 @@ export async function requestBooking(formData: FormData) {
 
   if (error) {
     redirect(`/client/${token}/book?error=` + encodeURIComponent(error.message));
+  }
+
+  // Fire-and-forget owner ping. A Resend hiccup or a missing API key
+  // must NOT roll back the booking — the request already lives in DB.
+  const { data: ownerAuth } = await admin.auth.admin.getUserById(
+    ctx.client.owner_id,
+  );
+  const ownerEmail = ownerAuth?.user?.email;
+  if (ownerEmail) {
+    notifyOwnerOfBookingRequest({
+      ownerEmail,
+      clientName: ctx.client.name,
+      clientPhone: ctx.client.phone,
+      serviceName: service.name,
+      scheduledFor,
+      startTime,
+      notes,
+    }).catch((err) =>
+      console.error('[requestBooking] notify owner failed', err),
+    );
   }
 
   // Invalidate everywhere the request could surface.

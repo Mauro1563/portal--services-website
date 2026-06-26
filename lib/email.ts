@@ -314,3 +314,98 @@ function escapeHtml(s: string) {
 function escapeAttr(s: string) {
   return escapeHtml(s).replace(/'/g, '&#39;');
 }
+
+/**
+ * Owner gets pinged the moment a client books from their portal. Mirrors
+ * notifyOwnerOfClientMessage in shape: violet header (matches the in-app
+ * "Solicitudes nuevas" banner), service + date summary, two CTAs (open
+ * the requests list, or WhatsApp the client straight back).
+ * Fire-and-forget — never throws.
+ */
+export async function notifyOwnerOfBookingRequest(input: {
+  ownerEmail: string;
+  clientName: string;
+  clientPhone: string | null;
+  serviceName: string | null;
+  scheduledFor: string;
+  startTime: string | null;
+  notes: string | null;
+}): Promise<NotifyResult> {
+  try {
+    const safeName = escapeHtml(input.clientName);
+    const safeService = escapeHtml(input.serviceName ?? 'Limpieza');
+    const dateLabel = (() => {
+      try {
+        return new Date(input.scheduledFor + 'T00:00:00').toLocaleDateString(
+          'es-ES',
+          { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' },
+        );
+      } catch {
+        return input.scheduledFor;
+      }
+    })();
+    const safeDate = escapeHtml(
+      input.startTime
+        ? `${dateLabel} · ${input.startTime.slice(0, 5)}`
+        : dateLabel,
+    );
+    const safeNotes = input.notes
+      ? escapeHtml(input.notes).replace(/\n/g, '<br>')
+      : null;
+
+    const requestsUrl = `${SITE_URL}/owner/tasks?status=requested`;
+    const subject = `${input.clientName} solicitó una ${input.serviceName ?? 'limpieza'}`;
+
+    const { waUrl } = await import('@/lib/phone');
+    const firstName = input.clientName.split(' ')[0] ?? '';
+    const wa = waUrl(
+      input.clientPhone,
+      `Hola ${firstName}, vi tu solicitud de ${input.serviceName ?? 'limpieza'} para ${dateLabel}. Te confirmo en breve.`,
+    );
+
+    const html = `
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;padding:24px;">
+        <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e2e8f0;">
+          <div style="background:linear-gradient(135deg,#a855f7,#7c3aed);padding:20px 24px;color:#fff;">
+            <p style="margin:0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.16em;opacity:0.85;">Solicitud nueva</p>
+            <h1 style="margin:6px 0 0;font-size:20px;font-weight:600;">${safeName}</h1>
+          </div>
+          <div style="padding:22px 24px;">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;color:#0f172a;">
+              <tr><td style="padding:6px 0;color:#64748b;width:90px;">Servicio</td><td style="padding:6px 0;font-weight:600;">${safeService}</td></tr>
+              <tr><td style="padding:6px 0;color:#64748b;">Fecha</td><td style="padding:6px 0;font-weight:600;">${safeDate}</td></tr>
+            </table>
+            ${
+              safeNotes
+                ? `<div style="margin-top:14px;background:#f1f5f9;border-radius:14px;padding:12px 14px;font-size:13px;color:#334155;line-height:1.55;"><p style="margin:0 0 6px;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.12em;font-weight:700;">Notas</p>${safeNotes}</div>`
+                : ''
+            }
+            <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="${escapeAttr(requestsUrl)}"
+                 style="display:inline-block;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:10px 18px;border-radius:10px;">
+                Ver solicitud
+              </a>
+              ${
+                wa
+                  ? `<a href="${escapeAttr(wa)}" style="display:inline-block;background:#25D366;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:10px 18px;border-radius:10px;">Responder por WhatsApp</a>`
+                  : ''
+              }
+            </div>
+            <p style="margin:20px 0 0;color:#64748b;font-size:11px;line-height:1.5;">
+              Aceptá o rechazá la solicitud desde la lista. Cuando la aceptes podés asignarle un limpiador desde el detalle.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const result = await sendEmail({ to: input.ownerEmail, subject, html });
+    if ('skipped' in result) {
+      return { sent: false, reason: 'no_resend_key' };
+    }
+    return { sent: true };
+  } catch (err) {
+    console.error('[email] notifyOwnerOfBookingRequest failed', err);
+    return { sent: false, reason: 'exception', detail: (err as Error).message };
+  }
+}
