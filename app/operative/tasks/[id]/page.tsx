@@ -286,21 +286,46 @@ export default async function OperativeTaskDetail({ params }: Props) {
 
         {/* Action area: changes by status */}
         {task.status === 'completed' ? (
-          <section className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4 text-center">
-            <CheckCircle2 className="mx-auto h-6 w-6 text-emerald-600" />
-            <p className="mt-2 text-sm font-semibold text-graphite-1">
-              Completed
-            </p>
-            <p className="mt-0.5 text-[11px] text-graphite-3">
-              {task.checked_in_at && task.completed_at ? (
-                <>
-                  Checked in {formatTime(task.checked_in_at)} · finished{' '}
-                  {formatTime(task.completed_at)}
-                </>
-              ) : task.completed_at ? (
-                <>Finished {formatTime(task.completed_at)}</>
-              ) : null}
-            </p>
+          <section className="relative animate-fade-up overflow-hidden rounded-3xl border border-clean-mint/40 bg-gradient-to-br from-clean-mint-soft via-white to-clean-aqua-soft/40 p-6 text-center shadow-mint-glow">
+            {/* Celebration sparkles */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-[18%] top-3 text-[14px] text-clean-aqua-glow animate-sparkle"
+            >
+              ✦
+            </span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute right-[14%] top-5 text-[10px] text-clean-mint animate-sparkle"
+              style={{ animationDelay: '0.6s' }}
+            >
+              ✦
+            </span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute right-[22%] bottom-3 text-[12px] text-clean-aqua animate-sparkle"
+              style={{ animationDelay: '1.3s' }}
+            >
+              ✦
+            </span>
+            <div className="relative">
+              <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-clean-mint text-white shadow-mint-glow animate-fade-in">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <p className="mt-3 font-display text-base font-semibold text-graphite-1">
+                ¡Listo!
+              </p>
+              <p className="mt-1 text-[11px] text-graphite-3">
+                {task.checked_in_at && task.completed_at ? (
+                  <>
+                    Entrada {formatTime(task.checked_in_at)} · finalizada{' '}
+                    {formatTime(task.completed_at)}
+                  </>
+                ) : task.completed_at ? (
+                  <>Finalizada {formatTime(task.completed_at)}</>
+                ) : null}
+              </p>
+            </div>
           </section>
         ) : task.status === 'in_progress' ? (
           <section className="rounded-2xl border border-brand-600/30 bg-brand-600/[0.04] p-4">

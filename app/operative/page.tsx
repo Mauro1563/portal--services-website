@@ -155,8 +155,21 @@ export default async function OperativeHome({ searchParams }: Props) {
       </ToolGrid>
 
       {heroTask ? (
-        <section className="mt-6 rounded-3xl border border-brand-600/30 bg-gradient-to-br from-brand-600/[0.08] to-brand-400/[0.04] p-5 shadow-card">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-700">
+        <section className="relative mt-6 animate-fade-up overflow-hidden rounded-3xl border border-clean-aqua/30 bg-gradient-to-br from-clean-aqua-soft/40 via-white to-brand-50 p-5 shadow-sparkle-glow">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-3 top-3 text-[12px] text-clean-aqua-glow animate-sparkle"
+          >
+            ✦
+          </span>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-7 top-6 text-[9px] text-clean-aqua animate-sparkle"
+            style={{ animationDelay: '0.7s' }}
+          >
+            ✦
+          </span>
+          <p className="relative text-[10px] font-bold uppercase tracking-[0.18em] text-brand-700">
             {heroTask.status === 'in_progress'
               ? t('operative.inProgress')
               : t('operative.nextUp')}
