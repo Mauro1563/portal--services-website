@@ -266,7 +266,7 @@ export default async function OwnerHome() {
         />
 
         {/* Chart + field cleaners — two columns on desktop, stacked mobile */}
-        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-5">
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <RevenueChart data={chartData} />
           </div>
@@ -276,7 +276,7 @@ export default async function OwnerHome() {
         </div>
 
         {/* Quick links to operations */}
-        <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <section className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 sm:grid-cols-4">
           <QuickTile
             href="/owner/tasks/new"
             label="Nueva limpieza"
@@ -305,7 +305,7 @@ export default async function OwnerHome() {
         </section>
 
         {/* Secondary nav — keeps things reachable on mobile */}
-        <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <section className="mt-3 grid grid-cols-4 gap-2 sm:mt-4 sm:gap-3">
           <SecondaryTile href="/owner/properties" label="Sitios" Icon={Building2} />
           <SecondaryTile href="/owner/calendar" label="Calendario" Icon={CalendarDays} />
           <SecondaryTile href="/owner/analytics" label="Analítica" Icon={BarChart3} />
@@ -344,23 +344,23 @@ function QuickTile({
   return (
     <Link
       href={href}
-      className={`group flex items-center gap-2.5 rounded-2xl p-3 transition ${
+      className={`group flex items-center gap-2 rounded-2xl p-2.5 transition sm:gap-2.5 sm:p-3 ${
         primary
           ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.55)] hover:brightness-110'
           : 'border border-slate-200 bg-white text-slate-900 hover:border-blue-300 hover:bg-blue-50/30'
       }`}
     >
       <span
-        className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
+        className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9 sm:rounded-xl ${
           primary ? 'bg-white/15 text-white' : 'bg-blue-50 text-blue-700'
         }`}
       >
-        <Icon className="h-4 w-4" />
+        <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
       </span>
       <span className="min-w-0">
-        <span className="block truncate text-[13px] font-semibold">{label}</span>
+        <span className="block truncate text-[12px] font-semibold sm:text-[13px]">{label}</span>
         <span
-          className={`block truncate text-[10.5px] ${
+          className={`block truncate text-[9.5px] sm:text-[10.5px] ${
             primary ? 'text-white/75' : 'text-slate-500'
           }`}
         >
