@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientByToken } from '@/lib/client-auth';
+import { notifyOwnerOfClientMessage } from '@/lib/email';
 
 export async function submitRating(formData: FormData) {
   const token = (formData.get('token') as string)?.trim();
@@ -67,12 +68,43 @@ export async function sendClientMessage(formData: FormData) {
   if (!ctx) redirect(`/client/${token}?error=expired`);
 
   const admin = createAdminClient();
+
+  // Rate-limit owner email: only send when THIS message is the first
+  // unread from this client. If there's already an unread message in
+  // the same conversation, the owner has already been pinged for it
+  // and a fresh email would be noise.
+  const { count: alreadyUnread } = await admin
+    .from('client_messages')
+    .select('id', { head: true, count: 'exact' })
+    .eq('client_id', ctx.client.id)
+    .eq('sender', 'client')
+    .is('read_at', null);
+
   await admin.from('client_messages').insert({
     owner_id: ctx.client.owner_id,
     client_id: ctx.client.id,
     sender: 'client',
     body,
   });
+
+  // Fire-and-forget — a Resend hiccup must not roll back the message.
+  if ((alreadyUnread ?? 0) === 0) {
+    const { data: ownerData } = await admin.auth.admin.getUserById(
+      ctx.client.owner_id,
+    );
+    const ownerEmail = ownerData?.user?.email;
+    if (ownerEmail) {
+      notifyOwnerOfClientMessage({
+        ownerEmail,
+        clientName: ctx.client.name,
+        clientId: ctx.client.id,
+        clientPhone: ctx.client.phone,
+        messageBody: body,
+      }).catch((err) =>
+        console.error('[sendClientMessage] notify owner failed', err),
+      );
+    }
+  }
 
   revalidatePath(`/client/${token}/messages`);
   redirect(`/client/${token}/messages`);

@@ -222,6 +222,88 @@ export async function notifyOwnerApproved(input: {
   }
 }
 
+/**
+ * Notify the owner when a client sends a message via the magic-link
+ * portal. Fired from `sendClientMessage`. Rate-limited at the call
+ * site (only sent when the message is the first unread from this
+ * client) so a chatty client doesn't trigger a dozen emails.
+ *
+ * The email body includes:
+ *  - The message text (truncated to 400 chars)
+ *  - A "Open chat" CTA back to /owner/clients/{id}/messages
+ *  - A WhatsApp tap-to-reply deep-link if the client has a phone
+ */
+export async function notifyOwnerOfClientMessage(input: {
+  ownerEmail: string;
+  clientName: string;
+  clientId: string;
+  clientPhone: string | null;
+  messageBody: string;
+}): Promise<NotifyResult> {
+  try {
+    const subject = `${input.clientName} te escribió en Portal Home`;
+    const trimmed =
+      input.messageBody.length > 400
+        ? input.messageBody.slice(0, 397) + '…'
+        : input.messageBody;
+    const chatUrl = `${SITE_URL}/owner/clients/${encodeURIComponent(input.clientId)}/messages`;
+
+    // Lazy import to avoid a circular dep with lib/phone (it doesn't
+    // import anything heavy but keeps the boundary clean).
+    const { waUrl } = await import('@/lib/phone');
+    const wa = waUrl(
+      input.clientPhone,
+      `Hola ${input.clientName.split(' ')[0] ?? ''}, ya leí tu mensaje en Portal Home — `,
+    );
+
+    const safeName = escapeHtml(input.clientName);
+    const safeBody = escapeHtml(trimmed).replace(/\n/g, '<br>');
+
+    const html = `
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;padding:24px;">
+        <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e2e8f0;">
+          <div style="background:linear-gradient(135deg,#22d3ee,#2563eb);padding:20px 24px;color:#fff;">
+            <p style="margin:0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.16em;opacity:0.85;">Mensaje nuevo</p>
+            <h1 style="margin:6px 0 0;font-size:20px;font-weight:600;">${safeName}</h1>
+          </div>
+          <div style="padding:22px 24px;">
+            <div style="background:#f1f5f9;border-radius:14px;padding:14px 16px;color:#0f172a;font-size:14px;line-height:1.55;">
+              ${safeBody}
+            </div>
+            <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="${escapeAttr(chatUrl)}"
+                 style="display:inline-block;background:linear-gradient(135deg,#22d3ee,#2563eb);color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:10px 18px;border-radius:10px;">
+                Abrir chat
+              </a>
+              ${
+                wa
+                  ? `<a href="${escapeAttr(wa)}" style="display:inline-block;background:#25D366;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:10px 18px;border-radius:10px;">Responder por WhatsApp</a>`
+                  : ''
+              }
+            </div>
+            <p style="margin:20px 0 0;color:#64748b;font-size:11px;line-height:1.5;">
+              Recibís este aviso porque ${safeName} te mandó un mensaje en su portal. Para no perderte más, dejá la pestaña <a href="${escapeAttr(chatUrl)}" style="color:#1d4ed8;">${escapeAttr(chatUrl)}</a> abierta — el chat es en vivo.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const result = await sendEmail({
+      to: input.ownerEmail,
+      subject,
+      html,
+    });
+    if ('skipped' in result) return { sent: false, reason: 'no_resend_key' };
+    if ('error' in result)
+      return { sent: false, reason: 'send_failed', detail: result.error };
+    return { sent: true };
+  } catch (err) {
+    console.error('[email] notifyOwnerOfClientMessage failed', err);
+    return { sent: false, reason: 'exception', detail: (err as Error).message };
+  }
+}
+
 function escapeHtml(s: string) {
   return s
     .replace(/&/g, '&amp;')
