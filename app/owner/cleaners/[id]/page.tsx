@@ -175,6 +175,29 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
         )}
       </section>
 
+      {/* Chat with cleaner — quick CTA */}
+      <section className="mt-4">
+        <Link
+          href={`/owner/cleaners/${cleaner.id}/chat`}
+          className="group flex items-center gap-3 rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50/70 to-cyan-50/50 p-4 transition hover:border-brand-300"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white">
+            💬
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-700">
+              Chat directo
+            </p>
+            <p className="mt-0.5 text-[13px] font-semibold text-text-1">
+              Habla con {cleaner.name.split(' ')[0]}
+            </p>
+          </div>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-brand-700 transition group-hover:translate-x-0.5">
+            Abrir →
+          </span>
+        </Link>
+      </section>
+
       {/* Performance snapshot */}
       <section className="mt-6">
         <h2 className="font-display text-base font-semibold text-text-1">

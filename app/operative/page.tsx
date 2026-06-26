@@ -9,6 +9,7 @@ import { AgendaHeader } from '@/components/operative/AgendaHeader';
 import { AgendaTimeline, type AgendaTask } from '@/components/operative/AgendaTimeline';
 import { EarningsStrip } from '@/components/operative/EarningsStrip';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
+import { getUnreadOwnerMessagesForCleaner } from '@/lib/cleaner-messages';
 import { PWAInstall } from '@/components/operative/PWAInstall';
 import { routeUrl, singleStopUrl, telUrl, type Stop } from '@/lib/maps';
 
@@ -62,15 +63,18 @@ export default async function OperativeHome({ searchParams }: Props) {
   const today = now.toISOString().split('T')[0];
   const weekStartIso = startOfWeek(now);
 
-  const { data } = await admin
-    .from('tasks')
-    .select(
-      'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, estimated_duration_min, price_pence, property:properties (name, address), client:clients (name, address, postcode, phone)',
-    )
-    .eq('cleaner_id', cleanerId)
-    .gte('scheduled_for', weekStartIso)
-    .order('scheduled_for', { ascending: true })
-    .order('start_time', { ascending: true, nullsFirst: false });
+  const [{ data }, unreadChat] = await Promise.all([
+    admin
+      .from('tasks')
+      .select(
+        'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, estimated_duration_min, price_pence, property:properties (name, address), client:clients (name, address, postcode, phone)',
+      )
+      .eq('cleaner_id', cleanerId)
+      .gte('scheduled_for', weekStartIso)
+      .order('scheduled_for', { ascending: true })
+      .order('start_time', { ascending: true, nullsFirst: false }),
+    getUnreadOwnerMessagesForCleaner(cleanerId),
+  ]);
 
   const tasks = (data ?? []) as unknown as OperativeTask[];
   const todayTasks = tasks.filter((t) => t.scheduled_for === today);
@@ -291,7 +295,7 @@ export default async function OperativeHome({ searchParams }: Props) {
         <PWAInstall />
       </div>
 
-      <BottomTabBar active="agenda" />
+      <BottomTabBar active="agenda" unreadChat={unreadChat} />
     </main>
   );
 }
