@@ -24,6 +24,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
 import { getT } from '@/lib/i18n';
 import { signout } from '@/app/login/actions';
+import { OnboardingChecklist } from '@/components/owner/OnboardingChecklist';
 import {
   CorporateBanner,
   PortalHero,
@@ -66,6 +67,7 @@ export default async function OwnerHome() {
     cleanersRes,
     clientsRes,
     pendingRes,
+    tasksTotalRes,
     todayTasksRes,
     ratingsRes,
     monthPaidRes,
@@ -79,6 +81,7 @@ export default async function OwnerHome() {
       .gte('scheduled_for', today)
       .neq('status', 'completed')
       .neq('status', 'cancelled'),
+    supabase.from('tasks').select('id', { count: 'exact', head: true }),
     supabase
       .from('tasks')
       .select(
@@ -102,6 +105,7 @@ export default async function OwnerHome() {
   const cleanersCount = cleanersRes.count ?? 0;
   const clientsCount = clientsRes.count ?? 0;
   const pendingCount = pendingRes.count ?? 0;
+  const tasksTotal = tasksTotalRes.count ?? 0;
   const todayTasks = (todayTasksRes.data ?? []) as unknown as TaskListItem[];
   const ratings = (ratingsRes.data ?? []) as RatingRow[];
   const paid = (monthPaidRes.data ?? []) as PaidRow[];
@@ -203,6 +207,13 @@ export default async function OwnerHome() {
                 : tx('subNoData'),
           },
         ]}
+      />
+
+      <OnboardingChecklist
+        propertiesCount={propertiesCount}
+        cleanersCount={cleanersCount}
+        clientsCount={clientsCount}
+        tasksTotal={tasksTotal}
       />
 
       <TodayTasksPanel tasks={todayTasks} tx={tx} />
