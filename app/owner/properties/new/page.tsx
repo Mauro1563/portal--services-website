@@ -20,6 +20,16 @@ export default async function NewPropertyPage({ searchParams }: Props) {
   const t = await getT();
   const { error } = await searchParams;
 
+  // Load clients so the owner can attach this property to an existing
+  // client instead of re-typing contact info. If the owner has none
+  // yet, the picker is hidden and the legacy inline contact fields are
+  // shown as a fallback.
+  const { data: clientsRaw } = await supabase
+    .from('clients')
+    .select('id, name')
+    .order('name');
+  const clientOptions = clientsRaw ?? [];
+
   return (
     <LightLayout
       activeTab="properties"
@@ -52,14 +62,40 @@ export default async function NewPropertyPage({ searchParams }: Props) {
           />
         </Section>
 
-        {/* ── Contacto del dueño / contacto en sitio ────────────────── */}
+        {/* ── Vinculación al cliente o contacto manual ─────────────── */}
         <Section
           icon={User}
-          title="Contacto del dueño"
-          subtitle="La persona a quien escribir si pasa algo en la casa."
+          title="Cliente / contacto"
+          subtitle={
+            clientOptions.length > 0
+              ? 'Vinculá con un cliente existente — sus datos pasan a ser la fuente de verdad. O cargá un contacto suelto abajo.'
+              : 'Todavía no tenés clientes registrados. Cargá un contacto suelto o creá un cliente primero.'
+          }
         >
+          {clientOptions.length > 0 ? (
+            <label className="block">
+              <span className="text-xs font-medium text-text-2">
+                Cliente vinculado
+              </span>
+              <select
+                name="client_id"
+                defaultValue=""
+                className="mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+              >
+                <option value="">— Sin cliente vinculado —</option>
+                {clientOptions.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block text-[11px] text-text-3">
+                Si elegís uno, los campos de contacto de abajo se ignoran.
+              </span>
+            </label>
+          ) : null}
           <Field
-            label="Nombre"
+            label="Nombre (si no vinculaste cliente)"
             name="contact_name"
             placeholder="Ej. María García"
           />
