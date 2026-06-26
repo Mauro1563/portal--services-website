@@ -3,35 +3,79 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
+/**
+ * ASCII guard for env vars — Vercel sometimes carries trailing
+ * whitespace or smart-quotes when keys get copy-pasted from email.
+ * `createServerClient` rejects with a misleading error in that case.
+ * Returning null lets the caller fall back to a permissive pass-through
+ * instead of 500ing the whole app.
+ */
+function asciiEnv(name: string): string | null {
+  const raw = process.env[name];
+  if (!raw) return null;
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  for (let i = 0; i < trimmed.length; i++) {
+    if (trimmed.charCodeAt(i) > 127) return null;
+  }
+  return trimmed;
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet: CookieToSet[]) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
-          );
-        },
+  const supabaseUrl = asciiEnv('NEXT_PUBLIC_SUPABASE_URL');
+  const supabaseAnon = asciiEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+
+  // If env is missing/garbled, don't 500. Let public pages render and
+  // protected routes redirect normally — better degraded than dead.
+  if (!supabaseUrl || !supabaseAnon) {
+    console.error(
+      '[middleware] Supabase env missing or non-ASCII — skipping auth check',
+      { hasUrl: !!supabaseUrl, hasAnon: !!supabaseAnon },
+    );
+
+    if (
+      pathname.startsWith('/operative') &&
+      !pathname.startsWith('/operative/login')
+    ) {
+      const cleanerSession = request.cookies.get('cleaner_session');
+      if (!cleanerSession) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/operative/login';
+        return NextResponse.redirect(url);
+      }
+    }
+    return supabaseResponse;
+  }
+
+  const supabase = createServerClient(supabaseUrl, supabaseAnon, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet: CookieToSet[]) {
+        cookiesToSet.forEach(({ name, value }) =>
+          request.cookies.set(name, value),
+        );
+        supabaseResponse = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          supabaseResponse.cookies.set(name, value, options),
+        );
       },
     },
-  );
+  });
 
-  // IMPORTANT: call getUser() right after creating the client to refresh the session.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Wrap getUser() — a transient Supabase outage shouldn't be a 500.
+  // Treat any auth error as "no user" and let the route handle it.
+  let user: { user_metadata?: Record<string, unknown> } | null = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch (err) {
+    console.error('[middleware] supabase.auth.getUser() failed', err);
+  }
 
   // Public sub-routes under /hq (auth flow pages themselves) — never redirect
   const isHqAuthPage =
