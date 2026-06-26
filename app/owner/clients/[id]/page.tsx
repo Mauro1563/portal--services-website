@@ -51,27 +51,37 @@ export default async function ClientDetail({ params, searchParams }: Props) {
 
   if (!client) notFound();
 
-  const [{ data: tasksRaw }, { data: ratingsRaw }, { count: unreadCount }] =
-    await Promise.all([
-      supabase
-        .from('tasks')
-        .select('id, scheduled_for, status, service_name, price_pence')
-        .eq('client_id', id)
-        .order('scheduled_for', { ascending: false })
-        .limit(10),
-      supabase
-        .from('task_ratings')
-        .select('task_id, stars, comment, created_at, cleaner_id')
-        .eq('client_id', id)
-        .order('created_at', { ascending: false })
-        .limit(5),
-      supabase
-        .from('client_messages')
-        .select('id', { head: true, count: 'exact' })
-        .eq('client_id', id)
-        .eq('sender', 'client')
-        .is('read_at', null),
-    ]);
+  const [
+    { data: tasksRaw },
+    { data: ratingsRaw },
+    { count: unreadCount },
+    { data: propertiesRaw },
+  ] = await Promise.all([
+    supabase
+      .from('tasks')
+      .select('id, scheduled_for, status, service_name, price_pence')
+      .eq('client_id', id)
+      .order('scheduled_for', { ascending: false })
+      .limit(10),
+    supabase
+      .from('task_ratings')
+      .select('task_id, stars, comment, created_at, cleaner_id')
+      .eq('client_id', id)
+      .order('created_at', { ascending: false })
+      .limit(5),
+    supabase
+      .from('client_messages')
+      .select('id', { head: true, count: 'exact' })
+      .eq('client_id', id)
+      .eq('sender', 'client')
+      .is('read_at', null),
+    supabase
+      .from('properties')
+      .select('id, name, address, platform')
+      .eq('client_id', id)
+      .order('created_at', { ascending: false }),
+  ]);
+  const linkedProperties = propertiesRaw ?? [];
   const unread = unreadCount ?? 0;
 
   const tasks = tasksRaw ?? [];
@@ -171,6 +181,56 @@ export default async function ClientDetail({ params, searchParams }: Props) {
           </span>
         ) : null}
       </Link>
+
+      {/* Propiedades vinculadas a este cliente */}
+      <section className="mt-6 rounded-2xl border border-surface-2 bg-surface-0 p-5 shadow-card">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="inline-flex items-center gap-2 font-display text-base font-semibold text-text-1">
+            <MapPin className="h-4 w-4 text-brand-600" />
+            Propiedades ({linkedProperties.length})
+          </h2>
+          <Link
+            href={`/owner/properties/new?client_id=${client.id}`}
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-surface-2 bg-surface-0 px-2.5 text-[11px] font-semibold text-text-1 hover:bg-surface-1"
+          >
+            + Sumar
+          </Link>
+        </div>
+
+        {linkedProperties.length === 0 ? (
+          <p className="mt-3 text-[12px] text-text-3">
+            Este cliente todavía no tiene propiedades vinculadas. Cargá una y
+            luego sus limpiezas la referencian solas.
+          </p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {linkedProperties.map((p) => (
+              <li key={p.id}>
+                <Link
+                  href={`/owner/properties/${p.id}`}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 transition hover:border-brand-600/30 hover:bg-surface-1"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-display text-sm font-semibold text-text-1">
+                      {p.name}
+                    </p>
+                    {p.address ? (
+                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-text-3">
+                        <MapPin className="h-3 w-3" /> {p.address}
+                      </p>
+                    ) : null}
+                  </div>
+                  {p.platform ? (
+                    <span className="shrink-0 rounded-full bg-brand-600/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-brand-700">
+                      {p.platform}
+                    </span>
+                  ) : null}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {/* Client portal access link */}
       <section className="mt-6 rounded-2xl border border-brand-600/30 bg-brand-600/[0.04] p-5 shadow-card">
