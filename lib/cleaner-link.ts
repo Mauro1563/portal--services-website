@@ -6,13 +6,20 @@ import 'server-only';
  * they only need to tap "Sign in" — bypassing the marketing site and the
  * unified login chooser.
  *
- * The base URL comes from NEXT_PUBLIC_SITE_URL; the fallback uses the new
- * "Portal Home" brand domain. Update both env and fallback together when
- * the production hostname changes.
+ * Critical: WhatsApp / SMS only auto-link URLs that start with `http://`
+ * or `https://`. If NEXT_PUBLIC_SITE_URL is set without the protocol
+ * (e.g. just `portalservices.digital`), the share message would show
+ * the URL as plain text and the recipient can't tap it. We normalize
+ * here so a misconfigured env var can never break the share flow.
  */
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ||
-  'https://hq.portalhome.digital';
+const RAW_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'hq.portalhome.digital';
+
+const SITE_URL = (() => {
+  const trimmed = RAW_SITE_URL.replace(/\/$/, '');
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+})();
 
 export function cleanerLoginUrl(pin: string): string {
   return `${SITE_URL}/operative/login?pin=${encodeURIComponent(pin)}`;

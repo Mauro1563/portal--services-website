@@ -5,8 +5,13 @@ import { redirect } from 'next/navigation';
 import { requireOwner } from '@/lib/auth';
 
 function clientPortalUrl(token: string): string {
-  const base =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hq.portalservices.digital';
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'hq.portalservices.digital';
+  const trimmed = raw.replace(/\/$/, '');
+  // WhatsApp/SMS only auto-link URLs that start with http(s)://. Normalize
+  // so a bare-host env var (`portalservices.digital`) still ships a
+  // clickable link.
+  const base = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   return `${base}/client/${encodeURIComponent(token)}`;
 }
 
