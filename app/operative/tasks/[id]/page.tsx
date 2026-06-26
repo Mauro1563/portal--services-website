@@ -6,10 +6,13 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
+  KeyRound,
   MapPin,
+  Phone,
   PoundSterling,
   StickyNote,
   User,
+  Wifi,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { createAdminClient } from '@/lib/supabase/admin';
@@ -31,8 +34,19 @@ type DetailTask = {
   service_name: string | null;
   price_pence: number | null;
   estimated_duration_min: number | null;
-  property: { name: string | null; address: string | null } | null;
-  client: { name: string | null } | null;
+  property: {
+    name: string | null;
+    address: string | null;
+    notes: string | null;
+  } | null;
+  client: {
+    name: string | null;
+    address: string | null;
+    postcode: string | null;
+    phone: string | null;
+    key_info: string | null;
+    wifi_info: string | null;
+  } | null;
 };
 
 type Photo = { id: string; url: string; created_at: string };
@@ -79,7 +93,7 @@ export default async function OperativeTaskDetail({ params }: Props) {
     admin
       .from('tasks')
       .select(
-        'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address), client:clients (name)',
+        'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
       )
       .eq('id', id)
       .eq('cleaner_id', cleanerId)
@@ -136,19 +150,34 @@ export default async function OperativeTaskDetail({ params }: Props) {
               {task.start_time ? ` · ${task.start_time.slice(0, 5)}` : ''}
             </span>
           </div>
-          <h1 className="mt-3 font-display text-xl font-semibold text-graphite-1">
-            {task.property?.name ?? 'Property removed'}
-          </h1>
-          {task.property?.address ? (
-            <a
-              href={`https://maps.google.com/?q=${encodeURIComponent(task.property.address)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
-            >
-              <MapPin className="h-3.5 w-3.5" /> {task.property.address}
-            </a>
-          ) : null}
+          {(() => {
+            // Address priority: client's house (house_cleaning) wins, falls
+            // back to property (airbnb). Postcode appended for GPS precision.
+            const fallbackAddress = task.property?.address ?? null;
+            const address = task.client?.address ?? fallbackAddress;
+            const postcode = task.client?.postcode ?? null;
+            const headline =
+              task.client?.name ?? task.property?.name ?? 'Sin destino';
+            const mapsQuery = [address, postcode].filter(Boolean).join(', ');
+            return (
+              <>
+                <h1 className="mt-3 font-display text-xl font-semibold text-graphite-1">
+                  {headline}
+                </h1>
+                {address ? (
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(mapsQuery)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+                  >
+                    <MapPin className="h-3.5 w-3.5" /> {address}
+                    {postcode ? ` · ${postcode}` : ''}
+                  </a>
+                ) : null}
+              </>
+            );
+          })()}
 
           {/* Meta row */}
           <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-4 text-center">
@@ -175,6 +204,66 @@ export default async function OperativeTaskDetail({ params }: Props) {
           <p className="text-center text-[11px] uppercase tracking-wider text-graphite-3">
             {task.service_name}
           </p>
+        ) : null}
+
+        {/* On-site info — keys, wifi, phone — pulled from the client. */}
+        {task.client &&
+        (task.client.key_info || task.client.wifi_info || task.client.phone) ? (
+          <section className="rounded-2xl border border-surface-2 bg-surface-0 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
+              On-site info
+            </p>
+            <ul className="mt-3 space-y-3">
+              {task.client.key_info ? (
+                <li className="flex items-start gap-2.5">
+                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700">
+                    <KeyRound className="h-3.5 w-3.5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
+                      Llaves / acceso
+                    </p>
+                    <p className="mt-0.5 text-sm leading-relaxed text-graphite-1">
+                      {task.client.key_info}
+                    </p>
+                  </div>
+                </li>
+              ) : null}
+              {task.client.wifi_info ? (
+                <li className="flex items-start gap-2.5">
+                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-cyan-50 text-brand-700">
+                    <Wifi className="h-3.5 w-3.5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
+                      Wifi
+                    </p>
+                    <p className="mt-0.5 break-words font-mono text-sm text-graphite-1">
+                      {task.client.wifi_info}
+                    </p>
+                  </div>
+                </li>
+              ) : null}
+              {task.client.phone ? (
+                <li className="flex items-start gap-2.5">
+                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-emerald-50 text-emerald-700">
+                    <Phone className="h-3.5 w-3.5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
+                      Contacto
+                    </p>
+                    <a
+                      href={`tel:${task.client.phone.replace(/\s+/g, '')}`}
+                      className="mt-0.5 inline-block text-sm font-semibold text-brand-700 hover:underline"
+                    >
+                      {task.client.phone}
+                    </a>
+                  </div>
+                </li>
+              ) : null}
+            </ul>
+          </section>
         ) : null}
 
         {/* Notes from manager */}
