@@ -152,11 +152,17 @@ export async function cancelTaskDetail(formData: FormData) {
   const taskId = (formData.get('task_id') as string)?.trim();
   if (!taskId) redirect('/owner/tasks');
 
-  await supabase
+  const { error } = await supabase
     .from('tasks')
     .update({ status: 'cancelled' })
     .eq('id', taskId)
     .eq('owner_id', user.id);
+
+  if (error) {
+    redirect(
+      `/owner/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
 
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
@@ -193,11 +199,17 @@ export async function deleteTaskDetail(formData: FormData) {
   const taskId = (formData.get('task_id') as string)?.trim();
   if (!taskId) redirect('/owner/tasks');
 
-  await supabase
+  const { error } = await supabase
     .from('tasks')
     .delete()
     .eq('id', taskId)
     .eq('owner_id', user.id);
+
+  if (error) {
+    redirect(
+      `/owner/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
 
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
