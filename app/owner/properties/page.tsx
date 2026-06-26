@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Building2, ChevronRight, Plus, Search } from 'lucide-react';
+import { Building2, ChevronRight, Plus, Search, SearchX } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { EmptyState } from '@/components/EmptyState';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{ q?: string }>;
@@ -66,14 +67,24 @@ export default async function PropertiesPage({
         </form>
 
         {!properties || properties.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-10 text-center">
-            <Building2 className="mx-auto h-7 w-7 text-text-3" />
-            <p className="mt-3 font-display text-base font-semibold text-text-1">
-              {needle ? t('properties.noMatches') : t('properties.empty')}
-            </p>
-            <p className="mt-1 text-sm text-text-2">
-              {needle ? t('properties.tryAnother') : t('properties.emptyHint')}
-            </p>
+          <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+            {needle ? (
+              <EmptyState
+                icon={SearchX}
+                tone="neutral"
+                title={t('properties.noMatches')}
+                description={t('properties.tryAnother')}
+              />
+            ) : (
+              <EmptyState
+                icon={Building2}
+                title={t('properties.empty')}
+                description={t('properties.emptyHint')}
+                actions={[
+                  { label: 'Añadir propiedad', href: '/owner/properties/new' },
+                ]}
+              />
+            )}
           </div>
         ) : (
           <div className="mt-5 overflow-hidden rounded-2xl border border-surface-2 bg-surface-0 shadow-card">

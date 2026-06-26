@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ChevronRight, Mail, MessageCircle, Phone, Plus, Search, UserPlus } from 'lucide-react';
+import { ChevronRight, Mail, MessageCircle, Phone, Plus, Search, UserPlus, SearchX } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { EmptyState } from '@/components/EmptyState';
 
 type SearchParams = Promise<{ q?: string }>;
 
@@ -91,16 +92,24 @@ export default async function ClientsPage({
         </form>
 
         {!clients || clients.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-10 text-center">
-            <UserPlus className="mx-auto h-7 w-7 text-text-3" />
-            <p className="mt-3 font-display text-base font-semibold text-text-1">
-              {needle ? 'Sin resultados.' : 'Aún no hay clientes.'}
-            </p>
-            <p className="mt-1 text-sm text-text-2">
-              {needle
-                ? 'Probá otra búsqueda.'
-                : 'Añadí tu primer cliente para darle su propio portal donde ve y valora las limpiezas.'}
-            </p>
+          <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+            {needle ? (
+              <EmptyState
+                icon={SearchX}
+                tone="neutral"
+                title="Sin resultados"
+                description={`No encontramos clientes que coincidan con "${needle}". Probá con otro término.`}
+              />
+            ) : (
+              <EmptyState
+                icon={UserPlus}
+                title="Aún no hay clientes"
+                description="Añadí tu primer cliente para darle su propio portal donde ve y valora las limpiezas."
+                actions={[
+                  { label: 'Añadir cliente', href: '/owner/clients/new' },
+                ]}
+              />
+            )}
           </div>
         ) : (
           <div className="mt-5 overflow-hidden rounded-2xl border border-surface-2 bg-surface-0 shadow-card">
