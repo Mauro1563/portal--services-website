@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { ChevronRight, KeyRound, Plus, Search } from 'lucide-react';
+import { ChevronRight, KeyRound, Plus, Search, SearchX } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { EmptyState } from '@/components/EmptyState';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{ q?: string }>;
@@ -81,14 +82,24 @@ export default async function CleanersPage({
         </form>
 
         {!cleaners || cleaners.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-10 text-center">
-            <KeyRound className="mx-auto h-7 w-7 text-text-3" />
-            <p className="mt-3 font-display text-base font-semibold text-text-1">
-              {needle ? t('cleaners.noMatches') : t('cleaners.empty')}
-            </p>
-            <p className="mt-1 text-sm text-text-2">
-              {needle ? t('properties.tryAnother') : t('cleaners.emptyHint')}
-            </p>
+          <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+            {needle ? (
+              <EmptyState
+                icon={SearchX}
+                tone="neutral"
+                title={t('cleaners.noMatches')}
+                description={t('properties.tryAnother')}
+              />
+            ) : (
+              <EmptyState
+                icon={KeyRound}
+                title={t('cleaners.empty')}
+                description={t('cleaners.emptyHint')}
+                actions={[
+                  { label: 'Añadir limpiador', href: '/owner/cleaners/new' },
+                ]}
+              />
+            )}
           </div>
         ) : (
           <div className="mt-5 overflow-hidden rounded-2xl border border-surface-2 bg-surface-0 shadow-card">

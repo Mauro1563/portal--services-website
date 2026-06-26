@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { CalendarDays, ChevronRight, MapPin, Plus, Search, X } from 'lucide-react';
+import { CalendarDays, ChevronRight, ListChecks, MapPin, Plus, Search, SearchX, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { EmptyState } from '@/components/EmptyState';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{
@@ -222,13 +223,24 @@ export default async function TasksPage({
       </form>
 
       {tasks.length === 0 ? (
-        <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-8 text-center">
-          <p className="font-display text-base font-semibold text-text-1">
-            {hasFilters ? t('tasks.noMatches') : t('tasks.empty')}
-          </p>
-          <p className="mt-1 text-sm text-text-2">
-            {hasFilters ? t('tasks.tryAdjust') : t('tasks.emptyHint')}
-          </p>
+        <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+          {hasFilters ? (
+            <EmptyState
+              icon={SearchX}
+              tone="neutral"
+              title={t('tasks.noMatches')}
+              description={t('tasks.tryAdjust')}
+            />
+          ) : (
+            <EmptyState
+              icon={ListChecks}
+              title={t('tasks.empty')}
+              description={t('tasks.emptyHint')}
+              actions={[
+                { label: 'Programar limpieza', href: '/owner/tasks/new' },
+              ]}
+            />
+          )}
         </div>
       ) : (
         <ul className="mt-5 space-y-2">
