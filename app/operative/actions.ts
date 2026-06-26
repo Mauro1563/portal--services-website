@@ -52,7 +52,7 @@ export async function markCompleted(formData: FormData) {
   if (!taskId) return;
 
   const admin = createAdminClient();
-  await admin
+  const { error } = await admin
     .from('tasks')
     .update({
       status: 'completed',
@@ -61,6 +61,15 @@ export async function markCompleted(formData: FormData) {
     .eq('id', taskId)
     .eq('cleaner_id', cleanerId);
 
+  if (error) {
+    console.error('[markCompleted] update failed', error);
+    redirect(
+      `/operative/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
+
+  // Only notify on success — otherwise the owner gets an email about a
+  // task that never actually completed.
   await notifyOwnerOfCompletion(taskId);
 
   revalidatePath('/operative');
@@ -77,7 +86,7 @@ export async function checkInTask(formData: FormData) {
   if (!taskId || Number.isNaN(lat) || Number.isNaN(lng)) return;
 
   const admin = createAdminClient();
-  await admin
+  const { error } = await admin
     .from('tasks')
     .update({
       status: 'in_progress',
@@ -87,6 +96,13 @@ export async function checkInTask(formData: FormData) {
     })
     .eq('id', taskId)
     .eq('cleaner_id', cleanerId);
+
+  if (error) {
+    console.error('[checkInTask] update failed', error);
+    redirect(
+      `/operative/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
 
   revalidatePath('/operative');
 }
