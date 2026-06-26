@@ -112,6 +112,7 @@ export async function updateProperty(formData: FormData) {
   const sqmRaw = (formData.get('floor_area_sqm') as string)?.trim();
   const platformRaw = (formData.get('platform') as string)?.trim();
 
+  const clientId = (formData.get('client_id') as string)?.trim() || null;
   const { error } = await supabase
     .from('properties')
     .update({
@@ -122,6 +123,7 @@ export async function updateProperty(formData: FormData) {
       platform: platformRaw || null,
       guests: guestsRaw ? Number(guestsRaw) : null,
       floor_area_sqm: sqmRaw ? Number(sqmRaw) : null,
+      client_id: clientId,
       contact_name: (formData.get('contact_name') as string)?.trim() || null,
       contact_phone: (formData.get('contact_phone') as string)?.trim() || null,
       contact_email: (formData.get('contact_email') as string)?.trim() || null,

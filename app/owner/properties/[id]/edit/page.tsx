@@ -20,13 +20,17 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
 
-  const { data: property } = await supabase
-    .from('properties')
-    .select(
-      'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, contact_name, contact_phone, contact_email',
-    )
-    .eq('id', id)
-    .maybeSingle();
+  const [{ data: property }, { data: clientsRaw }] = await Promise.all([
+    supabase
+      .from('properties')
+      .select(
+        'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, client_id, contact_name, contact_phone, contact_email',
+      )
+      .eq('id', id)
+      .maybeSingle(),
+    supabase.from('clients').select('id, name').order('name'),
+  ]);
+  const clientOptions = clientsRaw ?? [];
 
   if (!property) notFound();
 
@@ -61,14 +65,40 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
           />
         </Section>
 
-        {/* ── Contacto del dueño ────────────────────────────────────── */}
+        {/* ── Vinculación al cliente o contacto manual ─────────────── */}
         <Section
           icon={User}
-          title="Contacto del dueño"
-          subtitle="La persona a quien escribir si pasa algo en la casa."
+          title="Cliente / contacto"
+          subtitle={
+            clientOptions.length > 0
+              ? 'Vinculá con un cliente — sus datos pasan a ser la fuente de verdad. O cargá un contacto suelto abajo.'
+              : 'Cargá un contacto suelto o creá un cliente primero.'
+          }
         >
+          {clientOptions.length > 0 ? (
+            <label className="block">
+              <span className="text-xs font-medium text-text-2">
+                Cliente vinculado
+              </span>
+              <select
+                name="client_id"
+                defaultValue={property.client_id ?? ''}
+                className="mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+              >
+                <option value="">— Sin cliente vinculado —</option>
+                {clientOptions.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block text-[11px] text-text-3">
+                Si elegís uno, los campos de contacto de abajo se ignoran.
+              </span>
+            </label>
+          ) : null}
           <Field
-            label="Nombre"
+            label="Nombre (si no vinculaste cliente)"
             name="contact_name"
             defaultValue={property.contact_name ?? ''}
             placeholder="Ej. María García"
