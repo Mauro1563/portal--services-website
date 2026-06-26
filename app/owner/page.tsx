@@ -25,6 +25,7 @@ import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
 import { getT } from '@/lib/i18n';
 import { signout } from '@/app/login/actions';
 import { OnboardingChecklist } from '@/components/owner/OnboardingChecklist';
+import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import {
   CorporateBanner,
   PortalHero,
@@ -208,6 +209,8 @@ export default async function OwnerHome() {
           },
         ]}
       />
+
+      <TasksAutoRefresh ownerId={user.id} />
 
       <OnboardingChecklist
         propertiesCount={propertiesCount}
