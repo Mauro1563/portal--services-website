@@ -93,7 +93,7 @@ export default async function TasksPage({
   const hasFilters = !!(q || effectiveStatus || property || cleaner || from || to);
 
   return (
-    <LightLayout activeTab="tasks" title="Servicios">
+    <LightLayout activeTab="tasks" title="Limpiezas">
       <TasksAutoRefresh ownerId={user.id} />
       <div className="mx-auto max-w-5xl">
       <div className="flex flex-wrap items-end justify-between gap-3">

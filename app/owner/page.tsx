@@ -24,7 +24,6 @@ import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
 import { getT } from '@/lib/i18n';
 import { signout } from '@/app/login/actions';
-import { OnboardingChecklist } from '@/components/owner/OnboardingChecklist';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import {
   CorporateBanner,
@@ -80,7 +79,6 @@ export default async function OwnerHome() {
     cleanersRes,
     clientsRes,
     pendingRes,
-    tasksTotalRes,
     todayTasksRes,
     ratingsRes,
     monthPaidRes,
@@ -94,7 +92,6 @@ export default async function OwnerHome() {
       .gte('scheduled_for', today)
       .neq('status', 'completed')
       .neq('status', 'cancelled'),
-    supabase.from('tasks').select('id', { count: 'exact', head: true }),
     supabase
       .from('tasks')
       .select(
@@ -118,7 +115,6 @@ export default async function OwnerHome() {
   const cleanersCount = cleanersRes.count ?? 0;
   const clientsCount = clientsRes.count ?? 0;
   const pendingCount = pendingRes.count ?? 0;
-  const tasksTotal = tasksTotalRes.count ?? 0;
   const todayTasks = (todayTasksRes.data ?? []) as unknown as TaskListItem[];
   const ratings = (ratingsRes.data ?? []) as RatingRow[];
   const paid = (monthPaidRes.data ?? []) as PaidRow[];
@@ -198,8 +194,6 @@ export default async function OwnerHome() {
         ]}
       />
 
-      <QuickActions tx={tx} businessType={profile.business_type} />
-
       <StatRow
         items={[
           { label: tx('kpiToday'), value: todayCount, sub: tx('subCleanings') },
@@ -226,15 +220,9 @@ export default async function OwnerHome() {
 
       <TasksAutoRefresh ownerId={user.id} />
 
-      <OnboardingChecklist
-        propertiesCount={propertiesCount}
-        cleanersCount={cleanersCount}
-        clientsCount={clientsCount}
-        tasksTotal={tasksTotal}
-        businessType={profile.business_type}
-      />
-
       <TodayTasksPanel tasks={todayTasks} tx={tx} />
+
+      <QuickActions tx={tx} businessType={profile.business_type} />
 
       <ToolGrid>
         <ToolCard
@@ -327,39 +315,25 @@ function QuickActions({
   }
   actions.push({ href: '/owner/cleaners/new', label: tx('qaNewCleaner'), Icon: Users, primary: false });
   return (
-    <section className="my-5 animate-fade-up">
+    <section className="mt-6 animate-fade-up">
       <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
         {tx('quickActionsTitle')}
       </p>
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {actions.map((a) => {
           const Icon = a.Icon;
           return (
             <Link
               key={a.href}
               href={a.href}
-              className={`group relative flex min-h-[58px] items-center gap-2 overflow-hidden rounded-2xl px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${
+              className={`group relative flex h-12 items-center gap-2 overflow-hidden rounded-xl px-3 text-[13px] font-semibold transition-all duration-200 ${
                 a.primary
-                  ? 'bg-sparkle-gradient text-white shadow-sparkle-glow hover:scale-[1.02] hover:shadow-[0_14px_36px_-12px_rgba(34,211,238,0.7)]'
-                  : 'border border-surface-2 bg-surface-0 text-text-1 hover:-translate-y-0.5 hover:border-clean-aqua hover:shadow-sparkle-glow'
+                  ? 'bg-sparkle-gradient text-white shadow-sparkle-glow hover:scale-[1.02]'
+                  : 'border border-surface-2 bg-surface-0 text-text-1 hover:-translate-y-0.5 hover:border-clean-aqua'
               }`}
             >
-              {/* Sparkle accent on primary CTA */}
-              {a.primary ? (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute right-2 top-1.5 text-[10px] text-white/80 animate-sparkle"
-                >
-                  ✦
-                </span>
-              ) : null}
               <Icon className="h-4 w-4 shrink-0" />
               <span className="truncate">{a.label}</span>
-              <ChevronRight
-                className={`ml-auto h-4 w-4 shrink-0 transition group-hover:translate-x-0.5 ${
-                  a.primary ? 'text-white/80' : 'text-text-3 group-hover:text-clean-aqua'
-                }`}
-              />
             </Link>
           );
         })}

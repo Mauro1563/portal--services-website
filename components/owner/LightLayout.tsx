@@ -40,7 +40,7 @@ function buildGroups(
 ): { label: string; items: NavItem[] }[] {
   const opItems: NavItem[] = [
     { key: 'overview', href: '/owner', label: 'Resumen', Icon: LayoutGrid, tab: 'home' },
-    { key: 'services', href: '/owner/tasks', label: 'Servicios', Icon: ClipboardList, tab: 'tasks' },
+    { key: 'services', href: '/owner/tasks', label: 'Limpiezas', Icon: ClipboardList, tab: 'tasks' },
   ];
   // Airbnb managers think in properties (listings). House cleaning shops
   // think in clients (homeowners). Show the relevant ones; hybrid sees both.
