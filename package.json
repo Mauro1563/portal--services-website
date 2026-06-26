@@ -24,7 +24,6 @@
     "@capacitor/status-bar": "^8.0.2",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",
-    "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "jspdf": "^4.2.1",
