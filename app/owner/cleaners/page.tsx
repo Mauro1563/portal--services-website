@@ -4,6 +4,7 @@ import { ChevronRight, KeyRound, Plus, Search, SearchX } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
+import { CsvExportButton } from '@/components/CsvExportButton';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{ q?: string }>;
@@ -57,12 +58,24 @@ export default async function CleanersPage({
             </h1>
             <p className="mt-1 text-sm text-text-2">{t('cleaners.subtitle')}</p>
           </div>
-          <Link
-            href="/owner/cleaners/new"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
-          >
-            <Plus className="h-4 w-4" /> {t('cleaners.addBtn')}
-          </Link>
+          <div className="flex items-center gap-2">
+            <CsvExportButton
+              rows={cleaners ?? []}
+              filename="limpiadores"
+              headers={[
+                { key: 'name', label: 'Nombre' },
+                { key: 'email', label: 'Email' },
+                { key: 'phone', label: 'Teléfono' },
+                { key: 'pin', label: 'PIN' },
+              ]}
+            />
+            <Link
+              href="/owner/cleaners/new"
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
+            >
+              <Plus className="h-4 w-4" /> {t('cleaners.addBtn')}
+            </Link>
+          </div>
         </div>
 
         <form method="get" className="mt-5 flex items-center gap-3">

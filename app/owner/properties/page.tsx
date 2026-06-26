@@ -4,6 +4,7 @@ import { Building2, ChevronRight, Plus, Search, SearchX } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
+import { CsvExportButton } from '@/components/CsvExportButton';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{ q?: string }>;
@@ -25,7 +26,7 @@ export default async function PropertiesPage({
 
   let query = supabase
     .from('properties')
-    .select('id, name, address, airbnb_ical_url, created_at')
+    .select('id, name, address, airbnb_ical_url, platform, guests, floor_area_sqm, created_at')
     .order('created_at', { ascending: false });
 
   if (needle) {
@@ -42,12 +43,25 @@ export default async function PropertiesPage({
           <h1 className="font-display text-2xl font-semibold text-text-1">
             {t('properties.title')}
           </h1>
-          <Link
-            href="/owner/properties/new"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
-          >
-            <Plus className="h-4 w-4" /> {t('properties.addBtn')}
-          </Link>
+          <div className="flex items-center gap-2">
+            <CsvExportButton
+              rows={properties ?? []}
+              filename="propiedades"
+              headers={[
+                { key: 'name', label: 'Nombre' },
+                { key: 'address', label: 'Dirección' },
+                { key: 'platform', label: 'Plataforma' },
+                { key: 'guests', label: 'Huéspedes' },
+                { key: 'floor_area_sqm', label: 'm²' },
+              ]}
+            />
+            <Link
+              href="/owner/properties/new"
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
+            >
+              <Plus className="h-4 w-4" /> {t('properties.addBtn')}
+            </Link>
+          </div>
         </div>
 
         <form method="get" className="mt-5 flex items-center gap-3">
