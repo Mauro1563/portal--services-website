@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
+import { CsvExportButton } from '@/components/CsvExportButton';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{
@@ -19,6 +20,7 @@ type SearchParams = Promise<{
 type TaskRow = {
   id: string;
   scheduled_for: string;
+  start_time: string | null;
   status: string;
   notes: string | null;
   checked_in_at: string | null;
@@ -27,6 +29,9 @@ type TaskRow = {
   photo_url: string | null;
   property_id: string | null;
   cleaner_id: string | null;
+  price_pence: number | null;
+  payment_status: string | null;
+  paid_at: string | null;
   property: { name: string } | null;
   cleaner: { name: string } | null;
 };
@@ -62,7 +67,7 @@ export default async function TasksPage({
   let query = supabase
     .from('tasks')
     .select(
-      'id, scheduled_for, status, notes, checked_in_at, checkin_lat, checkin_lng, photo_url, property_id, cleaner_id, property:properties (name), cleaner:cleaners (name)',
+      'id, scheduled_for, start_time, status, notes, checked_in_at, checkin_lat, checkin_lng, photo_url, property_id, cleaner_id, price_pence, payment_status, paid_at, property:properties (name), cleaner:cleaners (name)',
     )
     .order('scheduled_for', { ascending: true });
 
@@ -112,6 +117,29 @@ export default async function TasksPage({
           >
             <CalendarDays className="h-3.5 w-3.5" /> {t('tasks.calendarView')}
           </Link>
+          <CsvExportButton
+            rows={tasks.map((x) => ({
+              scheduled_for: x.scheduled_for,
+              start_time: x.start_time ?? '',
+              status: x.status,
+              property: x.property?.name ?? '',
+              cleaner: x.cleaner?.name ?? '',
+              price_pence: x.price_pence ?? '',
+              payment_status: x.payment_status ?? '',
+              paid_at: x.paid_at ?? '',
+            }))}
+            filename="limpiezas"
+            headers={[
+              { key: 'scheduled_for', label: 'Fecha' },
+              { key: 'start_time', label: 'Hora' },
+              { key: 'status', label: 'Estado' },
+              { key: 'property', label: 'Propiedad' },
+              { key: 'cleaner', label: 'Limpiador' },
+              { key: 'price_pence', label: 'Precio (pence)' },
+              { key: 'payment_status', label: 'Pago' },
+              { key: 'paid_at', label: 'Cobrado' },
+            ]}
+          />
           <Link
             href="/owner/tasks/new"
             className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"

@@ -4,6 +4,7 @@ import { ChevronRight, Mail, MessageCircle, Phone, Plus, Search, UserPlus, Searc
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
+import { CsvExportButton } from '@/components/CsvExportButton';
 
 type SearchParams = Promise<{ q?: string }>;
 
@@ -66,12 +67,25 @@ export default async function ClientsPage({
               Tus clientes finales. Cada uno tiene un portal privado para ver y valorar sus limpiezas.
             </p>
           </div>
-          <Link
-            href="/owner/clients/new"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
-          >
-            <Plus className="h-4 w-4" /> Añadir cliente
-          </Link>
+          <div className="flex items-center gap-2">
+            <CsvExportButton
+              rows={clients ?? []}
+              filename="clientes"
+              headers={[
+                { key: 'name', label: 'Nombre' },
+                { key: 'email', label: 'Email' },
+                { key: 'phone', label: 'Teléfono' },
+                { key: 'address', label: 'Dirección' },
+                { key: 'created_at', label: 'Creado' },
+              ]}
+            />
+            <Link
+              href="/owner/clients/new"
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
+            >
+              <Plus className="h-4 w-4" /> Añadir cliente
+            </Link>
+          </div>
         </div>
 
         {/* Search + count */}
