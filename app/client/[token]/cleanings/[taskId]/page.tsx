@@ -221,8 +221,21 @@ export default async function ClientTaskPage({ params, searchParams }: Props) {
 
       {/* Rating */}
       {isCompleted ? (
-        <section className="mt-5 mb-4 rounded-2xl border border-surface-2 bg-surface-0 p-5 shadow-card">
-          <h2 className="inline-flex items-center gap-2 font-display text-base font-semibold text-text-1">
+        <section className="relative mt-5 mb-4 animate-fade-up overflow-hidden rounded-3xl border border-clean-aqua/30 bg-gradient-to-br from-clean-aqua-soft/30 via-white to-amber-50/40 p-5 shadow-sparkle-glow">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-3 top-3 text-[12px] text-clean-aqua-glow animate-sparkle"
+          >
+            ✦
+          </span>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-8 top-6 text-[9px] text-amber-400 animate-sparkle"
+            style={{ animationDelay: '0.7s' }}
+          >
+            ✦
+          </span>
+          <h2 className="relative inline-flex items-center gap-2 font-display text-base font-semibold text-text-1">
             <Star className="h-4 w-4 text-amber-500" />
             Valora esta limpieza
           </h2>

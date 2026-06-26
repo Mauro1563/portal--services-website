@@ -101,6 +101,7 @@ export default async function ClientHome({
         ]}
       />
 
+      <div className="animate-fade-up">
       <StatRow
         items={[
           { label: 'Next visit', value: nextLabel, sub: 'agendada' },
@@ -112,6 +113,7 @@ export default async function ClientHome({
           },
         ]}
       />
+      </div>
 
       <ToolGrid>
         <ToolCard
