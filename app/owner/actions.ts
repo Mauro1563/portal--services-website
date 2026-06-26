@@ -36,7 +36,9 @@ export async function addProperty(formData: FormData) {
 
   revalidatePath('/owner');
   revalidatePath('/owner/properties');
-  redirect('/owner/properties');
+  redirect(
+    '/owner/properties?flash=' + encodeURIComponent(`Propiedad "${name}" creada`),
+  );
 }
 
 export async function addCleaner(formData: FormData) {
@@ -59,7 +61,10 @@ export async function addCleaner(formData: FormData) {
     if (!error) {
       revalidatePath('/owner');
       revalidatePath('/owner/cleaners');
-      redirect('/owner/cleaners');
+      redirect(
+        '/owner/cleaners?flash=' +
+          encodeURIComponent(`Limpiador "${name}" agregado · PIN ${pin}`),
+      );
     }
     lastErr = error.message;
     if (!error.message.toLowerCase().includes('unique')) break;
@@ -169,7 +174,7 @@ export async function addTask(formData: FormData) {
 
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
-  redirect('/owner/tasks');
+  redirect('/owner/tasks?flash=' + encodeURIComponent('Limpieza programada'));
 }
 
 export async function deleteTask(formData: FormData) {

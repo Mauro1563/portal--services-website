@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { Sidebar } from './Sidebar';
 import { MobileNav } from './MobileNav';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { FlashToast } from '@/components/FlashToast';
 import { getLocale } from '@/lib/i18n';
 import type { Active } from './nav-items';
 
@@ -41,7 +43,12 @@ export async function HQShell({
             </div>
           </div>
         </header>
-        <main className="px-6 py-8 lg:px-10 lg:py-10">{children}</main>
+        <main className="px-6 py-8 lg:px-10 lg:py-10">
+          <Suspense fallback={null}>
+            <FlashToast />
+          </Suspense>
+          {children}
+        </main>
       </div>
     </div>
   );
