@@ -74,7 +74,7 @@ export async function updateClient(formData: FormData) {
 
   revalidatePath('/owner/clients');
   revalidatePath(`/owner/clients/${id}`);
-  redirect(`/owner/clients/${id}?updated=1`);
+  redirect(`/owner/clients/${id}?flash=${encodeURIComponent('Cliente actualizado')}`);
 }
 
 export async function deleteClient(formData: FormData) {
@@ -84,7 +84,7 @@ export async function deleteClient(formData: FormData) {
 
   await supabase.from('clients').delete().eq('id', id).eq('owner_id', user.id);
   revalidatePath('/owner/clients');
-  redirect('/owner/clients');
+  redirect('/owner/clients?flash=' + encodeURIComponent('Cliente eliminado'));
 }
 
 export async function regenerateAccessToken(formData: FormData) {
@@ -107,7 +107,7 @@ export async function regenerateAccessToken(formData: FormData) {
   }
 
   revalidatePath(`/owner/clients/${id}`);
-  redirect(`/owner/clients/${id}?regenerated=1`);
+  redirect(`/owner/clients/${id}?flash=${encodeURIComponent('Nuevo link generado · el anterior dejó de funcionar')}`);
 }
 
 export async function sendOwnerMessage(formData: FormData) {

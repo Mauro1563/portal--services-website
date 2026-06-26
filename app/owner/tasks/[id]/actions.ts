@@ -108,7 +108,7 @@ export async function updateTask(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/tasks/${taskId}`);
-  redirect(`/owner/tasks/${taskId}?updated=1`);
+  redirect(`/owner/tasks/${taskId}?flash=${encodeURIComponent('Tarea actualizada')}`);
 }
 
 export async function markTaskPaid(formData: FormData) {
@@ -144,7 +144,7 @@ export async function markTaskPaid(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/tasks/${taskId}`);
-  redirect(`/owner/tasks/${taskId}?updated=1`);
+  redirect(`/owner/tasks/${taskId}?flash=${encodeURIComponent('Tarea marcada como pagada')}`);
 }
 
 export async function cancelTaskDetail(formData: FormData) {
@@ -161,7 +161,7 @@ export async function cancelTaskDetail(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/tasks/${taskId}`);
-  redirect(`/owner/tasks/${taskId}?cancelled=1`);
+  redirect(`/owner/tasks/${taskId}?flash=${encodeURIComponent('Tarea cancelada')}`);
 }
 
 export async function quickAssignCleaner(formData: FormData) {
@@ -185,7 +185,7 @@ export async function quickAssignCleaner(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/tasks/${taskId}`);
-  redirect(`/owner/tasks/${taskId}?updated=1`);
+  redirect(`/owner/tasks/${taskId}?flash=${encodeURIComponent('Limpiador asignado')}`);
 }
 
 export async function deleteTaskDetail(formData: FormData) {
@@ -201,5 +201,5 @@ export async function deleteTaskDetail(formData: FormData) {
 
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
-  redirect('/owner/tasks');
+  redirect('/owner/tasks?flash=' + encodeURIComponent('Tarea eliminada'));
 }

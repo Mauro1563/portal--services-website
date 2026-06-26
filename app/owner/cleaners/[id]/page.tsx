@@ -17,7 +17,7 @@ import { PinShareActions } from './PinShareActions';
 
 type Props = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ regenerated?: string; updated?: string; error?: string }>;
+  searchParams: Promise<{ error?: string }>;
 };
 
 type TaskHistory = {
@@ -31,7 +31,7 @@ type TaskHistory = {
 
 export default async function CleanerDetail({ params, searchParams }: Props) {
   const { id } = await params;
-  const { regenerated, updated, error } = await searchParams;
+  const { error } = await searchParams;
 
   const supabase = await createClient();
   const {
@@ -116,17 +116,6 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
           'No contact info on file.'}
       </p>
 
-      {updated && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          Cleaner updated.
-        </p>
-      )}
-      {regenerated && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          New PIN generated. Share it with {cleaner.name} — the previous PIN no
-          longer works.
-        </p>
-      )}
       {error && (
         <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
           {error}

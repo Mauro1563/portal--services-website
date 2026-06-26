@@ -15,8 +15,6 @@ import { deleteProperty, syncProperty } from './actions';
 type Props = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{
-    synced?: string;
-    updated?: string;
     error?: string;
     tab?: string;
   }>;
@@ -152,17 +150,6 @@ export default async function PropertyDetail({ params, searchParams }: Props) {
         })}
       </nav>
 
-      {/* Flash messages */}
-      {sp.updated && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          Propiedad actualizada.
-        </p>
-      )}
-      {sp.synced && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          Sincronizadas {sp.synced} limpieza{Number(sp.synced) === 1 ? '' : 's'} del calendario.
-        </p>
-      )}
       {sp.error && (
         <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
           {sp.error}
