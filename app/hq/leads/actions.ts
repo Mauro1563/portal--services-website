@@ -125,3 +125,37 @@ export async function approveOwnerSignup(leadId: string): Promise<ApproveResult>
   revalidatePath('/hq/leads');
   return { ok: true, email };
 }
+
+export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'archived';
+
+export type UpdateStatusResult =
+  | { ok: true; status: LeadStatus }
+  | { ok: false; error: string };
+
+const VALID_STATUSES: LeadStatus[] = ['new', 'contacted', 'qualified', 'archived'];
+
+export async function updateLeadStatus(
+  leadId: string,
+  status: LeadStatus,
+): Promise<UpdateStatusResult> {
+  const admin = await requireMarketingAdmin();
+  if (!admin) return { ok: false, error: 'No autorizado' };
+
+  if (!VALID_STATUSES.includes(status)) {
+    return { ok: false, error: 'Estado inválido' };
+  }
+
+  const client = createAdminClient();
+  const { error } = await client
+    .from('marketing_leads')
+    .update({ status })
+    .eq('id', leadId);
+
+  if (error) {
+    console.error('[updateLeadStatus] failed', error);
+    return { ok: false, error: error.message };
+  }
+
+  revalidatePath('/hq/leads');
+  return { ok: true, status };
+}

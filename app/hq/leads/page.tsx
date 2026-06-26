@@ -12,6 +12,8 @@ import { requireMarketingAdmin } from '@/lib/marketing';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { HQShell } from '@/components/hq/Shell';
 import { ApproveSignupButton } from './ApproveSignupButton';
+import { LeadStatusPicker } from './LeadStatusPicker';
+import { ExportLeadsButton } from './ExportLeadsButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,7 +53,7 @@ export default async function HQLeads() {
       title="Leads"
       subtitle="Solicitudes de demo y contacto desde el sitio público."
     >
-      <div className="rounded-2xl bg-paper p-5 ring-1 ring-line">
+      <div className="flex items-center justify-between gap-3 rounded-2xl bg-paper p-5 ring-1 ring-line">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-200">
             <Inbox className="h-5 w-5" />
@@ -68,6 +70,7 @@ export default async function HQLeads() {
             </p>
           </div>
         </div>
+        <ExportLeadsButton leads={rows} />
       </div>
 
       <section className="mt-6 overflow-hidden rounded-2xl bg-paper ring-1 ring-line">
@@ -111,7 +114,7 @@ export default async function HQLeads() {
                     ) : null}
                   </div>
                   <div className="shrink-0 text-right">
-                    <StatusBadge status={l.status} />
+                    <LeadStatusPicker leadId={l.id} initial={l.status} />
                     <p className="mt-1 inline-flex items-center gap-1 text-[10px] text-graphite-4">
                       <Calendar className="h-3 w-3" />
                       {new Date(l.created_at).toLocaleString('es-ES', {
@@ -153,11 +156,6 @@ export default async function HQLeads() {
         )}
       </section>
 
-      <p className="mt-6 rounded-2xl bg-cyan-50 p-4 text-xs text-graphite-2 ring-1 ring-inset ring-cyan-200">
-        <span className="font-semibold text-brand-700">Próximamente:</span>{' '}
-        formulario de contacto en el sitio público que escribe directo aquí,
-        cambio de estado (contactado / cualificado), y exportar a CSV.
-      </p>
     </HQShell>
   );
 }
@@ -207,24 +205,3 @@ function ContactRow({ lead }: { lead: Lead }) {
   );
 }
 
-function StatusBadge({ status }: { status: Lead['status'] }) {
-  const map: Record<Lead['status'], string> = {
-    new: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-    contacted: 'bg-amber-50 text-amber-700 ring-amber-200',
-    qualified: 'bg-cyan-50 text-brand-700 ring-cyan-200',
-    archived: 'bg-slate-100 text-graphite-3 ring-slate-200',
-  };
-  const labels: Record<Lead['status'], string> = {
-    new: 'Nuevo',
-    contacted: 'Contactado',
-    qualified: 'Cualificado',
-    archived: 'Archivado',
-  };
-  return (
-    <span
-      className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ring-1 ring-inset ${map[status]}`}
-    >
-      {labels[status]}
-    </span>
-  );
-}
