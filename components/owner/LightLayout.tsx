@@ -17,6 +17,8 @@ import {
 import { Suspense } from 'react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { FlashToast } from '@/components/FlashToast';
+import { CommandPalette } from '@/components/CommandPalette';
+import { CommandPaletteButton } from '@/components/CommandPaletteButton';
 import { getLocale } from '@/lib/i18n';
 import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile } from '@/lib/owner-profile';
@@ -180,6 +182,7 @@ export async function LightLayout({
             <strong className="font-semibold text-text-1">{title ?? 'Panel general'}</strong>
           </div>
           <div className="ml-auto flex items-center gap-3">
+            <CommandPaletteButton />
             <LocaleSwitcher current={locale} variant="light" />
             <button className="relative grid h-9 w-9 place-items-center rounded-lg border border-surface-2 bg-white text-text-2" aria-label="Notificaciones">
               <Bell className="h-4 w-4" />
@@ -192,6 +195,7 @@ export async function LightLayout({
           <Suspense fallback={null}>
             <FlashToast />
           </Suspense>
+          <CommandPalette scope="owner" />
           {children}
         </main>
       </div>
