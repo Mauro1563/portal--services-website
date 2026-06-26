@@ -82,7 +82,7 @@ export default async function ClientCleaningsList({
   const past = (pastRes.data ?? []) as unknown as TaskRow[];
 
   return (
-    <ClientShell ctx={ctx} token={token} activeTab="home" unreadMessages={unread}>
+    <ClientShell ctx={ctx} token={token} activeTab="reservas" unreadMessages={unread}>
       <div className="mx-auto max-w-md">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
           Mis limpiezas
