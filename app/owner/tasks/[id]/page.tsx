@@ -32,6 +32,7 @@ type TaskRow = {
   scheduled_for: string;
   status: string;
   notes: string | null;
+  cleaner_note: string | null;
   checked_in_at: string | null;
   completed_at: string | null;
   checkin_lat: number | null;
@@ -132,7 +133,7 @@ export default async function TaskDetail({ params, searchParams }: Props) {
       supabase
         .from('tasks')
         .select(
-          'id, scheduled_for, status, notes, checked_in_at, completed_at, checkin_lat, checkin_lng, photo_url, service_name, price_pence, payment_status, payment_method, paid_amount_pence, paid_at, property:properties (id, name, address), cleaner:cleaners (id, name)',
+          'id, scheduled_for, status, notes, cleaner_note, checked_in_at, completed_at, checkin_lat, checkin_lng, photo_url, service_name, price_pence, payment_status, payment_method, paid_amount_pence, paid_at, property:properties (id, name, address), cleaner:cleaners (id, name)',
         )
         .eq('id', id)
         .maybeSingle(),
@@ -308,6 +309,21 @@ export default async function TaskDetail({ params, searchParams }: Props) {
             <div className="flex items-start gap-2 text-sm text-text-1">
               <StickyNote className="mt-0.5 h-4 w-4 shrink-0 text-text-3" />
               <p>{task.notes}</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Nota del limpiador (cleaner → owner) */}
+      {task.cleaner_note && (
+        <section className="mt-5">
+          <h2 className="px-1 text-xs font-semibold uppercase tracking-wider text-text-3">
+            Nota del limpiador
+          </h2>
+          <div className="mt-2 rounded-2xl border border-cyan-200 bg-cyan-50/60 p-4 shadow-card">
+            <div className="flex items-start gap-2 text-sm text-text-1">
+              <StickyNote className="mt-0.5 h-4 w-4 shrink-0 text-brand-700" />
+              <p>{task.cleaner_note}</p>
             </div>
           </div>
         </section>

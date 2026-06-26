@@ -18,9 +18,11 @@ import { Logo } from '@/components/Logo';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { CheckInButton } from '../../CheckInButton';
 import { PhotoUploadButton } from '../../PhotoUploadButton';
+import { CleanerNoteForm } from './CleanerNoteForm';
 
 type Props = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ note_saved?: string; error?: string }>;
 };
 
 type DetailTask = {
@@ -29,6 +31,7 @@ type DetailTask = {
   start_time: string | null;
   status: string;
   notes: string | null;
+  cleaner_note: string | null;
   checked_in_at: string | null;
   completed_at: string | null;
   service_name: string | null;
@@ -93,7 +96,7 @@ export default async function OperativeTaskDetail({ params }: Props) {
     admin
       .from('tasks')
       .select(
-        'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
+        'id, scheduled_for, start_time, status, notes, cleaner_note, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
       )
       .eq('id', id)
       .eq('cleaner_id', cleanerId)
@@ -277,6 +280,9 @@ export default async function OperativeTaskDetail({ params }: Props) {
             </p>
           </section>
         ) : null}
+
+        {/* Cleaner → owner note (always editable while task is assigned) */}
+        <CleanerNoteForm taskId={task.id} initial={task.cleaner_note ?? ''} />
 
         {/* Action area: changes by status */}
         {task.status === 'completed' ? (
