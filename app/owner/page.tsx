@@ -1,33 +1,43 @@
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import {
   BarChart3,
-  Briefcase,
   Building2,
   CalendarDays,
   CreditCard,
   ListChecks,
   MessageSquare,
-  Moon,
+  Plus,
   Settings,
-  Sun,
   Users,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
-import { getT } from '@/lib/i18n';
 import { signout } from '@/app/login/actions';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
-import {
-  CorporateBanner,
-  PortalHero,
-  PortalShell,
-  StatRow,
-  ToolCard,
-  ToolGrid,
-} from '@/components/portal/PortalDashboardShell';
+import { CorporateHeader } from '@/components/owner/CorporateHeader';
+import { StatCardsRow } from '@/components/owner/StatCardsRow';
+import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
+import { CleanersField, type FieldCheckin } from '@/components/owner/CleanersField';
+import { BottomTabBar } from '@/components/owner/BottomTabBar';
 
-type RatingRow = { stars: number };
-type PaidRow = { paid_amount_pence: number | null; price_pence: number | null };
+type PaidTask = {
+  scheduled_for: string;
+  paid_amount_pence: number | null;
+  price_pence: number | null;
+};
+
+type FieldRow = {
+  id: string;
+  checkin_lat: number | null;
+  checkin_lng: number | null;
+  checked_in_at: string | null;
+  cleaner: { name: string | null } | null;
+  property: { name: string | null } | null;
+  client: { name: string | null } | null;
+};
+
+const DAY_SHORT = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
 /**
  * "mauro541423@gmail.com" → "Mauro". Strips digits, punctuation, and
@@ -41,6 +51,21 @@ function prettyFromEmail(email: string | null | undefined): string | null {
   return local.charAt(0).toUpperCase() + local.slice(1).toLowerCase();
 }
 
+function toIsoDay(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function deltaPct(curr: number, prev: number): { label: string; positive: boolean } | undefined {
+  if (prev === 0 && curr === 0) return undefined;
+  if (prev === 0) return { label: 'nuevo', positive: true };
+  const pct = Math.round(((curr - prev) / prev) * 100);
+  if (pct === 0) return { label: '0%', positive: true };
+  return {
+    label: `${pct > 0 ? '+' : ''}${pct}%`,
+    positive: pct >= 0,
+  };
+}
+
 export default async function OwnerHome() {
   const supabase = await createClient();
   const {
@@ -48,11 +73,19 @@ export default async function OwnerHome() {
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
 
-  const t = await getT();
-  const tx = (k: string) => t(`ownerHome.${k}`);
-
-  const today = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const today = toIsoDay(now);
   const monthStart = `${today.slice(0, 7)}-01`;
+
+  // Previous-period boundaries for delta arrows.
+  const sevenDaysAgo = toIsoDay(new Date(now.getTime() - 7 * 86_400_000));
+  const fourteenDaysAgo = toIsoDay(new Date(now.getTime() - 14 * 86_400_000));
+  const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString();
+  const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevMonthStart = toIsoDay(prevMonthDate);
+  const prevMonthEnd = toIsoDay(
+    new Date(now.getFullYear(), now.getMonth(), 0),
+  );
 
   const [
     propsRes,
@@ -60,8 +93,12 @@ export default async function OwnerHome() {
     clientsRes,
     pendingRes,
     todayCountRes,
-    ratingsRes,
+    weekBookingsRes,
+    lastWeekBookingsRes,
     monthPaidRes,
+    prevMonthPaidRes,
+    weekPaidRes,
+    fieldRes,
   ] = await Promise.all([
     supabase.from('properties').select('id', { count: 'exact', head: true }),
     supabase.from('cleaners').select('id', { count: 'exact', head: true }),
@@ -77,14 +114,41 @@ export default async function OwnerHome() {
       .select('id', { count: 'exact', head: true })
       .eq('scheduled_for', today),
     supabase
-      .from('task_ratings')
-      .select('stars')
-      .gte('created_at', monthStart),
+      .from('tasks')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', sevenDaysAgo),
+    supabase
+      .from('tasks')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', fourteenDaysAgo)
+      .lt('created_at', sevenDaysAgo),
+    supabase
+      .from('tasks')
+      .select('paid_amount_pence, price_pence, scheduled_for')
+      .gte('scheduled_for', monthStart)
+      .in('payment_status', ['paid', 'partial']),
     supabase
       .from('tasks')
       .select('paid_amount_pence, price_pence')
-      .gte('scheduled_for', monthStart)
+      .gte('scheduled_for', prevMonthStart)
+      .lte('scheduled_for', prevMonthEnd)
       .in('payment_status', ['paid', 'partial']),
+    // Daily revenue for the chart — last 7 days.
+    supabase
+      .from('tasks')
+      .select('paid_amount_pence, price_pence, scheduled_for')
+      .gte('scheduled_for', sevenDaysAgo)
+      .in('payment_status', ['paid', 'partial']),
+    // Recent check-ins for the "cleaners en campo" widget.
+    supabase
+      .from('tasks')
+      .select(
+        'id, checkin_lat, checkin_lng, checked_in_at, cleaner:cleaners (name), property:properties (name), client:clients (name)',
+      )
+      .not('checked_in_at', 'is', null)
+      .gte('checked_in_at', eightHoursAgo)
+      .order('checked_in_at', { ascending: false })
+      .limit(6),
   ]);
 
   const propertiesCount = propsRes.count ?? 0;
@@ -92,173 +156,205 @@ export default async function OwnerHome() {
   const clientsCount = clientsRes.count ?? 0;
   const pendingCount = pendingRes.count ?? 0;
   const todayCount = todayCountRes.count ?? 0;
-  const ratings = (ratingsRes.data ?? []) as RatingRow[];
-  const paid = (monthPaidRes.data ?? []) as PaidRow[];
+  const weekBookings = weekBookingsRes.count ?? 0;
+  const lastWeekBookings = lastWeekBookingsRes.count ?? 0;
+  const monthPaid = (monthPaidRes.data ?? []) as PaidTask[];
+  const prevMonthPaid = (prevMonthPaidRes.data ?? []) as PaidTask[];
+  const weekPaid = (weekPaidRes.data ?? []) as PaidTask[];
+  const fieldRows = (fieldRes.data ?? []) as unknown as FieldRow[];
 
   if (propertiesCount === 0 && cleanersCount === 0) {
     redirect('/owner/onboarding');
   }
-  const monthRevenuePence = paid.reduce(
-    (s, t) => s + (t.paid_amount_pence ?? t.price_pence ?? 0),
-    0,
-  );
-  const avgRating =
-    ratings.length === 0
-      ? null
-      : (ratings.reduce((s, r) => s + r.stars, 0) / ratings.length).toFixed(1);
+
+  const sumPaid = (rows: PaidTask[]) =>
+    rows.reduce((sum, t) => sum + (t.paid_amount_pence ?? t.price_pence ?? 0), 0);
+  const monthRevenuePence = sumPaid(monthPaid);
+  const prevMonthRevenuePence = sumPaid(prevMonthPaid);
+
+  // Daily revenue points for the 7-day chart (oldest → newest).
+  const chartData: RevenuePoint[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now.getTime() - i * 86_400_000);
+    const iso = toIsoDay(d);
+    const dayRows = weekPaid.filter((t) => t.scheduled_for === iso);
+    chartData.push({
+      label: DAY_SHORT[d.getDay()],
+      pence: sumPaid(dayRows),
+    });
+  }
+
+  const fieldCheckins: FieldCheckin[] = fieldRows.map((r) => ({
+    taskId: r.id,
+    cleanerName: r.cleaner?.name ?? null,
+    propertyName: r.property?.name ?? null,
+    clientName: r.client?.name ?? null,
+    lat: r.checkin_lat,
+    lng: r.checkin_lng,
+    checkedInAt: r.checked_in_at,
+  }));
 
   const profile = await getOwnerProfile(user.id);
   const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
   const fullName =
     metadataName || displayNameFrom(profile, user.email ?? null);
-  // Friendly first-name greeting. If we have a real name (from user
-  // metadata or owner_profiles.business_name), use it. Otherwise pull a
-  // capitalized first-word from the email local-part — "mauro541423"
-  // → "Mauro" feels personal without looking like the raw login.
   const firstName = fullName
     ? fullName.split(/\s+/)[0]
-    : prettyFromEmail(user.email) ?? tx('welcomeFallback');
+    : prettyFromEmail(user.email) ?? 'Owner';
+  const businessName =
+    profile?.business_name ||
+    (user.user_metadata?.business as string | undefined) ||
+    'Tu negocio';
 
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 12
-      ? tx('greetingMorning')
-      : hour < 18
-      ? tx('greetingAfternoon')
-      : tx('greetingEvening');
-  const isDay = hour < 18;
-
-  const fmtPrice = (p: number) =>
-    `£${(p / 100).toLocaleString('en-GB', { maximumFractionDigits: 0 })}`;
+  const subtitle =
+    todayCount > 0
+      ? `${todayCount} ${todayCount === 1 ? 'limpieza' : 'limpiezas'} hoy · ${pendingCount} ${pendingCount === 1 ? 'pendiente' : 'pendientes'}`
+      : pendingCount > 0
+      ? `${pendingCount} ${pendingCount === 1 ? 'limpieza pendiente' : 'limpiezas pendientes'}`
+      : businessName;
 
   return (
-    <PortalShell
-      badge={{ label: tx('portalLabel'), icon: Briefcase }}
-      settingsHref="/owner/settings"
-      rightSlot={
-        <form action={signout}>
+    <main className="min-h-screen bg-slate-50 pb-24">
+      <div className="mx-auto max-w-md px-3 py-4 sm:max-w-2xl sm:px-4 sm:py-5 lg:max-w-5xl lg:px-8 lg:py-7">
+        <CorporateHeader
+          firstName={firstName}
+          businessName={businessName}
+          subtitle={subtitle}
+        />
+
+        <TasksAutoRefresh ownerId={user.id} />
+
+        {/* 3 big stat cards — Corporate Trust hero metrics */}
+        <StatCardsRow
+          cleanersActive={cleanersCount}
+          bookingsWeek={weekBookings}
+          revenueMonthPence={monthRevenuePence}
+          bookingsDelta={deltaPct(weekBookings, lastWeekBookings)}
+          revenueDelta={deltaPct(monthRevenuePence, prevMonthRevenuePence)}
+        />
+
+        {/* Chart + field cleaners — two columns on desktop, stacked mobile */}
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <RevenueChart data={chartData} />
+          </div>
+          <div className="lg:col-span-2">
+            <CleanersField checkins={fieldCheckins} />
+          </div>
+        </div>
+
+        {/* Quick links to operations */}
+        <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <QuickTile
+            href="/owner/tasks/new"
+            label="Nueva limpieza"
+            sub="Programar"
+            Icon={Plus}
+            primary
+          />
+          <QuickTile
+            href="/owner/tasks"
+            label="Limpiezas"
+            sub={`${todayCount} hoy`}
+            Icon={ListChecks}
+          />
+          <QuickTile
+            href="/owner/cleaners"
+            label="Cleaners"
+            sub={`${cleanersCount} activos`}
+            Icon={Users}
+          />
+          <QuickTile
+            href="/owner/clients"
+            label="Clientes"
+            sub={`${clientsCount} totales`}
+            Icon={MessageSquare}
+          />
+        </section>
+
+        {/* Secondary nav — keeps things reachable on mobile */}
+        <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <SecondaryTile href="/owner/properties" label="Sitios" Icon={Building2} />
+          <SecondaryTile href="/owner/calendar" label="Calendario" Icon={CalendarDays} />
+          <SecondaryTile href="/owner/analytics" label="Analítica" Icon={BarChart3} />
+          <SecondaryTile href="/owner/billing" label="Facturación" Icon={CreditCard} />
+        </section>
+
+        {/* Sign-out at the bottom — discreet */}
+        <form action={signout} className="mt-8 flex justify-center">
           <button
             type="submit"
-            className="text-[11px] font-semibold text-text-3 hover:text-text-1"
+            className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700"
           >
-            {tx('signOut')}
+            Cerrar sesión
           </button>
         </form>
-      }
+      </div>
+
+      <BottomTabBar active="home" />
+    </main>
+  );
+}
+
+function QuickTile({
+  href,
+  label,
+  sub,
+  Icon,
+  primary,
+}: {
+  href: string;
+  label: string;
+  sub: string;
+  Icon: React.ComponentType<{ className?: string }>;
+  primary?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`group flex items-center gap-2.5 rounded-2xl p-3 transition ${
+        primary
+          ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.55)] hover:brightness-110'
+          : 'border border-slate-200 bg-white text-slate-900 hover:border-blue-300 hover:bg-blue-50/30'
+      }`}
     >
-      <PortalHero
-        portalLabel={tx('portalLabel')}
-        portalIcon={Briefcase}
-        topRightChip={{
-          label: isDay ? tx('dayChip') : tx('nightChip'),
-          icon: isDay ? Sun : Moon,
-        }}
-        greeting={greeting}
-        displayName={firstName}
-        brandColor={profile?.brand_color}
-        chips={[
-          {
-            kind: 'text',
-            label:
-              profile?.business_name ||
-              (user.user_metadata?.business as string | undefined) ||
-              tx('yourBusiness'),
-            icon: Building2,
-          },
-        ]}
-      />
+      <span
+        className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
+          primary ? 'bg-white/15 text-white' : 'bg-blue-50 text-blue-700'
+        }`}
+      >
+        <Icon className="h-4 w-4" />
+      </span>
+      <span className="min-w-0">
+        <span className="block truncate text-[13px] font-semibold">{label}</span>
+        <span
+          className={`block truncate text-[10.5px] ${
+            primary ? 'text-white/75' : 'text-slate-500'
+          }`}
+        >
+          {sub}
+        </span>
+      </span>
+    </Link>
+  );
+}
 
-      <StatRow
-        items={[
-          { label: tx('kpiToday'), value: todayCount, sub: tx('subCleanings') },
-          {
-            label: tx('kpiPending'),
-            value: pendingCount,
-            sub: tx('subToComplete'),
-          },
-          {
-            label: tx('kpiRevenue'),
-            value: monthRevenuePence > 0 ? fmtPrice(monthRevenuePence) : '£0',
-            sub: tx('subThisMonth'),
-          },
-          {
-            label: tx('kpiRating'),
-            value: avgRating ?? '—',
-            sub:
-              ratings.length > 0
-                ? `${ratings.length} ${tx('subRatingsThisMonth')}`
-                : tx('subNoData'),
-          },
-        ]}
-      />
-
-      <TasksAutoRefresh ownerId={user.id} />
-
-      <ToolGrid>
-        <ToolCard
-          href="/owner/tasks"
-          icon={ListChecks}
-          title={tx('toolCleanings')}
-          subtitle={tx('subToday').replace('{n}', String(todayCount))}
-          accent="brand"
-        />
-        <ToolCard
-          href="/owner/properties"
-          icon={Building2}
-          title={tx('toolProperties')}
-          subtitle={tx('subTotal').replace('{n}', String(propertiesCount))}
-          accent="emerald"
-        />
-        <ToolCard
-          href="/owner/cleaners"
-          icon={Users}
-          title={tx('toolCleaners')}
-          subtitle={tx('subTeam').replace('{n}', String(cleanersCount))}
-          accent="amber"
-        />
-        <ToolCard
-          href="/owner/clients"
-          icon={MessageSquare}
-          title={tx('toolClients')}
-          subtitle={tx('subActive').replace('{n}', String(clientsCount))}
-          accent="navy"
-        />
-        <ToolCard
-          href="/owner/calendar"
-          icon={CalendarDays}
-          title={tx('toolCalendar')}
-          subtitle={tx('subScheduleView')}
-          accent="brand"
-        />
-        <ToolCard
-          href="/owner/analytics"
-          icon={BarChart3}
-          title={tx('toolAnalytics')}
-          subtitle={tx('subOpsDashboard')}
-          accent="emerald"
-        />
-        <ToolCard
-          href="/owner/billing"
-          icon={CreditCard}
-          title={tx('toolBilling')}
-          subtitle={tx('subPlanInvoices')}
-          accent="rose"
-        />
-        <ToolCard
-          href="/owner/settings"
-          icon={Settings}
-          title={tx('toolSettings')}
-          subtitle={tx('subBusinessProfile')}
-          accent="navy"
-        />
-      </ToolGrid>
-
-      <CorporateBanner
-        href="/owner/analytics"
-        eyebrow={tx('bannerEyebrow')}
-        title={tx('bannerTitle')}
-        subtitle={tx('bannerSubtitle')}
-      />
-    </PortalShell>
+function SecondaryTile({
+  href,
+  label,
+  Icon,
+}: {
+  href: string;
+  label: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-3 text-center transition hover:border-blue-300 hover:bg-blue-50/30"
+    >
+      <Icon className="h-4 w-4 text-slate-500 group-hover:text-blue-600" />
+      <span className="text-[11px] font-semibold text-slate-700">{label}</span>
+    </Link>
   );
 }
