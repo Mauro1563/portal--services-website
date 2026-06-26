@@ -7,6 +7,7 @@ import {
   Pencil,
   RefreshCw,
   Trash2,
+  User,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
@@ -28,6 +29,16 @@ type TaskRow = {
   cleaner: { name: string } | null;
 };
 
+type LinkedClient = {
+  id: string;
+  name: string;
+  phone: string | null;
+  email: string | null;
+  postcode: string | null;
+  key_info: string | null;
+  wifi_info: string | null;
+};
+
 type PropertyRow = {
   id: string;
   name: string;
@@ -37,6 +48,11 @@ type PropertyRow = {
   platform: string | null;
   guests: number | null;
   floor_area_sqm: number | null;
+  contact_name: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  client_id: string | null;
+  client: LinkedClient | LinkedClient[] | null;
   created_at: string;
 };
 
@@ -72,7 +88,7 @@ export default async function PropertyDetail({ params, searchParams }: Props) {
   const { data } = await supabase
     .from('properties')
     .select(
-      'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, created_at',
+      'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, contact_name, contact_phone, contact_email, client_id, created_at, client:clients (id, name, phone, email, postcode, key_info, wifi_info)',
     )
     .eq('id', id)
     .maybeSingle();
@@ -205,8 +221,77 @@ function ResumenTab({
   nextTask: TaskRow | null;
   property: PropertyRow;
 }) {
+  const client = Array.isArray(property.client)
+    ? property.client[0] ?? null
+    : property.client;
+
   return (
     <div className="mt-5 space-y-5">
+      {/* Cliente vinculado */}
+      {client ? (
+        <section>
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-text-3">
+            Cliente
+          </h2>
+          <Link
+            href={`/owner/clients/${client.id}`}
+            className="mt-2 flex items-center gap-3 rounded-2xl border border-cyan-200 bg-cyan-50/40 p-4 shadow-card transition hover:border-brand-600/40 hover:bg-cyan-50/60"
+          >
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600/10 text-brand-700">
+              <User className="h-4.5 w-4.5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="font-display text-sm font-semibold text-text-1">
+                {client.name}
+              </p>
+              <p className="mt-0.5 truncate text-[11px] text-text-3">
+                {[client.phone, client.email].filter(Boolean).join(' · ') ||
+                  'Sin datos de contacto'}
+              </p>
+            </div>
+            <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-brand-700">
+              Abrir →
+            </span>
+          </Link>
+        </section>
+      ) : property.contact_name ||
+        property.contact_phone ||
+        property.contact_email ? (
+        <section>
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-text-3">
+            Contacto del dueño
+          </h2>
+          <div className="mt-2 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card">
+            <div className="flex items-start gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+                <User className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-sm font-semibold text-text-1">
+                  {property.contact_name ?? 'Sin nombre'}
+                </p>
+                <p className="mt-0.5 truncate text-[11px] text-text-3">
+                  {[property.contact_phone, property.contact_email]
+                    .filter(Boolean)
+                    .join(' · ') || '—'}
+                </p>
+                <p className="mt-2 text-[11px] text-text-3">
+                  Contacto suelto. Si querés un portal cliente +
+                  chat,{' '}
+                  <Link
+                    href={`/owner/clients/new`}
+                    className="font-semibold text-brand-700 hover:underline"
+                  >
+                    creá un cliente
+                  </Link>{' '}
+                  y vinculalo desde el editor de la propiedad.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* Próxima limpieza */}
       <section>
         <h2 className="text-xs font-semibold uppercase tracking-wider text-text-3">
