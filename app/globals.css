@@ -67,6 +67,55 @@ textarea,
 /* The /hq admin panel restores the dark canvas */
 .dark-shell, .dark-shell body { background-color: var(--psd-bg-0); color: #f8fafc; }
 
+/* ============================================================
+   Operative night theme. Activated by setting
+   data-theme="operative-night" on <html>. Overrides the Tailwind
+   surface / text utilities used across the operative pages so the
+   whole portal flips without per-component dark: variants. Scoped
+   to operative-only via the toggle in components/operative/
+   ThemeToggle.tsx — owner / HQ / client unaffected.
+   ============================================================ */
+[data-theme="operative-night"] {
+  background-color: #060a14;
+  color: #f8fafc;
+}
+[data-theme="operative-night"] body {
+  background-color: #060a14;
+  color: #f8fafc;
+}
+[data-theme="operative-night"] .bg-surface-0 { background-color: #0f172a !important; }
+[data-theme="operative-night"] .bg-surface-1 { background-color: #1e293b !important; }
+[data-theme="operative-night"] .bg-surface-2 { background-color: #334155 !important; }
+[data-theme="operative-night"] .bg-surface-3 { background-color: #475569 !important; }
+[data-theme="operative-night"] .bg-white       { background-color: #0f172a !important; }
+[data-theme="operative-night"] .bg-slate-50    { background-color: #1e293b !important; }
+[data-theme="operative-night"] .bg-slate-100   { background-color: #1e293b !important; }
+[data-theme="operative-night"] .text-text-1   { color: #f8fafc !important; }
+[data-theme="operative-night"] .text-text-2   { color: #cbd5e1 !important; }
+[data-theme="operative-night"] .text-text-3   { color: #94a3b8 !important; }
+[data-theme="operative-night"] .text-slate-900 { color: #f8fafc !important; }
+[data-theme="operative-night"] .text-slate-700 { color: #cbd5e1 !important; }
+[data-theme="operative-night"] .text-slate-500 { color: #94a3b8 !important; }
+[data-theme="operative-night"] .border-surface-2 { border-color: #334155 !important; }
+[data-theme="operative-night"] .border-surface-3 { border-color: #475569 !important; }
+[data-theme="operative-night"] .border-slate-200 { border-color: #334155 !important; }
+[data-theme="operative-night"] .border-slate-300 { border-color: #475569 !important; }
+[data-theme="operative-night"] .ring-surface-2 { --tw-ring-color: #334155 !important; }
+[data-theme="operative-night"] .ring-line     { --tw-ring-color: #334155 !important; }
+[data-theme="operative-night"] .shadow-card   { box-shadow: 0 1px 3px 0 rgba(0,0,0,.4), 0 1px 2px 0 rgba(0,0,0,.3) !important; }
+[data-theme="operative-night"] .shadow-card-lg { box-shadow: 0 10px 25px -5px rgba(0,0,0,.5), 0 8px 10px -6px rgba(0,0,0,.4) !important; }
+[data-theme="operative-night"] input,
+[data-theme="operative-night"] textarea,
+[data-theme="operative-night"] select {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+[data-theme="operative-night"] input::placeholder,
+[data-theme="operative-night"] textarea::placeholder {
+  color: #64748b !important;
+}
+
 ::selection { background: rgba(37, 99, 235, 0.25); color: var(--psd-graphite-1); }
 
 /* Light hero/section accents */
