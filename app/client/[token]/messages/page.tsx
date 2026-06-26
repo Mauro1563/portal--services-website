@@ -54,7 +54,7 @@ export default async function ClientMessages({ params, searchParams }: Props) {
               {businessName}
             </p>
             <p className="text-[11px] text-text-2">
-              Suele responder en unas horas
+              Te respondemos lo antes posible
             </p>
           </div>
         </div>

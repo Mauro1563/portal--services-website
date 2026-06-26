@@ -98,7 +98,6 @@ export default async function ClientHome({
             label: ctx.owner.business_name ?? 'Tu equipo',
             icon: Sparkles,
           },
-          { kind: 'status', status: 'online', label: 'online' },
         ]}
       />
 
