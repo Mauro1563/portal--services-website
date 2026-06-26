@@ -91,7 +91,7 @@ export async function LightLayout({
 
   return (
     <div
-      className="flex min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#F4F6FB] text-text-1"
+      className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-[#F4F6FB] text-text-1"
       style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}
     >
       {/* Desktop sidebar */}
@@ -198,7 +198,7 @@ export async function LightLayout({
           </div>
         </header>
 
-        <main className="min-w-0 w-full max-w-[100vw] flex-1 overflow-x-hidden px-3 py-4 pb-24 sm:px-4 sm:py-5 lg:px-8 lg:py-7 lg:pb-10">
+        <main className="min-w-0 w-full flex-1 overflow-x-hidden px-3 py-4 pb-24 sm:px-4 sm:py-5 lg:px-8 lg:py-7 lg:pb-10">
           <Suspense fallback={null}>
             <FlashToast />
           </Suspense>

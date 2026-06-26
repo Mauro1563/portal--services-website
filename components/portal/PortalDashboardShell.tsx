@@ -38,7 +38,7 @@ export async function PortalShell({
   const locale = showLocaleSwitcher ? await getLocale() : null;
   return (
     <main
-      className="relative mx-auto min-h-screen w-screen max-w-[100vw] overflow-x-hidden bg-surface-1"
+      className="relative mx-auto min-h-screen w-full max-w-full overflow-x-hidden bg-surface-1"
       style={{
         paddingBottom: 'calc(env(safe-area-inset-bottom) + 64px)',
         touchAction: 'pan-y',
@@ -46,7 +46,7 @@ export async function PortalShell({
       }}
     >
       <header
-        className="sticky top-0 z-40 w-full max-w-[100vw] overflow-hidden border-b border-surface-2 bg-surface-0/95 backdrop-blur"
+        className="sticky top-0 z-40 w-full max-w-full overflow-hidden border-b border-surface-2 bg-surface-0/95 backdrop-blur"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="mx-auto flex h-14 w-full max-w-md items-center justify-between gap-2 px-4">
