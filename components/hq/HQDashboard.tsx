@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {
+  AlertTriangle,
   Inbox,
   Users,
   TrendingUp,
@@ -69,6 +70,12 @@ type Props = {
   recentCheckins: CheckinSummary[];
   recentPhotos: PhotoSummary[];
   propertiesCount: number;
+  /**
+   * If the page-level data fetch threw, the parent renders the dashboard
+   * with empty data and surfaces the failure here so admins see the real
+   * cause inline instead of bouncing to the generic error boundary.
+   */
+  errorMessage?: string;
 };
 
 const RELATIVE = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
@@ -104,6 +111,7 @@ export function HQDashboard({
   recentCheckins,
   recentPhotos,
   propertiesCount,
+  errorMessage,
 }: Props) {
   const username = email.split('@')[0];
   const hour = new Date().getHours();
@@ -144,6 +152,23 @@ export function HQDashboard({
         </div>
       }
     >
+      {errorMessage ? (
+        <div className="mb-4 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold">
+              No pude cargar los datos del dashboard
+            </p>
+            <p className="mt-1 text-xs text-amber-800">
+              Mostrando contadores en cero mientras tanto. Mensaje del servidor:
+            </p>
+            <pre className="mt-2 overflow-x-auto rounded-lg bg-amber-900/90 p-2.5 text-[11px] leading-relaxed text-amber-50">
+              {errorMessage}
+            </pre>
+          </div>
+        </div>
+      ) : null}
+
       {/* KPI grid */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <KpiCard
