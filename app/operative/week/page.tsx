@@ -69,17 +69,30 @@ export default async function OperativeWeekPage() {
   const startIso = toIso(weekStart);
   const endIso = toIso(weekEnd);
 
-  const { data: raw } = await admin
-    .from('tasks')
-    .select(
-      'id, scheduled_for, status, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address)',
-    )
-    .eq('cleaner_id', cleanerId)
-    .gte('scheduled_for', startIso)
-    .lte('scheduled_for', endIso)
-    .order('scheduled_for', { ascending: true });
+  // Wrap the joined query — a missing/renamed relation would otherwise
+  // bubble up and crash the whole page. We log the error and degrade
+  // to an empty week so the cleaner can still see the chrome + earnings
+  // tab even when the join fails.
+  let tasks: WeekTask[] = [];
+  try {
+    const { data: raw, error: tasksErr } = await admin
+      .from('tasks')
+      .select(
+        'id, scheduled_for, status, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address)',
+      )
+      .eq('cleaner_id', cleanerId)
+      .gte('scheduled_for', startIso)
+      .lte('scheduled_for', endIso)
+      .order('scheduled_for', { ascending: true });
 
-  const tasks = (raw ?? []) as unknown as WeekTask[];
+    if (tasksErr) {
+      console.error('[operative/week] tasks query failed', tasksErr);
+    } else {
+      tasks = (raw ?? []) as unknown as WeekTask[];
+    }
+  } catch (err) {
+    console.error('[operative/week] tasks fetch threw', err);
+  }
 
   // Group by day
   const days: Array<{ iso: string; tasks: WeekTask[] }> = [];
@@ -100,18 +113,23 @@ export default async function OperativeWeekPage() {
   }, 0);
   const earningsPence = completed.reduce((sum, t) => sum + (t.price_pence ?? 0), 0);
 
-  // Rating average from ratings on those completed tasks
+  // Rating average from ratings on those completed tasks. Same defensive
+  // wrap — a broken ratings query shouldn't tank the whole page.
   const completedIds = completed.map((t) => t.id);
   let avgStars: number | null = null;
   let ratingCount = 0;
   if (completedIds.length > 0) {
-    const { data: ratings } = await admin
-      .from('task_ratings')
-      .select('stars')
-      .in('task_id', completedIds);
-    if (ratings && ratings.length > 0) {
-      avgStars = ratings.reduce((s, r) => s + r.stars, 0) / ratings.length;
-      ratingCount = ratings.length;
+    try {
+      const { data: ratings } = await admin
+        .from('task_ratings')
+        .select('stars')
+        .in('task_id', completedIds);
+      if (ratings && ratings.length > 0) {
+        avgStars = ratings.reduce((s, r) => s + r.stars, 0) / ratings.length;
+        ratingCount = ratings.length;
+      }
+    } catch (err) {
+      console.error('[operative/week] ratings fetch threw', err);
     }
   }
 
