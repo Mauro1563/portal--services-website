@@ -8,8 +8,10 @@ import {
   Sparkles,
   Tag,
 } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { EmptyState } from '@/components/EmptyState';
 import { getT } from '@/lib/i18n';
 import { addTask } from '@/app/owner/actions';
 import { ensureDefaultServices } from '@/lib/default-services';
@@ -73,6 +75,34 @@ export default async function NewTaskPage({ searchParams }: Props) {
     'mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-3 text-sm text-text-1 placeholder:text-text-3 transition focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/25';
   const labelTitle = 'text-xs font-medium text-text-2';
 
+  // Block-empty state: if the owner has no properties yet, the rest of
+  // the form is unusable (Property is required and no options to pick).
+  // Show only a focused EmptyState pointing to the property create form
+  // instead of an empty dropdown the user can't escape.
+  if (noResources) {
+    return (
+      <LightLayout
+        activeTab="tasks"
+        title={t('tasks.newTitle')}
+        showBack
+        backHref="/owner/tasks"
+      >
+        <div className="mx-auto mt-6 max-w-md rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+          <EmptyState
+            icon={Building2}
+            tone="amber"
+            title="Falta tu primera propiedad"
+            description="Antes de programar una limpieza, necesitás cargar al menos una propiedad (casa, piso, Airbnb…). Tarda 30 segundos."
+            actions={[
+              { label: 'Crear propiedad', href: '/owner/properties/new' },
+              { label: 'Volver', href: '/owner/tasks', variant: 'secondary' },
+            ]}
+          />
+        </div>
+      </LightLayout>
+    );
+  }
+
   return (
     <LightLayout
       activeTab="tasks"
@@ -103,28 +133,6 @@ export default async function NewTaskPage({ searchParams }: Props) {
           </div>
         </div>
       </section>
-
-      {noResources ? (
-        <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-            <MapPin className="h-4 w-4" />
-          </span>
-          <div className="flex-1">
-            <p className="font-display font-semibold">
-              {t('taskNew.noProperties')}
-            </p>
-            <p className="mt-0.5 text-xs">
-              {t('taskNew.noPropertiesHint')}{' '}
-              <Link
-                href="/owner/properties/new"
-                className="font-semibold underline underline-offset-2 hover:text-amber-900"
-              >
-                {t('taskNew.addPropertyBtn')}
-              </Link>
-            </p>
-          </div>
-        </div>
-      ) : null}
 
       {error ? (
         <p className="mt-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-700">
