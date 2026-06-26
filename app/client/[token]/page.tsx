@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CalendarCheck, ChevronRight, Sparkles, Star } from 'lucide-react';
+import {
+  CalendarCheck,
+  CheckCircle2,
+  ChevronRight,
+  MessageCircle,
+  Phone,
+  Sparkles,
+  Star,
+} from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientByToken } from '@/lib/client-auth';
 import { getUnreadOwnerMessageCount } from '@/lib/client-messages';
@@ -13,6 +21,8 @@ import {
   type CleanerCard,
 } from '@/components/client/FeaturedCleaners';
 import type { CatalogService } from '@/components/client/ServiceCatalog';
+import { telUrl } from '@/lib/maps';
+import { waUrl } from '@/lib/phone';
 
 type TaskRow = {
   id: string;
@@ -97,6 +107,15 @@ export default async function ClientHome({
   const next = upcoming[0] ?? null;
   const lastDone = past.find((t) => t.status === 'completed') ?? null;
 
+  // Aggregate stats so the client can glance their relationship with
+  // this team — visits done, avg rating across all their reviews.
+  const visitsDone = past.filter((t) => t.status === 'completed').length;
+  const avgStarsAll =
+    ratings.length === 0
+      ? null
+      : ratings.reduce((s, r) => s + r.stars, 0) / ratings.length;
+  const upcomingCount = upcoming.length;
+
   // "Tu equipo" — dedup cleaners across all this client's tasks, with
   // their average rating from the same client.
   const cleanerMap = new Map<string, { id: string; name: string }>();
@@ -120,6 +139,16 @@ export default async function ClientHome({
 
   const firstName = ctx.client.name.split(/\s+/)[0] ?? ctx.client.name;
 
+  // Quick-contact links for the owner — phone may sit in user_metadata,
+  // email always comes from auth.users.
+  const ownerEmail = ctx.owner.email ?? null;
+  const ownerPhone = null; // owner_profiles doesn't store phone yet
+  const ownerTel = telUrl(ownerPhone);
+  const ownerWa = waUrl(
+    ownerPhone,
+    `Hola, soy ${firstName}, cliente de ${ctx.owner.business_name ?? 'Portal Home'}.`,
+  );
+
   return (
     <ClientShell ctx={ctx} token={token} activeTab="home" unreadMessages={unread}>
       <EcoGreeting
@@ -129,6 +158,45 @@ export default async function ClientHome({
       />
 
       <PromoBanner token={token} />
+
+      {/* Primary CTA — never let the client forget the main action */}
+      <section className="mt-4">
+        <Link
+          href={`/client/${token}/book`}
+          className="group flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 px-5 py-4 text-white shadow-[0_14px_30px_-12px_rgba(37,99,235,0.55)] transition hover:brightness-110 active:scale-[0.99]"
+        >
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-100">
+              Pídelo ahora
+            </p>
+            <p className="mt-1 font-display text-base font-bold">
+              Reservar limpieza
+            </p>
+          </div>
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-white transition group-hover:translate-x-0.5">
+            <ChevronRight className="h-5 w-5" />
+          </span>
+        </Link>
+      </section>
+
+      {/* Quick stats — keeps "your relationship" visible at a glance */}
+      <section className="mt-3 grid grid-cols-3 gap-2">
+        <StatChip
+          label="Próximas"
+          value={String(upcomingCount)}
+          Icon={CalendarCheck}
+        />
+        <StatChip
+          label="Hechas"
+          value={String(visitsDone)}
+          Icon={CheckCircle2}
+        />
+        <StatChip
+          label="Rating"
+          value={avgStarsAll == null ? '—' : avgStarsAll.toFixed(1)}
+          Icon={Star}
+        />
+      </section>
 
       <ServiceCatalog token={token} services={services} />
 
@@ -202,6 +270,90 @@ export default async function ClientHome({
           </div>
         </section>
       ) : null}
+
+      {/* Quick contact with the owner — chat is always live, the other
+          two only show when we have phone numbers on file. */}
+      <section className="mt-4 rounded-2xl bg-white p-4 ring-1 ring-inset ring-slate-100">
+        <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
+          Contacta a {ctx.owner.business_name ?? 'tu equipo'}
+        </p>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          <Link
+            href={`/client/${token}/messages`}
+            className="flex flex-col items-center gap-1 rounded-xl bg-blue-50 px-2 py-2.5 text-blue-700 transition hover:bg-blue-100"
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span className="text-[10.5px] font-semibold">Chat</span>
+          </Link>
+          {ownerWa ? (
+            <a
+              href={ownerWa}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1 rounded-xl bg-emerald-50 px-2 py-2.5 text-emerald-700 transition hover:bg-emerald-100"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span className="text-[10.5px] font-semibold">WhatsApp</span>
+            </a>
+          ) : ownerEmail ? (
+            <a
+              href={`mailto:${ownerEmail}`}
+              className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 px-2 py-2.5 text-slate-700 transition hover:bg-slate-200"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span className="text-[10.5px] font-semibold">Email</span>
+            </a>
+          ) : (
+            <span className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 px-2 py-2.5 text-slate-400">
+              <MessageCircle className="h-4 w-4" />
+              <span className="text-[10.5px] font-semibold">—</span>
+            </span>
+          )}
+          {ownerTel ? (
+            <a
+              href={ownerTel}
+              className="flex flex-col items-center gap-1 rounded-xl bg-amber-50 px-2 py-2.5 text-amber-700 transition hover:bg-amber-100"
+            >
+              <Phone className="h-4 w-4" />
+              <span className="text-[10.5px] font-semibold">Llamar</span>
+            </a>
+          ) : (
+            <Link
+              href={`/client/${token}/profile`}
+              className="flex flex-col items-center gap-1 rounded-xl bg-slate-100 px-2 py-2.5 text-slate-600 transition hover:bg-slate-200"
+            >
+              <Phone className="h-4 w-4" />
+              <span className="text-[10.5px] font-semibold">Mi perfil</span>
+            </Link>
+          )}
+        </div>
+      </section>
     </ClientShell>
+  );
+}
+
+function StatChip({
+  label,
+  value,
+  Icon,
+}: {
+  label: string;
+  value: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}) {
+  return (
+    <div className="flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 ring-1 ring-inset ring-slate-100">
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700">
+        <Icon className="h-3.5 w-3.5" />
+      </span>
+      <div className="min-w-0">
+        <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+          {label}
+        </p>
+        <p className="font-display text-sm font-bold tabular-nums text-slate-900">
+          {value}
+        </p>
+      </div>
+    </div>
   );
 }
