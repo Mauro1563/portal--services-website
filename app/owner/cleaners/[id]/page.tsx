@@ -12,6 +12,7 @@ import {
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { cleanerLoginUrl } from '@/lib/cleaner-link';
+import { getOwnerProfile } from '@/lib/owner-profile';
 import { deleteCleaner, regeneratePin } from './actions';
 import { PinShareActions } from './PinShareActions';
 
@@ -63,6 +64,9 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
     ]);
 
   if (!cleaner) notFound();
+
+  // Owner profile drives the welcome message branding ("equipo de X").
+  const profile = await getOwnerProfile(user.id);
 
   const tasks = (rawTasks ?? []) as unknown as TaskHistory[];
 
@@ -155,7 +159,9 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
               cleanerName={cleaner.name}
               pin={cleaner.pin}
               phone={cleaner.phone ?? null}
+              email={cleaner.email ?? null}
               loginUrl={cleanerLoginUrl(cleaner.pin)}
+              businessName={profile?.business_name ?? null}
             />
           </div>
         )}
