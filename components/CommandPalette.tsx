@@ -27,7 +27,13 @@ import {
   Mail,
   TrendingUp,
   FileSignature,
+  Loader2,
 } from 'lucide-react';
+import {
+  fetchCommandPaletteEntities,
+  type CommandSearchResult,
+  type SearchEntity,
+} from '@/app/owner/command-search/actions';
 
 type CmdItem = {
   id: string;
@@ -84,6 +90,19 @@ export function CommandPalette({ scope }: { scope: 'owner' | 'hq' }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const items = scope === 'owner' ? OWNER_ITEMS : HQ_ITEMS;
+
+  // Entity search — only for owner scope. Lazy-loaded the first time the
+  // palette opens; cached for the rest of the session.
+  const [entities, setEntities] = useState<CommandSearchResult | null>(null);
+  const [loadingEntities, setLoadingEntities] = useState(false);
+  useEffect(() => {
+    if (!open || scope !== 'owner' || entities !== null || loadingEntities) return;
+    setLoadingEntities(true);
+    fetchCommandPaletteEntities()
+      .then(setEntities)
+      .catch(() => setEntities({ clients: [], properties: [], cleaners: [] }))
+      .finally(() => setLoadingEntities(false));
+  }, [open, scope, entities, loadingEntities]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -163,6 +182,32 @@ export function CommandPalette({ scope }: { scope: 'owner' | 'hq' }) {
                   })}
               </Command.Group>
             ))}
+
+            {scope === 'owner' && (
+              <>
+                <EntityGroup
+                  heading="Clientes"
+                  icon={Users}
+                  entities={entities?.clients}
+                  loading={loadingEntities}
+                  onSelect={go}
+                />
+                <EntityGroup
+                  heading="Propiedades"
+                  icon={Building2}
+                  entities={entities?.properties}
+                  loading={loadingEntities}
+                  onSelect={go}
+                />
+                <EntityGroup
+                  heading="Limpiadores"
+                  icon={KeyRound}
+                  entities={entities?.cleaners}
+                  loading={loadingEntities}
+                  onSelect={go}
+                />
+              </>
+            )}
           </Command.List>
 
           <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50/60 px-4 py-2 text-[11px] text-slate-500">
@@ -191,5 +236,55 @@ function Kbd({ children }: { children: React.ReactNode }) {
     <kbd className="inline-flex h-5 min-w-[20px] items-center justify-center rounded border border-slate-200 bg-white px-1 font-mono text-[10px] text-slate-600 shadow-[0_1px_0_rgba(15,23,42,0.05)]">
       {children}
     </kbd>
+  );
+}
+
+function EntityGroup({
+  heading,
+  icon: Icon,
+  entities,
+  loading,
+  onSelect,
+}: {
+  heading: string;
+  icon: React.ComponentType<{ className?: string }>;
+  entities: SearchEntity[] | undefined;
+  loading: boolean;
+  onSelect: (href: string) => void;
+}) {
+  // Render nothing if loaded and empty — keeps the palette tight.
+  if (!loading && (!entities || entities.length === 0)) return null;
+
+  return (
+    <Command.Group
+      heading={heading}
+      className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+    >
+      {loading && !entities ? (
+        <div className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          Cargando…
+        </div>
+      ) : (
+        (entities ?? []).map((e) => (
+          <Command.Item
+            key={e.id}
+            value={`${e.name} ${e.subtitle ?? ''}`}
+            onSelect={() => onSelect(e.href)}
+            className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-700 transition aria-selected:bg-slate-100 aria-selected:text-slate-900"
+          >
+            <Icon className="h-4 w-4 shrink-0 text-slate-500" />
+            <div className="flex min-w-0 flex-1 items-baseline gap-2">
+              <span className="truncate">{e.name}</span>
+              {e.subtitle && (
+                <span className="truncate text-[11px] text-slate-400">
+                  {e.subtitle}
+                </span>
+              )}
+            </div>
+          </Command.Item>
+        ))
+      )}
+    </Command.Group>
   );
 }
