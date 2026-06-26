@@ -16,6 +16,39 @@ export default async function HQDashboardPage() {
   const admin = await requireMarketingAdmin();
   if (!admin) redirect('/hq/login');
 
+  // Never let one broken read take down the whole dashboard. Compute data
+  // inside a try/catch so the page always renders — on failure we fall back
+  // to an empty dashboard with a visible diagnostic banner (admin-only).
+  try {
+    return await renderDashboard(admin.email);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[hq dashboard] render failed', err);
+    return (
+      <HQDashboard
+        email={admin.email}
+        kpis={{
+          pendingLeads: 0,
+          ownersTotal: 0,
+          conversionPct: 0,
+          signups7d: 0,
+          cleanersTotal: 0,
+          tasksToday: 0,
+          tasksDoneToday: 0,
+        }}
+        funnel={{ new: 0, contacted: 0, qualified: 0, archived: 0 }}
+        pendingLeadsList={[]}
+        recentCleaners={[]}
+        recentCheckins={[]}
+        recentPhotos={[]}
+        propertiesCount={0}
+        errorMessage={msg}
+      />
+    );
+  }
+}
+
+async function renderDashboard(email: string) {
   const client = createAdminClient();
   const now = Date.now();
   const sevenDaysAgo = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -152,7 +185,7 @@ export default async function HQDashboardPage() {
 
   return (
     <HQDashboard
-      email={admin.email}
+      email={email}
       kpis={{
         pendingLeads: funnel.new,
         ownersTotal: ownersCount.count ?? 0,
