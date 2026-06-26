@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { EmptyState } from '@/components/EmptyState';
 import { getT } from '@/lib/i18n';
 
 type TaskAnalytics = {
@@ -188,6 +189,20 @@ export default async function AnalyticsPage() {
         {t('analytics.title')}
       </h1>
       <p className="mt-1 text-xs text-text-2">{t('analytics.subtitle')}</p>
+
+      {tasks.length === 0 ? (
+        <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+          <EmptyState
+            icon={BarChart3}
+            tone="neutral"
+            title="Sin datos todavía"
+            description="Cuando tengas algunas limpiezas programadas y completadas, acá vas a ver tus KPIs, evolución por mes y top de propiedades."
+            actions={[
+              { label: 'Programar limpieza', href: '/owner/tasks/new' },
+            ]}
+          />
+        </div>
+      ) : null}
 
       <div className="mt-5 grid grid-cols-2 gap-3">
         <Kpi
