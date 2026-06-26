@@ -28,15 +28,30 @@ import { signOutOperative } from './actions';
 import { CheckInButton } from './CheckInButton';
 import { PhotoUploadButton } from './PhotoUploadButton';
 import { ThemeToggle } from '@/components/operative/ThemeToggle';
+import { QuickActions } from '@/components/operative/QuickActions';
+import { TodayRoute, type RouteTask } from '@/components/operative/TodayRoute';
+import { WeekStatsMini } from '@/components/operative/WeekStatsMini';
+import { PWAInstall } from '@/components/operative/PWAInstall';
+import { singleStopUrl, telUrl } from '@/lib/maps';
 
 type OperativeTask = {
   id: string;
   scheduled_for: string;
+  start_time: string | null;
   status: string;
   notes: string | null;
   checked_in_at: string | null;
+  completed_at: string | null;
   photo_url: string | null;
-  property: { name: string; address: string | null } | null;
+  estimated_duration_min: number | null;
+  price_pence: number | null;
+  property: { name: string | null; address: string | null } | null;
+  client: {
+    name: string | null;
+    address: string | null;
+    postcode: string | null;
+    phone: string | null;
+  } | null;
 };
 
 type Props = {
@@ -48,6 +63,15 @@ function greeting(t: (k: string) => string) {
   if (hour < 12) return { text: t('operative.greetingMorning'), icon: Sunrise };
   if (hour < 18) return { text: t('operative.greetingAfternoon'), icon: Sun };
   return { text: t('operative.greetingEvening'), icon: Sunset };
+}
+
+function startOfWeek(d = new Date()): string {
+  const day = d.getUTCDay();
+  const diff = (day + 6) % 7;
+  const monday = new Date(
+    Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - diff),
+  );
+  return monday.toISOString().slice(0, 10);
 }
 
 export default async function OperativeHome({ searchParams }: Props) {
@@ -66,15 +90,18 @@ export default async function OperativeHome({ searchParams }: Props) {
   const { error } = await searchParams;
   const t = await getT();
   const today = new Date().toISOString().split('T')[0];
+  const weekStartIso = startOfWeek(new Date());
 
+  // Single query covers home + week mini-stats so we don't double-fetch.
   const { data } = await admin
     .from('tasks')
     .select(
-      'id, scheduled_for, status, notes, checked_in_at, photo_url, property:properties (name, address)',
+      'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, photo_url, estimated_duration_min, price_pence, property:properties (name, address), client:clients (name, address, postcode, phone)',
     )
     .eq('cleaner_id', cleanerId)
-    .gte('scheduled_for', today)
-    .order('scheduled_for', { ascending: true });
+    .gte('scheduled_for', weekStartIso)
+    .order('scheduled_for', { ascending: true })
+    .order('start_time', { ascending: true });
 
   const tasks = (data ?? []) as unknown as OperativeTask[];
   const todayTasks = tasks.filter((task) => task.scheduled_for === today);
@@ -86,9 +113,61 @@ export default async function OperativeHome({ searchParams }: Props) {
   const doneToday = todayCompleted.length;
   const totalToday = todayTasks.length;
 
+  // Week stats — same math as /operative/week so the home preview matches.
+  const completedThisWeek = tasks.filter((t) => t.status === 'completed');
+  const minutesWorked = completedThisWeek.reduce((sum, t) => {
+    if (t.checked_in_at && t.completed_at) {
+      const ms =
+        new Date(t.completed_at).getTime() -
+        new Date(t.checked_in_at).getTime();
+      return sum + Math.max(0, Math.round(ms / 60000));
+    }
+    return sum + (t.estimated_duration_min ?? 0);
+  }, 0);
+  const earningsPence = completedThisWeek.reduce(
+    (sum, t) => sum + (t.price_pence ?? 0),
+    0,
+  );
+
+  // Ratings live in their own table — fetch only when there's something to rate.
+  let avgStars: number | null = null;
+  let ratingCount = 0;
+  const completedIds = completedThisWeek.map((t) => t.id);
+  if (completedIds.length > 0) {
+    const { data: ratings } = await admin
+      .from('task_ratings')
+      .select('stars')
+      .in('task_id', completedIds);
+    if (ratings && ratings.length > 0) {
+      avgStars =
+        ratings.reduce((s, r) => s + (r.stars ?? 0), 0) / ratings.length;
+      ratingCount = ratings.length;
+    }
+  }
+
   const g = greeting(t);
   const firstName = cleaner.name.split(' ')[0];
   const isCover = todayInProgress.length > 0;
+
+  // Quick actions on the hero need the current task's address + phone.
+  const heroAddress =
+    heroTask?.client?.address ?? heroTask?.property?.address ?? null;
+  const heroPostcode = heroTask?.client?.postcode ?? null;
+  const heroMaps = heroAddress
+    ? singleStopUrl({ address: heroAddress, postcode: heroPostcode })
+    : null;
+  const heroTel = telUrl(heroTask?.client?.phone);
+  const heroCamera = heroTask ? `/operative/tasks/${heroTask.id}` : null;
+
+  // Route component wants the same shape but typed narrower.
+  const routeTasks: RouteTask[] = todayTasks.map((task) => ({
+    id: task.id,
+    start_time: task.start_time,
+    status: task.status,
+    estimated_duration_min: task.estimated_duration_min,
+    property: task.property,
+    client: task.client,
+  }));
 
   return (
     <PortalShell
@@ -175,12 +254,13 @@ export default async function OperativeHome({ searchParams }: Props) {
               : t('operative.nextUp')}
           </p>
           <h2 className="mt-2 font-display text-lg font-semibold text-text-1">
-            {heroTask.property?.name ?? 'Property removed'}
+            {heroTask.client?.name ?? heroTask.property?.name ?? 'Property removed'}
           </h2>
-          {heroTask.property?.address ? (
+          {heroAddress ? (
             <p className="mt-1 inline-flex items-center gap-1 text-xs text-text-2">
               <MapPin className="h-3.5 w-3.5 text-brand-600" />
-              {heroTask.property.address}
+              {heroAddress}
+              {heroPostcode ? ` · ${heroPostcode}` : ''}
             </p>
           ) : null}
           {heroTask.notes ? (
@@ -201,6 +281,13 @@ export default async function OperativeHome({ searchParams }: Props) {
               })}
             </p>
           ) : null}
+
+          <QuickActions
+            mapsUrl={heroMaps}
+            telUrl={heroTel}
+            cameraHref={heroCamera}
+          />
+
           <div className="mt-5">
             {heroTask.status === 'in_progress' ? (
               <PhotoUploadButton taskId={heroTask.id} />
@@ -211,6 +298,15 @@ export default async function OperativeHome({ searchParams }: Props) {
         </section>
       ) : null}
 
+      <TodayRoute tasks={routeTasks} />
+
+      <WeekStatsMini
+        minutesWorked={minutesWorked}
+        earningsPence={earningsPence}
+        avgStars={avgStars}
+        ratingCount={ratingCount}
+      />
+
       {totalToday === 0 && upcomingTasks.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
           <EmptyState
@@ -220,49 +316,6 @@ export default async function OperativeHome({ searchParams }: Props) {
             description="Cuando tu manager te asigne una limpieza, vas a verla acá. También te llega notificación si tenés la app instalada."
           />
         </div>
-      ) : null}
-
-      {/* The hero card highlights one task; the rest of today's queue would
-          otherwise be invisible until that one is finished. */}
-      {heroTask && todayTasks.length > 1 ? (
-        <section className="mt-6">
-          <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-            More today ({todayTasks.length - 1})
-          </h2>
-          <ul className="mt-3 space-y-2">
-            {todayTasks
-              .filter((task) => task.id !== heroTask.id)
-              .map((task) => (
-                <li key={task.id}>
-                  <Link
-                    href={`/operative/tasks/${task.id}`}
-                    className="flex items-center gap-3 rounded-2xl border border-surface-2 bg-surface-0 px-4 py-3 shadow-card transition hover:border-brand-600/30 hover:shadow-card-lg"
-                  >
-                    <span
-                      className={`h-2 w-2 shrink-0 rounded-full ${
-                        task.status === 'completed'
-                          ? 'bg-emerald-500'
-                          : task.status === 'in_progress'
-                          ? 'bg-amber-500'
-                          : 'bg-brand-600/40'
-                      }`}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-display text-sm font-semibold text-text-1">
-                        {task.property?.name ?? 'Property removed'}
-                      </p>
-                      <p className="mt-0.5 truncate text-[11px] text-text-3">
-                        {task.property?.address ?? 'No address on file'}
-                      </p>
-                    </div>
-                    {task.status === 'completed' ? (
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    ) : null}
-                  </Link>
-                </li>
-              ))}
-          </ul>
-        </section>
       ) : null}
 
       <CorporateBanner
@@ -287,7 +340,7 @@ export default async function OperativeHome({ searchParams }: Props) {
                   <span className="h-2 w-2 shrink-0 rounded-full bg-brand-600/40" />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-display text-sm font-semibold text-text-1">
-                      {task.property?.name ?? 'Property removed'}
+                      {task.client?.name ?? task.property?.name ?? 'Property removed'}
                     </p>
                     <p className="mt-0.5 truncate text-[11px] text-text-3">
                       {new Date(task.scheduled_for).toLocaleDateString('en-GB', {
@@ -303,7 +356,8 @@ export default async function OperativeHome({ searchParams }: Props) {
           </ul>
         </section>
       ) : null}
+
+      <PWAInstall />
     </PortalShell>
   );
 }
-
