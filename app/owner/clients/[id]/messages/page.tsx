@@ -3,6 +3,7 @@ import { Send } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { sendOwnerMessage } from '../../actions';
+import { OwnerChatAutoRefresh } from './OwnerChatAutoRefresh';
 
 type MessageRow = {
   id: string;
@@ -58,6 +59,7 @@ export default async function OwnerClientMessages({ params, searchParams }: Prop
       showBack
       backHref={`/owner/clients/${id}`}
     >
+      <OwnerChatAutoRefresh clientId={client.id} />
       <section className="rounded-2xl border border-surface-2 bg-gradient-to-br from-brand-600/[0.06] to-brand-600/[0.02] p-4 shadow-card">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
