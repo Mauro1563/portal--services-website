@@ -313,28 +313,37 @@ function QuickActions({
   }
   actions.push({ href: '/owner/cleaners/new', label: tx('qaNewCleaner'), Icon: Users, primary: false });
   return (
-    <section className="my-5">
-      <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
+    <section className="my-5 animate-fade-up">
+      <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
         {tx('quickActionsTitle')}
       </p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
         {actions.map((a) => {
           const Icon = a.Icon;
           return (
             <Link
               key={a.href}
               href={a.href}
-              className={`group flex items-center gap-2 rounded-2xl px-3.5 py-3 text-sm font-semibold transition ${
+              className={`group relative flex min-h-[58px] items-center gap-2 overflow-hidden rounded-2xl px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${
                 a.primary
-                  ? 'bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-[0_10px_28px_-12px_rgba(37,99,235,0.6)] hover:brightness-110'
-                  : 'border border-surface-2 bg-surface-0 text-text-1 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow'
+                  ? 'bg-sparkle-gradient text-white shadow-sparkle-glow hover:scale-[1.02] hover:shadow-[0_14px_36px_-12px_rgba(34,211,238,0.7)]'
+                  : 'border border-surface-2 bg-surface-0 text-text-1 hover:-translate-y-0.5 hover:border-clean-aqua hover:shadow-sparkle-glow'
               }`}
             >
+              {/* Sparkle accent on primary CTA */}
+              {a.primary ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute right-2 top-1.5 text-[10px] text-white/80 animate-sparkle"
+                >
+                  ✦
+                </span>
+              ) : null}
               <Icon className="h-4 w-4 shrink-0" />
               <span className="truncate">{a.label}</span>
               <ChevronRight
                 className={`ml-auto h-4 w-4 shrink-0 transition group-hover:translate-x-0.5 ${
-                  a.primary ? 'text-white/80' : 'text-text-3'
+                  a.primary ? 'text-white/80' : 'text-text-3 group-hover:text-clean-aqua'
                 }`}
               />
             </Link>
