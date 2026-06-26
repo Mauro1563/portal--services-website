@@ -3,7 +3,16 @@ import { createAdminClient } from '@/lib/supabase/admin';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ?? 'Portal Home <onboarding@resend.dev>';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hq.portalservices.digital';
+
+// Normalize the env-var hostname so email links always carry an explicit
+// https:// scheme — same problem WhatsApp has if the env is set bare.
+const RAW_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'hq.portalservices.digital';
+const SITE_URL = (() => {
+  const trimmed = RAW_SITE_URL.replace(/\/$/, '');
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+})();
 
 async function sendEmail(opts: { to: string; subject: string; html: string }) {
   if (!RESEND_API_KEY) {

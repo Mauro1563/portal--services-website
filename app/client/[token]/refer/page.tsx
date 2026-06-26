@@ -41,8 +41,13 @@ export default async function ClientRefer({
     .order('sort_order', { ascending: true });
   const rewards = (rewardsData ?? []) as Reward[];
 
-  const base =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hq.portalservices.digital';
+  // Normalize the host so WhatsApp/SMS always recognises the share URL
+  // — bare-host env vars would otherwise ship a non-clickable plain-text
+  // string into the recipient's chat.
+  const rawBase =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'hq.portalservices.digital';
+  const trimmed = rawBase.replace(/\/$/, '');
+  const base = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   const signupUrl = code ? `${base}/refer/${code}` : base;
 
   return (
