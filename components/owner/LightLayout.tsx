@@ -14,7 +14,9 @@ import {
   Bell,
   ChevronLeft,
 } from 'lucide-react';
+import { Suspense } from 'react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { FlashToast } from '@/components/FlashToast';
 import { getLocale } from '@/lib/i18n';
 import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile } from '@/lib/owner-profile';
@@ -186,7 +188,12 @@ export async function LightLayout({
           </div>
         </header>
 
-        <main className="min-w-0 w-full max-w-[100vw] flex-1 overflow-x-hidden px-3 py-4 pb-24 sm:px-4 sm:py-5 lg:px-8 lg:py-7 lg:pb-10">{children}</main>
+        <main className="min-w-0 w-full max-w-[100vw] flex-1 overflow-x-hidden px-3 py-4 pb-24 sm:px-4 sm:py-5 lg:px-8 lg:py-7 lg:pb-10">
+          <Suspense fallback={null}>
+            <FlashToast />
+          </Suspense>
+          {children}
+        </main>
       </div>
 
       {/* Mobile bottom tabs */}

@@ -38,7 +38,9 @@ export async function addClient(formData: FormData) {
   }
 
   revalidatePath('/owner/clients');
-  redirect('/owner/clients');
+  redirect(
+    '/owner/clients?flash=' + encodeURIComponent(`Cliente "${name}" creado`),
+  );
 }
 
 export async function updateClient(formData: FormData) {

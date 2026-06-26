@@ -14,6 +14,7 @@ import {
   UserCog,
 } from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { EmptyState } from '@/components/EmptyState';
 import { getT } from '@/lib/i18n';
 import {
   CorporateBanner,
@@ -194,11 +195,13 @@ export default async function OperativeHome({ searchParams }: Props) {
       ) : null}
 
       {totalToday === 0 && upcomingTasks.length === 0 ? (
-        <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-6 text-center">
-          <Clock className="mx-auto h-5 w-5 text-text-3" />
-          <p className="mt-2 text-sm text-text-2">
-            {t('operative.noAssignmentsYet')}
-          </p>
+        <div className="mt-6 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+          <EmptyState
+            icon={Clock}
+            tone="neutral"
+            title={t('operative.noAssignmentsYet')}
+            description="Cuando tu manager te asigne una limpieza, vas a verla acá. También te llega notificación si tenés la app instalada."
+          />
         </div>
       ) : null}
 

@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientByToken } from '@/lib/client-auth';
 import { getUnreadOwnerMessageCount } from '@/lib/client-messages';
 import { ClientShell } from '@/components/client/ClientShell';
+import { EmptyState } from '@/components/EmptyState';
 
 type TaskRow = {
   id: string;
@@ -99,14 +100,13 @@ export default async function ClientCleaningsList({
             <Calendar className="h-3 w-3" /> Próximas ({upcoming.length})
           </h2>
           {upcoming.length === 0 ? (
-            <div className="mt-3 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-6 text-center">
-              <Clock className="mx-auto h-5 w-5 text-text-3" />
-              <p className="mt-2 text-sm text-text-2">
-                No tienes limpiezas agendadas todavía.
-              </p>
-              <p className="mt-1 text-[11px] text-text-3">
-                Tu equipo te avisará por aquí en cuanto programe una.
-              </p>
+            <div className="mt-3 rounded-2xl border border-dashed border-surface-2 bg-surface-0">
+              <EmptyState
+                icon={Clock}
+                tone="neutral"
+                title="No tienes limpiezas agendadas todavía"
+                description="Tu equipo te avisará por aquí en cuanto programe una."
+              />
             </div>
           ) : (
             <ul className="mt-3 space-y-2">
