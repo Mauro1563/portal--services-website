@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Mail, Phone, User } from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { PortalShell } from '@/components/portal/PortalDashboardShell';
+import { BottomTabBar } from '@/components/operative/BottomTabBar';
 import { updateOwnProfile } from '../actions';
 
 type Props = {
@@ -26,7 +26,8 @@ export default async function OperativeProfile({ searchParams }: Props) {
   if (!cleaner) redirect('/login');
 
   return (
-    <PortalShell backHref="/operative" backLabel="Back">
+    <main className="min-h-screen bg-canvas pb-24">
+      <div className="mx-auto max-w-md px-4 py-6">
       <header className="mb-6">
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
           My profile
@@ -115,6 +116,8 @@ export default async function OperativeProfile({ searchParams }: Props) {
           Save changes
         </button>
       </form>
-    </PortalShell>
+      </div>
+      <BottomTabBar active="perfil" />
+    </main>
   );
 }
