@@ -22,6 +22,16 @@ const poppins = Poppins({
 
 const SITE_URL = 'https://portalservices.digital';
 
+export const viewport: import('next').Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+  ],
+  // Tells the browser's content sniffing to start composition with our
+  // brand color instead of flashing white between paint and React mount.
+  colorScheme: 'light dark',
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -104,6 +114,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"
         />
+        {/* Warm the TLS connection to Supabase before the first query
+            fires — meaningful on cold-start cellular when handshake
+            adds ~200ms. */}
+        {process.env.NEXT_PUBLIC_SUPABASE_URL ? (
+          <>
+            <link
+              rel="preconnect"
+              href={process.env.NEXT_PUBLIC_SUPABASE_URL}
+              crossOrigin=""
+            />
+            <link
+              rel="dns-prefetch"
+              href={process.env.NEXT_PUBLIC_SUPABASE_URL}
+            />
+          </>
+        ) : null}
       </head>
       <body className="min-h-screen bg-ink-0 text-white antialiased">
         <ThemeManager />
