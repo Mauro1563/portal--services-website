@@ -37,4 +37,3 @@ export async function ensureBusinessLogosBucket(): Promise<{ error?: string }> {
   return {};
 }
 
-export const BUSINESS_LOGOS_BUCKET = BUCKET_ID;
