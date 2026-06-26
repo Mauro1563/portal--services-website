@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -9,7 +10,6 @@ import {
   ListChecks,
   MessageSquare,
   Plus,
-  Settings,
   Users,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
@@ -40,11 +40,6 @@ type FieldRow = {
 
 const DAY_SHORT = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
-/**
- * "mauro541423@gmail.com" → "Mauro". Strips digits, punctuation, and
- * the domain, capitalizes the first letter. Returns null if the email
- * doesn't yield anything alphabetic (e.g. "12345@foo.com").
- */
 function prettyFromEmail(email: string | null | undefined): string | null {
   if (!email) return null;
   const local = email.split('@')[0]?.replace(/[^a-zA-Z]/g, '');
@@ -74,11 +69,73 @@ export default async function OwnerHome() {
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
 
+  // Profile fetch is cheap (single row) and the chrome needs it for the
+  // greeting + business name. Everything else is in the streamed block.
+  const profile = await getOwnerProfile(user.id);
+  const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
+  const fullName =
+    metadataName || displayNameFrom(profile, user.email ?? null);
+  const firstName = fullName
+    ? fullName.split(/\s+/)[0]
+    : prettyFromEmail(user.email) ?? 'Owner';
+  const businessName =
+    profile?.business_name ||
+    (user.user_metadata?.business as string | undefined) ||
+    'Tu negocio';
+
+  return (
+    <main className="min-h-screen bg-slate-50 pb-24">
+      <div className="mx-auto max-w-md px-3 py-4 sm:max-w-2xl sm:px-4 sm:py-5 lg:max-w-5xl lg:px-8 lg:py-7">
+        <CorporateHeader
+          firstName={firstName}
+          businessName={businessName}
+          subtitle={businessName}
+        />
+
+        <TasksAutoRefresh ownerId={user.id} />
+
+        {/* Heavy data section streams in — chrome above renders in <100ms
+            so the user always sees something instantly. */}
+        <Suspense fallback={<DashboardSkeleton />}>
+          <DashboardSections userId={user.id} />
+        </Suspense>
+
+        {/* Secondary nav — static, no DB. Renders immediately. */}
+        <section className="mt-3 grid grid-cols-4 gap-2 sm:mt-4 sm:gap-3">
+          <SecondaryTile href="/owner/properties" label="Sitios" Icon={Building2} />
+          <SecondaryTile href="/owner/calendar" label="Calendario" Icon={CalendarDays} />
+          <SecondaryTile href="/owner/analytics" label="Analítica" Icon={BarChart3} />
+          <SecondaryTile href="/owner/billing" label="Facturación" Icon={CreditCard} />
+        </section>
+
+        <form action={signout} className="mt-8 flex justify-center">
+          <button
+            type="submit"
+            className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700"
+          >
+            Cerrar sesión
+          </button>
+        </form>
+      </div>
+
+      <BottomTabBar active="home" />
+    </main>
+  );
+}
+
+/**
+ * Heavy server component — 12 parallel Supabase queries. Lives inside a
+ * <Suspense> on the home so the page chrome never waits for the slowest
+ * one. The fallback below shows skeleton blocks that match the layout
+ * so the page doesn't jump when the real data arrives.
+ */
+async function DashboardSections({ userId }: { userId: string }) {
+  const supabase = await createClient();
+
   const now = new Date();
   const today = toIsoDay(now);
   const monthStart = `${today.slice(0, 7)}-01`;
 
-  // Previous-period boundaries for delta arrows.
   const sevenDaysAgo = toIsoDay(new Date(now.getTime() - 7 * 86_400_000));
   const fourteenDaysAgo = toIsoDay(new Date(now.getTime() - 14 * 86_400_000));
   const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString();
@@ -92,7 +149,6 @@ export default async function OwnerHome() {
     propsRes,
     cleanersRes,
     clientsRes,
-    pendingRes,
     requestedCountRes,
     todayCountRes,
     weekBookingsRes,
@@ -105,12 +161,6 @@ export default async function OwnerHome() {
     supabase.from('properties').select('id', { count: 'exact', head: true }),
     supabase.from('cleaners').select('id', { count: 'exact', head: true }),
     supabase.from('clients').select('id', { count: 'exact', head: true }),
-    supabase
-      .from('tasks')
-      .select('id', { count: 'exact', head: true })
-      .gte('scheduled_for', today)
-      .neq('status', 'completed')
-      .neq('status', 'cancelled'),
     supabase
       .from('tasks')
       .select('id', { count: 'exact', head: true })
@@ -139,13 +189,11 @@ export default async function OwnerHome() {
       .gte('scheduled_for', prevMonthStart)
       .lte('scheduled_for', prevMonthEnd)
       .in('payment_status', ['paid', 'partial']),
-    // Daily revenue for the chart — last 7 days.
     supabase
       .from('tasks')
       .select('paid_amount_pence, price_pence, scheduled_for')
       .gte('scheduled_for', sevenDaysAgo)
       .in('payment_status', ['paid', 'partial']),
-    // Recent check-ins for the "cleaners en campo" widget.
     supabase
       .from('tasks')
       .select(
@@ -156,11 +204,11 @@ export default async function OwnerHome() {
       .order('checked_in_at', { ascending: false })
       .limit(6),
   ]);
+  void userId; // RLS already scopes everything to the current user
 
   const propertiesCount = propsRes.count ?? 0;
   const cleanersCount = cleanersRes.count ?? 0;
   const clientsCount = clientsRes.count ?? 0;
-  const pendingCount = pendingRes.count ?? 0;
   const requestedCount = requestedCountRes.count ?? 0;
   const todayCount = todayCountRes.count ?? 0;
   const weekBookings = weekBookingsRes.count ?? 0;
@@ -179,7 +227,6 @@ export default async function OwnerHome() {
   const monthRevenuePence = sumPaid(monthPaid);
   const prevMonthRevenuePence = sumPaid(prevMonthPaid);
 
-  // Daily revenue points for the 7-day chart (oldest → newest).
   const chartData: RevenuePoint[] = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(now.getTime() - i * 86_400_000);
@@ -201,130 +248,110 @@ export default async function OwnerHome() {
     checkedInAt: r.checked_in_at,
   }));
 
-  const profile = await getOwnerProfile(user.id);
-  const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
-  const fullName =
-    metadataName || displayNameFrom(profile, user.email ?? null);
-  const firstName = fullName
-    ? fullName.split(/\s+/)[0]
-    : prettyFromEmail(user.email) ?? 'Owner';
-  const businessName =
-    profile?.business_name ||
-    (user.user_metadata?.business as string | undefined) ||
-    'Tu negocio';
-
-  const subtitle =
-    todayCount > 0
-      ? `${todayCount} ${todayCount === 1 ? 'limpieza' : 'limpiezas'} hoy · ${pendingCount} ${pendingCount === 1 ? 'pendiente' : 'pendientes'}`
-      : pendingCount > 0
-      ? `${pendingCount} ${pendingCount === 1 ? 'limpieza pendiente' : 'limpiezas pendientes'}`
-      : businessName;
-
   return (
-    <main className="min-h-screen bg-slate-50 pb-24">
-      <div className="mx-auto max-w-md px-3 py-4 sm:max-w-2xl sm:px-4 sm:py-5 lg:max-w-5xl lg:px-8 lg:py-7">
-        <CorporateHeader
-          firstName={firstName}
-          businessName={businessName}
-          subtitle={subtitle}
-        />
-
-        <TasksAutoRefresh ownerId={user.id} />
-
-        {requestedCount > 0 ? (
-          <Link
-            href="/owner/tasks?status=requested"
-            className="group mb-4 flex items-center gap-3 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-violet-300"
-          >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-600 text-white">
-              <Bell className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-700">
-                Solicitudes nuevas
-              </p>
-              <p className="mt-0.5 text-[13px] font-semibold text-slate-900">
-                {requestedCount}{' '}
-                {requestedCount === 1
-                  ? 'cliente esperando confirmación'
-                  : 'clientes esperando confirmación'}
-              </p>
-            </div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-violet-700 transition group-hover:translate-x-0.5">
-              Ver →
-            </span>
-          </Link>
-        ) : null}
-
-        {/* 3 big stat cards — Corporate Trust hero metrics */}
-        <StatCardsRow
-          cleanersActive={cleanersCount}
-          bookingsWeek={weekBookings}
-          revenueMonthPence={monthRevenuePence}
-          bookingsDelta={deltaPct(weekBookings, lastWeekBookings)}
-          revenueDelta={deltaPct(monthRevenuePence, prevMonthRevenuePence)}
-        />
-
-        {/* Chart + field cleaners — two columns on desktop, stacked mobile */}
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-5">
-          <div className="lg:col-span-3">
-            <RevenueChart data={chartData} />
+    <>
+      {requestedCount > 0 ? (
+        <Link
+          href="/owner/tasks?status=requested"
+          className="group mb-4 flex items-center gap-3 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-violet-300"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-600 text-white">
+            <Bell className="h-4 w-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-700">
+              Solicitudes nuevas
+            </p>
+            <p className="mt-0.5 text-[13px] font-semibold text-slate-900">
+              {requestedCount}{' '}
+              {requestedCount === 1
+                ? 'cliente esperando confirmación'
+                : 'clientes esperando confirmación'}
+            </p>
           </div>
-          <div className="lg:col-span-2">
-            <CleanersField checkins={fieldCheckins} />
-          </div>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-violet-700 transition group-hover:translate-x-0.5">
+            Ver →
+          </span>
+        </Link>
+      ) : null}
+
+      <StatCardsRow
+        cleanersActive={cleanersCount}
+        bookingsWeek={weekBookings}
+        revenueMonthPence={monthRevenuePence}
+        bookingsDelta={deltaPct(weekBookings, lastWeekBookings)}
+        revenueDelta={deltaPct(monthRevenuePence, prevMonthRevenuePence)}
+      />
+
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          <RevenueChart data={chartData} />
         </div>
-
-        {/* Quick links to operations */}
-        <section className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 sm:grid-cols-4">
-          <QuickTile
-            href="/owner/tasks/new"
-            label="Nueva limpieza"
-            sub="Programar"
-            Icon={Plus}
-            primary
-          />
-          <QuickTile
-            href="/owner/tasks"
-            label="Limpiezas"
-            sub={`${todayCount} hoy`}
-            Icon={ListChecks}
-          />
-          <QuickTile
-            href="/owner/cleaners"
-            label="Cleaners"
-            sub={`${cleanersCount} activos`}
-            Icon={Users}
-          />
-          <QuickTile
-            href="/owner/clients"
-            label="Clientes"
-            sub={`${clientsCount} totales`}
-            Icon={MessageSquare}
-          />
-        </section>
-
-        {/* Secondary nav — keeps things reachable on mobile */}
-        <section className="mt-3 grid grid-cols-4 gap-2 sm:mt-4 sm:gap-3">
-          <SecondaryTile href="/owner/properties" label="Sitios" Icon={Building2} />
-          <SecondaryTile href="/owner/calendar" label="Calendario" Icon={CalendarDays} />
-          <SecondaryTile href="/owner/analytics" label="Analítica" Icon={BarChart3} />
-          <SecondaryTile href="/owner/billing" label="Facturación" Icon={CreditCard} />
-        </section>
-
-        {/* Sign-out at the bottom — discreet */}
-        <form action={signout} className="mt-8 flex justify-center">
-          <button
-            type="submit"
-            className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700"
-          >
-            Cerrar sesión
-          </button>
-        </form>
+        <div className="lg:col-span-2">
+          <CleanersField checkins={fieldCheckins} />
+        </div>
       </div>
 
-      <BottomTabBar active="home" />
-    </main>
+      <section className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 sm:grid-cols-4">
+        <QuickTile
+          href="/owner/tasks/new"
+          label="Nueva limpieza"
+          sub="Programar"
+          Icon={Plus}
+          primary
+        />
+        <QuickTile
+          href="/owner/tasks"
+          label="Limpiezas"
+          sub={`${todayCount} hoy`}
+          Icon={ListChecks}
+        />
+        <QuickTile
+          href="/owner/cleaners"
+          label="Cleaners"
+          sub={`${cleanersCount} activos`}
+          Icon={Users}
+        />
+        <QuickTile
+          href="/owner/clients"
+          label="Clientes"
+          sub={`${clientsCount} totales`}
+          Icon={MessageSquare}
+        />
+      </section>
+    </>
+  );
+}
+
+/**
+ * Skeleton that mirrors the real layout of DashboardSections so the page
+ * doesn't shift when the data arrives. Pulses softly so the user knows
+ * something is loading without it feeling broken.
+ */
+function DashboardSkeleton() {
+  return (
+    <div className="animate-pulse">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="h-[88px] rounded-2xl bg-white ring-1 ring-inset ring-slate-100"
+          />
+        ))}
+      </div>
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-5">
+        <div className="h-44 rounded-2xl bg-white ring-1 ring-inset ring-slate-100 lg:col-span-3" />
+        <div className="h-44 rounded-2xl bg-white ring-1 ring-inset ring-slate-100 lg:col-span-2" />
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 sm:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-[60px] rounded-2xl bg-white ring-1 ring-inset ring-slate-100"
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
