@@ -50,6 +50,18 @@ type PaidRow = { paid_amount_pence: number | null; price_pence: number | null };
 
 type T = (k: string) => string;
 
+/**
+ * "mauro541423@gmail.com" → "Mauro". Strips digits, punctuation, and
+ * the domain, capitalizes the first letter. Returns null if the email
+ * doesn't yield anything alphabetic (e.g. "12345@foo.com").
+ */
+function prettyFromEmail(email: string | null | undefined): string | null {
+  if (!email) return null;
+  const local = email.split('@')[0]?.replace(/[^a-zA-Z]/g, '');
+  if (!local) return null;
+  return local.charAt(0).toUpperCase() + local.slice(1).toLowerCase();
+}
+
 export default async function OwnerHome() {
   const supabase = await createClient();
   const {
@@ -129,10 +141,13 @@ export default async function OwnerHome() {
   const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
   const fullName =
     metadataName || displayNameFrom(profile, user.email ?? null);
-  // Greet by first name when we know it; otherwise just "Bienvenido" — never
-  // fall back to the email local-part, which is impersonal and exposes
-  // credentials in a screenshot.
-  const firstName = fullName ? fullName.split(/\s+/)[0] : tx('welcomeFallback');
+  // Friendly first-name greeting. If we have a real name (from user
+  // metadata or owner_profiles.business_name), use it. Otherwise pull a
+  // capitalized first-word from the email local-part — "mauro541423"
+  // → "Mauro" feels personal without looking like the raw login.
+  const firstName = fullName
+    ? fullName.split(/\s+/)[0]
+    : prettyFromEmail(user.email) ?? tx('welcomeFallback');
 
   const hour = new Date().getHours();
   const greeting =
@@ -180,7 +195,6 @@ export default async function OwnerHome() {
               tx('yourBusiness'),
             icon: Building2,
           },
-          { kind: 'status', status: 'online', label: tx('online') },
         ]}
       />
 
