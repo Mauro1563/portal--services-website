@@ -96,7 +96,21 @@ export function OnboardingChecklist({
   if (done === total) return null;
 
   return (
-    <section className="rounded-2xl border border-brand-600/30 bg-gradient-to-br from-brand-600/[0.04] to-brand-600/[0.01] p-5 shadow-card">
+    <section className="relative animate-fade-up overflow-hidden rounded-3xl border border-clean-aqua/30 bg-gradient-to-br from-clean-aqua-soft/40 via-white to-clean-mint-soft/30 p-5 shadow-sparkle-glow">
+      {/* Cleaning sparkles in the top-right corner */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-3 top-3 text-[13px] text-clean-aqua-glow animate-sparkle"
+      >
+        ✦
+      </span>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute right-7 top-7 text-[9px] text-clean-aqua animate-sparkle"
+        style={{ animationDelay: '0.8s' }}
+      >
+        ✦
+      </span>
       <header className="flex items-start gap-3">
         <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600/10 text-brand-700">
           <Sparkles className="h-5 w-5" />
@@ -109,7 +123,7 @@ export function OnboardingChecklist({
             {done} de {total} configurados. Termina lo que falta para tener tu
             operación funcionando.
           </p>
-          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/60">
             <div
               className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 transition-all"
               style={{ width: `${(done / total) * 100}%` }}
