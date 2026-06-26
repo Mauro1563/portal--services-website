@@ -3,6 +3,8 @@ import { Sidebar } from './Sidebar';
 import { MobileNav } from './MobileNav';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { FlashToast } from '@/components/FlashToast';
+import { CommandPalette } from '@/components/CommandPalette';
+import { CommandPaletteButton } from '@/components/CommandPaletteButton';
 import { getLocale } from '@/lib/i18n';
 import type { Active } from './nav-items';
 
@@ -38,6 +40,7 @@ export async function HQShell({
               ) : null}
             </div>
             <div className="flex shrink-0 items-center gap-2">
+              <CommandPaletteButton />
               <LocaleSwitcher current={locale} variant="onLight" />
               {actions}
             </div>
@@ -47,6 +50,7 @@ export async function HQShell({
           <Suspense fallback={null}>
             <FlashToast />
           </Suspense>
+          <CommandPalette scope="hq" />
           {children}
         </main>
       </div>
