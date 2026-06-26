@@ -1,9 +1,7 @@
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import type { ClientContext } from '@/lib/client-auth';
-import { ClientTabBar } from './ClientTabBar';
-
-type Tab = 'home' | 'messages' | 'reviews' | 'refer';
+import { ClientTabBar, type Tab } from './ClientTabBar';
 
 /**
  * Mobile-first shell for the client portal. Uses the owner's white-label
