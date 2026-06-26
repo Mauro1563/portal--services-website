@@ -27,6 +27,7 @@ import {
 import { signOutOperative } from './actions';
 import { CheckInButton } from './CheckInButton';
 import { PhotoUploadButton } from './PhotoUploadButton';
+import { ThemeToggle } from '@/components/operative/ThemeToggle';
 
 type OperativeTask = {
   id: string;
@@ -94,14 +95,17 @@ export default async function OperativeHome({ searchParams }: Props) {
       badge={{ label: 'Cleaner portal', icon: Hammer }}
       settingsHref="/operative/profile"
       rightSlot={
-        <form action={signOutOperative}>
-          <button
-            type="submit"
-            className="text-[11px] font-semibold text-text-3 hover:text-text-1"
-          >
-            {t('operative.signOut')}
-          </button>
-        </form>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <form action={signOutOperative}>
+            <button
+              type="submit"
+              className="text-[11px] font-semibold text-text-3 hover:text-text-1"
+            >
+              {t('operative.signOut')}
+            </button>
+          </form>
+        </div>
       }
     >
       <PortalHero
