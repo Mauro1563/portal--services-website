@@ -252,7 +252,7 @@ export function ToolGrid({
       <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
         {label}
       </h2>
-      <div className="mt-3 grid grid-cols-2 gap-2 min-w-0 max-w-full sm:gap-3 sm:grid-cols-3">{children}</div>
+      <div className="mt-3 grid grid-cols-2 gap-2.5 min-w-0 max-w-full sm:gap-3 sm:grid-cols-3">{children}</div>
     </section>
   );
 }

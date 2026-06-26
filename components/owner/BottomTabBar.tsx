@@ -39,7 +39,7 @@ export async function BottomTabBar({ active }: { active: Tab }) {
               <Link
                 href={href}
                 className={
-                  'flex flex-col items-center gap-1 py-1.5 text-[10px] font-medium transition-colors ' +
+                  'flex flex-col items-center gap-1 py-1.5 text-[11px] font-medium transition-colors ' +
                   (isActive ? 'text-brand-600' : 'text-text-3 hover:text-text-2')
                 }
                 aria-current={isActive ? 'page' : undefined}
