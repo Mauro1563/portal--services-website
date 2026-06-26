@@ -12,9 +12,10 @@ import {
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { cleanerLoginUrl } from '@/lib/cleaner-link';
+import { getLocale } from '@/lib/i18n';
 import { getOwnerProfile } from '@/lib/owner-profile';
 import { deleteCleaner, regeneratePin } from './actions';
-import { PinShareActions } from './PinShareActions';
+import { PinShareActions, type ShareLang } from './PinShareActions';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -66,7 +67,13 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
   if (!cleaner) notFound();
 
   // Owner profile drives the welcome message branding ("equipo de X").
-  const profile = await getOwnerProfile(user.id);
+  // Locale seeds the language picker on the share panel; owner can flip.
+  const [profile, locale] = await Promise.all([
+    getOwnerProfile(user.id),
+    getLocale(),
+  ]);
+  const defaultLang: ShareLang =
+    locale === 'es' || locale === 'pt' ? locale : 'en';
 
   const tasks = (rawTasks ?? []) as unknown as TaskHistory[];
 
@@ -162,6 +169,7 @@ export default async function CleanerDetail({ params, searchParams }: Props) {
               email={cleaner.email ?? null}
               loginUrl={cleanerLoginUrl(cleaner.pin)}
               businessName={profile?.business_name ?? null}
+              defaultLang={defaultLang}
             />
           </div>
         )}
