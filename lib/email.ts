@@ -170,12 +170,16 @@ export async function notifyNewSignup(input: {
  * password and a button to enter the portal. They'll be forced to change
  * the password on first login.
  */
+export type NotifyResult =
+  | { sent: true }
+  | { sent: false; reason: 'no_resend_key' | 'send_failed' | 'exception'; detail?: string };
+
 export async function notifyOwnerApproved(input: {
   to: string;
   name: string;
   business: string;
   password: string;
-}) {
+}): Promise<NotifyResult> {
   try {
     const loginUrl = `${SITE_URL}/login`;
     const subject = `Tu portal de ${input.business} está listo`;
@@ -208,9 +212,13 @@ export async function notifyOwnerApproved(input: {
         </div>
       </div>
     `;
-    await sendEmail({ to: input.to, subject, html });
+    const result = await sendEmail({ to: input.to, subject, html });
+    if ('skipped' in result) return { sent: false, reason: 'no_resend_key' };
+    if ('error' in result) return { sent: false, reason: 'send_failed', detail: result.error };
+    return { sent: true };
   } catch (err) {
     console.error('[email] notifyOwnerApproved failed', err);
+    return { sent: false, reason: 'exception', detail: (err as Error).message };
   }
 }
 

@@ -7,7 +7,16 @@ import { ensureDefaultServices } from '@/lib/default-services';
 import { notifyOwnerApproved } from '@/lib/email';
 
 export type ApproveResult =
-  | { ok: true; email: string }
+  | {
+      ok: true;
+      email: string;
+      password: string;
+      name: string;
+      phone: string | null;
+      business: string;
+      emailSent: boolean;
+      emailReason?: string;
+    }
   | { ok: false; error: string };
 
 function generatePassword(): string {
@@ -112,18 +121,29 @@ export async function approveOwnerSignup(leadId: string): Promise<ApproveResult>
     .update({ status: 'qualified' })
     .eq('id', leadId);
 
-  // Email the owner the credentials. Fire-and-forget so a Resend hiccup
-  // doesn't roll back the approval — they can always recover via "forgot
-  // password".
-  notifyOwnerApproved({
+  // Try to email the owner the credentials, but we ALWAYS surface the
+  // password in the response so the admin can share it manually if email
+  // delivery fails (Resend not configured, recipient not verified on free
+  // plan, etc.). The credentials are returned to a single one-shot UI
+  // surface and never persisted.
+  const notify = await notifyOwnerApproved({
     to: email,
     name,
     business,
     password,
-  }).catch((err) => console.error('[approve] notify owner failed', err));
+  });
 
   revalidatePath('/hq/leads');
-  return { ok: true, email };
+  return {
+    ok: true,
+    email,
+    password,
+    name,
+    phone: lead.phone || null,
+    business,
+    emailSent: notify.sent,
+    emailReason: notify.sent ? undefined : notify.reason,
+  };
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'archived';
