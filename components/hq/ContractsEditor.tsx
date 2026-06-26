@@ -53,15 +53,95 @@ Portal Home                  ${c.client || '[Cliente]'}
 `;
 }
 
-function printContract(c: Contract) {
-  const w = window.open('', '_blank', 'width=800,height=900');
-  if (!w) return;
-  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Contrato — ${c.client}</title>
-    <style>body{font-family:-apple-system,system-ui,sans-serif;color:#0F172A;line-height:1.6;padding:48px;max-width:760px;margin:0 auto;}
-    pre{white-space:pre-wrap;font-family:inherit;font-size:14px;}</style></head>
-    <body><pre>${c.body.replace(/</g, '&lt;')}</pre>
-    <script>window.onload=function(){window.print();}<\/script></body></html>`);
-  w.document.close();
+/**
+ * Generate a real PDF (no browser print dialog). Layout: branded
+ * header band, contract body (auto-wrapped + paginated), signature
+ * block, page numbers in footer.
+ */
+async function downloadContractPdf(c: Contract) {
+  const { default: jsPDF } = await import('jspdf');
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 56;
+  const contentWidth = pageWidth - margin * 2;
+
+  // ── Header band ────────────────────────────────────────────────
+  doc.setFillColor(15, 23, 41); // #0F1729
+  doc.rect(0, 0, pageWidth, 72, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('PORTAL HOME', margin, 32);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(180, 200, 230);
+  doc.text('Cleaning & Facilities · portalservices.digital', margin, 50);
+  // Right side: doc ref
+  doc.setFontSize(8);
+  const ref = `Ref: ${c.id.slice(0, 8).toUpperCase()}`;
+  doc.text(ref, pageWidth - margin, 32, { align: 'right' });
+  doc.text(
+    `Emitido: ${new Date(c.createdAt).toLocaleDateString('es-ES')}`,
+    pageWidth - margin,
+    50,
+    { align: 'right' },
+  );
+
+  // ── Title ──────────────────────────────────────────────────────
+  doc.setTextColor(15, 23, 41);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.text(`Contrato de servicios · ${c.client || 'Cliente'}`, margin, 108);
+
+  // ── Body (split + paginate) ────────────────────────────────────
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10.5);
+  doc.setTextColor(30, 41, 59);
+  const lines = doc.splitTextToSize(c.body, contentWidth) as string[];
+  const lineH = 14;
+  let y = 130;
+  for (const line of lines) {
+    if (y + lineH > pageHeight - 80) {
+      // Footer + new page
+      drawFooter(doc, pageWidth, pageHeight, margin);
+      doc.addPage();
+      y = 80;
+    }
+    doc.text(line, margin, y);
+    y += lineH;
+  }
+  drawFooter(doc, pageWidth, pageHeight, margin);
+
+  // Filename: contract-{client-slug}-{date}.pdf
+  const slug =
+    (c.client || 'cliente')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'cliente';
+  const stamp = new Date(c.createdAt).toISOString().slice(0, 10);
+  doc.save(`contrato-${slug}-${stamp}.pdf`);
+}
+
+function drawFooter(
+  doc: import('jspdf').jsPDF,
+  pageWidth: number,
+  pageHeight: number,
+  margin: number,
+) {
+  const pageCount = doc.getNumberOfPages();
+  const current = doc.getCurrentPageInfo().pageNumber;
+  doc.setDrawColor(226, 232, 240);
+  doc.line(margin, pageHeight - 56, pageWidth - margin, pageHeight - 56);
+  doc.setFontSize(8);
+  doc.setTextColor(100, 116, 139);
+  doc.text('Portal Home · portalservices.digital', margin, pageHeight - 36);
+  doc.text(
+    `Página ${current} de ${pageCount}`,
+    pageWidth - margin,
+    pageHeight - 36,
+    { align: 'right' },
+  );
 }
 
 export function ContractsEditor({
@@ -137,7 +217,7 @@ export function ContractsEditor({
                   <td className="px-4 py-3 text-graphite-2">{c.startDate || '—'}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-1">
-                      <button onClick={() => printContract(c)} className="rounded-lg p-1.5 text-graphite-3 hover:bg-slate-100 hover:text-brand-600" aria-label="Imprimir / PDF"><Printer className="h-4 w-4" /></button>
+                      <button onClick={() => downloadContractPdf(c)} className="rounded-lg p-1.5 text-graphite-3 hover:bg-slate-100 hover:text-brand-600" aria-label="Descargar PDF"><Printer className="h-4 w-4" /></button>
                       <button onClick={() => setDraft(c)} className="rounded-lg p-1.5 text-graphite-3 hover:bg-slate-100 hover:text-brand-600" aria-label="Editar"><FileSignature className="h-4 w-4" /></button>
                       <button onClick={() => remove(c.id)} className="rounded-lg p-1.5 text-graphite-3 hover:bg-rose-50 hover:text-rose-600" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
                     </div>
@@ -199,8 +279,8 @@ export function ContractsEditor({
 
             <div className="mt-5 flex justify-end gap-2">
               {draft.body && (
-                <button onClick={() => printContract({ ...draft, body: draft.body || buildBody(draft) })} className="inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-medium text-graphite-2 ring-1 ring-inset ring-line hover:bg-slate-50">
-                  <Printer className="h-4 w-4" /> Imprimir / PDF
+                <button onClick={() => downloadContractPdf({ ...draft, body: draft.body || buildBody(draft) })} className="inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-medium text-graphite-2 ring-1 ring-inset ring-line hover:bg-slate-50">
+                  <Printer className="h-4 w-4" /> Descargar PDF
                 </button>
               )}
               <button onClick={saveDraft} disabled={saving} className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-50">
