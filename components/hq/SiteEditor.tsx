@@ -40,7 +40,17 @@ const HEADER: Spec[] = [
   { key: 'sub', label: 'Subtítulo', area: true },
 ];
 
-function PlanList({ title, plans, onChange }: { title: string; plans: any[]; onChange: (n: any[]) => void }) {
+type Plan = {
+  name?: string;
+  scope?: string;
+  price?: string;
+  cta?: string;
+  features?: string[];
+  featured?: boolean;
+  from?: boolean;
+};
+
+function PlanList({ title, plans, onChange }: { title: string; plans: Plan[]; onChange: (n: Plan[]) => void }) {
   const set = (i: number, k: string, v: unknown) => onChange(plans.map((p, idx) => (idx === i ? { ...p, [k]: v } : p)));
   return (
     <div className="space-y-3">
@@ -74,9 +84,19 @@ function PlanList({ title, plans, onChange }: { title: string; plans: any[]; onC
   );
 }
 
-function ComparisonRows({ rows, onChange }: { rows: any[][]; onChange: (n: any[][]) => void }) {
-  const setLabel = (i: number, v: string) => onChange(rows.map((r, idx) => (idx === i ? [v, r[1], r[2], r[3]] : r)));
-  const toggle = (i: number, c: number) => onChange(rows.map((r, idx) => (idx === i ? r.map((cell, ci) => (ci === c ? !cell : cell)) : r)));
+type ComparisonRow = [string, boolean, boolean, boolean];
+function ComparisonRows({ rows, onChange }: { rows: ComparisonRow[]; onChange: (n: ComparisonRow[]) => void }) {
+  const setLabel = (i: number, v: string) =>
+    onChange(rows.map((r, idx) => (idx === i ? [v, r[1], r[2], r[3]] : r)));
+  const toggle = (i: number, c: number) =>
+    onChange(
+      rows.map((r, idx) => {
+        if (idx !== i) return r;
+        const next: ComparisonRow = [r[0], r[1], r[2], r[3]];
+        if (c === 1 || c === 2 || c === 3) next[c] = !next[c];
+        return next;
+      }),
+    );
   return (
     <div className="space-y-2">
       <div className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-2 px-1 text-[10px] font-semibold uppercase tracking-wider text-graphite-4">
@@ -108,7 +128,8 @@ export function SiteEditor({ initial }: { initial: ByLocale }) {
   const merge = (sec: string, patch: Any) =>
     setData({ ...data, [locale]: { ...psd, [sec]: { ...psd[sec], ...patch } } });
   const setField = (sec: string) => (key: string, v: string) => merge(sec, { [key]: v });
-  const setList = (sec: string, key: string) => (next: any) => merge(sec, { [key]: next });
+  const setList = (sec: string, key: string) => (next: unknown) =>
+    merge(sec, { [key]: next });
 
   const save = () =>
     startSaving(async () => {
