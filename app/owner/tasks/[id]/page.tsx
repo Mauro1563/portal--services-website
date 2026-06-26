@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import {
   cancelTaskDetail,
   deleteTaskDetail,
@@ -172,6 +173,8 @@ export default async function TaskDetail({ params, searchParams }: Props) {
         </Link>
       }
     >
+      <TasksAutoRefresh ownerId={user.id} />
+
       {/* Status hero card */}
       <section
         className={`overflow-hidden rounded-3xl border border-surface-2 ${st.stripe} shadow-card`}

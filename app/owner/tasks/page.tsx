@@ -4,6 +4,7 @@ import { CalendarDays, ChevronRight, ListChecks, MapPin, Plus, Search, SearchX, 
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
+import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{
@@ -88,6 +89,7 @@ export default async function TasksPage({
 
   return (
     <LightLayout activeTab="tasks" title="Servicios">
+      <TasksAutoRefresh ownerId={user.id} />
       <div className="mx-auto max-w-5xl">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
