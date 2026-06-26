@@ -17,6 +17,7 @@ import {
   FeaturedCleaners,
   type CleanerCard,
 } from '@/components/client/FeaturedCleaners';
+import type { CatalogService } from '@/components/client/ServiceCatalog';
 
 type TaskRow = {
   id: string;
@@ -58,31 +59,42 @@ export default async function ClientHome({
   const admin = createAdminClient();
   const today = new Date().toISOString().slice(0, 10);
 
-  const [upcomingRes, pastRes, ratingsRes, unread] = await Promise.all([
-    admin
-      .from('tasks')
-      .select(
-        'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
-      )
-      .eq('client_id', ctx.client.id)
-      .gte('scheduled_for', today)
-      .order('scheduled_for', { ascending: true })
-      .limit(5),
-    admin
-      .from('tasks')
-      .select(
-        'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
-      )
-      .eq('client_id', ctx.client.id)
-      .lt('scheduled_for', today)
-      .order('scheduled_for', { ascending: false })
-      .limit(10),
-    admin
-      .from('task_ratings')
-      .select('stars, cleaner_id')
-      .eq('client_id', ctx.client.id),
-    getUnreadOwnerMessageCount(ctx.client.id),
-  ]);
+  const [upcomingRes, pastRes, ratingsRes, servicesRes, unread] =
+    await Promise.all([
+      admin
+        .from('tasks')
+        .select(
+          'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
+        )
+        .eq('client_id', ctx.client.id)
+        .gte('scheduled_for', today)
+        .order('scheduled_for', { ascending: true })
+        .limit(5),
+      admin
+        .from('tasks')
+        .select(
+          'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
+        )
+        .eq('client_id', ctx.client.id)
+        .lt('scheduled_for', today)
+        .order('scheduled_for', { ascending: false })
+        .limit(10),
+      admin
+        .from('task_ratings')
+        .select('stars, cleaner_id')
+        .eq('client_id', ctx.client.id),
+      admin
+        .from('service_types')
+        .select('id, name')
+        .eq('owner_id', ctx.client.owner_id)
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true })
+        .limit(4),
+      getUnreadOwnerMessageCount(ctx.client.id),
+    ]);
+
+  const services = (servicesRes.data ?? []) as CatalogService[];
 
   const upcoming = (upcomingRes.data ?? []) as unknown as TaskRow[];
   const past = (pastRes.data ?? []) as unknown as TaskRow[];
@@ -126,9 +138,7 @@ export default async function ClientHome({
       {/* Reservar Ahora — primary CTA */}
       <section className="mt-5">
         <Link
-          href={`/client/${token}/messages?prefill=${encodeURIComponent(
-            'Hola, me gustaría reservar una nueva limpieza.',
-          )}`}
+          href={`/client/${token}/book`}
           className="group flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 px-5 py-4 text-white shadow-[0_14px_30px_-12px_rgba(5,150,105,0.6)] transition hover:brightness-110 active:scale-[0.99]"
         >
           <div className="min-w-0">
@@ -145,7 +155,7 @@ export default async function ClientHome({
         </Link>
       </section>
 
-      <ServiceCatalog token={token} />
+      <ServiceCatalog token={token} services={services} />
 
       <FeaturedCleaners cleaners={cleaners} />
 

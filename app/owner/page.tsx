@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
   BarChart3,
+  Bell,
   Building2,
   CalendarDays,
   CreditCard,
@@ -92,6 +93,7 @@ export default async function OwnerHome() {
     cleanersRes,
     clientsRes,
     pendingRes,
+    requestedCountRes,
     todayCountRes,
     weekBookingsRes,
     lastWeekBookingsRes,
@@ -109,6 +111,10 @@ export default async function OwnerHome() {
       .gte('scheduled_for', today)
       .neq('status', 'completed')
       .neq('status', 'cancelled'),
+    supabase
+      .from('tasks')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'requested'),
     supabase
       .from('tasks')
       .select('id', { count: 'exact', head: true })
@@ -155,6 +161,7 @@ export default async function OwnerHome() {
   const cleanersCount = cleanersRes.count ?? 0;
   const clientsCount = clientsRes.count ?? 0;
   const pendingCount = pendingRes.count ?? 0;
+  const requestedCount = requestedCountRes.count ?? 0;
   const todayCount = todayCountRes.count ?? 0;
   const weekBookings = weekBookingsRes.count ?? 0;
   const lastWeekBookings = lastWeekBookingsRes.count ?? 0;
@@ -223,6 +230,31 @@ export default async function OwnerHome() {
         />
 
         <TasksAutoRefresh ownerId={user.id} />
+
+        {requestedCount > 0 ? (
+          <Link
+            href="/owner/tasks?status=requested"
+            className="group mb-4 flex items-center gap-3 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-violet-300"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-600 text-white">
+              <Bell className="h-4 w-4" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-700">
+                Solicitudes nuevas
+              </p>
+              <p className="mt-0.5 text-[13px] font-semibold text-slate-900">
+                {requestedCount}{' '}
+                {requestedCount === 1
+                  ? 'cliente esperando confirmación'
+                  : 'clientes esperando confirmación'}
+              </p>
+            </div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-violet-700 transition group-hover:translate-x-0.5">
+              Ver →
+            </span>
+          </Link>
+        ) : null}
 
         {/* 3 big stat cards — Corporate Trust hero metrics */}
         <StatCardsRow

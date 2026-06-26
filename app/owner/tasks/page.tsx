@@ -53,6 +53,7 @@ export default async function TasksPage({
 
   const STATUS_OPTIONS = [
     { value: 'all', label: t('tasks.filterAll') },
+    { value: 'requested', label: 'Solicitudes' },
     { value: 'scheduled', label: t('tasks.filterScheduled') },
     { value: 'in_progress', label: t('tasks.filterInProgress') },
     { value: 'completed', label: t('tasks.filterCompleted') },
@@ -337,6 +338,7 @@ export default async function TasksPage({
 
 function StatusPill({ status, t }: { status: string; t: (k: string) => string }) {
   const map: Record<string, { label: string; cls: string }> = {
+    requested: { label: 'Solicitada', cls: 'bg-violet-50 text-violet-700 ring-violet-200' },
     scheduled: { label: t('status.scheduled'), cls: 'bg-amber-50 text-amber-700 ring-amber-200' },
     in_progress: { label: t('status.in_progress'), cls: 'bg-sky-50 text-sky-700 ring-sky-200' },
     completed: { label: t('status.completed'), cls: 'bg-emerald-50 text-emerald-700 ring-emerald-200' },
