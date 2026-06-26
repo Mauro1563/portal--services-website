@@ -5,21 +5,19 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 /**
- * Live chat refresher. Subscribes to Supabase realtime on
- * client_messages for this conversation and triggers a router refresh
- * whenever a new row lands — so the client sees owner messages instantly.
- *
- * Falls back to a 15s interval + window-focus refresh as a safety net
- * if the websocket drops (most common: phones rotating cellular ↔ wifi).
+ * Owner-side mirror of the client chat refresher. Subscribes to
+ * client_messages for this conversation and refreshes when the client
+ * sends a new message, so the owner sees replies instantly without
+ * tapping the back button + going in again.
  */
-export function ChatAutoRefresh({ clientId }: { clientId: string }) {
+export function OwnerChatAutoRefresh({ clientId }: { clientId: string }) {
   const router = useRouter();
 
   useEffect(() => {
     const supabase = createClient();
 
     const channel = supabase
-      .channel(`client-messages-${clientId}`)
+      .channel(`owner-chat-${clientId}`)
       .on(
         'postgres_changes',
         {
@@ -32,7 +30,6 @@ export function ChatAutoRefresh({ clientId }: { clientId: string }) {
       )
       .subscribe();
 
-    // Fallback heartbeats — covers websocket drops + waking from sleep.
     const interval = setInterval(() => router.refresh(), 15_000);
     const onFocus = () => router.refresh();
     window.addEventListener('focus', onFocus);

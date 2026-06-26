@@ -41,7 +41,7 @@ export default async function ClientMessages({ params, searchParams }: Props) {
 
   return (
     <ClientShell ctx={ctx} token={token} activeTab="messages" title="Mensajes">
-      <ChatAutoRefresh />
+      <ChatAutoRefresh clientId={ctx.client.id} />
 
       {/* Header card with business info */}
       <section className="rounded-2xl border border-surface-2 bg-gradient-to-br from-brand-600/[0.06] to-brand-600/[0.02] p-4 shadow-card">
