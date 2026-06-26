@@ -29,6 +29,9 @@ export async function addClient(formData: FormData) {
     email: (formData.get('email') as string)?.trim() || null,
     phone: (formData.get('phone') as string)?.trim() || null,
     address: (formData.get('address') as string)?.trim() || null,
+    postcode: (formData.get('postcode') as string)?.trim() || null,
+    key_info: (formData.get('key_info') as string)?.trim() || null,
+    wifi_info: (formData.get('wifi_info') as string)?.trim() || null,
     notes: (formData.get('notes') as string)?.trim() || null,
     access_token: accessToken,
   });
@@ -62,6 +65,9 @@ export async function updateClient(formData: FormData) {
       email: (formData.get('email') as string)?.trim() || null,
       phone: (formData.get('phone') as string)?.trim() || null,
       address: (formData.get('address') as string)?.trim() || null,
+      postcode: (formData.get('postcode') as string)?.trim() || null,
+      key_info: (formData.get('key_info') as string)?.trim() || null,
+      wifi_info: (formData.get('wifi_info') as string)?.trim() || null,
       notes: (formData.get('notes') as string)?.trim() || null,
       updated_at: new Date().toISOString(),
     })
