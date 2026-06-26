@@ -18,7 +18,6 @@ import {
   Settings,
   Sun,
   Users,
-  UserPlus,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
@@ -222,8 +221,6 @@ export default async function OwnerHome() {
 
       <TodayTasksPanel tasks={todayTasks} tx={tx} />
 
-      <QuickActions tx={tx} businessType={profile.business_type} />
-
       <ToolGrid>
         <ToolCard
           href="/owner/tasks"
@@ -290,55 +287,6 @@ export default async function OwnerHome() {
         subtitle={tx('bannerSubtitle')}
       />
     </PortalShell>
-  );
-}
-
-function QuickActions({
-  tx,
-  businessType,
-}: {
-  tx: T;
-  businessType: 'airbnb' | 'house_cleaning' | 'hybrid';
-}) {
-  // Always show "New cleaning" and "New cleaner". The other two depend
-  // on the kind of business — Airbnb managers don't have one client per
-  // listing (guests rotate), and house-cleaning shops think in clients
-  // rather than properties.
-  const actions = [
-    { href: '/owner/tasks/new', label: tx('qaNewCleaning'), Icon: Plus, primary: true },
-  ];
-  if (businessType === 'house_cleaning' || businessType === 'hybrid') {
-    actions.push({ href: '/owner/clients/new', label: tx('qaNewClient'), Icon: UserPlus, primary: false });
-  }
-  if (businessType === 'airbnb' || businessType === 'hybrid') {
-    actions.push({ href: '/owner/properties/new', label: tx('qaNewProperty'), Icon: Building2, primary: false });
-  }
-  actions.push({ href: '/owner/cleaners/new', label: tx('qaNewCleaner'), Icon: Users, primary: false });
-  return (
-    <section className="mt-6 animate-fade-up">
-      <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-        {tx('quickActionsTitle')}
-      </p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {actions.map((a) => {
-          const Icon = a.Icon;
-          return (
-            <Link
-              key={a.href}
-              href={a.href}
-              className={`group relative flex h-12 items-center gap-2 overflow-hidden rounded-xl px-3 text-[13px] font-semibold transition-all duration-200 ${
-                a.primary
-                  ? 'bg-sparkle-gradient text-white shadow-sparkle-glow hover:scale-[1.02]'
-                  : 'border border-surface-2 bg-surface-0 text-text-1 hover:-translate-y-0.5 hover:border-clean-aqua'
-              }`}
-            >
-              <Icon className="h-4 w-4 shrink-0" />
-              <span className="truncate">{a.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
   );
 }
 
