@@ -45,7 +45,7 @@ export default async function ClientDetail({ params, searchParams }: Props) {
 
   const { data: client } = await supabase
     .from('clients')
-    .select('id, name, email, phone, address, notes, access_token, created_at')
+    .select('id, name, email, phone, address, postcode, key_info, wifi_info, notes, access_token, created_at')
     .eq('id', id)
     .maybeSingle();
 
@@ -124,9 +124,17 @@ export default async function ClientDetail({ params, searchParams }: Props) {
               </p>
             ) : null}
             {client.address ? (
-              <p className="inline-flex items-center gap-1 text-[11px] text-text-2">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  `${client.address}${client.postcode ? `, ${client.postcode}` : ''}`,
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] text-text-2 hover:text-brand-700 hover:underline"
+              >
                 <MapPin className="h-3 w-3" /> {client.address}
-              </p>
+                {client.postcode ? ` · ${client.postcode}` : ''}
+              </a>
             ) : null}
           </div>
         </div>
