@@ -7,7 +7,7 @@ import { getT } from '@/lib/i18n';
 import { addProperty } from '@/app/owner/actions';
 
 type Props = {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; client_id?: string }>;
 };
 
 export default async function NewPropertyPage({ searchParams }: Props) {
@@ -18,7 +18,7 @@ export default async function NewPropertyPage({ searchParams }: Props) {
   if (!user) redirect('/login?role=owner');
 
   const t = await getT();
-  const { error } = await searchParams;
+  const { error, client_id: preselectClientId } = await searchParams;
 
   // Load clients so the owner can attach this property to an existing
   // client instead of re-typing contact info. If the owner has none
@@ -79,7 +79,7 @@ export default async function NewPropertyPage({ searchParams }: Props) {
               </span>
               <select
                 name="client_id"
-                defaultValue=""
+                defaultValue={preselectClientId ?? ''}
                 className="mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
               >
                 <option value="">— Sin cliente vinculado —</option>
