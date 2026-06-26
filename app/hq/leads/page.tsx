@@ -14,6 +14,7 @@ import { HQShell } from '@/components/hq/Shell';
 import { ApproveSignupButton } from './ApproveSignupButton';
 import { LeadStatusPicker } from './LeadStatusPicker';
 import { ExportLeadsButton } from './ExportLeadsButton';
+import { waUrl } from '@/lib/phone';
 
 export const dynamic = 'force-dynamic';
 
@@ -162,11 +163,10 @@ export default async function HQLeads() {
 
 function ContactRow({ lead }: { lead: Lead }) {
   // Build a WhatsApp link with a sensible default opener message.
-  const wa = lead.phone
-    ? `https://wa.me/${lead.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
-        `Hola ${lead.name?.split(' ')[0] ?? ''}, soy Mauricio de Portal Home. Vi tu registro de ${lead.company ?? 'tu empresa'} — ¿podemos charlar 10 min sobre cómo te puede ayudar la plataforma?`,
-      )}`
-    : null;
+  const wa = waUrl(
+    lead.phone,
+    `Hola ${lead.name?.split(' ')[0] ?? ''}, soy Mauricio de Portal Home. Vi tu registro de ${lead.company ?? 'tu empresa'} — ¿podemos charlar 10 min sobre cómo te puede ayudar la plataforma?`,
+  );
   const subj = encodeURIComponent(
     `Sobre tu registro en Portal Home${lead.company ? ` — ${lead.company}` : ''}`,
   );

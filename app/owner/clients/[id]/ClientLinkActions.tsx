@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check, Copy, MessageCircle } from 'lucide-react';
+import { waUrl as buildWaUrl } from '@/lib/phone';
 
 type Props = {
   clientName: string;
@@ -17,9 +18,9 @@ export function ClientLinkActions({ clientName, portalUrl, phone }: Props) {
     `${portalUrl}\n\n` +
     `You can see upcoming visits, see photos of finished work, and rate your cleaner. No password — just tap the link.`;
 
-  const waUrl = phone
-    ? `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`
-    : `https://wa.me/?text=${encodeURIComponent(message)}`;
+  const waUrl =
+    buildWaUrl(phone, message) ??
+    `https://wa.me/?text=${encodeURIComponent(message)}`;
 
   function copy() {
     navigator.clipboard.writeText(portalUrl).then(
