@@ -36,16 +36,16 @@ const ACCENT: Record<
 function StatCard({ label, value, hint, delta, Icon, accent }: StatProps) {
   const cls = ACCENT[accent];
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="flex items-start justify-between gap-2">
+    <div className="flex flex-col gap-1.5 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:gap-2 sm:p-4">
+      <div className="flex items-start justify-between gap-1">
         <span
-          className={`grid h-9 w-9 place-items-center rounded-xl ${cls.iconBg} text-white shadow-sm ring-4 ${cls.ring}`}
+          className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9 sm:rounded-xl ${cls.iconBg} text-white shadow-sm ring-2 sm:ring-4 ${cls.ring}`}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         </span>
         {delta ? (
           <span
-            className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+            className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold sm:px-2 sm:text-[10px] ${
               delta.positive
                 ? 'bg-emerald-50 text-emerald-700'
                 : 'bg-rose-50 text-rose-700'
@@ -58,15 +58,17 @@ function StatCard({ label, value, hint, delta, Icon, accent }: StatProps) {
           </span>
         ) : null}
       </div>
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
+      <div className="min-w-0">
+        <p className="truncate text-[9px] font-bold uppercase tracking-[0.12em] text-slate-500 sm:text-[10px] sm:tracking-[0.15em]">
           {label}
         </p>
-        <p className="mt-1 font-display text-2xl font-bold tabular-nums text-slate-900">
+        <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-none text-slate-900 sm:mt-1 sm:text-2xl">
           {value}
         </p>
         {hint ? (
-          <p className="mt-0.5 text-[10.5px] text-slate-500">{hint}</p>
+          <p className="mt-0.5 truncate text-[9.5px] text-slate-500 sm:text-[10.5px]">
+            {hint}
+          </p>
         ) : null}
       </div>
     </div>
@@ -96,7 +98,7 @@ export function StatCardsRow({
     `£${(p / 100).toLocaleString('en-GB', { maximumFractionDigits: 0 })}`;
 
   return (
-    <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <section className="grid grid-cols-3 gap-2 sm:gap-3">
       <StatCard
         label="Cleaners activos"
         value={String(cleanersActive)}
