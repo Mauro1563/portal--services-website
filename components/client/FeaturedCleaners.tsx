@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Star } from 'lucide-react';
 
 export type CleanerCard = {
@@ -8,21 +9,35 @@ export type CleanerCard = {
 };
 
 /**
- * Cleaners that have worked for THIS client recently, with their average
- * rating. Stand-in for the "Featured Cleaners" marketplace in the
- * mockup — our model isn't a marketplace, so we surface the cleaners
- * the client already knows. Hidden entirely when the client has no
- * past services.
+ * "Top Rated" horizontal scroll — modeled on the marketplace template
+ * but adapted to our 1-owner-N-cleaners model: shows cleaners that
+ * have actually worked for this client (not a public roster) with
+ * their average rating from this client's reviews.
+ *
+ * Tapping a card doesn't open a profile yet (we don't have one);
+ * routes back to the booking form, since most "tap on cleaner" intent
+ * in this UI is "I want to book". The booking action stays with the
+ * owner — they pick who actually goes.
  */
-export function FeaturedCleaners({ cleaners }: { cleaners: CleanerCard[] }) {
+export function FeaturedCleaners({
+  cleaners,
+  token,
+}: {
+  cleaners: CleanerCard[];
+  token: string;
+}) {
   if (cleaners.length === 0) return null;
 
   return (
     <section className="mt-6">
-      <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
-        Tu equipo
-      </h2>
-      <ul className="mt-3 flex gap-3 overflow-x-auto pb-2">
+      <div className="flex items-center justify-between">
+        <h2 className="text-[13px] font-bold text-slate-900">Tu equipo</h2>
+        <span className="text-[11px] text-slate-400">
+          {cleaners.length}{' '}
+          {cleaners.length === 1 ? 'cleaner' : 'cleaners'} asignados
+        </span>
+      </div>
+      <ul className="mt-3 -mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
         {cleaners.map((c) => {
           const initials =
             c.name
@@ -34,28 +49,32 @@ export function FeaturedCleaners({ cleaners }: { cleaners: CleanerCard[] }) {
               .toUpperCase() || '·';
           return (
             <li key={c.id} className="shrink-0">
-              <div className="flex w-[120px] flex-col items-center rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-                <span className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-base font-bold text-white shadow-[0_8px_18px_-8px_rgba(5,150,105,0.55)]">
-                  {initials}
-                </span>
-                <p className="mt-2 truncate text-[12.5px] font-semibold text-slate-900">
-                  {c.name.split(/\s+/)[0]}
-                </p>
-                {c.avgStars != null ? (
-                  <p className="mt-0.5 inline-flex items-center gap-0.5 text-[10.5px] font-semibold text-amber-700">
-                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                    {c.avgStars.toFixed(1)}
-                    <span className="font-normal text-slate-400">
-                      {' '}
-                      · {c.ratingCount}
+              <Link
+                href={`/client/${token}/book`}
+                className="group block w-[140px] overflow-hidden rounded-2xl bg-white ring-1 ring-inset ring-slate-100 transition hover:ring-blue-200 hover:shadow-[0_8px_20px_-10px_rgba(37,99,235,0.35)]"
+              >
+                <div className="relative grid h-24 place-items-center bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800">
+                  <span className="text-xl font-bold text-white drop-shadow">
+                    {initials}
+                  </span>
+                  {c.avgStars != null ? (
+                    <span className="absolute right-2 top-2 inline-flex items-center gap-0.5 rounded-full bg-white/90 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 backdrop-blur">
+                      <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+                      {c.avgStars.toFixed(1)}
                     </span>
+                  ) : null}
+                </div>
+                <div className="px-3 py-2.5">
+                  <p className="truncate text-[12.5px] font-semibold text-slate-900">
+                    {c.name}
                   </p>
-                ) : (
-                  <p className="mt-0.5 text-[10.5px] text-slate-400">
-                    Sin valoraciones
+                  <p className="mt-0.5 text-[10.5px] text-slate-500">
+                    {c.ratingCount > 0
+                      ? `${c.ratingCount} review${c.ratingCount === 1 ? '' : 's'}`
+                      : 'Asignado a tu cuenta'}
                   </p>
-                )}
-              </div>
+                </div>
+              </Link>
             </li>
           );
         })}

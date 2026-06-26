@@ -55,7 +55,7 @@ export function ClientTabBar({
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-emerald-100 bg-white/95 backdrop-blur-xl"
+      className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-slate-200 bg-white/95 backdrop-blur-xl"
     >
       <ul className="grid grid-cols-4">
         {items.map(({ key, href, label, Icon, badge }) => {
@@ -65,13 +65,13 @@ export function ClientTabBar({
               <Link
                 href={href}
                 className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider transition ${
-                  isActive ? 'text-emerald-700' : 'text-slate-400 hover:text-slate-700'
+                  isActive ? 'text-blue-700' : 'text-slate-400 hover:text-slate-700'
                 }`}
               >
                 {isActive ? (
                   <span
                     aria-hidden
-                    className="absolute top-0 h-[3px] w-10 rounded-b bg-emerald-600"
+                    className="absolute top-0 h-[3px] w-10 rounded-b bg-blue-600"
                   />
                 ) : null}
                 <span className="relative">

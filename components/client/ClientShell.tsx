@@ -32,14 +32,18 @@ export function ClientShell({
   const showTabs = Boolean(token && activeTab);
 
   return (
-    <main className={`relative min-h-screen bg-surface-1 ${showTabs ? 'pb-24' : 'pb-10'}`}>
-      <header className="sticky top-0 z-40 border-b border-navy-800/40 bg-navy-900 text-white">
-        <div className="mx-auto flex h-20 max-w-md items-center justify-between px-4">
+    <main
+      className={`relative min-h-screen bg-slate-50 text-slate-900 ${
+        showTabs ? 'pb-24' : 'pb-10'
+      }`}
+    >
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
+        <div className="mx-auto flex h-14 max-w-md items-center justify-between px-4">
           {showBack && backHref ? (
             <Link
               href={backHref}
               aria-label="Atrás"
-              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full hover:bg-white/[0.06]"
+              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-slate-700 hover:bg-slate-100"
             >
               <BackArrow />
             </Link>
@@ -48,7 +52,7 @@ export function ClientShell({
           )}
 
           {title ? (
-            <h1 className="font-display text-sm font-semibold tracking-tight">
+            <h1 className="font-display text-sm font-semibold tracking-tight text-slate-900">
               {title}
             </h1>
           ) : logoUrl ? (
@@ -56,7 +60,7 @@ export function ClientShell({
             <img
               src={logoUrl}
               alt={businessName}
-              className="h-7 w-auto max-w-[150px] object-contain"
+              className="h-6 w-auto max-w-[140px] object-contain"
             />
           ) : (
             <Logo size="sm" />
@@ -66,9 +70,9 @@ export function ClientShell({
         </div>
       </header>
 
-      <div className="mx-auto max-w-md px-4 pt-5">{children}</div>
+      <div className="mx-auto max-w-md px-4 pt-4">{children}</div>
 
-      <footer className="mx-auto mt-8 max-w-md px-4 pb-4 text-center text-[10px] text-text-3">
+      <footer className="mx-auto mt-8 max-w-md px-4 pb-4 text-center text-[10px] text-slate-400">
         Con tecnología de Portal Home
       </footer>
 
