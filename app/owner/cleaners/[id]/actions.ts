@@ -21,7 +21,7 @@ export async function regeneratePin(formData: FormData) {
     if (!error) {
       revalidatePath('/owner/cleaners');
       revalidatePath(`/owner/cleaners/${cleanerId}`);
-      redirect(`/owner/cleaners/${cleanerId}?regenerated=1`);
+      redirect(`/owner/cleaners/${cleanerId}?flash=${encodeURIComponent(`Nuevo PIN: ${pin}`)}`);
     }
     lastErr = error.message;
     if (!error.message.toLowerCase().includes('unique')) break;
@@ -64,7 +64,7 @@ export async function updateCleaner(formData: FormData) {
 
   revalidatePath('/owner/cleaners');
   revalidatePath(`/owner/cleaners/${cleanerId}`);
-  redirect(`/owner/cleaners/${cleanerId}?updated=1`);
+  redirect(`/owner/cleaners/${cleanerId}?flash=${encodeURIComponent('Limpiador actualizado')}`);
 }
 
 export async function deleteCleaner(formData: FormData) {
@@ -86,5 +86,5 @@ export async function deleteCleaner(formData: FormData) {
 
   revalidatePath('/owner/cleaners');
   revalidatePath('/owner');
-  redirect('/owner/cleaners');
+  redirect('/owner/cleaners?flash=' + encodeURIComponent('Limpiador eliminado'));
 }

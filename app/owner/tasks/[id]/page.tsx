@@ -22,8 +22,6 @@ import {
 type Props = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{
-    updated?: string;
-    cancelled?: string;
     error?: string;
   }>;
 };
@@ -120,7 +118,7 @@ function initials(name: string) {
 
 export default async function TaskDetail({ params, searchParams }: Props) {
   const { id } = await params;
-  const { updated, cancelled, error } = await searchParams;
+  const { error } = await searchParams;
 
   const supabase = await createClient();
   const {
@@ -210,17 +208,6 @@ export default async function TaskDetail({ params, searchParams }: Props) {
         </div>
       </section>
 
-      {/* Flash messages */}
-      {updated && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          Limpieza actualizada.
-        </p>
-      )}
-      {cancelled && (
-        <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
-          Limpieza cancelada.
-        </p>
-      )}
       {error && (
         <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
           {error}

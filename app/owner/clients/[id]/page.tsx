@@ -22,7 +22,7 @@ import { ClientLinkActions } from './ClientLinkActions';
 
 type Props = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ updated?: string; regenerated?: string; error?: string }>;
+  searchParams: Promise<{ error?: string }>;
 };
 
 type Rating = {
@@ -35,7 +35,7 @@ type Rating = {
 
 export default async function ClientDetail({ params, searchParams }: Props) {
   const { id } = await params;
-  const { updated, regenerated, error } = await searchParams;
+  const { error } = await searchParams;
 
   const supabase = await createClient();
   const {
@@ -132,16 +132,6 @@ export default async function ClientDetail({ params, searchParams }: Props) {
         </div>
       </div>
 
-      {updated && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          Client updated.
-        </p>
-      )}
-      {regenerated && (
-        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-          New access link generated. The previous link no longer works.
-        </p>
-      )}
       {error && (
         <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
           {error}

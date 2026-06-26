@@ -55,7 +55,7 @@ export async function syncProperty(formData: FormData) {
   const futureDates = dates.filter((d) => d >= today);
 
   if (futureDates.length === 0) {
-    redirect(`/owner/properties/${propertyId}?synced=0`);
+    redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent('Calendario ya estaba sincronizado · 0 limpiezas nuevas')}`);
   }
 
   const { data: existing } = await supabase
@@ -68,7 +68,7 @@ export async function syncProperty(formData: FormData) {
   const toCreate = futureDates.filter((d) => !existingSet.has(d));
 
   if (toCreate.length === 0) {
-    redirect(`/owner/properties/${propertyId}?synced=0`);
+    redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent('Calendario ya estaba sincronizado · 0 limpiezas nuevas')}`);
   }
 
   const rows = toCreate.map((d) => ({
@@ -88,7 +88,11 @@ export async function syncProperty(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/properties/${propertyId}`);
-  redirect(`/owner/properties/${propertyId}?synced=${toCreate.length}`);
+  const n = toCreate.length;
+  const msg = n === 0
+    ? 'Calendario ya estaba sincronizado · 0 limpiezas nuevas'
+    : `Sincronizadas ${n} limpieza${n === 1 ? '' : 's'} del calendario`;
+  redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent(msg)}`);
 }
 
 export async function updateProperty(formData: FormData) {
@@ -133,7 +137,7 @@ export async function updateProperty(formData: FormData) {
 
   revalidatePath('/owner/properties');
   revalidatePath(`/owner/properties/${propertyId}`);
-  redirect(`/owner/properties/${propertyId}?updated=1`);
+  redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent('Propiedad actualizada')}`);
 }
 
 export async function deleteProperty(formData: FormData) {
@@ -156,5 +160,5 @@ export async function deleteProperty(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/properties');
   revalidatePath('/owner/tasks');
-  redirect('/owner/properties');
+  redirect('/owner/properties?flash=' + encodeURIComponent('Propiedad eliminada'));
 }
