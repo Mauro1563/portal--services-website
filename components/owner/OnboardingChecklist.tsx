@@ -33,14 +33,24 @@ export function OnboardingChecklist({
   cleanersCount,
   clientsCount,
   tasksTotal,
+  businessType,
 }: {
   propertiesCount: number;
   cleanersCount: number;
   clientsCount: number;
   tasksTotal: number;
+  businessType: 'airbnb' | 'house_cleaning' | 'hybrid';
 }) {
-  const steps: Step[] = [
-    {
+  // Airbnb managers don't track 1 client per listing — guests rotate.
+  // House-cleaning shops always have a client (the homeowner), but the
+  // property is implicit (= that homeowner's home), so we don't push
+  // them to a separate "Add property" step.
+  const showPropertyStep = businessType !== 'house_cleaning';
+  const showClientStep = businessType !== 'airbnb';
+
+  const steps: Step[] = [];
+  if (showPropertyStep) {
+    steps.push({
       done: propertiesCount > 0,
       icon: Building2,
       title: 'Agregá tu primera propiedad',
@@ -48,17 +58,19 @@ export function OnboardingChecklist({
         'Una casa, un piso, un Airbnb… cualquier lugar donde se limpie.',
       cta: 'Sumar propiedad',
       href: '/owner/properties/new',
-    },
-    {
-      done: cleanersCount > 0,
-      icon: KeyRound,
-      title: 'Sumá tu primer limpiador',
-      description:
-        'Le generamos un PIN; entra a su portal con ese número, sin email.',
-      cta: 'Agregar limpiador',
-      href: '/owner/cleaners/new',
-    },
-    {
+    });
+  }
+  steps.push({
+    done: cleanersCount > 0,
+    icon: KeyRound,
+    title: 'Sumá tu primer limpiador',
+    description:
+      'Le generamos un PIN; entra a su portal con ese número, sin email.',
+    cta: 'Agregar limpiador',
+    href: '/owner/cleaners/new',
+  });
+  if (showClientStep) {
+    steps.push({
       done: clientsCount > 0,
       icon: UserPlus,
       title: 'Cargá tu primer cliente',
@@ -66,17 +78,17 @@ export function OnboardingChecklist({
         'Cada cliente recibe un link mágico para ver y valorar las limpiezas.',
       cta: 'Crear cliente',
       href: '/owner/clients/new',
-    },
-    {
-      done: tasksTotal > 0,
-      icon: CalendarPlus,
-      title: 'Programá la primera limpieza',
-      description:
-        'Asigná propiedad, fecha y limpiador. Ya estás operativo.',
-      cta: 'Programar',
-      href: '/owner/tasks/new',
-    },
-  ];
+    });
+  }
+  steps.push({
+    done: tasksTotal > 0,
+    icon: CalendarPlus,
+    title: 'Programá la primera limpieza',
+    description:
+      'Asigná propiedad, fecha y limpiador. Ya estás operativo.',
+    cta: 'Programar',
+    href: '/owner/tasks/new',
+  });
 
   const done = steps.filter((s) => s.done).length;
   const total = steps.length;

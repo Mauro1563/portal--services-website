@@ -35,29 +35,38 @@ type Props = {
 
 type NavItem = { key: string; href: string; label: string; Icon: typeof LayoutGrid; tab?: Tab };
 
-const GROUPS: { label: string; items: NavItem[] }[] = [
-  {
-    label: 'Operación',
-    items: [
-      { key: 'overview', href: '/owner', label: 'Resumen', Icon: LayoutGrid, tab: 'home' },
-      { key: 'services', href: '/owner/tasks', label: 'Servicios', Icon: ClipboardList, tab: 'tasks' },
-      { key: 'sites', href: '/owner/properties', label: 'Sitios', Icon: MapPin, tab: 'properties' },
-      { key: 'team', href: '/owner/cleaners', label: 'Equipo', Icon: Users, tab: 'cleaners' },
-      { key: 'calendar', href: '/owner/calendar', label: 'Calendario', Icon: Calendar },
-      { key: 'clients', href: '/owner/clients', label: 'Clientes', Icon: Briefcase },
-    ],
-  },
-  {
-    label: 'Administración',
-    items: [
-      { key: 'reports', href: '/owner/analytics', label: 'Reportes', Icon: BarChart3 },
-      { key: 'referrals', href: '/owner/referrals', label: 'Referidos', Icon: Gift },
-      { key: 'billing', href: '/owner/billing', label: 'Facturación', Icon: CreditCard },
-      { key: 'settings', href: '/owner/settings', label: 'Configuración', Icon: Settings },
-      { key: 'more', href: '/owner/more', label: 'Más', Icon: MoreHorizontal, tab: 'more' },
-    ],
-  },
-];
+function buildGroups(
+  businessType: 'airbnb' | 'house_cleaning' | 'hybrid',
+): { label: string; items: NavItem[] }[] {
+  const opItems: NavItem[] = [
+    { key: 'overview', href: '/owner', label: 'Resumen', Icon: LayoutGrid, tab: 'home' },
+    { key: 'services', href: '/owner/tasks', label: 'Servicios', Icon: ClipboardList, tab: 'tasks' },
+  ];
+  // Airbnb managers think in properties (listings). House cleaning shops
+  // think in clients (homeowners). Show the relevant ones; hybrid sees both.
+  if (businessType !== 'house_cleaning') {
+    opItems.push({ key: 'sites', href: '/owner/properties', label: 'Sitios', Icon: MapPin, tab: 'properties' });
+  }
+  opItems.push({ key: 'team', href: '/owner/cleaners', label: 'Equipo', Icon: Users, tab: 'cleaners' });
+  opItems.push({ key: 'calendar', href: '/owner/calendar', label: 'Calendario', Icon: Calendar });
+  if (businessType !== 'airbnb') {
+    opItems.push({ key: 'clients', href: '/owner/clients', label: 'Clientes', Icon: Briefcase });
+  }
+
+  return [
+    { label: 'Operación', items: opItems },
+    {
+      label: 'Administración',
+      items: [
+        { key: 'reports', href: '/owner/analytics', label: 'Reportes', Icon: BarChart3 },
+        { key: 'referrals', href: '/owner/referrals', label: 'Referidos', Icon: Gift },
+        { key: 'billing', href: '/owner/billing', label: 'Facturación', Icon: CreditCard },
+        { key: 'settings', href: '/owner/settings', label: 'Configuración', Icon: Settings },
+        { key: 'more', href: '/owner/more', label: 'Más', Icon: MoreHorizontal, tab: 'more' },
+      ],
+    },
+  ];
+}
 
 export async function LightLayout({
   activeTab,
@@ -76,6 +85,7 @@ export async function LightLayout({
   const businessName = profile?.business_name ?? 'Mi empresa';
   const logo = profile?.business_logo_url ?? null;
   const wsInit = businessName.slice(0, 2).toUpperCase();
+  const groups = buildGroups(profile?.business_type ?? 'hybrid');
 
   const isActive = (it: NavItem) => it.tab === activeTab;
 
@@ -109,7 +119,7 @@ export async function LightLayout({
         </div>
 
         <nav className="flex-1 space-y-4 overflow-y-auto">
-          {GROUPS.map((g) => (
+          {groups.map((g) => (
             <div key={g.label}>
               <p className="px-3 pb-1.5 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-white/35">
                 {g.label}

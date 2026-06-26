@@ -184,7 +184,7 @@ export default async function OwnerHome() {
         ]}
       />
 
-      <QuickActions tx={tx} />
+      <QuickActions tx={tx} businessType={profile.business_type} />
 
       <StatRow
         items={[
@@ -217,6 +217,7 @@ export default async function OwnerHome() {
         cleanersCount={cleanersCount}
         clientsCount={clientsCount}
         tasksTotal={tasksTotal}
+        businessType={profile.business_type}
       />
 
       <TodayTasksPanel tasks={todayTasks} tx={tx} />
@@ -290,13 +291,27 @@ export default async function OwnerHome() {
   );
 }
 
-function QuickActions({ tx }: { tx: T }) {
+function QuickActions({
+  tx,
+  businessType,
+}: {
+  tx: T;
+  businessType: 'airbnb' | 'house_cleaning' | 'hybrid';
+}) {
+  // Always show "New cleaning" and "New cleaner". The other two depend
+  // on the kind of business — Airbnb managers don't have one client per
+  // listing (guests rotate), and house-cleaning shops think in clients
+  // rather than properties.
   const actions = [
     { href: '/owner/tasks/new', label: tx('qaNewCleaning'), Icon: Plus, primary: true },
-    { href: '/owner/clients/new', label: tx('qaNewClient'), Icon: UserPlus },
-    { href: '/owner/properties/new', label: tx('qaNewProperty'), Icon: Building2 },
-    { href: '/owner/cleaners/new', label: tx('qaNewCleaner'), Icon: Users },
   ];
+  if (businessType === 'house_cleaning' || businessType === 'hybrid') {
+    actions.push({ href: '/owner/clients/new', label: tx('qaNewClient'), Icon: UserPlus, primary: false });
+  }
+  if (businessType === 'airbnb' || businessType === 'hybrid') {
+    actions.push({ href: '/owner/properties/new', label: tx('qaNewProperty'), Icon: Building2, primary: false });
+  }
+  actions.push({ href: '/owner/cleaners/new', label: tx('qaNewCleaner'), Icon: Users, primary: false });
   return (
     <section className="my-5">
       <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
