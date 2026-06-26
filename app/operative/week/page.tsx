@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { BottomTabBar } from '@/components/operative/BottomTabBar';
 
 type WeekTask = {
   id: string;
@@ -115,7 +116,7 @@ export default async function OperativeWeekPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-canvas pb-16">
+    <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
       <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-2 px-4">
           <Link
@@ -238,6 +239,7 @@ export default async function OperativeWeekPage() {
           })}
         </section>
       </div>
+      <BottomTabBar active="tareas" />
     </main>
   );
 }
