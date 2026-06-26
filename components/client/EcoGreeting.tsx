@@ -1,11 +1,18 @@
-import { Leaf, Search } from 'lucide-react';
+import { Hand, Search, SlidersHorizontal } from 'lucide-react';
 
 /**
- * Warm green greeting block for the client home — "Eco-Friendly" style
- * from the user mockup. Big "HOLA, NAME!" plus a search bar pinned at
- * the bottom of the block. Search currently submits to the messages
- * thread with the query pre-filled so the client can text the owner —
- * a real catalog search would require a service-types table.
+ * Greeting + search row at the top of the client home — modeled on
+ * the marketplace template: friendly "Hi, Name 👋" line, "Let's
+ * start booking" subtitle, an avatar circle to the right, and a
+ * search input plus a filter chip underneath.
+ *
+ * The search form GETs to /messages with the query pre-filled —
+ * we don't have a real catalog search yet, so routing it to chat
+ * keeps the input meaningful while we ship the booking flow.
+ *
+ * Component name kept as `EcoGreeting` for now to avoid touching
+ * every importer — the visual style itself moved to royal blue
+ * per the user's marketplace mockup.
  */
 export function EcoGreeting({
   firstName,
@@ -13,54 +20,53 @@ export function EcoGreeting({
   searchAction,
 }: {
   firstName: string;
+  /** Currently used to seed the avatar initial — businessName isn't
+   *  rendered any more (the marketplace look is name-first). */
   businessName: string;
-  /** URL the search form submits to (GET ?q=...). */
   searchAction: string;
 }) {
+  void businessName; // kept in the props signature for back-compat
+
+  const initial = firstName.charAt(0).toUpperCase() || '·';
+
   return (
-    <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 px-5 pb-5 pt-6 text-white shadow-[0_18px_40px_-18px_rgba(5,150,105,0.55)]">
-      {/* Decorative leaves for warmth */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -right-4 -top-2 text-emerald-300/40 rotate-12"
-        style={{ fontSize: 110, lineHeight: 1 }}
-      >
-        <Leaf />
-      </span>
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -left-3 bottom-2 text-emerald-300/20 -rotate-12"
-        style={{ fontSize: 70, lineHeight: 1 }}
-      >
-        <Leaf />
-      </span>
-
-      <div className="relative">
-        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-100">
-          <Leaf className="h-3 w-3" /> {businessName}
-        </p>
-        <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">
-          ¡Hola, {firstName}!
-        </h1>
-        <p className="mt-1 text-[13px] text-emerald-50/85">
-          ¿Qué servicio necesitas hoy?
-        </p>
-
-        <form action={searchAction} method="get" className="mt-4">
-          <label className="relative block">
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-700"
-              aria-hidden
-            />
-            <input
-              type="text"
-              name="q"
-              placeholder="Buscar servicio o cleaner…"
-              className="block h-12 w-full rounded-2xl border border-white/20 bg-white pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 shadow-[0_8px_24px_-12px_rgba(15,23,42,0.35)] focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-            />
-          </label>
-        </form>
+    <section className="px-1 pt-1">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="inline-flex items-center gap-1.5 font-display text-xl font-bold tracking-tight text-slate-900">
+            {firstName}
+            <Hand className="h-5 w-5 -rotate-12 text-amber-400" />
+          </p>
+          <p className="mt-0.5 text-[12.5px] text-slate-500">
+            Empecemos tu próxima limpieza
+          </p>
+        </div>
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white shadow-[0_6px_14px_-6px_rgba(37,99,235,0.55)]">
+          {initial}
+        </span>
       </div>
+
+      <form action={searchAction} method="get" className="mt-4 flex gap-2">
+        <label className="relative block flex-1">
+          <Search
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            aria-hidden
+          />
+          <input
+            type="text"
+            name="q"
+            placeholder="Buscar servicio…"
+            className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          />
+        </label>
+        <button
+          type="submit"
+          aria-label="Filtros"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-slate-900 text-white transition hover:bg-slate-700"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+        </button>
+      </form>
     </section>
   );
 }
