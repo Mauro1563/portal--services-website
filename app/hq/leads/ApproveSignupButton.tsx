@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { approveOwnerSignup } from './actions';
+import { waUrl } from '@/lib/phone';
 
 type Approved = {
   email: string;
@@ -48,11 +49,10 @@ export function ApproveSignupButton({ leadId }: { leadId: string }) {
   if (result.kind === 'ok') {
     const a = result.data;
     const both = `Email: ${a.email}\nContraseña: ${a.password}`;
-    const wa = a.phone
-      ? `https://wa.me/${a.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
-          `Hola ${a.name.split(' ')[0] ?? ''}, tu portal de ${a.business} ya está activo.\n\nEntrá en https://portalservices.digital/login\n\nEmail: ${a.email}\nContraseña: ${a.password}\n\nTe va a pedir cambiar la contraseña en el primer ingreso.`,
-        )}`
-      : null;
+    const wa = waUrl(
+      a.phone,
+      `Hola ${a.name.split(' ')[0] ?? ''}, tu portal de ${a.business} ya está activo.\n\nEntrá en https://portalservices.digital/login\n\nEmail: ${a.email}\nContraseña: ${a.password}\n\nTe va a pedir cambiar la contraseña en el primer ingreso.`,
+    );
 
     return (
       <div className="w-full rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">

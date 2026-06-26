@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check, Copy, MessageCircle } from 'lucide-react';
+import { waUrl as buildWaUrl } from '@/lib/phone';
 
 type Props = {
   cleanerName: string;
@@ -24,9 +25,9 @@ export function PinShareActions({ cleanerName, pin, phone, loginUrl }: Props) {
     `Tap to sign in (PIN pre-filled): ${loginUrl}\n\n` +
     `Add to home screen for an app-like experience.`;
 
-  const waUrl = phone
-    ? `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`
-    : `https://wa.me/?text=${encodeURIComponent(message)}`;
+  const waUrl =
+    buildWaUrl(phone, message) ??
+    `https://wa.me/?text=${encodeURIComponent(message)}`;
 
   function copyPin() {
     navigator.clipboard.writeText(pin).then(
