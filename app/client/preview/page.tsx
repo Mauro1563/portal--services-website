@@ -60,7 +60,6 @@ export default function ClientPreview() {
         displayName="María"
         chips={[
           { kind: 'text', label: 'Limpiezas Premium', icon: Sparkles },
-          { kind: 'status', status: 'online', label: 'online' },
         ]}
       />
 
