@@ -390,7 +390,11 @@ function ClientPreviewInner({
           </div>
         ) : (
           <div className="mt-3 rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
-            <div className="flex items-start gap-3">
+            <Link
+              href="/client/preview/cleaning"
+              title="Toca para ver el detalle completo de la visita"
+              className="-m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
+            >
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
                 <CalendarCheck className="h-5 w-5" />
               </span>
@@ -409,14 +413,13 @@ function ClientPreviewInner({
                   <span className="truncate">{PROPERTY.address}</span>
                 </p>
               </div>
-              <Link
-                href="/client/preview/cleaning"
-                title="Ver detalle completo de la visita"
-                className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white transition hover:bg-slate-700"
+              <span
+                aria-hidden="true"
+                className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white transition group-hover:bg-slate-700"
               >
                 Ver
-              </Link>
-            </div>
+              </span>
+            </Link>
 
             {/* Quick actions: state transitions */}
             <div className="mt-3 flex gap-2">
@@ -424,7 +427,8 @@ function ClientPreviewInner({
                 <>
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setNextStatus('accepted');
                       showToast('Visita confirmada');
                     }}
@@ -435,7 +439,8 @@ function ClientPreviewInner({
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setNextStatus('rejected');
                       showToast('Visita cancelada');
                     }}
@@ -449,7 +454,8 @@ function ClientPreviewInner({
               {nextStatus === 'accepted' && (
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setNextStatus('done');
                     showToast('Marcada como completada');
                   }}

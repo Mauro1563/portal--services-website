@@ -184,6 +184,7 @@ function OperativePreviewHomeBody({
     tasks.find((t) => t.status !== 'completed') ?? tasks[tasks.length - 1];
 
   const doneCount = tasks.filter((t) => t.status === 'completed').length;
+  const inProgressTaskId = tasks.find((t) => t.status === 'in_progress')?.id;
 
   // Today's earnings = sum of completed tasks' labour + tips (in pence).
   // Mirrors lib/cleaner-earnings.ts so the strip stays consistent.
@@ -269,9 +270,15 @@ function OperativePreviewHomeBody({
           now={now}
           doneCount={doneCount}
           totalCount={tasks.length}
+          weekHref="/operative/preview/week"
+          inProgressTaskId={inProgressTaskId}
         />
 
-        <EarningsStrip todayPence={todayPence} weekPence={weekPence} />
+        <EarningsStrip
+          todayPence={todayPence}
+          weekPence={weekPence}
+          href="/operative/preview/week"
+        />
 
         {/* Hero card — siguiente parada */}
         {heroTask ? (
@@ -347,7 +354,7 @@ function OperativePreviewHomeBody({
               const st = STATUS_META[task.status];
               const isExpanded = expandedId === task.id;
               return (
-                <li key={task.id} className="relative pb-3 last:pb-0">
+                <li key={task.id} id={`task-${task.id}`} className="relative pb-3 last:pb-0 scroll-mt-24">
                   <div className="flex items-stretch gap-3">
                     {/* Time column */}
                     <div className="flex w-[52px] shrink-0 flex-col items-end pt-2.5">

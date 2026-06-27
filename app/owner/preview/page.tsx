@@ -4,7 +4,7 @@
  */
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
-import { StatCardsRow } from '@/components/owner/StatCardsRow';
+import { DemoStatCardsRow } from './_components/DemoStatCardsRow';
 import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
 import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
 import { DemoCleanersField, type DemoFieldCheckin } from './_components/DemoCleanersField';
@@ -68,7 +68,7 @@ export default function OwnerPreviewHome() {
         />
 
         <div className="space-y-5">
-          <StatCardsRow
+          <DemoStatCardsRow
             cleanersActive={3}
             bookingsWeek={12}
             revenueMonthPence={145000}

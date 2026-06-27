@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { signOutOperative } from '@/app/operative/actions';
 import { ThemeToggle } from '@/components/operative/ThemeToggle';
 
@@ -26,12 +27,20 @@ export function AgendaHeader({
   now,
   doneCount,
   totalCount,
+  weekHref = '/operative/week',
+  inProgressTaskId,
 }: {
   cleanerName: string;
   /** Pass `new Date()` from the server component — keeps SSR deterministic. */
   now: Date;
   doneCount: number;
   totalCount: number;
+  /** Destination for the "doneCount/totalCount tareas" pill. */
+  weekHref?: string;
+  /** When set, the "En curso" chip becomes an anchor link to `#task-<id>` so
+   *  tapping it scrolls the in-progress task card into view. When omitted,
+   *  the chip is hidden (the per-task status pill already conveys it). */
+  inProgressTaskId?: string;
 }) {
   const firstName = cleanerName.split(' ')[0];
   const dayFull = DAY_FULL[now.getDay()];
@@ -75,15 +84,23 @@ export function AgendaHeader({
       </div>
 
       <div className="mt-3 flex items-center gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85">
+        <Link
+          href={weekHref}
+          title="Ver el resumen semanal de tareas"
+          className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85 transition hover:bg-white/20"
+        >
           {totalCount === 0
             ? 'Sin tareas hoy'
             : `${doneCount}/${totalCount} ${totalCount === 1 ? 'tarea' : 'tareas'}`}
-        </span>
-        {totalCount > 0 ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-200">
+        </Link>
+        {totalCount > 0 && inProgressTaskId ? (
+          <a
+            href={`#task-${inProgressTaskId}`}
+            title="Saltar a la tarea que tienes en curso ahora mismo"
+            className="inline-flex items-center gap-1 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-200 transition hover:bg-emerald-400/25"
+          >
             En curso
-          </span>
+          </a>
         ) : null}
       </div>
     </header>

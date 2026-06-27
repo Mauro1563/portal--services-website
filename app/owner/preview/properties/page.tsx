@@ -4,8 +4,9 @@
  */
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
   Bath,
@@ -107,9 +108,28 @@ const platformChip: Record<Property['platform'], string> = {
 type PlatformFilter = Property['platform'] | 'all';
 
 export default function OwnerPropertiesPreview() {
+  return (
+    <Suspense fallback={null}>
+      <OwnerPropertiesPreviewInner />
+    </Suspense>
+  );
+}
+
+function OwnerPropertiesPreviewInner() {
+  const searchParams = useSearchParams();
+  const clientParam = searchParams.get('client') ?? '';
   const [properties, setProperties] = useState<Property[]>(initialProperties);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(clientParam);
+  const [highlightClient, setHighlightClient] = useState(clientParam);
   const [platform, setPlatform] = useState<PlatformFilter>('all');
+
+  // Update search when client query param appears (e.g. from clients page).
+  useEffect(() => {
+    if (clientParam) {
+      setQuery(clientParam);
+      setHighlightClient(clientParam);
+    }
+  }, [clientParam]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [rateId, setRateId] = useState<string | null>(null);
   const [rateDraft, setRateDraft] = useState('');
@@ -366,6 +386,26 @@ export default function OwnerPropertiesPreview() {
             {visible.length} resultado{visible.length === 1 ? '' : 's'}
           </span>
         </div>
+
+        {highlightClient ? (
+          <div className="mt-3 flex items-center justify-between gap-2 rounded-lg bg-blue-50 px-3 py-2 text-[11px] text-blue-700 ring-1 ring-blue-200">
+            <span>
+              Mostrando propiedades filtradas por cliente{' '}
+              <strong>{highlightClient}</strong>.
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setHighlightClient('');
+                setQuery('');
+              }}
+              title="Quitar el filtro por cliente"
+              className="rounded-full p-1 text-blue-700 hover:bg-blue-100"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ) : null}
 
         <p className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-slate-500">
           <Info className="h-3 w-3" /> Toca cualquier propiedad para ver fotos

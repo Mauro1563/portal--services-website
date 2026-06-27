@@ -238,6 +238,7 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
   const [days, setDays] = useState<Day[]>(DAYS);
   const [selectedTask, setSelectedTask] = useState<{ dayLabel: string; taskId: string } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [kpiSheet, setKpiSheet] = useState<'worked' | 'earnings' | 'rating' | null>(null);
 
   function showToast(message: string) {
     setToast(message);
@@ -331,19 +332,22 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
             icon={<Clock className="h-3.5 w-3.5 text-brand-500" />}
             label="Worked"
             value={formatHours(totalMinutes)}
-            title="Total de horas trabajadas esta semana"
+            title="Ver el desglose de horas trabajadas por día"
+            onClick={() => setKpiSheet('worked')}
           />
           <Kpi
             icon={<PoundSterling className="h-3.5 w-3.5 text-emerald-600" />}
             label="Earnings"
             value={formatMoney(totalEarnings)}
-            title="Total ganado esta semana — antes de impuestos"
+            title="Ver desglose de ganancias por tarea"
+            onClick={() => setKpiSheet('earnings')}
           />
           <Kpi
             icon={<Star className="h-3.5 w-3.5 text-amber-500" />}
             label={`Rating (${ratingCount})`}
             value={avgStars.toFixed(1)}
-            title="Promedio de valoraciones de los clientes esta semana"
+            title="Ver valoraciones recientes del cliente"
+            onClick={() => setKpiSheet('rating')}
           />
         </div>
 
@@ -557,6 +561,129 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
         </div>
       ) : null}
 
+      {/* KPI breakdown sheet */}
+      {kpiSheet ? (
+        <div
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center"
+          onClick={() => setKpiSheet(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-t-3xl bg-paper p-5 shadow-2xl sm:rounded-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-graphite-3">
+                  Esta semana
+                </p>
+                <h2 className="mt-1 font-display text-lg font-semibold text-graphite-1">
+                  {kpiSheet === 'worked'
+                    ? 'Horas trabajadas por día'
+                    : kpiSheet === 'earnings'
+                      ? 'Ganancias por tarea'
+                      : 'Valoraciones de clientes'}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setKpiSheet(null)}
+                title="Cerrar"
+                className="grid h-8 w-8 place-items-center rounded-full text-graphite-3 hover:bg-surface-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {kpiSheet === 'worked' ? (
+              <ul className="mt-4 divide-y divide-line rounded-xl border border-line">
+                {days.map((d) => {
+                  const mins = d.tasks.reduce((s, t) => s + t.estimated_duration_min, 0);
+                  return (
+                    <li key={d.label} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
+                      <span className={`font-medium ${d.isToday ? 'text-brand-600' : 'text-graphite-1'}`}>
+                        {d.label}
+                        {d.isToday ? ' · HOY' : ''}
+                      </span>
+                      <span className="tabular-nums text-graphite-3">
+                        {mins === 0 ? '—' : formatHours(mins)}
+                      </span>
+                    </li>
+                  );
+                })}
+                <li className="flex items-center justify-between gap-3 bg-surface-1/40 px-3 py-2.5 text-[12px] font-semibold">
+                  <span className="text-graphite-1">Total semana</span>
+                  <span className="tabular-nums text-graphite-1">{formatHours(totalMinutes)}</span>
+                </li>
+              </ul>
+            ) : null}
+
+            {kpiSheet === 'earnings' ? (
+              <ul className="mt-4 divide-y divide-line rounded-xl border border-line">
+                {allTasks
+                  .filter((t) => t.status === 'completed')
+                  .map((t) => (
+                    <li key={t.id} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-graphite-1">
+                          {t.property.name}
+                        </p>
+                        <p className="truncate text-[10px] text-graphite-3">
+                          {t.service_name}
+                        </p>
+                      </div>
+                      <span className="shrink-0 font-semibold tabular-nums text-emerald-700">
+                        {formatMoney(t.price_pence)}
+                      </span>
+                    </li>
+                  ))}
+                <li className="flex items-center justify-between gap-3 bg-surface-1/40 px-3 py-2.5 text-[12px] font-semibold">
+                  <span className="text-graphite-1">Total ganado</span>
+                  <span className="tabular-nums text-graphite-1">{formatMoney(totalEarnings)}</span>
+                </li>
+              </ul>
+            ) : null}
+
+            {kpiSheet === 'rating' ? (
+              <ul className="mt-4 space-y-2">
+                {(() => {
+                  const completed = allTasks.filter((t) => t.status === 'completed');
+                  const MOCK_REVIEWS = [
+                    { stars: 5, text: 'Impecable, todo brillaba. Volveremos a reservar.' },
+                    { stars: 5, text: 'Súper puntual y muy detallista — gracias.' },
+                    { stars: 4, text: 'Buen trabajo, la cocina quedó perfecta.' },
+                    { stars: 5, text: 'Atención al detalle excelente, sábanas planchadas.' },
+                    { stars: 5, text: 'Mejor limpieza que hemos tenido en meses.' },
+                  ];
+                  return completed.slice(0, MOCK_REVIEWS.length).map((t, i) => {
+                    const r = MOCK_REVIEWS[i];
+                    return (
+                      <li key={t.id} className="rounded-xl border border-line bg-paper p-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-[12px] font-semibold text-graphite-1">
+                            {t.property.name}
+                          </p>
+                          <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-amber-600">
+                            {Array.from({ length: r.stars }).map((_, k) => (
+                              <Star key={k} className="h-3 w-3 fill-amber-500 text-amber-500" />
+                            ))}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-[11.5px] leading-relaxed text-graphite-3">
+                          "{r.text}"
+                        </p>
+                      </li>
+                    );
+                  });
+                })()}
+                <li className="rounded-xl bg-surface-1/40 px-3 py-2.5 text-center text-[11px] font-semibold text-graphite-1">
+                  Promedio {avgStars.toFixed(1)} ★ sobre {ratingCount} servicios
+                </li>
+              </ul>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+
       {/* Toast */}
       {toast ? (
         <div
@@ -605,17 +732,22 @@ function Kpi({
   label,
   value,
   title,
+  onClick,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   title?: string;
+  /** When provided, the tile renders as a button — tap opens the matching
+   *  inline breakdown sheet. Same visual treatment plus a hover ring so
+   *  the affordance is discoverable. */
+  onClick?: () => void;
 }) {
-  return (
-    <div
-      title={title}
-      className="rounded-xl border border-line bg-paper p-3 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
-    >
+  const className =
+    'rounded-xl border border-line bg-paper p-3 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]' +
+    (onClick ? ' transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]' : '');
+  const body = (
+    <>
       <div className="flex justify-center">{icon}</div>
       <p className="mt-1.5 font-display text-base font-bold text-graphite-1 tabular-nums">
         {value}
@@ -623,6 +755,18 @@ function Kpi({
       <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-graphite-3">
         {label}
       </p>
+    </>
+  );
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} title={title} className={`${className} w-full text-center`}>
+        {body}
+      </button>
+    );
+  }
+  return (
+    <div title={title} className={className}>
+      {body}
     </div>
   );
 }

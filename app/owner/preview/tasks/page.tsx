@@ -81,11 +81,13 @@ export default function OwnerTasksPreview() {
 function OwnerTasksPreviewInner() {
   const searchParams = useSearchParams();
   const propertyParam = searchParams.get('property') ?? '';
+  const cleanerParam = searchParams.get('cleaner') ?? '';
+  const initialQuery = propertyParam || cleanerParam;
 
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [query, setQuery] = useState(propertyParam);
+  const [query, setQuery] = useState(initialQuery);
   const [showNew, setShowNew] = useState(false);
   const [newProperty, setNewProperty] = useState(PROPERTY_OPTIONS[0]);
   const [newCleaner, setNewCleaner] = useState(CLEANER_OPTIONS[0]);
@@ -94,10 +96,11 @@ function OwnerTasksPreviewInner() {
   const [newNotes, setNewNotes] = useState('');
   const [toast, setToast] = useState<string | null>(null);
 
-  // Update search when property query param appears (e.g. from properties page).
+  // Update search when property/cleaner query param appears (e.g. from properties or cleaners pages).
   useEffect(() => {
     if (propertyParam) setQuery(propertyParam);
-  }, [propertyParam]);
+    else if (cleanerParam) setQuery(cleanerParam);
+  }, [propertyParam, cleanerParam]);
 
   function showToast(text: string) {
     setToast(text);

@@ -136,6 +136,7 @@ export default function OwnerCleanersPreview() {
   const [payId, setPayId] = useState<string | null>(null);
   const [payDraft, setPayDraft] = useState('');
   const [detailId, setDetailId] = useState<string | null>(null);
+  const [showReviewsId, setShowReviewsId] = useState<string | null>(null);
   const [chatDraft, setChatDraft] = useState('');
   const [chats, setChats] = useState<Record<string, ChatMsg[]>>({
     c1: [{ from: 'cleaner', text: 'Voy en camino al Soho Loft.' }],
@@ -200,6 +201,7 @@ export default function OwnerCleanersPreview() {
   const reassignCleaner = cleaners.find((c) => c.id === reassignId);
   const payCleaner = cleaners.find((c) => c.id === payId);
   const detailCleaner = cleaners.find((c) => c.id === detailId);
+  const reviewsCleaner = cleaners.find((c) => c.id === showReviewsId);
 
   function openPaySheet(c: Cleaner) {
     setPayId(c.id);
@@ -676,30 +678,47 @@ export default function OwnerCleanersPreview() {
             </div>
             <div className="space-y-4 p-4">
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl bg-slate-50 p-2">
+                <button
+                  type="button"
+                  onClick={() => setShowReviewsId(detailCleaner.id)}
+                  title={`Ver las últimas reseñas de ${detailCleaner.name}`}
+                  className="rounded-xl bg-slate-50 p-2 transition hover:bg-amber-50 hover:ring-1 hover:ring-amber-200"
+                >
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                     Rating
                   </p>
                   <p className="mt-1 font-display text-lg font-bold text-slate-900">
                     {detailCleaner.rating}
                   </p>
-                </div>
-                <div className="rounded-xl bg-slate-50 p-2">
+                </button>
+                <Link
+                  href={`/owner/preview/tasks?cleaner=${encodeURIComponent(detailCleaner.name)}`}
+                  title={`Ver las limpiezas de ${detailCleaner.name} este mes`}
+                  className="rounded-xl bg-slate-50 p-2 transition hover:bg-blue-50 hover:ring-1 hover:ring-blue-200"
+                >
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                     Mes
                   </p>
                   <p className="mt-1 font-display text-lg font-bold text-slate-900">
                     {detailCleaner.cleaningsMonth}
                   </p>
-                </div>
-                <div className="rounded-xl bg-slate-50 p-2">
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDetailId(null);
+                    setReassignId(detailCleaner.id);
+                  }}
+                  title={`Reasignar la propiedad asignada (${detailCleaner.assignedProperty})`}
+                  className="rounded-xl bg-slate-50 p-2 transition hover:bg-emerald-50 hover:ring-1 hover:ring-emerald-200"
+                >
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                     Asignada
                   </p>
                   <p className="mt-1 truncate text-[11px] font-semibold text-slate-700">
                     {detailCleaner.assignedProperty}
                   </p>
-                </div>
+                </button>
               </div>
               <div>
                 <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
@@ -749,6 +768,56 @@ export default function OwnerCleanersPreview() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Reviews mini-sheet */}
+      {reviewsCleaner ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
+            <div className="flex items-start justify-between gap-3 border-b border-slate-200 p-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Reseñas de {reviewsCleaner.name}
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Rating medio {reviewsCleaner.rating} · últimas 4 reseñas
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowReviewsId(null)}
+                aria-label="Cerrar"
+                className="rounded-full p-1 text-slate-500 hover:bg-slate-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <ul className="space-y-2 p-4 text-xs text-slate-700">
+              {[
+                { who: 'María García', when: 'hace 2 días', stars: 5, text: 'Impecable como siempre — Soho Loft listo a tiempo.' },
+                { who: 'Ana Romero', when: 'hace 1 semana', stars: 5, text: 'Muy atenta a los detalles. Repetiré.' },
+                { who: 'David Lopez', when: 'hace 2 semanas', stars: 4, text: 'Buen trabajo, sólo se olvidó del balcón.' },
+                { who: 'Sofía Martín', when: 'hace 3 semanas', stars: 5, text: '10/10. Las toallas dobladas como en hotel.' },
+              ].map((r, i) => (
+                <li
+                  key={i}
+                  className="rounded-lg bg-slate-50 px-3 py-2"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-semibold text-slate-900">{r.who}</span>
+                    <span className="inline-flex items-center gap-0.5 text-amber-500">
+                      {Array.from({ length: r.stars }).map((_, k) => (
+                        <Star key={k} className="h-3 w-3 fill-current" />
+                      ))}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-slate-600">{r.text}</p>
+                  <p className="mt-1 text-[10px] text-slate-400">{r.when}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       ) : null}

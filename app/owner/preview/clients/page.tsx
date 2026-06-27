@@ -77,6 +77,7 @@ export default function OwnerClientsPreview() {
   const [draftEmail, setDraftEmail] = useState('');
   const [draftPhone, setDraftPhone] = useState('');
   const [chatId, setChatId] = useState<string | null>(null);
+  const [spendId, setSpendId] = useState<string | null>(null);
   const [chatDraft, setChatDraft] = useState('');
   const [chats, setChats] = useState<Record<string, ChatMsg[]>>({});
   const [showNew, setShowNew] = useState(false);
@@ -156,6 +157,7 @@ export default function OwnerClientsPreview() {
   }
 
   const chatClient = clients.find((c) => c.id === chatId);
+  const spendClient = clients.find((c) => c.id === spendId);
 
   return (
     <main className="min-h-screen bg-slate-50 pb-20">
@@ -318,21 +320,34 @@ export default function OwnerClientsPreview() {
                     )}
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-2 rounded-xl bg-slate-50 px-3 py-2 text-center text-[11px] text-slate-600">
-                  <div>
+                <div className="grid grid-cols-3 gap-2 rounded-xl bg-slate-50 px-1 py-1 text-center text-[11px] text-slate-600">
+                  <Link
+                    href={`/owner/preview/properties?client=${encodeURIComponent(c.name)}`}
+                    title={`Ver las propiedades gestionadas para ${c.name}`}
+                    className="rounded-lg px-2 py-1 transition hover:bg-white hover:ring-1 hover:ring-blue-200"
+                  >
                     <p className="font-bold text-slate-900">{c.properties}</p>
                     <p>sitios</p>
-                  </div>
-                  <div>
+                  </Link>
+                  <Link
+                    href={`/owner/preview/tasks?cleaner=${encodeURIComponent(c.name)}`}
+                    title={`Ver las limpiezas de este mes para ${c.name}`}
+                    className="rounded-lg px-2 py-1 transition hover:bg-white hover:ring-1 hover:ring-blue-200"
+                  >
                     <p className="font-bold text-slate-900">{c.cleaningsMonth}</p>
                     <p>limpiezas/mes</p>
-                  </div>
-                  <div>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setSpendId(c.id)}
+                    title={`Ver desglose de facturación de ${c.name} este mes`}
+                    className="rounded-lg px-2 py-1 transition hover:bg-white hover:ring-1 hover:ring-emerald-200"
+                  >
                     <p className="font-bold text-emerald-700">
                       {fmtMoney(c.spentMonthPence)}
                     </p>
                     <p>este mes</p>
-                  </div>
+                  </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <button
@@ -445,6 +460,68 @@ export default function OwnerClientsPreview() {
                 <Send className="h-4 w-4" />
               </button>
             </form>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Spending breakdown sheet */}
+      {spendClient ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
+            <div className="flex items-start justify-between gap-3 border-b border-slate-200 p-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Facturación de {spendClient.name}
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  {fmtMoney(spendClient.spentMonthPence)} este mes ·{' '}
+                  {spendClient.cleaningsMonth} limpiezas
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSpendId(null)}
+                aria-label="Cerrar"
+                className="rounded-full p-1 text-slate-500 hover:bg-slate-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <ul className="space-y-1.5 p-4 text-xs text-slate-700">
+              {(() => {
+                const total = spendClient.spentMonthPence;
+                const lines = [
+                  { date: 'Esta semana', desc: 'Limpieza estándar · 3h', amount: Math.round(total * 0.28) },
+                  { date: 'Hace 1 sem', desc: 'Limpieza estándar · 3h', amount: Math.round(total * 0.24) },
+                  { date: 'Hace 2 sem', desc: 'Limpieza profunda · 5h', amount: Math.round(total * 0.32) },
+                  { date: 'Hace 3 sem', desc: 'Limpieza estándar · 3h', amount: Math.round(total * 0.16) },
+                ];
+                return lines.map((l, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2"
+                  >
+                    <div>
+                      <p className="font-semibold text-slate-900">{l.desc}</p>
+                      <p className="text-[10px] text-slate-500">{l.date}</p>
+                    </div>
+                    <span className="font-semibold text-emerald-700 tabular-nums">
+                      {fmtMoney(l.amount)}
+                    </span>
+                  </li>
+                ));
+              })()}
+            </ul>
+            <div className="border-t border-slate-200 p-4">
+              <Link
+                href="/owner/preview/analytics"
+                title="Ver tendencias completas de facturación en analytics"
+                className="flex items-center justify-between rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+              >
+                <span>Ver analytics completos</span>
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
       ) : null}

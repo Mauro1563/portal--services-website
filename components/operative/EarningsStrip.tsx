@@ -21,13 +21,19 @@ function formatMoney(pence: number): string {
 export function EarningsStrip({
   todayPence,
   weekPence,
+  href = '/operative/earnings',
 }: {
   todayPence: number;
   weekPence: number;
+  /** Destination for the strip. Defaults to the real /operative/earnings
+   *  page. The /operative/preview home overrides this to point at the
+   *  weekly summary, which is where the per-day breakdown lives in the
+   *  no-auth demo. */
+  href?: string;
 }) {
   return (
     <Link
-      href="/operative/earnings"
+      href={href}
       prefetch={true}
       aria-label="Ver desglose de ganancias"
       className="mt-4 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 p-4 shadow-card transition hover:border-emerald-300 hover:shadow-md"
