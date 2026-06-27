@@ -23,11 +23,25 @@ import { StatCardsRow } from '@/components/owner/StatCardsRow';
 import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
 import { CleanersField, type FieldCheckin } from '@/components/owner/CleanersField';
 import { BottomTabBar } from '@/components/owner/BottomTabBar';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 
-type PaidTask = {
+/**
+ * Subset of `tasks` rows joined with their property + cleaner needed to
+ * compute the rate-based revenue/profit formula from migration 0035:
+ *
+ *   revenue  = actual_hours * COALESCE(task.charge_rate, property.default_charge_rate, owner.default_charge_rate)
+ *   cleaner_pay = actual_hours * COALESCE(task.cleaner_pay_rate, cleaner.default_hourly_pay) + task.tip_pence
+ *   profit   = revenue - (actual_hours * COALESCE(task.cleaner_pay_rate, cleaner.default_hourly_pay))
+ *              -- tips flow 100% to the cleaner, never to the owner.
+ */
+type RateTask = {
   scheduled_for: string;
-  paid_amount_pence: number | null;
-  price_pence: number | null;
+  actual_hours: number | null;
+  charge_rate_pence: number | null;
+  cleaner_pay_rate_pence: number | null;
+  tip_pence: number | null;
+  property: { default_charge_rate_pence: number | null } | null;
+  cleaner: { default_hourly_pay_pence: number | null } | null;
 };
 
 type FieldRow = {
@@ -135,23 +149,34 @@ export default async function OwnerHome() {
       .select('id', { count: 'exact', head: true })
       .gte('created_at', fourteenDaysAgo)
       .lt('created_at', sevenDaysAgo),
+    // Rate-based revenue/profit for the current month. We now derive both
+    // metrics from cleaner-reported actual_hours × the resolved hourly
+    // rate (per migration 0035), so the payment_status flag is no longer
+    // the gate — what matters is that the work actually happened, which
+    // is signalled by actual_hours being non-null.
     supabase
       .from('tasks')
-      .select('paid_amount_pence, price_pence, scheduled_for')
+      .select(
+        'scheduled_for, actual_hours, charge_rate_pence, cleaner_pay_rate_pence, tip_pence, property:properties (default_charge_rate_pence), cleaner:cleaners (default_hourly_pay_pence)',
+      )
       .gte('scheduled_for', monthStart)
-      .in('payment_status', ['paid', 'partial']),
+      .not('actual_hours', 'is', null),
     supabase
       .from('tasks')
-      .select('paid_amount_pence, price_pence')
+      .select(
+        'scheduled_for, actual_hours, charge_rate_pence, cleaner_pay_rate_pence, tip_pence, property:properties (default_charge_rate_pence), cleaner:cleaners (default_hourly_pay_pence)',
+      )
       .gte('scheduled_for', prevMonthStart)
       .lte('scheduled_for', prevMonthEnd)
-      .in('payment_status', ['paid', 'partial']),
-    // Daily revenue for the chart — last 7 days.
+      .not('actual_hours', 'is', null),
+    // Daily revenue for the chart — last 7 days. Same rate-based shape.
     supabase
       .from('tasks')
-      .select('paid_amount_pence, price_pence, scheduled_for')
+      .select(
+        'scheduled_for, actual_hours, charge_rate_pence, cleaner_pay_rate_pence, tip_pence, property:properties (default_charge_rate_pence), cleaner:cleaners (default_hourly_pay_pence)',
+      )
       .gte('scheduled_for', sevenDaysAgo)
-      .in('payment_status', ['paid', 'partial']),
+      .not('actual_hours', 'is', null),
     // Recent check-ins for the "cleaners en campo" widget.
     supabase
       .from('tasks')
@@ -176,19 +201,63 @@ export default async function OwnerHome() {
   const todayCount = todayCountRes.count ?? 0;
   const weekBookings = weekBookingsRes.count ?? 0;
   const lastWeekBookings = lastWeekBookingsRes.count ?? 0;
-  const monthPaid = (monthPaidRes.data ?? []) as PaidTask[];
-  const prevMonthPaid = (prevMonthPaidRes.data ?? []) as PaidTask[];
-  const weekPaid = (weekPaidRes.data ?? []) as PaidTask[];
+  const monthPaid = (monthPaidRes.data ?? []) as unknown as RateTask[];
+  const prevMonthPaid = (prevMonthPaidRes.data ?? []) as unknown as RateTask[];
+  const weekPaid = (weekPaidRes.data ?? []) as unknown as RateTask[];
   const fieldRows = (fieldRes.data ?? []) as unknown as FieldRow[];
 
   if (propertiesCount === 0 && cleanersCount === 0) {
     redirect('/owner/onboarding');
   }
 
-  const sumPaid = (rows: PaidTask[]) =>
-    rows.reduce((sum, t) => sum + (t.paid_amount_pence ?? t.price_pence ?? 0), 0);
-  const monthRevenuePence = sumPaid(monthPaid);
-  const prevMonthRevenuePence = sumPaid(prevMonthPaid);
+  const ownerDefaultChargePence = profile?.default_charge_rate_pence ?? 0;
+
+  /**
+   * Resolves the per-task charge rate per the migration-0035 cascade:
+   *   task.charge_rate → property.default_charge_rate → owner default → 0
+   */
+  function resolveChargeRate(t: RateTask): number {
+    if (t.charge_rate_pence != null && t.charge_rate_pence > 0) {
+      return t.charge_rate_pence;
+    }
+    const prop = t.property?.default_charge_rate_pence ?? 0;
+    if (prop > 0) return prop;
+    return ownerDefaultChargePence;
+  }
+
+  function resolvePayRate(t: RateTask): number {
+    if (t.cleaner_pay_rate_pence != null && t.cleaner_pay_rate_pence > 0) {
+      return t.cleaner_pay_rate_pence;
+    }
+    return t.cleaner?.default_hourly_pay_pence ?? 0;
+  }
+
+  /** Per-row revenue (what the client owes us) in pence. */
+  function revenueOf(t: RateTask): number {
+    const hours = typeof t.actual_hours === 'number' ? t.actual_hours : 0;
+    if (hours <= 0) return 0;
+    return Math.round(hours * resolveChargeRate(t));
+  }
+
+  /** Per-row cleaner pay (hours × pay rate, excludes tip). Tips are
+   *  cleaner-only and don't affect owner profit. */
+  function payOf(t: RateTask): number {
+    const hours = typeof t.actual_hours === 'number' ? t.actual_hours : 0;
+    if (hours <= 0) return 0;
+    return Math.round(hours * resolvePayRate(t));
+  }
+
+  const sumRevenue = (rows: RateTask[]) =>
+    rows.reduce((sum, t) => sum + revenueOf(t), 0);
+  const sumPay = (rows: RateTask[]) => rows.reduce((sum, t) => sum + payOf(t), 0);
+
+  const monthRevenuePence = sumRevenue(monthPaid);
+  const monthPayPence = sumPay(monthPaid);
+  const monthProfitPence = monthRevenuePence - monthPayPence;
+
+  const prevMonthRevenuePence = sumRevenue(prevMonthPaid);
+  const prevMonthPayPence = sumPay(prevMonthPaid);
+  const prevMonthProfitPence = prevMonthRevenuePence - prevMonthPayPence;
 
   // Daily revenue points for the 7-day chart (oldest → newest).
   const chartData: RevenuePoint[] = [];
@@ -198,7 +267,7 @@ export default async function OwnerHome() {
     const dayRows = weekPaid.filter((t) => t.scheduled_for === iso);
     chartData.push({
       label: DAY_SHORT[d.getDay()],
-      pence: sumPaid(dayRows),
+      pence: sumRevenue(dayRows),
     });
   }
 
@@ -274,6 +343,8 @@ export default async function OwnerHome() {
           revenueMonthPence={monthRevenuePence}
           bookingsDelta={deltaPct(weekBookings, lastWeekBookings)}
           revenueDelta={deltaPct(monthRevenuePence, prevMonthRevenuePence)}
+          profitMonthPence={monthProfitPence}
+          profitDelta={deltaPct(monthProfitPence, prevMonthProfitPence)}
         />
 
         {/* Chart + field cleaners — two columns on desktop, stacked mobile.
@@ -332,12 +403,12 @@ export default async function OwnerHome() {
 
         {/* Sign-out at the bottom — discreet */}
         <form action={signout} className="mt-8 flex justify-center">
-          <button
-            type="submit"
-            className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700"
+          <SubmitButton
+            pendingLabel="Saliendo…"
+            className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700 disabled:opacity-60"
           >
             Cerrar sesión
-          </button>
+          </SubmitButton>
         </form>
       </div>
 

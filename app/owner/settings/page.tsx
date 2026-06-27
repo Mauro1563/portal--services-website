@@ -138,12 +138,12 @@ export default async function SettingsPage({
 
         {profile.business_logo_url ? (
           <form action={removeBusinessLogo} className="mt-3">
-            <button
-              type="submit"
-              className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-surface-2 bg-surface-0 px-2.5 text-[11px] text-text-2 hover:bg-rose-50 hover:text-rose-700"
+            <SubmitButton
+              pendingLabel="Quitando…"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-surface-2 bg-surface-0 px-2.5 text-[11px] text-text-2 hover:bg-rose-50 hover:text-rose-700 disabled:opacity-60"
             >
               <X className="h-3.5 w-3.5" /> Remove logo
-            </button>
+            </SubmitButton>
           </form>
         ) : null}
       </Section>
@@ -270,7 +270,12 @@ export default async function SettingsPage({
         <form action={updatePassword} className="space-y-3">
           <Field label={t('settings.newPassword')} name="password" type="password" required />
           <Field label={t('settings.confirmPassword')} name="confirm" type="password" required />
-          <SubmitButton>{t('settings.updatePassword')}</SubmitButton>
+          <SubmitButton
+            pendingLabel="Actualizando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
+          >
+            {t('settings.updatePassword')}
+          </SubmitButton>
         </form>
       </Section>
 
@@ -308,12 +313,12 @@ export default async function SettingsPage({
           {t('settings.signedInAs').replace('{email}', user.email ?? '')}
         </p>
         <form action={signout}>
-          <button
-            type="submit"
-            className="inline-flex h-9 items-center gap-2 rounded-xl border border-surface-2 bg-surface-0 px-3 text-xs font-medium text-text-1 hover:bg-surface-1"
+          <SubmitButton
+            pendingLabel="Saliendo…"
+            className="inline-flex h-9 items-center gap-2 rounded-xl border border-surface-2 bg-surface-0 px-3 text-xs font-medium text-text-1 hover:bg-surface-1 disabled:opacity-60"
           >
             {t('common.signOut')}
-          </button>
+          </SubmitButton>
         </form>
       </section>
 
@@ -342,12 +347,12 @@ export default async function SettingsPage({
               className="mt-1.5 block w-full rounded-xl border border-rose-200 bg-surface-0 px-4 py-2.5 text-sm text-text-1 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-300"
             />
           </label>
-          <button
-            type="submit"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-rose-600 px-4 text-sm font-medium text-white hover:bg-rose-700"
+          <SubmitButton
+            pendingLabel="Borrando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-rose-600 px-4 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-70"
           >
             {t('settings.deletePermanent')}
-          </button>
+          </SubmitButton>
         </form>
       </section>
     </LightLayout>

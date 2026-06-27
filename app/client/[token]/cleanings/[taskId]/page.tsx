@@ -4,6 +4,7 @@ import {
   Camera,
   CheckCircle2,
   Clock,
+  Heart,
   MapPin,
   Star,
   User,
@@ -11,11 +12,18 @@ import {
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientByToken } from '@/lib/client-auth';
 import { ClientShell } from '@/components/client/ClientShell';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { submitRating } from '../../actions';
+import { TipForm } from './TipForm';
 
 type Props = {
   params: Promise<{ token: string; taskId: string }>;
-  searchParams: Promise<{ rated?: string; error?: string }>;
+  searchParams: Promise<{
+    rated?: string;
+    error?: string;
+    tipped?: string;
+    tip_error?: string;
+  }>;
 };
 
 type TaskRow = {
@@ -28,6 +36,7 @@ type TaskRow = {
   photo_url: string | null;
   service_name: string | null;
   price_pence: number | null;
+  tip_pence: number | null;
   client_id: string | null;
   property: { name: string | null; address: string | null } | null;
   cleaner: { id: string; name: string } | null;
@@ -41,7 +50,7 @@ type RatingRow = {
 
 export default async function ClientTaskPage({ params, searchParams }: Props) {
   const { token, taskId } = await params;
-  const { rated, error } = await searchParams;
+  const { rated, error, tipped, tip_error: tipError } = await searchParams;
 
   const ctx = await getClientByToken(token);
   if (!ctx) notFound();
@@ -50,7 +59,7 @@ export default async function ClientTaskPage({ params, searchParams }: Props) {
   const { data } = await admin
     .from('tasks')
     .select(
-      'id, scheduled_for, status, notes, checked_in_at, completed_at, photo_url, service_name, price_pence, client_id, property:properties (name, address), cleaner:cleaners (id, name)',
+      'id, scheduled_for, status, notes, checked_in_at, completed_at, photo_url, service_name, price_pence, tip_pence, client_id, property:properties (name, address), cleaner:cleaners (id, name)',
     )
     .eq('id', taskId)
     .maybeSingle();
@@ -151,6 +160,23 @@ export default async function ClientTaskPage({ params, searchParams }: Props) {
       {rated ? (
         <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
           ¡Gracias por tu valoración!
+        </p>
+      ) : null}
+      {tipped ? (
+        <p
+          role="status"
+          className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700"
+        >
+          Propina enviada · Gracias 💚
+        </p>
+      ) : null}
+      {tipError ? (
+        <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+          {tipError === 'invalid'
+            ? 'Importe de propina no válido.'
+            : tipError === 'not_completed'
+            ? 'Solo puedes enviar una propina cuando la limpieza esté completada.'
+            : 'No se pudo guardar la propina.'}
         </p>
       ) : null}
       {error ? (
@@ -273,6 +299,30 @@ export default async function ClientTaskPage({ params, searchParams }: Props) {
         </section>
       ) : null}
 
+      {/* Tip — only when work is done. The cleaner sees this in their earnings. */}
+      {isCompleted ? (
+        <section className="mt-5 rounded-3xl border border-emerald-200/60 bg-gradient-to-br from-emerald-50/60 via-white to-white p-5 shadow-card">
+          <h2 className="inline-flex items-center gap-2 font-display text-base font-semibold text-text-1">
+            <Heart className="h-4 w-4 text-emerald-600" />
+            {task.tip_pence && task.tip_pence > 0
+              ? `Ya enviaste £${(task.tip_pence / 100).toFixed(2)} de propina`
+              : 'Deja una propina a tu limpiador'}
+          </h2>
+          <p className="mt-1 text-xs text-text-2">
+            <span className="font-medium text-emerald-700">
+              100% va para tu limpiador
+            </span>
+            {' · '}
+            sin comisiones, sin cortes.
+          </p>
+          <TipForm
+            token={token}
+            taskId={taskId}
+            currentTipPence={task.tip_pence ?? 0}
+          />
+        </section>
+      ) : null}
+
       {task.notes ? (
         <section className="mt-5 mb-4 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-text-3">
@@ -365,12 +415,12 @@ function RatingForm({
         </span>
       </label>
 
-      <button
-        type="submit"
-        className="flex h-11 w-full items-center justify-center rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow"
+      <SubmitButton
+        pendingLabel="Enviando…"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow disabled:opacity-80"
       >
         Enviar valoración
-      </button>
+      </SubmitButton>
     </form>
   );
 }

@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Info,
   MessageSquare,
+  Pencil,
   Repeat,
   Search,
   Send,
@@ -31,6 +32,8 @@ type Cleaner = {
   status: 'active' | 'in_field' | 'off';
   accent: string;
   assignedProperty: string;
+  /** Hourly pay rate the owner pays this cleaner, in £. */
+  payPerHour: number;
 };
 
 const initialCleaners: Cleaner[] = [
@@ -44,6 +47,7 @@ const initialCleaners: Cleaner[] = [
     status: 'in_field',
     accent: 'from-amber-400 to-orange-500',
     assignedProperty: 'Soho Loft',
+    payPerHour: 14,
   },
   {
     id: 'c2',
@@ -55,6 +59,7 @@ const initialCleaners: Cleaner[] = [
     status: 'active',
     accent: 'from-rose-400 to-rose-600',
     assignedProperty: 'Camden House',
+    payPerHour: 15,
   },
   {
     id: 'c3',
@@ -66,6 +71,7 @@ const initialCleaners: Cleaner[] = [
     status: 'in_field',
     accent: 'from-cyan-400 to-blue-600',
     assignedProperty: 'Notting Hill Flat',
+    payPerHour: 13,
   },
   {
     id: 'c4',
@@ -77,6 +83,7 @@ const initialCleaners: Cleaner[] = [
     status: 'off',
     accent: 'from-emerald-400 to-emerald-600',
     assignedProperty: 'Mayfair Studio',
+    payPerHour: 14,
   },
 ];
 
@@ -126,6 +133,8 @@ export default function OwnerCleanersPreview() {
   const [query, setQuery] = useState('');
   const [chatId, setChatId] = useState<string | null>(null);
   const [reassignId, setReassignId] = useState<string | null>(null);
+  const [payId, setPayId] = useState<string | null>(null);
+  const [payDraft, setPayDraft] = useState('');
   const [detailId, setDetailId] = useState<string | null>(null);
   const [chatDraft, setChatDraft] = useState('');
   const [chats, setChats] = useState<Record<string, ChatMsg[]>>({
@@ -160,6 +169,7 @@ export default function OwnerCleanersPreview() {
         status: 'active',
         accent: ACCENT_POOL[prev.length % ACCENT_POOL.length],
         assignedProperty: 'Sin asignar',
+        payPerHour: 14,
       },
     ]);
     setInviteName('');
@@ -188,7 +198,25 @@ export default function OwnerCleanersPreview() {
 
   const chatCleaner = cleaners.find((c) => c.id === chatId);
   const reassignCleaner = cleaners.find((c) => c.id === reassignId);
+  const payCleaner = cleaners.find((c) => c.id === payId);
   const detailCleaner = cleaners.find((c) => c.id === detailId);
+
+  function openPaySheet(c: Cleaner) {
+    setPayId(c.id);
+    setPayDraft(String(c.payPerHour));
+  }
+
+  function savePay() {
+    if (!payId) return;
+    const n = Number(payDraft);
+    if (!Number.isFinite(n) || n < 0) return;
+    const rounded = Math.round(n * 100) / 100;
+    setCleaners((prev) =>
+      prev.map((c) => (c.id === payId ? { ...c, payPerHour: rounded } : c)),
+    );
+    setPayId(null);
+    showToast(`Pago actualizado a £${rounded}/h`);
+  }
 
   function sendChat() {
     if (!chatId || !chatDraft.trim()) return;
@@ -361,13 +389,25 @@ export default function OwnerCleanersPreview() {
                     </span>
                   </div>
                   <p className="mt-0.5 text-xs text-slate-500">PIN {c.pin}</p>
-                  <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-600">
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
                     <span className="inline-flex items-center gap-1 text-amber-500">
                       <Star className="h-3 w-3 fill-current" />
                       <span className="font-semibold text-slate-700">{c.rating}</span>
                     </span>
                     <span>·</span>
                     <span>{c.cleaningsMonth} limpiezas/mes</span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-700 ring-1 ring-emerald-100">
+                      Pago £{c.payPerHour}/h
+                      <button
+                        type="button"
+                        onClick={() => openPaySheet(c)}
+                        title={`Editar el pago por hora de ${c.name}`}
+                        aria-label={`Editar pago de ${c.name}`}
+                        className="ml-0.5 rounded p-0.5 text-emerald-700 hover:bg-emerald-100"
+                      >
+                        <Pencil className="h-2.5 w-2.5" />
+                      </button>
+                    </span>
                   </div>
                   <p className="mt-2 text-[11px] text-slate-500">
                     Asignada a:{' '}
@@ -531,6 +571,75 @@ export default function OwnerCleanersPreview() {
                 );
               })}
             </ul>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Edit pay sheet */}
+      {payCleaner ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 p-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Pago de {payCleaner.name}
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Tarifa por hora que se aplica al payroll del cleaner.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPayId(null)}
+                aria-label="Cerrar"
+                className="rounded-full p-1 text-slate-500 hover:bg-slate-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                savePay();
+              }}
+              className="space-y-3 p-4"
+            >
+              <label className="block text-xs font-semibold text-slate-700">
+                Pago por hora (£)
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="text-sm text-slate-500">£</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.5}
+                    value={payDraft}
+                    onChange={(e) => setPayDraft(e.target.value)}
+                    autoFocus
+                    className="h-10 flex-1 rounded-lg border border-slate-200 bg-white px-3 text-sm tabular-nums"
+                  />
+                  <span className="text-xs text-slate-400">/h</span>
+                </div>
+              </label>
+              <p className="text-[10.5px] text-slate-500">
+                Cambia sólo el pago de este cleaner. No afecta lo que cobras al
+                cliente.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                >
+                  Guardar pago
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPayId(null)}
+                  className="flex-1 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       ) : null}

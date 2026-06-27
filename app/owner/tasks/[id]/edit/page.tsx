@@ -13,6 +13,8 @@ import { LightLayout } from '@/components/owner/LightLayout';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { ensureDefaultServices } from '@/lib/default-services';
+import { getOwnerProfile } from '@/lib/owner-profile';
+import { TaskRateOverrides } from '@/components/owner/TaskRateOverrides';
 import { updateTask } from '../actions';
 
 type Props = {
@@ -34,6 +36,8 @@ type TaskRow = {
   payment_method: string | null;
   paid_amount_pence: number | null;
   notes: string | null;
+  charge_rate_pence: number | null;
+  cleaner_pay_rate_pence: number | null;
 };
 
 const inputCls =
@@ -61,23 +65,31 @@ export default async function EditTaskPage({ params, searchParams }: Props) {
     { data: cleanersData },
     { data: clientsData },
     { data: servicesData },
+    ownerProfile,
   ] = await Promise.all([
     supabase
       .from('tasks')
       .select(
-        'id, property_id, cleaner_id, client_id, service_type_id, scheduled_for, start_time, estimated_duration_min, price_pence, payment_status, payment_method, paid_amount_pence, notes',
+        'id, property_id, cleaner_id, client_id, service_type_id, scheduled_for, start_time, estimated_duration_min, price_pence, payment_status, payment_method, paid_amount_pence, notes, charge_rate_pence, cleaner_pay_rate_pence',
       )
       .eq('id', id)
       .eq('owner_id', user.id)
       .maybeSingle(),
-    supabase.from('properties').select('id, name').order('name'),
-    supabase.from('cleaners').select('id, name').order('name'),
+    supabase
+      .from('properties')
+      .select('id, name, default_charge_rate_pence')
+      .order('name'),
+    supabase
+      .from('cleaners')
+      .select('id, name, default_hourly_pay_pence')
+      .order('name'),
     supabase.from('clients').select('id, name').order('name'),
     supabase
       .from('service_types')
       .select('id, name, price_pence, hourly_rate_pence, default_duration_min')
       .eq('is_active', true)
       .order('sort_order', { ascending: true }),
+    getOwnerProfile(user.id),
   ]);
 
   const task = taskData as TaskRow | null;
@@ -271,6 +283,31 @@ export default async function EditTaskPage({ params, searchParams }: Props) {
               />
             </div>
           </label>
+        </SectionCard>
+
+        <SectionCard
+          accent="emerald"
+          icon={Tag}
+          title="Tarifas (opcional)"
+          desc="Se autocompletan desde la propiedad y el cleaner — podés sobreescribirlas solo para esta tarea."
+        >
+          <TaskRateOverrides
+            properties={properties.map((p) => ({
+              id: p.id,
+              default_charge_rate_pence:
+                (p as { default_charge_rate_pence?: number | null }).default_charge_rate_pence ?? 0,
+            }))}
+            cleaners={cleaners.map((c) => ({
+              id: c.id,
+              default_hourly_pay_pence:
+                (c as { default_hourly_pay_pence?: number | null }).default_hourly_pay_pence ?? 0,
+            }))}
+            initialChargePence={task.charge_rate_pence}
+            initialPayPence={task.cleaner_pay_rate_pence}
+            initialPropertyId={task.property_id}
+            initialCleanerId={task.cleaner_id}
+            ownerDefaultChargePence={ownerProfile.default_charge_rate_pence}
+          />
         </SectionCard>
 
         <SectionCard

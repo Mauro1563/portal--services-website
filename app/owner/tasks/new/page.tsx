@@ -16,6 +16,8 @@ import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { addTask } from '@/app/owner/actions';
 import { ensureDefaultServices } from '@/lib/default-services';
+import { getOwnerProfile } from '@/lib/owner-profile';
+import { TaskRateOverrides } from '@/components/owner/TaskRateOverrides';
 
 type Props = {
   searchParams: Promise<{
@@ -39,16 +41,24 @@ export default async function NewTaskPage({ searchParams }: Props) {
   // Back-fill defaults for existing owners who signed up before auto-seeding.
   await ensureDefaultServices(user.id);
 
-  const [propertiesRes, cleanersRes, clientsRes, servicesRes] = await Promise.all([
-    supabase.from('properties').select('id, name').order('name'),
-    supabase.from('cleaners').select('id, name').order('name'),
-    supabase.from('clients').select('id, name').order('name'),
-    supabase
-      .from('service_types')
-      .select('id, name, price_pence, hourly_rate_pence, default_duration_min')
-      .eq('is_active', true)
-      .order('sort_order', { ascending: true }),
-  ]);
+  const [propertiesRes, cleanersRes, clientsRes, servicesRes, ownerProfile] =
+    await Promise.all([
+      supabase
+        .from('properties')
+        .select('id, name, default_charge_rate_pence')
+        .order('name'),
+      supabase
+        .from('cleaners')
+        .select('id, name, default_hourly_pay_pence')
+        .order('name'),
+      supabase.from('clients').select('id, name').order('name'),
+      supabase
+        .from('service_types')
+        .select('id, name, price_pence, hourly_rate_pence, default_duration_min')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true }),
+      getOwnerProfile(user.id),
+    ]);
 
   const properties = propertiesRes.data ?? [];
   const cleaners = cleanersRes.data ?? [];
@@ -322,6 +332,28 @@ export default async function NewTaskPage({ searchParams }: Props) {
               />
             </div>
           </label>
+        </SectionCard>
+
+        {/* ───────── Tarifas (override opcional) ───────── */}
+        <SectionCard
+          accent="emerald"
+          icon={Tag}
+          title="Tarifas (opcional)"
+          desc="Se autocompletan desde la propiedad y el cleaner — podés sobreescribirlas solo para esta tarea."
+        >
+          <TaskRateOverrides
+            properties={properties.map((p) => ({
+              id: p.id,
+              default_charge_rate_pence: p.default_charge_rate_pence ?? 0,
+            }))}
+            cleaners={cleaners.map((c) => ({
+              id: c.id,
+              default_hourly_pay_pence: c.default_hourly_pay_pence ?? 0,
+            }))}
+            initialPropertyId={propertyParam ?? null}
+            initialCleanerId={cleanerParam ?? null}
+            ownerDefaultChargePence={ownerProfile.default_charge_rate_pence}
+          />
         </SectionCard>
 
         {/* ───────── Pago ───────── */}

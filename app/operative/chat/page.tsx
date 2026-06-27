@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { MessageCircle, Send } from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { markOwnerMessagesReadForCleaner, sendCleanerMessage } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -154,13 +155,13 @@ export default async function OperativeChat({
             maxLength={4000}
             className="block max-h-32 min-h-[44px] w-full resize-none rounded-2xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 placeholder:text-text-3 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
-          <button
-            type="submit"
-            aria-label="Enviar"
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.55)] transition active:scale-95"
+          <SubmitButton
+            ariaLabel="Enviar"
+            pendingLabel=""
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.55)] transition active:scale-95 disabled:opacity-70"
           >
             <Send className="h-4 w-4" />
-          </button>
+          </SubmitButton>
         </div>
       </form>
 

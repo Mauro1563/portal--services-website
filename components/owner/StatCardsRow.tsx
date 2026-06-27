@@ -1,5 +1,6 @@
 import {
   CalendarPlus,
+  PiggyBank,
   PoundSterling,
   TrendingUp,
   Users,
@@ -12,7 +13,7 @@ type StatProps = {
   /** Optional small delta chip (e.g. "+12% vs sem. pasada"). */
   delta?: { label: string; positive?: boolean };
   Icon: React.ComponentType<{ className?: string }>;
-  accent: 'brand' | 'emerald' | 'amber';
+  accent: 'brand' | 'emerald' | 'amber' | 'violet' | 'rose';
 };
 
 const ACCENT: Record<
@@ -30,6 +31,14 @@ const ACCENT: Record<
   amber: {
     iconBg: 'bg-gradient-to-br from-amber-400 to-amber-600',
     ring: 'ring-amber-100',
+  },
+  violet: {
+    iconBg: 'bg-gradient-to-br from-violet-500 to-purple-700',
+    ring: 'ring-violet-100',
+  },
+  rose: {
+    iconBg: 'bg-gradient-to-br from-rose-500 to-rose-700',
+    ring: 'ring-rose-100',
   },
 };
 
@@ -87,18 +96,41 @@ export function StatCardsRow({
   revenueMonthPence,
   bookingsDelta,
   revenueDelta,
+  profitMonthPence,
+  profitDelta,
 }: {
   cleanersActive: number;
   bookingsWeek: number;
   revenueMonthPence: number;
   bookingsDelta?: { label: string; positive: boolean };
   revenueDelta?: { label: string; positive: boolean };
+  /**
+   * Optional. When provided we surface a 4th "profit" card alongside
+   * revenue, and shift the grid to 2-col mobile / 4-col desktop. Kept
+   * optional so existing callers (preview/demo page) keep working.
+   */
+  profitMonthPence?: number;
+  profitDelta?: { label: string; positive: boolean };
 }) {
-  const fmtMoney = (p: number) =>
-    `£${(p / 100).toLocaleString('en-GB', { maximumFractionDigits: 0 })}`;
+  const fmtMoney = (p: number) => {
+    // Negative profit reads as e.g. "-£40" rather than "£-40".
+    const abs = Math.abs(p);
+    const formatted = `£${(abs / 100).toLocaleString('en-GB', {
+      maximumFractionDigits: 0,
+    })}`;
+    return p < 0 ? `-${formatted}` : formatted;
+  };
+
+  const showProfit = typeof profitMonthPence === 'number';
 
   return (
-    <section className="grid grid-cols-3 gap-2 sm:gap-3">
+    <section
+      className={
+        showProfit
+          ? 'grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4'
+          : 'grid grid-cols-3 gap-2 sm:gap-3'
+      }
+    >
       <StatCard
         label="Cleaners activos"
         value={String(cleanersActive)}
@@ -122,6 +154,16 @@ export function StatCardsRow({
         Icon={PoundSterling}
         accent="emerald"
       />
+      {showProfit ? (
+        <StatCard
+          label="Profit"
+          value={fmtMoney(profitMonthPence)}
+          hint="revenue − pagado"
+          delta={profitDelta}
+          Icon={PiggyBank}
+          accent={profitMonthPence >= 0 ? 'violet' : 'rose'}
+        />
+      ) : null}
     </section>
   );
 }

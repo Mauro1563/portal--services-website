@@ -152,6 +152,16 @@ export async function addTask(formData: FormData) {
       ? new Date().toISOString()
       : null;
 
+  // Per-task rate overrides (NULLABLE in DB). Blank input → NULL, so the
+  // dashboard's revenue/profit calc falls back to the property / cleaner
+  // defaults (then to the org-wide default for charge rate).
+  const chargeRatePence = parseOptionalRatePence(
+    formData.get('charge_rate') as string | null,
+  );
+  const cleanerPayRatePence = parseOptionalRatePence(
+    formData.get('cleaner_pay_rate') as string | null,
+  );
+
   const { error } = await supabase.from('tasks').insert({
     owner_id: user.id,
     property_id: propertyId,
@@ -167,6 +177,8 @@ export async function addTask(formData: FormData) {
     payment_method: paymentMethod,
     paid_amount_pence: paidAmountPence,
     paid_at: paidAt,
+    charge_rate_pence: chargeRatePence,
+    cleaner_pay_rate_pence: cleanerPayRatePence,
     notes: (formData.get('notes') as string)?.trim() || null,
   });
 
@@ -217,4 +229,19 @@ export async function cancelTask(formData: FormData) {
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   redirect('/owner/tasks');
+}
+
+/**
+ * Parses an optional £/h input. Empty string → NULL (let the fallback
+ * cascade decide); otherwise the number is rounded to integer pence.
+ * Negative or NaN values are rejected by returning NULL too — the form
+ * input already has `min="0"`, so this is just belt-and-braces.
+ */
+function parseOptionalRatePence(raw: string | null): number | null {
+  if (raw == null) return null;
+  const v = raw.trim();
+  if (v === '') return null;
+  const n = Number(v);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return Math.round(n * 100);
 }

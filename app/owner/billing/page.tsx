@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Check, ExternalLink } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { PLAN_LABELS, PLAN_PRICE_IDS, type PlanTier } from '@/lib/stripe';
 import { openBillingPortal, startCheckout } from './actions';
@@ -125,12 +126,12 @@ export default async function BillingPage({ searchParams }: Props) {
             )}
           </p>
           <form action={openBillingPortal} className="mt-4">
-            <button
-              type="submit"
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-surface-2 bg-surface-0 px-4 text-sm font-medium text-text-1 hover:bg-surface-1"
+            <SubmitButton
+              pendingLabel="Abriendo…"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-surface-2 bg-surface-0 px-4 text-sm font-medium text-text-1 hover:bg-surface-1 disabled:opacity-60"
             >
               {t('billing.manageBilling')} <ExternalLink className="h-3.5 w-3.5" />
-            </button>
+            </SubmitButton>
           </form>
         </section>
       )}
@@ -179,13 +180,13 @@ export default async function BillingPage({ searchParams }: Props) {
               {!isCurrent && (
                 <form action={startCheckout} className="mt-5">
                   <input type="hidden" name="tier" value={tier} />
-                  <button
-                    type="submit"
+                  <SubmitButton
                     disabled={!hasPrice}
+                    pendingLabel="Abriendo Stripe…"
                     className={
                       featured
-                        ? 'flex h-11 w-full items-center justify-center rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow disabled:cursor-not-allowed disabled:opacity-50'
-                        : 'flex h-11 w-full items-center justify-center rounded-2xl border border-surface-2 bg-surface-0 text-sm font-medium text-text-1 hover:bg-surface-1 disabled:cursor-not-allowed disabled:opacity-50'
+                        ? 'flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow disabled:cursor-not-allowed disabled:opacity-50'
+                        : 'flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-surface-2 bg-surface-0 text-sm font-medium text-text-1 hover:bg-surface-1 disabled:cursor-not-allowed disabled:opacity-50'
                     }
                   >
                     {hasPrice
@@ -193,7 +194,7 @@ export default async function BillingPage({ searchParams }: Props) {
                         ? t('billing.switchPlan')
                         : t('billing.startTrial')
                       : t('billing.comingSoon')}
-                  </button>
+                  </SubmitButton>
                 </form>
               )}
               {!hasPrice && (

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Mail, Phone, User } from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { updateOwnProfile } from '../actions';
 
 type Props = {
@@ -109,12 +110,12 @@ export default async function OperativeProfile({ searchParams }: Props) {
           </div>
         </label>
 
-        <button
-          type="submit"
-          className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold uppercase tracking-[0.16em] text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
+        <SubmitButton
+          pendingLabel="Saving…"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold uppercase tracking-[0.16em] text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 disabled:opacity-80"
         >
           Save changes
-        </button>
+        </SubmitButton>
       </form>
       </div>
       <BottomTabBar active="perfil" />

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ChevronRight, KeyRound, PlayCircle } from 'lucide-react';
 import { PortalLoginCard, LoginField } from '@/components/portal/PortalLoginCard';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { signIn } from '@/app/login/actions';
 
 type Props = {
@@ -70,14 +71,14 @@ export default async function OperativeLogin({ searchParams }: Props) {
             unused for PIN auth — submit empty. */}
         <input type="hidden" name="password" value="" />
 
-        <button
-          type="submit"
-          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] active:translate-y-px"
+        <SubmitButton
+          pendingLabel="Entrando…"
+          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] active:translate-y-px disabled:opacity-80"
         >
           <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
           Entrar
           <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </button>
+        </SubmitButton>
       </form>
     </PortalLoginCard>
   );

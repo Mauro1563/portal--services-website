@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Info,
   MapPin,
+  Pencil,
   Plus,
   Ruler,
   Search,
@@ -36,6 +37,8 @@ type Property = {
   platform: 'airbnb' | 'booking' | 'direct';
   cleanings: number;
   photo: string;
+  /** Hourly rate charged to the client for cleaning this property, in £. */
+  chargePerHour: number;
 };
 
 const initialProperties: Property[] = [
@@ -46,6 +49,7 @@ const initialProperties: Property[] = [
     mapsQuery: '22+Old+Compton+St+London',
     beds: 2, baths: 2, area: 65, guests: 4, platform: 'airbnb', cleanings: 24,
     photo: 'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=800&auto=format&fit=crop&q=70',
+    chargePerHour: 26,
   },
   {
     id: '2',
@@ -54,6 +58,7 @@ const initialProperties: Property[] = [
     mapsQuery: '47+Camden+High+St+London',
     beds: 4, baths: 3, area: 180, guests: 8, platform: 'direct', cleanings: 12,
     photo: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=70',
+    chargePerHour: 28,
   },
   {
     id: '3',
@@ -62,6 +67,7 @@ const initialProperties: Property[] = [
     mapsQuery: '12+Portobello+Rd+London',
     beds: 1, baths: 1, area: 45, guests: 2, platform: 'booking', cleanings: 18,
     photo: 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&auto=format&fit=crop&q=70',
+    chargePerHour: 25,
   },
   {
     id: '4',
@@ -70,6 +76,7 @@ const initialProperties: Property[] = [
     mapsQuery: '8+Berkeley+St+Mayfair+London',
     beds: 0, baths: 1, area: 32, guests: 2, platform: 'airbnb', cleanings: 30,
     photo: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=70',
+    chargePerHour: 24,
   },
   {
     id: '5',
@@ -78,6 +85,7 @@ const initialProperties: Property[] = [
     mapsQuery: '31+Curtain+Rd+Shoreditch+London',
     beds: 3, baths: 2, area: 110, guests: 6, platform: 'airbnb', cleanings: 22,
     photo: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&auto=format&fit=crop&q=70',
+    chargePerHour: 30,
   },
   {
     id: '6',
@@ -86,6 +94,7 @@ const initialProperties: Property[] = [
     mapsQuery: '78+Mare+St+Hackney+London',
     beds: 1, baths: 1, area: 38, guests: 2, platform: 'booking', cleanings: 16,
     photo: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&auto=format&fit=crop&q=70',
+    chargePerHour: 24,
   },
 ];
 
@@ -102,6 +111,8 @@ export default function OwnerPropertiesPreview() {
   const [query, setQuery] = useState('');
   const [platform, setPlatform] = useState<PlatformFilter>('all');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [rateId, setRateId] = useState<string | null>(null);
+  const [rateDraft, setRateDraft] = useState('');
   const [showNewForm, setShowNewForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAddress, setNewAddress] = useState('');
@@ -144,6 +155,7 @@ export default function OwnerPropertiesPreview() {
         platform: newPlatform,
         cleanings: 0,
         photo: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=70',
+        chargePerHour: 25,
       },
     ]);
     setNewName('');
@@ -154,6 +166,25 @@ export default function OwnerPropertiesPreview() {
     setNewPlatform('direct');
     setShowNewForm(false);
     showToast('Propiedad añadida');
+  }
+
+  const rateProperty = properties.find((p) => p.id === rateId);
+
+  function openRateSheet(p: Property) {
+    setRateId(p.id);
+    setRateDraft(String(p.chargePerHour));
+  }
+
+  function saveRate() {
+    if (!rateId) return;
+    const n = Number(rateDraft);
+    if (!Number.isFinite(n) || n < 0) return;
+    const rounded = Math.round(n * 100) / 100;
+    setProperties((prev) =>
+      prev.map((p) => (p.id === rateId ? { ...p, chargePerHour: rounded } : p)),
+    );
+    setRateId(null);
+    showToast(`Tarifa actualizada a £${rounded}/h`);
   }
 
   function deleteProperty(id: string) {
@@ -387,6 +418,21 @@ export default function OwnerPropertiesPreview() {
                     <p className="mt-2 text-[11px] text-slate-400">
                       {p.cleanings} limpiezas este mes
                     </p>
+                    <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700 ring-1 ring-blue-100">
+                      Tarifa £{p.chargePerHour}/h al cliente
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openRateSheet(p);
+                        }}
+                        title={`Editar la tarifa que cobras al cliente por ${p.name}`}
+                        aria-label={`Editar tarifa de ${p.name}`}
+                        className="ml-0.5 rounded p-0.5 text-blue-700 hover:bg-blue-100"
+                      >
+                        <Pencil className="h-2.5 w-2.5" />
+                      </button>
+                    </div>
                   </div>
                   {isOpen ? (
                     <ChevronDown className="mt-1 h-4 w-4 shrink-0 text-blue-500" />
@@ -442,6 +488,75 @@ export default function OwnerPropertiesPreview() {
           </p>
         ) : null}
       </div>
+
+      {/* Edit charge-rate sheet */}
+      {rateProperty ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 p-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Tarifa de {rateProperty.name}
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Lo que cobras al cliente por hora de limpieza.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRateId(null)}
+                aria-label="Cerrar"
+                className="rounded-full p-1 text-slate-500 hover:bg-slate-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                saveRate();
+              }}
+              className="space-y-3 p-4"
+            >
+              <label className="block text-xs font-semibold text-slate-700">
+                Tarifa por hora (£)
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="text-sm text-slate-500">£</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.5}
+                    value={rateDraft}
+                    onChange={(e) => setRateDraft(e.target.value)}
+                    autoFocus
+                    className="h-10 flex-1 rounded-lg border border-slate-200 bg-white px-3 text-sm tabular-nums"
+                  />
+                  <span className="text-xs text-slate-400">/h</span>
+                </div>
+              </label>
+              <p className="text-[10.5px] text-slate-500">
+                Sólo afecta a esta propiedad. El pago del cleaner se gestiona
+                desde Cleaners.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                >
+                  Guardar tarifa
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRateId(null)}
+                  className="flex-1 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
 
       {toast ? (
         <div className="pointer-events-none fixed bottom-20 left-1/2 z-50 -translate-x-1/2">

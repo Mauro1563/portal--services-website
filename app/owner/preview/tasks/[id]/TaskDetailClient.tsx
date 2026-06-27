@@ -42,6 +42,12 @@ type TaskDetail = {
   time: string;
   status: TaskStatus;
   notes: string;
+  /** Estimated/actual job duration in hours — feeds the Margen pill. */
+  hours: number;
+  /** What the owner charges the client per hour (£). */
+  chargePerHour: number;
+  /** What the owner pays the cleaner per hour (£). */
+  payPerHour: number;
 };
 
 const STATUS: Record<TaskStatus, { label: string; cls: string; icon: typeof Clock }> = {
@@ -79,6 +85,7 @@ const DETAILS: Record<string, TaskDetail> = {
     client: 'María García', clientInitials: 'MG', rating: '4.9', cleaningsPerMonth: 3,
     date: 'Hoy', time: '09:00 – 11:00', status: 'in_progress',
     notes: 'Cocina, salón y 2 baños completados. Reposición de toallas hecha. El detergente del baño se está acabando — comprar antes del lunes.',
+    hours: 2, chargePerHour: 26, payPerHour: 14,
   },
   'demo-2': {
     id: 'demo-2', property: 'Camden House',
@@ -90,6 +97,7 @@ const DETAILS: Record<string, TaskDetail> = {
     client: 'Direct booking', clientInitials: 'DB', rating: '5.0', cleaningsPerMonth: 4,
     date: 'Hoy', time: '11:30 – 14:00', status: 'completed',
     notes: 'Limpieza completa con cambio de sábanas en 4 habitaciones. Terraza barrida y muebles repuestos.',
+    hours: 2.5, chargePerHour: 28, payPerHour: 15,
   },
   'demo-3': {
     id: 'demo-3', property: 'Notting Hill Flat',
@@ -101,6 +109,7 @@ const DETAILS: Record<string, TaskDetail> = {
     client: 'Ana Romero', clientInitials: 'AR', rating: '4.7', cleaningsPerMonth: 2,
     date: 'Hoy', time: '14:00 – 15:30', status: 'pending',
     notes: 'Programada para esta tarde. Llaves en cerradura inteligente, código 4712.',
+    hours: 1.5, chargePerHour: 25, payPerHour: 13,
   },
   'demo-4': {
     id: 'demo-4', property: 'Mayfair Studio',
@@ -112,6 +121,7 @@ const DETAILS: Record<string, TaskDetail> = {
     client: 'Direct booking', clientInitials: 'DB', rating: '4.8', cleaningsPerMonth: 5,
     date: 'Hoy', time: '17:00 – 18:00', status: 'pending',
     notes: 'Turn-around rápido entre huéspedes. Reposición standard.',
+    hours: 1, chargePerHour: 24, payPerHour: 14,
   },
 };
 
@@ -127,6 +137,7 @@ function fallback(id: string): TaskDetail {
     client: 'Cliente demo', clientInitials: 'CD', rating: '4.8', cleaningsPerMonth: 2,
     date: 'Próx.', time: '10:00 – 12:00', status: 'pending',
     notes: 'Tarea de demostración.',
+    hours: 2, chargePerHour: 25, payPerHour: 14,
   };
 }
 
@@ -154,6 +165,16 @@ export function TaskDetailClient({ id }: { id: string }) {
   const [statusOpen, setStatusOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
+  const [ratesOpen, setRatesOpen] = useState(false);
+  const [draftCharge, setDraftCharge] = useState(String(initial.chargePerHour));
+  const [draftPay, setDraftPay] = useState(String(initial.payPerHour));
+  const [draftHours, setDraftHours] = useState(String(initial.hours));
+
+  const margin = Math.max(
+    0,
+    Math.round((task.chargePerHour - task.payPerHour) * task.hours * 100) / 100,
+  );
+
   const st = STATUS[task.status];
   const StIcon = st.icon;
 
@@ -177,6 +198,30 @@ export function TaskDetailClient({ id }: { id: string }) {
     }));
     setEditing(false);
     showToast('Cambios guardados');
+  }
+
+  function saveRates() {
+    const charge = Number(draftCharge);
+    const pay = Number(draftPay);
+    const hours = Number(draftHours);
+    if (
+      !Number.isFinite(charge) ||
+      !Number.isFinite(pay) ||
+      !Number.isFinite(hours) ||
+      charge < 0 ||
+      pay < 0 ||
+      hours < 0
+    ) {
+      return;
+    }
+    setTask((t) => ({
+      ...t,
+      chargePerHour: Math.round(charge * 100) / 100,
+      payPerHour: Math.round(pay * 100) / 100,
+      hours: Math.round(hours * 100) / 100,
+    }));
+    setRatesOpen(false);
+    showToast('Tarifas actualizadas');
   }
 
   function deletePhoto(idx: number) {
@@ -269,6 +314,25 @@ export function TaskDetailClient({ id }: { id: string }) {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <span
+              title={`Cobras £${task.chargePerHour}/h, pagas £${task.payPerHour}/h, ${task.hours} h`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200"
+            >
+              Margen £{margin.toFixed(margin % 1 === 0 ? 0 : 2)}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setDraftCharge(String(task.chargePerHour));
+                setDraftPay(String(task.payPerHour));
+                setDraftHours(String(task.hours));
+                setRatesOpen(true);
+              }}
+              title="Editar lo que cobras al cliente y lo que pagas al cleaner para esta tarea"
+              className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              Editar tarifas
+            </button>
             <button
               type="button"
               onClick={() => setEditing((e) => !e)}
@@ -588,6 +652,99 @@ export function TaskDetailClient({ id }: { id: string }) {
               >
                 <Send className="h-4 w-4" />
               </button>
+            </form>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Rates sheet */}
+      {ratesOpen ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 p-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Tarifas de esta tarea
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Ajusta charge, pay y horas para recalcular el margen.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRatesOpen(false)}
+                aria-label="Cerrar"
+                className="rounded-full p-1 text-slate-500 hover:bg-slate-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                saveRates();
+              }}
+              className="space-y-3 p-4"
+            >
+              <div className="grid grid-cols-2 gap-3">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Cobro al cliente (£/h)
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.5}
+                    value={draftCharge}
+                    onChange={(e) => setDraftCharge(e.target.value)}
+                    className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm tabular-nums"
+                  />
+                </label>
+                <label className="block text-xs font-semibold text-slate-700">
+                  Pago al cleaner (£/h)
+                  <input
+                    type="number"
+                    min={0}
+                    step={0.5}
+                    value={draftPay}
+                    onChange={(e) => setDraftPay(e.target.value)}
+                    className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm tabular-nums"
+                  />
+                </label>
+              </div>
+              <label className="block text-xs font-semibold text-slate-700">
+                Horas de la tarea
+                <input
+                  type="number"
+                  min={0}
+                  step={0.25}
+                  value={draftHours}
+                  onChange={(e) => setDraftHours(e.target.value)}
+                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm tabular-nums"
+                />
+              </label>
+              <p className="rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-semibold text-emerald-700">
+                Margen previsto: £
+                {(
+                  Math.max(
+                    0,
+                    (Number(draftCharge) - Number(draftPay)) * Number(draftHours),
+                  ) || 0
+                ).toFixed(2)}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                >
+                  Guardar tarifas
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRatesOpen(false)}
+                  className="flex-1 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+                >
+                  Cancelar
+                </button>
+              </div>
             </form>
           </div>
         </div>

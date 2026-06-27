@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react';
 import { Palette, RotateCcw, Save, Upload } from 'lucide-react';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { resetBranding, saveColors, uploadLogo } from './actions';
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
@@ -128,13 +129,13 @@ export function BrandingForm({
                   onChange={onFileChange}
                 />
               </label>
-              <button
-                type="submit"
-                className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow"
+              <SubmitButton
+                pendingLabel="Subiendo…"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
               >
                 <Save className="h-4 w-4" />
                 Subir logo
-              </button>
+              </SubmitButton>
             </div>
           </form>
         </section>

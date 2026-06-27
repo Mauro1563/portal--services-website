@@ -18,6 +18,7 @@ import {
 import { createClient } from '@/lib/supabase/server';
 import { signout } from '@/app/login/actions';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { getSuperAdminEmails } from '@/lib/super-admin';
 import { Crown } from 'lucide-react';
@@ -211,13 +212,13 @@ export default async function MorePage() {
 
         <div>
           <form action={signout}>
-            <button
-              type="submit"
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-surface-2 bg-surface-0 text-sm font-medium text-rose-600 shadow-card transition hover:bg-rose-50"
+            <SubmitButton
+              pendingLabel="Saliendo…"
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-surface-2 bg-surface-0 text-sm font-medium text-rose-600 shadow-card transition hover:bg-rose-50 disabled:opacity-70"
             >
               <LogOut className="h-4 w-4" />
               {t('more.signOut')}
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </div>

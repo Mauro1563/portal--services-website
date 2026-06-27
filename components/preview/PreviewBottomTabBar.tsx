@@ -37,9 +37,9 @@ const TABS: Tab[] = [
   },
   {
     key: 'chat',
-    href: '/operative/preview/chat',
+    href: '/operative/preview/chat-hub',
     label: 'Chat',
-    title: 'Hablar directamente con el manager (Alan)',
+    title: 'Bandeja de chats con el manager y tus clientes',
     Icon: MessageCircle,
   },
   {

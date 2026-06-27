@@ -3,6 +3,7 @@ import { MessageCircle, Send } from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getClientByToken } from '@/lib/client-auth';
 import { ClientShell } from '@/components/client/ClientShell';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { sendClientMessage, markOwnerMessagesRead } from '../actions';
 import { ChatAutoRefresh } from './ChatAutoRefresh';
 
@@ -99,13 +100,13 @@ export default async function ClientMessages({ params, searchParams }: Props) {
           placeholder={`Escribe a ${businessName}…`}
           className="block min-h-[40px] max-h-32 flex-1 resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-text-1 placeholder:text-text-3 focus:outline-none focus:ring-0"
         />
-        <button
-          type="submit"
-          aria-label="Enviar"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-brand-glow"
+        <SubmitButton
+          ariaLabel="Enviar"
+          pendingLabel=""
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-brand-glow disabled:opacity-70"
         >
           <Send className="h-4 w-4" />
-        </button>
+        </SubmitButton>
       </form>
     </ClientShell>
   );

@@ -35,7 +35,8 @@ const PHOTOS: { src: string; label: string }[] = [
   { src: DEMO_PHOTOS.sink,     label: 'Fregadero' },
 ];
 
-// Preset tip amounts shown as chips. £0 = no tip.
+// Preset tip amounts shown as chips. £0 = no tip. "Otra" lets the
+// client enter a custom amount — useful when the preset chips don't fit.
 const TIP_OPTIONS = [0, 2, 5, 10];
 
 export default function ClientCleaningPreview() {
@@ -45,6 +46,8 @@ export default function ClientCleaningPreview() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [photos, setPhotos] = useState(PHOTOS);
   const [tip, setTip] = useState<number>(0);
+  const [customTipOpen, setCustomTipOpen] = useState(false);
+  const [customTipDraft, setCustomTipDraft] = useState('');
   const [toast, setToast] = useState<string | null>(null);
 
   function showToast(msg: string) {
@@ -247,26 +250,72 @@ export default function ClientCleaningPreview() {
                   Añadir propina (opcional)
                 </p>
                 <div className="mt-2 flex gap-2">
-                  {TIP_OPTIONS.map((t) => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => setTip(t)}
-                      title={
-                        t === 0
-                          ? 'Sin propina'
-                          : `Añadir £${t} de propina a Carmen`
-                      }
-                      className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
-                        tip === t
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
-                    >
-                      {t === 0 ? 'No' : `£${t}`}
-                    </button>
-                  ))}
+                  {TIP_OPTIONS.map((t) => {
+                    const isPreset = TIP_OPTIONS.includes(tip) && !customTipOpen;
+                    const active = isPreset && tip === t;
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => {
+                          setCustomTipOpen(false);
+                          setTip(t);
+                        }}
+                        title={
+                          t === 0
+                            ? 'Sin propina'
+                            : `Añadir £${t} de propina a Carmen`
+                        }
+                        className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
+                          active
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        {t === 0 ? 'No' : `£${t}`}
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCustomTipOpen(true);
+                      setCustomTipDraft(
+                        tip > 0 && !TIP_OPTIONS.includes(tip) ? String(tip) : '',
+                      );
+                    }}
+                    title="Escribir un importe personalizado para la propina"
+                    className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
+                      customTipOpen
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Otra
+                  </button>
                 </div>
+                {customTipOpen ? (
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-sm font-semibold text-slate-500">£</span>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={customTipDraft}
+                      onChange={(e) => {
+                        setCustomTipDraft(e.target.value);
+                        const n = Number(e.target.value);
+                        setTip(Number.isFinite(n) && n >= 0 ? n : 0);
+                      }}
+                      placeholder="Importe"
+                      autoFocus
+                      className="h-9 flex-1 rounded-lg border border-slate-200 bg-white px-3 text-sm tabular-nums"
+                    />
+                  </div>
+                ) : null}
+                <p className="mt-2 text-[10.5px] font-semibold text-emerald-700">
+                  100% para tu limpiador — Portal no retiene comisión.
+                </p>
               </div>
 
               <textarea

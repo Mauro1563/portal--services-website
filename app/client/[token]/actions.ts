@@ -111,6 +111,87 @@ export async function sendClientMessage(formData: FormData) {
 }
 
 /**
+ * Save a client tip for a completed task. The tip is stored in
+ * tasks.tip_pence and goes 100% to the cleaner — the owner does NOT
+ * take a cut (see migration 0035_tips_and_rates.sql).
+ *
+ * The form posts `amount_pence` directly; when the client picks "Otra",
+ * the page converts the £ input to pence before submit. We cap at
+ * £500 / 50,000 pence as a sanity guard — a slip of the keyboard on
+ * "Otra" shouldn't be able to record £5,000 for the cleaner.
+ */
+const MAX_TIP_PENCE = 50_000;
+
+export async function saveTip(formData: FormData) {
+  const token = (formData.get('token') as string)?.trim();
+  const taskId = (formData.get('task_id') as string)?.trim();
+  const amountRaw = (formData.get('amount_pence') as string)?.trim();
+
+  if (!token) redirect('/');
+  if (!taskId) redirect(`/client/${token}?error=missing`);
+  if (!amountRaw) {
+    redirect(`/client/${token}/cleanings/${taskId}?tip_error=missing`);
+  }
+
+  const amountPence = Number(amountRaw);
+  if (
+    !Number.isFinite(amountPence) ||
+    !Number.isInteger(amountPence) ||
+    amountPence <= 0 ||
+    amountPence > MAX_TIP_PENCE
+  ) {
+    redirect(`/client/${token}/cleanings/${taskId}?tip_error=invalid`);
+  }
+
+  const ctx = await getClientByToken(token);
+  if (!ctx) redirect(`/client/${token}?error=expired`);
+
+  const admin = createAdminClient();
+
+  const { data: task } = await admin
+    .from('tasks')
+    .select('id, client_id, status')
+    .eq('id', taskId)
+    .maybeSingle();
+
+  if (!task || task.client_id !== ctx.client.id) {
+    redirect(`/client/${token}?error=not_yours`);
+  }
+
+  // Only allow tipping on completed work. A client shouldn't be able
+  // to pre-tip something the cleaner hasn't done yet.
+  if (task.status !== 'completed') {
+    redirect(`/client/${token}/cleanings/${taskId}?tip_error=not_completed`);
+  }
+
+  await saveTipDirect(taskId, amountPence);
+
+  revalidatePath(`/client/${token}`);
+  revalidatePath(`/client/${token}/cleanings/${taskId}`);
+  redirect(`/client/${token}/cleanings/${taskId}?tipped=1`);
+}
+
+/**
+ * Lower-level helper exported for tests / programmatic callers. The
+ * form action above already gates on ownership + completion; callers
+ * of this helper are responsible for their own auth.
+ */
+export async function saveTipDirect(taskId: string, amountPence: number) {
+  if (
+    !Number.isInteger(amountPence) ||
+    amountPence < 0 ||
+    amountPence > MAX_TIP_PENCE
+  ) {
+    throw new Error('saveTipDirect: amountPence out of range');
+  }
+  const admin = createAdminClient();
+  await admin
+    .from('tasks')
+    .update({ tip_pence: amountPence })
+    .eq('id', taskId);
+}
+
+/**
  * Mark every owner-sent message in this conversation as read.
  * Called from the chat page on every render — keeps unread badges honest.
  */

@@ -52,6 +52,12 @@ type DemoTask = {
   completedAt?: string;
   /** Photos uploaded for this job (only used on the in-progress demo). */
   photos: string[];
+  /** Hours the cleaner reported (NULL until they mark it). */
+  actualHours: number | null;
+  /** Cleaner pay rate for this task, in pence/hour. */
+  cleanerPayRatePence: number;
+  /** Tip from the client, in pence. */
+  tipPence: number;
 };
 
 const INITIAL_TASKS: DemoTask[] = [
@@ -69,6 +75,9 @@ const INITIAL_TASKS: DemoTask[] = [
     phone: '+447700900111',
     completedAt: '11:32',
     photos: [],
+    actualHours: 1.5,
+    cleanerPayRatePence: 1400,
+    tipPence: 500,
   },
   {
     id: 'demo-2',
@@ -83,6 +92,9 @@ const INITIAL_TASKS: DemoTask[] = [
     mapsUrl: 'https://maps.google.com/?q=78+Mare+St+Hackney+London+E8+4RT',
     phone: '+447700900222',
     photos: [],
+    actualHours: null,
+    cleanerPayRatePence: 1400,
+    tipPence: 0,
   },
   {
     id: 'demo-3',
@@ -97,6 +109,9 @@ const INITIAL_TASKS: DemoTask[] = [
     mapsUrl: 'https://maps.google.com/?q=31+Curtain+Rd+Shoreditch+London+EC2A+3LT',
     phone: '+447700900333',
     photos: [],
+    actualHours: null,
+    cleanerPayRatePence: 1400,
+    tipPence: 0,
   },
 ];
 
@@ -170,6 +185,28 @@ function OperativePreviewHomeBody({
 
   const doneCount = tasks.filter((t) => t.status === 'completed').length;
 
+  // Today's earnings = sum of completed tasks' labour + tips (in pence).
+  // Mirrors lib/cleaner-earnings.ts so the strip stays consistent.
+  const todayPence = tasks
+    .filter((t) => t.status === 'completed')
+    .reduce((acc, t) => {
+      const hours = t.actualHours ?? 0;
+      const labour = Math.round(hours * t.cleanerPayRatePence);
+      return acc + Math.max(0, labour + (t.tipPence ?? 0));
+    }, 0);
+  // Week mock: today + four prior days at roughly the same cadence.
+  const weekPence = todayPence + 4 * Math.max(todayPence, 4000);
+
+  function handleSetHours(taskId: string, hours: number) {
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === taskId
+          ? { ...t, actualHours: Number.isFinite(hours) && hours >= 0 ? hours : t.actualHours }
+          : t,
+      ),
+    );
+  }
+
   function handleCheckIn(taskId: string) {
     setTasks((prev) =>
       prev.map((t) =>
@@ -234,7 +271,7 @@ function OperativePreviewHomeBody({
           totalCount={tasks.length}
         />
 
-        <EarningsStrip todayPence={4000} weekPence={28000} />
+        <EarningsStrip todayPence={todayPence} weekPence={weekPence} />
 
         {/* Hero card — siguiente parada */}
         {heroTask ? (
@@ -377,6 +414,31 @@ function OperativePreviewHomeBody({
                           <CheckCircle2 className="h-2.5 w-2.5" />
                           Completada a las {task.completedAt}
                         </p>
+                      ) : null}
+                      {task.status === 'completed' && task.tipPence > 0 ? (
+                        <span
+                          title="Propina del cliente — 100% para ti, ya sumada a tus ganancias del día"
+                          className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800"
+                        >
+                          Propina £{(task.tipPence / 100).toFixed(0)}
+                        </span>
+                      ) : null}
+                      {task.status === 'in_progress' ? (
+                        <label className="mt-2 flex items-center gap-2 rounded-lg bg-amber-50 px-2 py-1.5 text-[10px] font-semibold text-amber-800 ring-1 ring-amber-100">
+                          <Clock className="h-3 w-3" />
+                          Marcar horas
+                          <input
+                            type="number"
+                            min={0}
+                            step={0.25}
+                            value={task.actualHours ?? ''}
+                            onChange={(e) => handleSetHours(task.id, Number(e.target.value))}
+                            placeholder="0.0"
+                            title="Reporta cuántas horas tardaste — actualiza tus ganancias al instante"
+                            className="ml-auto h-6 w-14 rounded border border-amber-200 bg-white px-1.5 text-[11px] tabular-nums text-text-1"
+                          />
+                          <span className="text-[10px] text-amber-700">h</span>
+                        </label>
                       ) : null}
 
                       <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">

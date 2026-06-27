@@ -78,6 +78,16 @@ export async function updateTask(formData: FormData) {
       ? new Date().toISOString()
       : null;
 
+  // Per-task rate overrides. Always write (including NULL) so the owner
+  // can *clear* a previously-set override and fall back to the cascade
+  // (task → property → owner defaults).
+  const chargeRatePence = parseOptionalRatePence(
+    formData.get('charge_rate') as string | null,
+  );
+  const cleanerPayRatePence = parseOptionalRatePence(
+    formData.get('cleaner_pay_rate') as string | null,
+  );
+
   const update: Record<string, unknown> = {
     property_id: propertyId,
     cleaner_id: cleanerId || null,
@@ -89,6 +99,8 @@ export async function updateTask(formData: FormData) {
     payment_method: paymentMethod,
     paid_amount_pence: paidAmountPence,
     paid_at: paidAt,
+    charge_rate_pence: chargeRatePence,
+    cleaner_pay_rate_pence: cleanerPayRatePence,
     notes: (formData.get('notes') as string)?.trim() || null,
   };
   if (serviceName !== undefined) update.service_name = serviceName;
@@ -192,6 +204,20 @@ export async function quickAssignCleaner(formData: FormData) {
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/tasks/${taskId}`);
   redirect(`/owner/tasks/${taskId}?flash=${encodeURIComponent('Limpiador asignado')}`);
+}
+
+/**
+ * Same parser used by the create-task action: empty input → NULL so the
+ * fallback cascade (property → owner default) kicks in. See
+ * supabase/migrations/0035_tips_and_rates.sql for the resolution model.
+ */
+function parseOptionalRatePence(raw: string | null): number | null {
+  if (raw == null) return null;
+  const v = raw.trim();
+  if (v === '') return null;
+  const n = Number(v);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return Math.round(n * 100);
 }
 
 export async function deleteTaskDetail(formData: FormData) {

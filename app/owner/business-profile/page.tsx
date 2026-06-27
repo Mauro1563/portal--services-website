@@ -9,6 +9,7 @@ import {
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import {
   setBusinessTypeFromSettings,
@@ -142,20 +143,20 @@ export default async function BusinessProfilePage({ searchParams }: Props) {
           {(['airbnb', 'house_cleaning', 'hybrid'] as const).map((k) => {
             const active = profile.business_type === k;
             return (
-              <button
+              <SubmitButton
                 key={k}
-                type="submit"
                 name="business_type"
                 value={k}
+                pendingLabel="…"
                 className={
-                  'flex h-10 items-center justify-center rounded-xl text-xs font-medium ring-1 ring-inset transition ' +
+                  'flex h-10 items-center justify-center gap-1.5 rounded-xl text-xs font-medium ring-1 ring-inset transition disabled:opacity-70 ' +
                   (active
                     ? 'bg-brand-600/10 text-brand-700 ring-brand-600/30'
                     : 'bg-surface-1 text-text-2 ring-surface-2 hover:bg-surface-2')
                 }
               >
                 {typeLabel(k)}
-              </button>
+              </SubmitButton>
             );
           })}
         </form>
@@ -245,12 +246,12 @@ export default async function BusinessProfilePage({ searchParams }: Props) {
           placeholder={t('businessProfile.fWebsitePh')}
         />
 
-        <button
-          type="submit"
-          className="flex h-11 w-full items-center justify-center rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow"
+        <SubmitButton
+          pendingLabel="Guardando…"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow disabled:opacity-80"
         >
           {t('businessProfile.save')}
-        </button>
+        </SubmitButton>
       </form>
 
       {/* Portfolio photos picker */}
@@ -277,10 +278,10 @@ export default async function BusinessProfilePage({ searchParams }: Props) {
                   name="next"
                   value={p.is_public_portfolio ? '0' : '1'}
                 />
-                <button
-                  type="submit"
+                <SubmitButton
+                  pendingLabel=""
                   className={
-                    'group block aspect-square w-full overflow-hidden rounded-xl border-2 ' +
+                    'group flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border-2 disabled:opacity-70 ' +
                     (p.is_public_portfolio
                       ? 'border-emerald-500 ring-2 ring-emerald-200'
                       : 'border-surface-2 hover:border-brand-400')
@@ -300,7 +301,7 @@ export default async function BusinessProfilePage({ searchParams }: Props) {
                       {t('businessProfile.photoLive')}
                     </span>
                   ) : null}
-                </button>
+                </SubmitButton>
               </form>
             ))}
           </div>
@@ -359,10 +360,10 @@ export default async function BusinessProfilePage({ searchParams }: Props) {
                       name="next"
                       value={r.is_public ? '0' : '1'}
                     />
-                    <button
-                      type="submit"
+                    <SubmitButton
+                      pendingLabel="…"
                       className={
-                        'inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-[10px] font-medium ring-1 ring-inset ' +
+                        'inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-[10px] font-medium ring-1 ring-inset disabled:opacity-60 ' +
                         (r.is_public
                           ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
                           : 'bg-surface-0 text-text-2 ring-surface-2 hover:bg-surface-1')
@@ -377,7 +378,7 @@ export default async function BusinessProfilePage({ searchParams }: Props) {
                           <EyeOff className="h-3 w-3" /> {t('businessProfile.reviewHidden')}
                         </>
                       )}
-                    </button>
+                    </SubmitButton>
                   </form>
                 </div>
               </li>

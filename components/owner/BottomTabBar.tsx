@@ -3,11 +3,18 @@ import {
   Building2,
   LayoutGrid,
   ListChecks,
+  MessageCircle,
   MoreHorizontal,
   Users,
 } from 'lucide-react';
 
-export type Tab = 'home' | 'properties' | 'tasks' | 'cleaners' | 'more';
+export type Tab =
+  | 'home'
+  | 'properties'
+  | 'tasks'
+  | 'cleaners'
+  | 'chat'
+  | 'more';
 
 const ITEMS: Array<{
   key: Tab;
@@ -18,6 +25,7 @@ const ITEMS: Array<{
   { key: 'home', href: '/owner', label: 'Dashboard', Icon: LayoutGrid },
   { key: 'tasks', href: '/owner/tasks', label: 'Limpiezas', Icon: ListChecks },
   { key: 'cleaners', href: '/owner/cleaners', label: 'Cleaners', Icon: Users },
+  { key: 'chat', href: '/owner/chat', label: 'Chat', Icon: MessageCircle },
   { key: 'properties', href: '/owner/properties', label: 'Sitios', Icon: Building2 },
   { key: 'more', href: '/owner/more', label: 'Más', Icon: MoreHorizontal },
 ];

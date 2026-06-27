@@ -3,11 +3,18 @@ import {
   Building2,
   LayoutGrid,
   ListChecks,
+  MessageCircle,
   MoreHorizontal,
   Users,
 } from 'lucide-react';
 
-export type DemoTab = 'home' | 'tasks' | 'cleaners' | 'properties' | 'more';
+export type DemoTab =
+  | 'home'
+  | 'tasks'
+  | 'cleaners'
+  | 'properties'
+  | 'chat'
+  | 'more';
 
 const ITEMS: Array<{
   key: DemoTab;
@@ -19,6 +26,7 @@ const ITEMS: Array<{
   { key: 'tasks', href: '/owner/preview/tasks', label: 'Limpiezas', Icon: ListChecks },
   { key: 'cleaners', href: '/owner/preview/cleaners', label: 'Cleaners', Icon: Users },
   { key: 'properties', href: '/owner/preview/properties', label: 'Sitios', Icon: Building2 },
+  { key: 'chat', href: '/owner/preview/chat-hub', label: 'Chat', Icon: MessageCircle },
   { key: 'more', href: '/owner/preview/clients', label: 'Clientes', Icon: MoreHorizontal },
 ];
 

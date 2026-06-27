@@ -24,7 +24,11 @@ import { ActualHoursForm } from './ActualHoursForm';
 
 type Props = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ note_saved?: string; error?: string }>;
+  searchParams: Promise<{
+    note_saved?: string;
+    hours_saved?: string;
+    error?: string;
+  }>;
 };
 
 type DetailTask = {
@@ -39,6 +43,9 @@ type DetailTask = {
   service_name: string | null;
   price_pence: number | null;
   estimated_duration_min: number | null;
+  actual_hours: number | string | null;
+  cleaner_pay_rate_pence: number | null;
+  tip_pence: number | null;
   property: {
     name: string | null;
     address: string | null;
@@ -94,25 +101,49 @@ export default async function OperativeTaskDetail({ params }: Props) {
 
   const admin = createAdminClient();
 
-  const [{ data: taskData }, { data: photosData }] = await Promise.all([
-    admin
-      .from('tasks')
-      .select(
-        'id, scheduled_for, start_time, status, notes, cleaner_note, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
-      )
-      .eq('id', id)
-      .eq('cleaner_id', cleanerId)
-      .maybeSingle(),
-    admin
-      .from('task_photos')
-      .select('id, url, created_at')
-      .eq('task_id', id)
-      .order('created_at', { ascending: true }),
-  ]);
+  const [{ data: taskData }, { data: photosData }, { data: cleanerRow }] =
+    await Promise.all([
+      admin
+        .from('tasks')
+        .select(
+          'id, scheduled_for, start_time, status, notes, cleaner_note, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, actual_hours, cleaner_pay_rate_pence, tip_pence, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
+        )
+        .eq('id', id)
+        .eq('cleaner_id', cleanerId)
+        .maybeSingle(),
+      admin
+        .from('task_photos')
+        .select('id, url, created_at')
+        .eq('task_id', id)
+        .order('created_at', { ascending: true }),
+      // Default rate fallback for the live preview in the hours form
+      // — per-task override wins, this is only used when the task
+      // doesn't specify its own.
+      admin
+        .from('cleaners')
+        .select('default_hourly_pay_pence')
+        .eq('id', cleanerId)
+        .maybeSingle(),
+    ]);
 
   const task = taskData as unknown as DetailTask | null;
   if (!task) notFound();
   const photos = (photosData ?? []) as Photo[];
+  const defaultPayRate =
+    (cleanerRow as { default_hourly_pay_pence?: number } | null)
+      ?.default_hourly_pay_pence ?? 0;
+  const effectivePayRate =
+    task.cleaner_pay_rate_pence ?? defaultPayRate;
+  // actual_hours comes back from Postgres NUMERIC as either string or
+  // number depending on the supabase-js codec — normalise to a display
+  // string for the form's initial value.
+  const initialHoursStr =
+    task.actual_hours == null
+      ? ''
+      : typeof task.actual_hours === 'string'
+        ? task.actual_hours
+        : String(task.actual_hours);
+  const tipPence = task.tip_pence ?? 0;
 
   const status = STATUS_META[task.status] ?? STATUS_META.scheduled;
   const scheduledDate = new Date(task.scheduled_for + 'T00:00:00Z');
@@ -286,6 +317,18 @@ export default async function OperativeTaskDetail({ params }: Props) {
         {/* Cleaner → owner note (always editable while task is assigned) */}
         <CleanerNoteForm taskId={task.id} initial={task.cleaner_note ?? ''} />
 
+        {/* Cleaner-reported hours — drives payroll. Kept editable on any
+            non-cancelled task so a cleaner can correct yesterday's
+            figure without bothering the manager. */}
+        {task.status !== 'cancelled' ? (
+          <ActualHoursForm
+            taskId={task.id}
+            initial={initialHoursStr}
+            payRatePence={effectivePayRate}
+            tipPence={tipPence}
+          />
+        ) : null}
+
         {/* Action area: changes by status */}
         {task.status === 'completed' ? (
           <section className="relative animate-fade-up overflow-hidden rounded-3xl border border-clean-mint/40 bg-gradient-to-br from-clean-mint-soft via-white to-clean-aqua-soft/40 p-6 text-center shadow-mint-glow">
@@ -327,6 +370,16 @@ export default async function OperativeTaskDetail({ params }: Props) {
                   <>Finalizada {formatTime(task.completed_at)}</>
                 ) : null}
               </p>
+              {/* Tip celebration — only shown on completed tasks where
+                  the client actually tipped. We pull from tasks.tip_pence
+                  directly (not derived) so the figure here matches the
+                  payroll figure the owner sees. */}
+              {tipPence > 0 ? (
+                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold text-amber-800 shadow-sm">
+                  <Gift className="h-3 w-3" />
+                  Propina recibida: £{(tipPence / 100).toFixed(2)}
+                </p>
+              ) : null}
             </div>
           </section>
         ) : task.status === 'in_progress' ? (

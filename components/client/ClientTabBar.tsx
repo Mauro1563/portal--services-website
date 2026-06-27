@@ -23,6 +23,15 @@ export function ClientTabBar({
   active: Tab;
   unread?: number;
 }) {
+  // In the public preview the messages tab points at the new chat hub
+  // (an inbox of multiple conversations) instead of the legacy single
+  // /messages thread, so prospects see the richer experience. The real
+  // /client/<token>/messages route is untouched.
+  const isPreview = token === 'preview';
+  const chatHref = isPreview
+    ? `/client/${token}/chat-hub`
+    : `/client/${token}/messages`;
+
   const items: {
     key: Tab;
     href: string;
@@ -39,7 +48,7 @@ export function ClientTabBar({
     },
     {
       key: 'messages',
-      href: `/client/${token}/messages`,
+      href: chatHref,
       label: 'Chat',
       Icon: MessageCircle,
       badge: unread,
