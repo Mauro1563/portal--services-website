@@ -1,9 +1,19 @@
-import { redirect } from 'next/navigation';
+import HeroSection from '@/components/marketing/HeroSection';
+import PortalsSection from '@/components/marketing/PortalsSection';
+import PricingSection from '@/components/marketing/PricingSection';
+import TestimonialsSection from '@/components/marketing/TestimonialsSection';
+import FaqSection from '@/components/marketing/FaqSection';
+import FooterSection from '@/components/marketing/FooterSection';
 
-// Marketing landing disabled — the localized root (/en, /es, /pt) is no
-// longer a public-facing site, just a redirect to the unified login.
-// Legal pages still live under /[locale]/privacy, /[locale]/terms,
-// /[locale]/docs and remain accessible.
 export default function LocaleHome() {
-  redirect('/login');
+  return (
+    <main className="min-h-screen bg-white text-slate-900">
+      <HeroSection />
+      <PortalsSection />
+      <PricingSection />
+      <TestimonialsSection />
+      <FaqSection />
+      <FooterSection />
+    </main>
+  );
 }
