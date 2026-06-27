@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles, Building2, Users, UserRound } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  const locale = await getLocale();
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 text-white">
       {/* Decorative radial glows */}
@@ -20,18 +22,34 @@ export default function HeroSection() {
       />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top nav */}
+        {/* Top nav — bespoke brand mark designed for dark backgrounds
+            (the shared <Logo/> uses a dark PNG that disappears here). */}
         <nav className="flex items-center justify-between py-5 sm:py-6">
-          <Link href="/" className="inline-flex items-center" aria-label="Portal Home">
-            <Logo size="sm" />
-          </Link>
           <Link
-            href="/login"
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white/85 transition hover:bg-white/10 hover:text-white"
+            href="/"
+            className="inline-flex items-center gap-2.5"
+            aria-label="Portal Home"
           >
-            Iniciar sesi&oacute;n
-            <ArrowRight className="h-3.5 w-3.5" />
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold text-white shadow-[0_8px_18px_-8px_rgba(34,211,238,0.7)]">
+              P
+            </span>
+            <span className="font-display text-base font-semibold leading-tight text-white">
+              Portal Home
+              <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-cyan-300/90">
+                Cleaning &amp; Facilities
+              </span>
+            </span>
           </Link>
+          <div className="flex items-center gap-2">
+            <LocaleSwitcher current={locale} variant="dark" />
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white/85 transition hover:bg-white/10 hover:text-white"
+            >
+              Iniciar sesi&oacute;n
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </nav>
 
         {/* Hero content */}
