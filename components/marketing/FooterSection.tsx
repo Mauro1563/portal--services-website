@@ -82,7 +82,7 @@ const COPY: Record<
     ctaPrimary: 'Prueba 14 días gratis',
     ctaSecondary: 'Hablar con ventas',
     copyright: (year) =>
-      `© ${year} Portal Home. Todos los derechos reservados. Hecho con cariño en Barcelona.`,
+      `© ${year} Portal Home. Todos los derechos reservados.`,
     legalShort: { privacy: 'Privacidad', terms: 'Términos', status: 'Estado' },
   },
   en: {
@@ -131,7 +131,7 @@ const COPY: Record<
     ctaPrimary: 'Start 14-day free trial',
     ctaSecondary: 'Talk to sales',
     copyright: (year) =>
-      `© ${year} Portal Home. All rights reserved. Made with care in Barcelona.`,
+      `© ${year} Portal Home. All rights reserved.`,
     legalShort: { privacy: 'Privacy', terms: 'Terms', status: 'Status' },
   },
   pt: {
@@ -180,7 +180,7 @@ const COPY: Record<
     ctaPrimary: 'Experimentar 14 dias grátis',
     ctaSecondary: 'Falar com vendas',
     copyright: (year) =>
-      `© ${year} Portal Home. Todos os direitos reservados. Feito com carinho em Barcelona.`,
+      `© ${year} Portal Home. Todos os direitos reservados.`,
     legalShort: { privacy: 'Privacidade', terms: 'Termos', status: 'Estado' },
   },
 };
