@@ -12,39 +12,56 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-export default async function HQDashboardPage() {
-  const admin = await requireMarketingAdmin();
-  if (!admin) redirect('/hq/login');
+function emptyDashboard(email: string, errorMessage: string) {
+  return (
+    <HQDashboard
+      email={email}
+      kpis={{
+        pendingLeads: 0,
+        ownersTotal: 0,
+        conversionPct: 0,
+        signups7d: 0,
+        cleanersTotal: 0,
+        tasksToday: 0,
+        tasksDoneToday: 0,
+      }}
+      funnel={{ new: 0, contacted: 0, qualified: 0, archived: 0 }}
+      pendingLeadsList={[]}
+      recentCleaners={[]}
+      recentCheckins={[]}
+      recentPhotos={[]}
+      propertiesCount={0}
+      errorMessage={errorMessage}
+    />
+  );
+}
 
-  // Never let one broken read take down the whole dashboard. Compute data
-  // inside a try/catch so the page always renders — on failure we fall back
-  // to an empty dashboard with a visible diagnostic banner (admin-only).
+export default async function HQDashboardPage() {
+  // Wrap EVERYTHING — earlier this only wrapped renderDashboard, but
+  // requireMarketingAdmin can also throw (createClient() asserts ASCII
+  // env vars). When that fires the page used to fall through to
+  // /hq/error.tsx with the masked digest. Now any throw degrades to
+  // the inline empty dashboard with the real message — and we never
+  // need to chase Vercel logs again.
+  let adminEmail = '—';
   try {
+    const admin = await requireMarketingAdmin();
+    if (!admin) redirect('/hq/login');
+    adminEmail = admin.email;
     return await renderDashboard(admin.email);
   } catch (err) {
+    // next/navigation redirect() throws a NEXT_REDIRECT — never swallow it.
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'digest' in err &&
+      String((err as { digest?: string }).digest).startsWith('NEXT_REDIRECT')
+    ) {
+      throw err;
+    }
     const msg = err instanceof Error ? err.message : String(err);
-    console.error('[hq dashboard] render failed', err);
-    return (
-      <HQDashboard
-        email={admin.email}
-        kpis={{
-          pendingLeads: 0,
-          ownersTotal: 0,
-          conversionPct: 0,
-          signups7d: 0,
-          cleanersTotal: 0,
-          tasksToday: 0,
-          tasksDoneToday: 0,
-        }}
-        funnel={{ new: 0, contacted: 0, qualified: 0, archived: 0 }}
-        pendingLeadsList={[]}
-        recentCleaners={[]}
-        recentCheckins={[]}
-        recentPhotos={[]}
-        propertiesCount={0}
-        errorMessage={msg}
-      />
-    );
+    console.error('[hq dashboard] page failed', err);
+    return emptyDashboard(adminEmail, msg);
   }
 }
 
