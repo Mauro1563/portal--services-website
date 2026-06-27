@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Clock, MapPin, Navigation2 } from 'lucide-react';
 import { singleStopUrl, type Stop } from '@/lib/maps';

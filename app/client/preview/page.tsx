@@ -1,127 +1,129 @@
 /**
- * Public, no-auth PREVIEW of the client portal — same components rendering
- * with fully mocked context so you can see what the client experiences
- * without needing a real magic-link token. Linked from /hq/vistas.
+ * Public, no-auth PREVIEW of the client portal home — same components
+ * as the real /client/<token> page, fed with mock data so anyone
+ * (sales, the team, the user) can click through the experience
+ * without a magic-link token.
  */
-import {
-  CalendarDays,
-  Gift,
-  Home,
-  ListChecks,
-  MessageCircle,
-  Sparkles,
-  Star,
-  Sun,
-} from 'lucide-react';
+import Link from 'next/link';
+import { CalendarCheck, CheckCircle2, Sparkles, Star } from 'lucide-react';
 import { ClientShell } from '@/components/client/ClientShell';
-import {
-  CorporateBanner,
-  PortalHero,
-  StatRow,
-  ToolCard,
-  ToolGrid,
-} from '@/components/portal/PortalDashboardShell';
+import { EcoGreeting } from '@/components/client/EcoGreeting';
+import { FeaturedCleaners } from '@/components/client/FeaturedCleaners';
+import { PromoBanner } from '@/components/client/PromoBanner';
+import { ServiceCatalog } from '@/components/client/ServiceCatalog';
+import { MOCK_CLEANERS, MOCK_CTX, MOCK_SERVICES, PREVIEW_TOKEN } from './_mock';
 
 export const metadata = {
   title: 'Vista previa · Portal del cliente',
   robots: { index: false, follow: false },
 };
 
-const MOCK_CTX = {
-  client: {
-    id: 'preview',
-    owner_id: 'preview',
-    name: 'María García',
-    email: 'maria@example.com',
-    phone: null,
-    address: null,
-    notes: null,
-    access_token: 'preview',
-    referral_code: 'PREVIEW',
-    created_at: new Date().toISOString(),
-  },
-  owner: {
-    business_name: 'Limpiezas Premium',
-    business_logo_url: null,
-    business_type: 'hybrid' as const,
-    brand_color: null,
-    email: null,
-  },
-};
+function StatChip({
+  icon: Icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: typeof CalendarCheck;
+  label: string;
+  value: string;
+  tone: 'blue' | 'emerald' | 'amber';
+}) {
+  const tones: Record<typeof tone, string> = {
+    blue: 'bg-blue-50 text-blue-700 ring-blue-100',
+    emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
+    amber: 'bg-amber-50 text-amber-700 ring-amber-100',
+  };
+  return (
+    <div
+      className={`flex flex-1 items-center gap-2 rounded-2xl px-3 py-2.5 ring-1 ring-inset ${tones[tone]}`}
+    >
+      <Icon className="h-4 w-4 shrink-0" />
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+          {label}
+        </p>
+        <p className="text-sm font-bold">{value}</p>
+      </div>
+    </div>
+  );
+}
 
 export default function ClientPreview() {
   return (
-    <ClientShell ctx={MOCK_CTX} activeTab="home">
-      <PortalHero
-        portalLabel="Client portal"
-        portalIcon={Home}
-        topRightChip={{ label: 'Day', icon: Sun }}
-        greeting="Buenas tardes"
-        displayName="María"
-        chips={[
-          { kind: 'text', label: 'Limpiezas Premium', icon: Sparkles },
-        ]}
+    <ClientShell ctx={MOCK_CTX} token={PREVIEW_TOKEN} activeTab="home">
+      <EcoGreeting
+        firstName="Sofía"
+        businessName={MOCK_CTX.owner.business_name ?? ''}
+        searchAction={`/client/${PREVIEW_TOKEN}/messages`}
       />
 
-      <StatRow
-        items={[
-          { label: 'Next visit', value: 'Mañana', sub: 'agendada' },
-          { label: 'Visits', value: 24, sub: 'completadas' },
-          { label: 'Rating', value: '4.9', sub: '18 valoraciones' },
-        ]}
-      />
+      <PromoBanner token={PREVIEW_TOKEN} />
 
-      <ToolGrid>
-        <ToolCard
-          href="#"
-          icon={ListChecks}
-          title="Mis limpiezas"
-          subtitle="3 próximas"
-          accent="brand"
-        />
-        <ToolCard
-          href="#"
-          icon={MessageCircle}
-          title="Mensajes"
-          subtitle="2 sin leer"
-          accent="emerald"
-        />
-        <ToolCard
-          href="#"
-          icon={Star}
-          title="Valoraciones"
-          subtitle="Media 4.9 ★"
-          accent="amber"
-        />
-        <ToolCard
-          href="#"
-          icon={Gift}
-          title="Refer & Earn"
-          subtitle="Invita y gana"
-          accent="rose"
-        />
-        <ToolCard
-          href="#"
-          icon={CalendarDays}
-          title="Agenda"
-          subtitle="Próximas visitas"
-          accent="navy"
-        />
-        <ToolCard
-          href="#"
-          icon={Sparkles}
-          title="Historial"
-          subtitle="24 limpiezas"
-          accent="brand"
-        />
-      </ToolGrid>
+      <Link
+        href={`/client/${PREVIEW_TOKEN}/book`}
+        className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-4 text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] transition hover:from-blue-700 hover:to-blue-900"
+      >
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-100">
+            Listo en 30 seg
+          </p>
+          <p className="mt-0.5 font-display text-base font-bold">
+            Reservar limpieza
+          </p>
+        </div>
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+          <Sparkles className="h-5 w-5" />
+        </span>
+      </Link>
 
-      <CorporateBanner
-        href="#"
-        eyebrow="Tu cleaning hub"
-        title="Mensajes · Valoraciones · Referidos"
-        subtitle="Todo lo que necesitas con tu equipo"
-      />
+      <div className="mt-4 flex gap-2">
+        <StatChip
+          icon={CalendarCheck}
+          tone="blue"
+          label="Próximas"
+          value="2"
+        />
+        <StatChip
+          icon={CheckCircle2}
+          tone="emerald"
+          label="Hechas"
+          value="12"
+        />
+        <StatChip icon={Star} tone="amber" label="Rating" value="4.8" />
+      </div>
+
+      <ServiceCatalog token={PREVIEW_TOKEN} services={MOCK_SERVICES} />
+
+      <FeaturedCleaners token={PREVIEW_TOKEN} cleaners={MOCK_CLEANERS} />
+
+      <section className="mt-6">
+        <h2 className="text-[13px] font-bold text-slate-900">Próxima visita</h2>
+        <div className="mt-3 rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
+          <div className="flex items-start gap-3">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
+              <CalendarCheck className="h-5 w-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
+                Mañana · 10:00
+              </p>
+              <p className="mt-0.5 font-display text-sm font-bold text-slate-900">
+                Limpieza estándar
+              </p>
+              <p className="mt-0.5 text-[12px] text-slate-500">
+                Con Ana Ruiz · ~2 h
+              </p>
+            </div>
+            <Link
+              href={`/client/${PREVIEW_TOKEN}/cleaning`}
+              className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white transition hover:bg-slate-700"
+            >
+              Ver
+            </Link>
+          </div>
+        </div>
+      </section>
     </ClientShell>
   );
 }
