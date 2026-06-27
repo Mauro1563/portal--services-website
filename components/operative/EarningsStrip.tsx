@@ -1,4 +1,5 @@
-import { Coins, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
+import { ChevronRight, Coins, TrendingUp } from 'lucide-react';
 
 function formatMoney(pence: number): string {
   return `£${(pence / 100).toFixed(0)}`;
@@ -9,8 +10,13 @@ function formatMoney(pence: number): string {
  * one question a cleaner asks mid-shift: "how much have I made today?"
  * Shows today + week so they get instant context without going to /week.
  *
- * Mirrors the "Efficient Work" mockup's "$120 today" element but with
- * the secondary week figure baked in.
+ * The numbers are computed by the caller from
+ *   actual_hours * cleaner_pay_rate_pence + tip_pence
+ * (see lib/cleaner-earnings.ts). This component just renders.
+ *
+ * Tapping the strip opens /operative/earnings — the per-task breakdown
+ * with tips listed individually, which is the "show me where this
+ * number came from" follow-up question.
  */
 export function EarningsStrip({
   todayPence,
@@ -20,7 +26,12 @@ export function EarningsStrip({
   weekPence: number;
 }) {
   return (
-    <section className="mt-4 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 p-4 shadow-card">
+    <Link
+      href="/operative/earnings"
+      prefetch={true}
+      aria-label="Ver desglose de ganancias"
+      className="mt-4 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 p-4 shadow-card transition hover:border-emerald-300 hover:shadow-md"
+    >
       <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-emerald-600 text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.6)]">
         <Coins className="h-5 w-5" />
       </span>
@@ -40,6 +51,7 @@ export function EarningsStrip({
           {formatMoney(weekPence)}
         </p>
       </div>
-    </section>
+      <ChevronRight className="h-4 w-4 shrink-0 text-emerald-700" />
+    </Link>
   );
 }

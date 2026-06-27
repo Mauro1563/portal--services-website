@@ -128,7 +128,12 @@ export default async function SettingsPage({
             </div>
           </div>
 
-          <SubmitButton>{t('common.saveChanges')}</SubmitButton>
+          <SubmitButton
+            pendingLabel="Guardando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
+          >
+            {t('common.saveChanges')}
+          </SubmitButton>
         </form>
 
         {profile.business_logo_url ? (
@@ -177,7 +182,12 @@ export default async function SettingsPage({
               la propiedad y la tarea no la definen.
             </span>
           </label>
-          <SubmitButton>{t('common.saveChanges')}</SubmitButton>
+          <SubmitButton
+            pendingLabel="Guardando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
+          >
+            {t('common.saveChanges')}
+          </SubmitButton>
         </form>
       </Section>
 
@@ -242,7 +252,12 @@ export default async function SettingsPage({
             defaultValue={user.email ?? ''}
             required
           />
-          <SubmitButton>{t('settings.updateEmail')}</SubmitButton>
+          <SubmitButton
+            pendingLabel="Actualizando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
+          >
+            {t('settings.updateEmail')}
+          </SubmitButton>
         </form>
       </Section>
 

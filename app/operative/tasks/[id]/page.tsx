@@ -6,6 +6,7 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
+  Gift,
   KeyRound,
   MapPin,
   Phone,
@@ -19,6 +20,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { CheckInButton } from '../../CheckInButton';
 import { PhotoUploadButton } from '../../PhotoUploadButton';
 import { CleanerNoteForm } from './CleanerNoteForm';
+import { ActualHoursForm } from './ActualHoursForm';
 
 type Props = {
   params: Promise<{ id: string }>;
