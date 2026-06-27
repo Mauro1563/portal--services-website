@@ -32,25 +32,25 @@ type Prompt = {
 
 const PROMPTS: Prompt[] = [
   {
-    id: 'move',
-    text: 'Mover mi cita de mañana',
+    id: 'book-fast',
+    text: 'Reservar limpieza para mañana 10am',
     reply:
-      'Sin problema. Tu visita de mañana a las 10:00 con Ana se puede mover a las 16:00 del mismo día o al jueves a las 11:00. ¿Cuál prefieres?',
-    action: { label: 'Elegir jueves 11:00', href: '/client/preview/cleanings' },
+      'Reservado: mañana 10:00 en tu piso de Soho con Ana Ruiz (limpieza estándar, 2h, £45). Ana confirmará en menos de 5 min. ¿Quieres agregar limpieza de cristales por £15 más?',
+    action: { label: 'Confirmar sin cristales', href: '/client/preview/cleanings' },
   },
   {
-    id: 'deep',
-    text: 'Pedir una limpieza profunda',
+    id: 'subscribe-weekly',
+    text: 'Suscríbeme a limpieza semanal con descuento',
     reply:
-      'Una limpieza profunda tarda ~4h y cuesta £95 para tu piso de Soho. Tengo disponibilidad este sábado por la mañana con Carmen R., 5 estrellas.',
-    action: { label: 'Reservar sábado 9:00', href: '/client/preview/book?service=profunda' },
+      'Limpieza semanal estándar con Ana cada martes 10:00 — £38.25/visita (15% off vs £45 puntual). Te ahorras £27/mes. Cancelas cuando quieras.',
+    action: { label: 'Activar plan semanal', href: '/client/preview/book?plan=weekly' },
   },
   {
-    id: 'late',
-    text: 'Ana llega tarde, ¿qué hago?',
+    id: 'incident-lookup',
+    text: '¿Por qué se canceló mi última limpieza?',
     reply:
-      'Ana está a 1.1 km — tráfico en Oxford St. Llega en ~12 min. ¿Quieres que le avise que esperas en el café de abajo?',
-    action: { label: 'Avisar a Ana', href: '/client/preview/messages' },
+      'Tu visita del 12 jun fue cancelada por Luis (enfermo). Te asignamos a Ana automáticamente para el 14 jun sin coste extra. Recibiste £10 de crédito por la molestia — disponible para usar.',
+    action: { label: 'Usar £10 de crédito', href: '/client/preview/book?credit=10' },
   },
 ];
 
