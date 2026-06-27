@@ -1,38 +1,46 @@
+'use client';
+
 /**
  * Public, no-auth preview of the Cleaner /week page. Mock data only.
+ *
+ * Now interactive: tap any day's task to expand inline notes, and use
+ * the status filter chips at the top to slice the week by progress.
+ * All state is in-memory — refreshing resets the demo.
  */
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
   Calendar,
   CheckCircle2,
   Clock,
+  HelpCircle,
   MapPin,
   PoundSterling,
   Star,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
-import { BottomTabBar } from '@/components/operative/BottomTabBar';
+import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 
-export const metadata = {
-  title: 'Demo · Cleaner',
-  robots: { index: false, follow: false },
-};
+type DemoStatus = 'scheduled' | 'completed' | 'in_progress';
 
 type MockWeekTask = {
   id: string;
-  status: 'scheduled' | 'completed' | 'in_progress';
+  status: DemoStatus;
   service_name: string;
   price_pence: number;
   estimated_duration_min: number;
   property: { name: string; address: string };
+  notes: string;
 };
 
-const DAYS: Array<{
+type Day = {
   label: string;
   isToday: boolean;
   tasks: MockWeekTask[];
-}> = [
+};
+
+const DAYS: Day[] = [
   {
     label: 'Lunes 23 Jun',
     isToday: false,
@@ -43,7 +51,11 @@ const DAYS: Array<{
         service_name: 'Limpieza profunda',
         price_pence: 6500,
         estimated_duration_min: 120,
-        property: { name: 'Apto 4B', address: '12 Carrer del Sol' },
+        property: {
+          name: 'Soho Loft',
+          address: '22 Old Compton St, London W1D 4TR',
+        },
+        notes: 'Cliente muy satisfecho. Pidió que la próxima vez se cambie el filtro de la campana.',
       },
     ],
   },
@@ -57,7 +69,11 @@ const DAYS: Array<{
         service_name: 'Mantenimiento',
         price_pence: 4000,
         estimated_duration_min: 90,
-        property: { name: 'Estudio Loft', address: '5 Av. Diagonal' },
+        property: {
+          name: 'Hackney Studio',
+          address: '78 Mare St, London E8 4RT',
+        },
+        notes: 'Reponer pastillas del lavavajillas (quedaba solo una).',
       },
       {
         id: 'w-3',
@@ -65,7 +81,11 @@ const DAYS: Array<{
         service_name: 'Check-out',
         price_pence: 5500,
         estimated_duration_min: 105,
-        property: { name: 'Casa Gómez', address: '47 Passeig de Gràcia' },
+        property: {
+          name: 'Shoreditch Penthouse',
+          address: '31 Curtain Rd, London EC2A 3LT',
+        },
+        notes: 'Cambio de sábanas + reposición de amenities.',
       },
     ],
   },
@@ -84,7 +104,11 @@ const DAYS: Array<{
         service_name: 'Limpieza estándar',
         price_pence: 4000,
         estimated_duration_min: 75,
-        property: { name: 'Apto 2A', address: '12 Carrer del Sol' },
+        property: {
+          name: 'Notting Hill Flat',
+          address: '12 Portobello Rd, London W11 2DZ',
+        },
+        notes: 'Atención a la repisa de la ventana — el cliente lo pidió la última vez.',
       },
     ],
   },
@@ -98,7 +122,11 @@ const DAYS: Array<{
         service_name: 'Limpieza estándar',
         price_pence: 4000,
         estimated_duration_min: 90,
-        property: { name: 'Apto 2A', address: '12 Carrer del Sol' },
+        property: {
+          name: 'Soho Loft',
+          address: '22 Old Compton St, London W1D 4TR',
+        },
+        notes: 'Listo a las 11:32, fotos subidas.',
       },
       {
         id: 'w-6',
@@ -106,7 +134,11 @@ const DAYS: Array<{
         service_name: 'Mantenimiento',
         price_pence: 3500,
         estimated_duration_min: 60,
-        property: { name: 'Estudio Loft', address: '5 Av. Diagonal' },
+        property: {
+          name: 'Hackney Studio',
+          address: '78 Mare St, London E8 4RT',
+        },
+        notes: 'En curso. Llaves en el lockbox (código 4421).',
       },
       {
         id: 'w-7',
@@ -114,7 +146,11 @@ const DAYS: Array<{
         service_name: 'Check-out',
         price_pence: 6500,
         estimated_duration_min: 120,
-        property: { name: 'Casa Gómez', address: '47 Passeig de Gràcia' },
+        property: {
+          name: 'Shoreditch Penthouse',
+          address: '31 Curtain Rd, London EC2A 3LT',
+        },
+        notes: 'Check-out Airbnb a las 14:30. Sábanas limpias en armario del pasillo.',
       },
     ],
   },
@@ -128,7 +164,11 @@ const DAYS: Array<{
         service_name: 'Limpieza profunda',
         price_pence: 7500,
         estimated_duration_min: 150,
-        property: { name: 'Villa Sol', address: '3 Carrer Mar' },
+        property: {
+          name: 'Mayfair Studio',
+          address: '8 Berkeley St, London W1J 8DY',
+        },
+        notes: 'Limpieza profunda mensual — traer aspirador grande.',
       },
     ],
   },
@@ -152,11 +192,53 @@ function formatHours(minutes: number): string {
   return `${minutes}m`;
 }
 
+type Filter = 'all' | 'completed' | 'in_progress' | 'scheduled';
+
+const FILTERS: Array<{ key: Filter; label: string; title: string }> = [
+  {
+    key: 'all',
+    label: 'Todas',
+    title: 'Ver todas las tareas de la semana',
+  },
+  {
+    key: 'completed',
+    label: 'Completadas',
+    title: 'Filtrar solo las tareas terminadas',
+  },
+  {
+    key: 'in_progress',
+    label: 'En curso',
+    title: 'Filtrar solo las tareas que tienes ahora mismo en curso',
+  },
+  {
+    key: 'scheduled',
+    label: 'Pendientes',
+    title: 'Filtrar solo las tareas todavía por hacer',
+  },
+];
+
 export default function OperativePreviewWeek() {
+  const [filter, setFilter] = useState<Filter>('all');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
   const totalMinutes = 540;
   const totalEarnings = 28000;
   const avgStars = 4.8;
   const ratingCount = 6;
+
+  const filteredDays = useMemo<Day[]>(
+    () =>
+      DAYS.map((d) => ({
+        ...d,
+        tasks:
+          filter === 'all' ? d.tasks : d.tasks.filter((t) => t.status === filter),
+      })),
+    [filter],
+  );
+
+  function toggleExpand(id: string) {
+    setExpandedId((cur) => (cur === id ? null : id));
+  }
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
@@ -165,6 +247,7 @@ export default function OperativePreviewWeek() {
           <Link
             href="/operative/preview"
             aria-label="Back"
+            title="Volver a la agenda de hoy"
             className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-graphite-1 hover:bg-surface-2"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -187,21 +270,59 @@ export default function OperativePreviewWeek() {
             icon={<Clock className="h-3.5 w-3.5 text-brand-500" />}
             label="Worked"
             value={formatHours(totalMinutes)}
+            title="Total de horas trabajadas esta semana"
           />
           <Kpi
             icon={<PoundSterling className="h-3.5 w-3.5 text-emerald-600" />}
             label="Earnings"
             value={formatMoney(totalEarnings)}
+            title="Total ganado esta semana — antes de impuestos"
           />
           <Kpi
             icon={<Star className="h-3.5 w-3.5 text-amber-500" />}
             label={`Rating (${ratingCount})`}
             value={avgStars.toFixed(1)}
+            title="Promedio de valoraciones de los clientes esta semana"
           />
         </div>
 
+        {/* Filter chips */}
+        <div className="mt-5">
+          <div className="flex items-center gap-1.5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-graphite-3">
+              Filtrar
+            </p>
+            <span
+              title="Toca un chip para filtrar las tareas por estado. El recuento se actualiza al instante."
+              className="grid h-3.5 w-3.5 cursor-help place-items-center rounded-full text-graphite-3"
+            >
+              <HelpCircle className="h-3 w-3" />
+            </span>
+          </div>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {FILTERS.map((f) => {
+              const active = f.key === filter;
+              return (
+                <button
+                  key={f.key}
+                  type="button"
+                  onClick={() => setFilter(f.key)}
+                  title={f.title}
+                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                    active
+                      ? 'bg-brand-600 text-white shadow-sm'
+                      : 'border border-line bg-paper text-graphite-3 hover:text-graphite-1'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <section className="mt-6 space-y-4">
-          {DAYS.map((day) => (
+          {filteredDays.map((day) => (
             <div key={day.label}>
               <h2
                 className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider ${
@@ -214,51 +335,66 @@ export default function OperativePreviewWeek() {
               </h2>
               {day.tasks.length === 0 ? (
                 <p className="mt-1 ml-5 text-[11px] text-graphite-3">
-                  No cleanings
+                  {filter === 'all' ? 'No cleanings' : 'Sin coincidencias'}
                 </p>
               ) : (
                 <ul className="mt-2 space-y-2">
-                  {day.tasks.map((t, idx) => (
-                    <li key={t.id}>
-                      <Link
-                        href="/operative/preview"
-                        className="flex items-start gap-3 rounded-2xl border border-line bg-paper p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
-                      >
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
-                          {idx + 1}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <p className="font-display text-sm font-semibold text-graphite-1">
-                            {t.property.name}
-                          </p>
-                          <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600">
-                            <MapPin className="h-3 w-3" /> {t.property.address}
+                  {day.tasks.map((t, idx) => {
+                    const isExpanded = expandedId === t.id;
+                    return (
+                      <li key={t.id}>
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(t.id)}
+                          title="Toca para ver las notas del cliente para esta tarea"
+                          className="flex w-full items-start gap-3 rounded-2xl border border-line bg-paper p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
+                        >
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
+                            {idx + 1}
                           </span>
-                          <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-graphite-3">
-                            <span>{t.service_name}</span>
-                            <span className="inline-flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {formatHours(t.estimated_duration_min)}
+                          <div className="min-w-0 flex-1">
+                            <p className="font-display text-sm font-semibold text-graphite-1">
+                              {t.property.name}
+                            </p>
+                            <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600">
+                              <MapPin className="h-3 w-3" /> {t.property.address}
                             </span>
-                            <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
-                              <PoundSterling className="h-3 w-3" />
-                              {formatMoney(t.price_pence)}
-                            </span>
+                            <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-graphite-3">
+                              <span>{t.service_name}</span>
+                              <span className="inline-flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {formatHours(t.estimated_duration_min)}
+                              </span>
+                              <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                                <PoundSterling className="h-3 w-3" />
+                                {formatMoney(t.price_pence)}
+                              </span>
+                            </div>
+                            {isExpanded ? (
+                              <div className="mt-2 rounded-lg border border-dashed border-line bg-surface-1/40 p-2">
+                                <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
+                                  Notas
+                                </p>
+                                <p className="mt-0.5 text-[11px] leading-relaxed text-graphite-1">
+                                  {t.notes}
+                                </p>
+                              </div>
+                            ) : null}
                           </div>
-                        </div>
-                        {t.status === 'completed' ? (
-                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                        ) : null}
-                      </Link>
-                    </li>
-                  ))}
+                          {t.status === 'completed' ? (
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                          ) : null}
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
           ))}
         </section>
       </div>
-      <BottomTabBar active="tareas" />
+      <PreviewBottomTabBar active="tareas" />
     </main>
   );
 }
@@ -267,13 +403,18 @@ function Kpi({
   icon,
   label,
   value,
+  title,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
+  title?: string;
 }) {
   return (
-    <div className="rounded-xl border border-line bg-paper p-3 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div
+      title={title}
+      className="rounded-xl border border-line bg-paper p-3 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+    >
       <div className="flex justify-center">{icon}</div>
       <p className="mt-1.5 font-display text-base font-bold text-graphite-1 tabular-nums">
         {value}

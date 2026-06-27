@@ -3,18 +3,13 @@
  * No auth, no Supabase. Every link routes inside /owner/preview/*.
  */
 import Link from 'next/link';
-import {
-  BarChart3,
-  Building2,
-  ChevronRight,
-  ListChecks,
-  Users,
-} from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { StatCardsRow } from '@/components/owner/StatCardsRow';
 import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
 import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
 import { DemoCleanersField, type DemoFieldCheckin } from './_components/DemoCleanersField';
 import { DemoBottomTabBar } from './_components/DemoBottomTabBar';
+import { DemoQuickActions } from './_components/DemoQuickActions';
 import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 
 export const metadata = {
@@ -32,68 +27,34 @@ const revenueData: RevenuePoint[] = [
   { label: 'D', pence: 17500 },
 ];
 
+// London coordinates roughly matching the property locations.
 const checkins: DemoFieldCheckin[] = [
   {
     taskId: 'demo-1',
     cleanerName: 'Carmen Ruiz',
-    propertyName: 'Apto Centro 4B',
+    propertyName: 'Soho Loft',
     clientName: 'María García',
     relative: 'hace 12 min',
-    lat: 40.4168,
-    lng: -3.7038,
+    lat: 51.5132,
+    lng: -0.1311,
   },
   {
     taskId: 'demo-3',
     cleanerName: 'Pedro Kovac',
-    propertyName: 'Loft Goya',
+    propertyName: 'Notting Hill Flat',
     clientName: 'Ana Romero',
     relative: 'hace 45 min',
-    lat: 40.4239,
-    lng: -3.6779,
+    lat: 51.5152,
+    lng: -0.2057,
   },
   {
     taskId: 'demo-2',
     cleanerName: 'Lucía Vega',
-    propertyName: 'Casa Sol',
+    propertyName: 'Camden House',
     clientName: 'Direct',
     relative: 'hace 2h',
-  },
-];
-
-const tiles: Array<{
-  href: string;
-  label: string;
-  hint: string;
-  Icon: React.ComponentType<{ className?: string }>;
-  accent: string;
-}> = [
-  {
-    href: '/owner/preview/tasks',
-    label: 'Limpiezas',
-    hint: '4 hoy',
-    Icon: ListChecks,
-    accent: 'from-blue-600 to-blue-700',
-  },
-  {
-    href: '/owner/preview/properties',
-    label: 'Propiedades',
-    hint: '6 sitios',
-    Icon: Building2,
-    accent: 'from-emerald-500 to-emerald-700',
-  },
-  {
-    href: '/owner/preview/cleaners',
-    label: 'Cleaners',
-    hint: '4 en equipo',
-    Icon: Users,
-    accent: 'from-amber-500 to-amber-600',
-  },
-  {
-    href: '/owner/preview/clients',
-    label: 'Clientes',
-    hint: '6 activos',
-    Icon: BarChart3,
-    accent: 'from-slate-700 to-slate-900',
+    lat: 51.5390,
+    lng: -0.1426,
   },
 ];
 
@@ -119,41 +80,11 @@ export default function OwnerPreviewHome() {
 
           <DemoCleanersField checkins={checkins} />
 
-          <section>
-            <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-              Accesos rápidos
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              {tiles.map((t) => {
-                const Icon = t.Icon;
-                return (
-                  <Link
-                    key={t.href}
-                    href={t.href}
-                    className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow"
-                  >
-                    <span
-                      className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${t.accent} text-white shadow-sm`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-slate-900">
-                        {t.label}
-                      </p>
-                      <p className="mt-0.5 truncate text-[11px] text-slate-500">
-                        {t.hint}
-                      </p>
-                    </div>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 transition group-hover:text-slate-500" />
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
+          <DemoQuickActions />
 
           <Link
             href="/owner/preview/analytics"
+            title="Ver tendencias semanales y KPIs detallados"
             className="flex items-center justify-between rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 p-4 text-white shadow-sm hover:from-slate-800"
           >
             <div>

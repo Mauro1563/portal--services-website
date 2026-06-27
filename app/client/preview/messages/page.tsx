@@ -1,15 +1,15 @@
 /**
  * Public preview: Client → Messages thread. Mocked chat with the
- * owner; composer is decorative (no submit handler).
+ * owner. The composer is fully interactive in the demo — typing and
+ * tapping send appends a new message to local state so a prospect
+ * can feel the chat experience. Refreshing resets the demo.
  */
-import { Send } from 'lucide-react';
-import { ClientShell } from '@/components/client/ClientShell';
-import { MOCK_CTX, PREVIEW_TOKEN } from '../_mock';
+'use client';
 
-export const metadata = {
-  title: 'Vista previa · Chat',
-  robots: { index: false, follow: false },
-};
+import { useState } from 'react';
+import { MapPin, Send } from 'lucide-react';
+import { ClientShell } from '@/components/client/ClientShell';
+import { LONDON_PROPERTIES, MOCK_CTX, PREVIEW_TOKEN } from '../_mock';
 
 type Msg = {
   id: string;
@@ -18,11 +18,11 @@ type Msg = {
   at: string;
 };
 
-const MESSAGES: Msg[] = [
+const INITIAL_MESSAGES: Msg[] = [
   {
     id: 'm1',
     from: 'owner',
-    body: '¡Hola Sofía! Ana llega mañana a las 10:00. ¿Necesitas algo especial?',
+    body: `¡Hola Sofía! Ana llega mañana a las 10:00 a ${LONDON_PROPERTIES.soho.address}. ¿Necesitas algo especial?`,
     at: 'Ayer 18:42',
   },
   {
@@ -45,16 +45,64 @@ const MESSAGES: Msg[] = [
   },
 ];
 
+function nowLabel() {
+  const d = new Date();
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `Ahora ${hh}:${mm}`;
+}
+
 export default function ClientMessagesPreview() {
+  const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
+  const [body, setBody] = useState('');
+
+  function handleSend(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = body.trim();
+    if (!trimmed) return;
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `local-${prev.length + 1}`,
+        from: 'client',
+        body: trimmed,
+        at: nowLabel(),
+      },
+    ]);
+    setBody('');
+    // Simulate an auto-reply from the business after a tick.
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `local-reply-${prev.length + 1}`,
+          from: 'owner',
+          body: '¡Recibido! Te confirmamos en unos minutos.',
+          at: nowLabel(),
+        },
+      ]);
+    }, 900);
+  }
+
   return (
     <ClientShell
       ctx={MOCK_CTX}
       token={PREVIEW_TOKEN}
       activeTab="messages"
-      title="Chat con Limpiezas Premium"
+      title="Chat con London Sparkle Cleaning Co."
     >
+      <div
+        className="mb-3 flex items-center gap-2 rounded-2xl bg-blue-50 p-3 ring-1 ring-inset ring-blue-100"
+        title="Dirección de la propiedad de la próxima visita"
+      >
+        <MapPin className="h-3.5 w-3.5 shrink-0 text-blue-700" />
+        <p className="text-[11px] text-blue-900">
+          Próxima visita: <span className="font-semibold">{LONDON_PROPERTIES.soho.address}</span>
+        </p>
+      </div>
+
       <ul className="flex flex-col gap-3">
-        {MESSAGES.map((m) => {
+        {messages.map((m) => {
           const mine = m.from === 'client';
           return (
             <li
@@ -85,19 +133,24 @@ export default function ClientMessagesPreview() {
       </ul>
 
       <form
+        onSubmit={handleSend}
         className="sticky bottom-20 mt-6 flex items-center gap-2 rounded-3xl bg-white p-2 ring-1 ring-inset ring-slate-100 shadow-[0_10px_24px_-12px_rgba(15,23,42,0.18)]"
-        action="#"
       >
         <input
           type="text"
           name="body"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
           placeholder="Escribe un mensaje…"
+          title="Escribe tu mensaje al equipo y pulsa enviar"
           className="block h-10 flex-1 rounded-2xl border-0 bg-slate-50 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
         />
         <button
           type="submit"
-          aria-label="Enviar"
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white transition hover:bg-blue-700"
+          aria-label="Enviar mensaje"
+          title="Enviar mensaje al equipo de limpieza"
+          disabled={!body.trim()}
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-40"
         >
           <Send className="h-4 w-4" />
         </button>
