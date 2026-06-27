@@ -1,23 +1,27 @@
 /**
  * Public preview: Client → Cleaning detail. Mocked data with real
  * photos and interactive rating/photo lightbox so a prospect can
- * actually click around.
+ * actually click around. Wrapped in ClientShell so the bottom tab
+ * bar (Inicio / Reservas / Chat / Perfil) stays available — no
+ * dead ends, no need to hit the browser back button.
  */
 'use client';
 
 import Link from 'next/link';
 import { useState } from 'react';
 import {
-  ArrowLeft,
   Camera,
   CheckCircle2,
   Clock,
+  FileText,
   MapPin,
   MessageCircle,
   Star,
-  X,
 } from 'lucide-react';
-import { DEMO_PHOTOS, LONDON_PROPERTIES } from '../_mock';
+import { ClientShell } from '@/components/client/ClientShell';
+import { DemoLightbox } from '@/components/preview/DemoLightbox';
+import { DemoToast } from '@/components/preview/DemoSheet';
+import { DEMO_PHOTOS, LONDON_PROPERTIES, MOCK_CTX, PREVIEW_TOKEN } from '../_mock';
 
 const PROPERTY = LONDON_PROPERTIES.soho;
 const MAPS_URL = `https://maps.google.com/?q=${encodeURIComponent(PROPERTY.address)}`;
@@ -31,31 +35,39 @@ const PHOTOS: { src: string; label: string }[] = [
   { src: DEMO_PHOTOS.sink,     label: 'Fregadero' },
 ];
 
+// Preset tip amounts shown as chips. £0 = no tip.
+const TIP_OPTIONS = [0, 2, 5, 10];
+
 export default function ClientCleaningPreview() {
   const [rating, setRating] = useState(5);
   const [submitted, setSubmitted] = useState(false);
   const [comment, setComment] = useState('');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [photos, setPhotos] = useState(PHOTOS);
+  const [tip, setTip] = useState<number>(0);
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 1800);
+  }
+
+  function deletePhoto(idx: number) {
+    setPhotos((prev) => prev.filter((_, i) => i !== idx));
+    setLightboxIndex(null);
+    showToast('Foto eliminada');
+  }
 
   return (
-    <main className="min-h-screen bg-slate-50 pb-16">
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-4 px-4">
-          <Link
-            href="/client/preview"
-            className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100"
-            title="Volver al inicio"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-          <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-            Detalle de limpieza
-          </span>
-          <span className="-mr-2 h-9 w-9" aria-hidden />
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-md px-4 py-5 space-y-4">
+    <ClientShell
+      ctx={MOCK_CTX}
+      token={PREVIEW_TOKEN}
+      activeTab="reservas"
+      title="Detalle de limpieza"
+      showBack
+      backHref={`/client/${PREVIEW_TOKEN}/cleanings`}
+    >
+      <div className="space-y-4">
         {/* Status header */}
         <div className="rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-white shadow-[0_18px_36px_-14px_rgba(16,185,129,0.45)]">
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/80">
@@ -71,7 +83,7 @@ export default function ClientCleaningPreview() {
             href={MAPS_URL}
             target="_blank"
             rel="noreferrer"
-            title="Abrir en Google Maps"
+            title="Abrir dirección en Google Maps"
             className="mt-1 inline-flex items-center gap-1.5 text-xs text-white/85 underline-offset-2 hover:underline"
           >
             <MapPin className="h-3 w-3" /> {PROPERTY.address}
@@ -100,7 +112,7 @@ export default function ClientCleaningPreview() {
               <p className="text-xs text-slate-500">London Sparkle Cleaning Co.</p>
             </div>
             <Link
-              href="/client/preview/messages"
+              href={`/client/${PREVIEW_TOKEN}/messages`}
               title="Enviar un mensaje a Carmen sobre esta limpieza"
               className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
             >
@@ -117,34 +129,42 @@ export default function ClientCleaningPreview() {
             </h3>
             <button
               type="button"
-              onClick={() => setLightboxIndex(0)}
-              title="Ver todas las fotos en grande"
-              className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-700 hover:bg-slate-200"
+              onClick={() => photos.length > 0 && setLightboxIndex(0)}
+              title="Abrir el visor de fotos con flechas para navegar"
+              disabled={photos.length === 0}
+              className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-700 hover:bg-slate-200 disabled:opacity-40"
             >
               <Camera className="h-3 w-3" /> Ver todas
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-1 p-1">
-            {PHOTOS.slice(0, 6).map((p, i) => (
-              <button
-                key={p.src}
-                type="button"
-                onClick={() => setLightboxIndex(i)}
-                title={`Ver foto: ${p.label}`}
-                className="group relative aspect-square overflow-hidden rounded-lg"
-              >
-                <img
-                  src={p.src}
-                  alt={p.label}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition group-hover:scale-105"
-                />
-                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1 text-left text-[9px] font-bold uppercase tracking-wider text-white">
-                  {p.label}
-                </span>
-              </button>
-            ))}
-          </div>
+          {photos.length === 0 ? (
+            <p className="px-4 py-6 text-center text-[12px] text-slate-500">
+              Eliminaste todas las fotos.
+            </p>
+          ) : (
+            <div className="grid grid-cols-3 gap-1 p-1">
+              {photos.map((p, i) => (
+                <button
+                  key={p.src + i}
+                  type="button"
+                  onClick={() => setLightboxIndex(i)}
+                  title={`Ver foto: ${p.label}`}
+                  className="group relative aspect-square overflow-hidden rounded-lg"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.src}
+                    alt={p.label}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition group-hover:scale-105"
+                  />
+                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1 text-left text-[9px] font-bold uppercase tracking-wider text-white">
+                    {p.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
           <div className="border-t border-slate-100 p-4">
             <h3 className="text-sm font-semibold text-slate-700">Lo que se hizo</h3>
             <ul className="mt-2 space-y-1.5 text-sm text-slate-600">
@@ -187,8 +207,17 @@ export default function ClientCleaningPreview() {
                 ¡Gracias por tu valoración!
               </p>
               <p className="mt-0.5 text-xs text-emerald-700">
-                {rating} estrella{rating === 1 ? '' : 's'} enviadas a Carmen.
+                {rating} estrella{rating === 1 ? '' : 's'}
+                {tip > 0 ? ` + £${tip} de propina` : ''} enviadas a Carmen.
               </p>
+              <button
+                type="button"
+                onClick={() => setSubmitted(false)}
+                title="Editar tu valoración"
+                className="mt-3 rounded-full bg-white px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-100"
+              >
+                Editar
+              </button>
             </div>
           ) : (
             <>
@@ -211,10 +240,40 @@ export default function ClientCleaningPreview() {
                   </button>
                 ))}
               </div>
+
+              {/* Tip selector */}
+              <div className="mt-4">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                  Añadir propina (opcional)
+                </p>
+                <div className="mt-2 flex gap-2">
+                  {TIP_OPTIONS.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTip(t)}
+                      title={
+                        t === 0
+                          ? 'Sin propina'
+                          : `Añadir £${t} de propina a Carmen`
+                      }
+                      className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
+                        tip === t
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      {t === 0 ? 'No' : `£${t}`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Comentario opcional…"
+                title="Escribe un comentario para Carmen y el equipo"
                 className="mt-4 block h-20 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
               />
               <button
@@ -228,49 +287,37 @@ export default function ClientCleaningPreview() {
             </>
           )}
         </div>
-      </div>
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
-          onClick={() => setLightboxIndex(null)}
-        >
+        {/* Invoice + rebook actions */}
+        <div className="flex gap-2">
           <button
             type="button"
-            title="Cerrar"
-            onClick={() => setLightboxIndex(null)}
-            className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20"
+            onClick={() => showToast('Factura enviada a tu email')}
+            title="Pedir la factura de este servicio por email"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-white px-3 py-2.5 text-[11.5px] font-bold uppercase tracking-wider text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
           >
-            <X className="h-5 w-5" />
+            <FileText className="h-3.5 w-3.5" /> Pedir factura
           </button>
-          <div className="flex max-h-full max-w-md flex-col gap-3" onClick={(e) => e.stopPropagation()}>
-            <img
-              src={PHOTOS[lightboxIndex].src}
-              alt={PHOTOS[lightboxIndex].label}
-              className="max-h-[70vh] w-full rounded-2xl object-contain"
-            />
-            <p className="text-center text-xs font-bold uppercase tracking-wider text-white/80">
-              {PHOTOS[lightboxIndex].label} · {lightboxIndex + 1} / {PHOTOS.length}
-            </p>
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {PHOTOS.map((p, i) => (
-                <button
-                  key={p.src}
-                  type="button"
-                  onClick={() => setLightboxIndex(i)}
-                  title={`Ver ${p.label}`}
-                  className={`h-14 w-14 shrink-0 overflow-hidden rounded-lg ring-2 ${
-                    i === lightboxIndex ? 'ring-white' : 'ring-transparent opacity-60'
-                  }`}
-                >
-                  <img src={p.src} alt={p.label} loading="lazy" className="h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
-          </div>
+          <Link
+            href={`/client/${PREVIEW_TOKEN}/book?service=profunda`}
+            title="Reservar otra vez este mismo servicio"
+            className="inline-flex flex-1 items-center justify-center rounded-2xl bg-blue-600 px-3 py-2.5 text-[11.5px] font-bold uppercase tracking-wider text-white hover:bg-blue-700"
+          >
+            Reservar otra vez
+          </Link>
         </div>
-      )}
-    </main>
+      </div>
+
+      {/* Lightbox with prev/next arrows + keyboard support */}
+      <DemoLightbox
+        photos={photos}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onChange={setLightboxIndex}
+        onDelete={deletePhoto}
+      />
+
+      <DemoToast show={toast != null} message={toast ?? ''} />
+    </ClientShell>
   );
 }

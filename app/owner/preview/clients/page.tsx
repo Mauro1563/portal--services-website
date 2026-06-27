@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
+  CheckCircle2,
   ChevronRight,
   ExternalLink,
   Info,
@@ -18,6 +19,7 @@ import {
   Plus,
   Search,
   Send,
+  Trash2,
   X,
 } from 'lucide-react';
 import { DemoBottomTabBar } from '../_components/DemoBottomTabBar';
@@ -48,6 +50,26 @@ const fmtMoney = (p: number) =>
 
 type ChatMsg = { from: 'owner' | 'client'; text: string };
 
+const ACCENT_POOL = [
+  'from-cyan-400 to-blue-600',
+  'from-rose-400 to-rose-600',
+  'from-emerald-400 to-emerald-600',
+  'from-amber-400 to-orange-500',
+  'from-indigo-400 to-indigo-600',
+  'from-violet-400 to-violet-600',
+];
+
+function initialsOf(name: string) {
+  return (
+    name
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((w) => w[0] ?? '')
+      .join('')
+      .toUpperCase() || 'NC'
+  );
+}
+
 export default function OwnerClientsPreview() {
   const [clients, setClients] = useState<Client[]>(initialClients);
   const [query, setQuery] = useState('');
@@ -57,6 +79,45 @@ export default function OwnerClientsPreview() {
   const [chatId, setChatId] = useState<string | null>(null);
   const [chatDraft, setChatDraft] = useState('');
   const [chats, setChats] = useState<Record<string, ChatMsg[]>>({});
+  const [showNew, setShowNew] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newPhone, setNewPhone] = useState('');
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(text: string) {
+    setToast(text);
+    window.setTimeout(() => setToast(null), 1800);
+  }
+
+  function addClient() {
+    if (!newName.trim()) return;
+    setClients((prev) => [
+      ...prev,
+      {
+        id: `cli-${prev.length + 1}-new`,
+        name: newName.trim(),
+        initials: initialsOf(newName.trim()),
+        email: newEmail.trim() || 'pendiente@example.com',
+        phone: newPhone.trim() || '+44 7700 900000',
+        properties: 0,
+        cleaningsMonth: 0,
+        spentMonthPence: 0,
+        accent: ACCENT_POOL[prev.length % ACCENT_POOL.length],
+      },
+    ]);
+    setNewName('');
+    setNewEmail('');
+    setNewPhone('');
+    setShowNew(false);
+    showToast('Cliente añadido');
+  }
+
+  function deleteClient(id: string) {
+    if (!confirm('¿Eliminar este cliente?')) return;
+    setClients((prev) => prev.filter((c) => c.id !== id));
+    showToast('Cliente eliminado');
+  }
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -82,6 +143,7 @@ export default function OwnerClientsPreview() {
       ),
     );
     setEditId(null);
+    showToast('Cliente actualizado');
   }
 
   function sendChat() {
@@ -123,12 +185,63 @@ export default function OwnerClientsPreview() {
           </div>
           <button
             type="button"
+            onClick={() => setShowNew((s) => !s)}
             title="Añadir un cliente nuevo al panel"
             className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-4 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.5)]"
           >
             <Plus className="h-4 w-4" /> Nuevo cliente
           </button>
         </div>
+
+        {showNew ? (
+          <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50/40 p-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-slate-900">
+                Nuevo cliente
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowNew(false)}
+                aria-label="Cerrar"
+                className="rounded-full p-1 text-slate-500 hover:bg-white"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <input
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Nombre completo"
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              />
+              <input
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="Email"
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              />
+              <input
+                value={newPhone}
+                onChange={(e) => setNewPhone(e.target.value)}
+                placeholder="Teléfono"
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              />
+            </div>
+            {!newName.trim() ? (
+              <p className="mt-2 text-[10.5px] text-rose-600">
+                El nombre es obligatorio.
+              </p>
+            ) : null}
+            <button
+              type="button"
+              onClick={addClient}
+              className="mt-3 inline-flex h-9 items-center gap-1.5 rounded-lg bg-blue-600 px-3 text-xs font-semibold text-white hover:bg-blue-700"
+            >
+              <CheckCircle2 className="h-3.5 w-3.5" /> Guardar cliente
+            </button>
+          </div>
+        ) : null}
 
         <div className="relative mt-5">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -238,6 +351,15 @@ export default function OwnerClientsPreview() {
                   >
                     <MessageSquare className="h-3 w-3" /> Enviar mensaje
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => deleteClient(c.id)}
+                    title={`Eliminar a ${c.name} del panel`}
+                    aria-label={`Eliminar ${c.name}`}
+                    className="ml-auto inline-flex items-center gap-1 rounded-lg bg-white px-2 py-1.5 text-[11px] font-semibold text-rose-600 ring-1 ring-rose-200 hover:bg-rose-50"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
                 </div>
                 <Link
                   href="/client/preview"
@@ -323,6 +445,14 @@ export default function OwnerClientsPreview() {
                 <Send className="h-4 w-4" />
               </button>
             </form>
+          </div>
+        </div>
+      ) : null}
+
+      {toast ? (
+        <div className="pointer-events-none fixed bottom-20 left-1/2 z-50 -translate-x-1/2">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+            ✓ {toast}
           </div>
         </div>
       ) : null}

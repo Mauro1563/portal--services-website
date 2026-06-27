@@ -8,8 +8,8 @@
  * the cleaner sends, a canned "owner" reply lands ~700ms later so the
  * demo feels like a live conversation.
  */
-import { useRef, useState } from 'react';
-import { HelpCircle, Send } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { HelpCircle, RotateCcw, Send } from 'lucide-react';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 
 type Msg = {
@@ -61,7 +61,13 @@ function nowHHMM(): string {
 export default function OperativePreviewChat() {
   const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
   const [draft, setDraft] = useState('');
+  const [typing, setTyping] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, typing]);
 
   function handleSend() {
     const body = draft.trim();
@@ -74,6 +80,7 @@ export default function OperativePreviewChat() {
     };
     setMessages((prev) => [...prev, newMsg]);
     setDraft('');
+    setTyping(true);
     // Canned auto-reply so the demo feels alive.
     window.setTimeout(() => {
       const reply: Msg = {
@@ -82,8 +89,9 @@ export default function OperativePreviewChat() {
         body: CANNED_REPLIES[Math.floor(Math.random() * CANNED_REPLIES.length)],
         time: nowHHMM(),
       };
+      setTyping(false);
       setMessages((prev) => [...prev, reply]);
-    }, 700);
+    }, 900);
     textareaRef.current?.focus();
   }
 
@@ -94,24 +102,41 @@ export default function OperativePreviewChat() {
     }
   }
 
+  function handleResetThread() {
+    setMessages(INITIAL_MESSAGES);
+    setDraft('');
+    setTyping(false);
+  }
+
   return (
     <main className="flex min-h-screen flex-col bg-canvas pb-24">
-      <header className="sticky top-0 z-20 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur">
-        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-          Chat con
-          <span
-            title="Mensajería directa entre el cleaner y el manager — sin email, sin WhatsApp."
-            className="grid h-3.5 w-3.5 cursor-help place-items-center text-text-3"
-          >
-            <HelpCircle className="h-3 w-3" />
-          </span>
-        </p>
-        <h1 className="mt-0.5 font-display text-base font-semibold text-text-1">
-          Alan (manager)
-        </h1>
+      <header className="sticky top-0 z-20 flex items-start justify-between gap-2 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur">
+        <div>
+          <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
+            Chat con
+            <span
+              title="Mensajería directa entre el cleaner y el manager — sin email, sin WhatsApp."
+              className="grid h-3.5 w-3.5 cursor-help place-items-center text-text-3"
+            >
+              <HelpCircle className="h-3 w-3" />
+            </span>
+          </p>
+          <h1 className="mt-0.5 font-display text-base font-semibold text-text-1">
+            Alan (manager)
+          </h1>
+        </div>
+        <button
+          type="button"
+          onClick={handleResetThread}
+          title="Reiniciar la conversación a su estado inicial (solo demo)"
+          className="inline-flex items-center gap-1 rounded-full border border-line bg-paper px-2.5 py-1 text-[10px] font-semibold text-text-3 hover:text-text-1"
+        >
+          <RotateCcw className="h-3 w-3" />
+          Reiniciar
+        </button>
       </header>
 
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-3 px-4 py-4">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-3 px-4 py-4 pb-28">
         <ol className="flex-1 space-y-2">
           {messages.map((m) => {
             const mine = m.sender === 'cleaner';
@@ -139,7 +164,17 @@ export default function OperativePreviewChat() {
               </li>
             );
           })}
+          {typing ? (
+            <li className="flex justify-start">
+              <div className="inline-flex items-center gap-1 rounded-2xl rounded-bl-md border border-surface-2 bg-paper px-3.5 py-2.5 shadow-sm">
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-text-3 [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-text-3 [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-text-3" />
+              </div>
+            </li>
+          ) : null}
         </ol>
+        <div ref={bottomRef} />
       </div>
 
       {/* Composer pinned above the bottom tab bar — functional in demo */}

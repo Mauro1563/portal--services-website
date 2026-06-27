@@ -1,15 +1,24 @@
 /**
  * Public preview: Client → Book a cleaning. Fully interactive in the
- * demo — useState-backed form fields, animated success state on
- * submit. No backend; refreshing resets the demo.
+ * demo — useState-backed form fields, inline validation, animated
+ * success state on submit. No backend; refreshing resets the demo.
  */
 'use client';
 
+import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Calendar, CheckCircle2, MapPin, Sparkles } from 'lucide-react';
+import {
+  Calendar,
+  CheckCircle2,
+  Mail,
+  MapPin,
+  Sparkles,
+} from 'lucide-react';
 import { ClientShell } from '@/components/client/ClientShell';
 import { LONDON_PROPERTIES, MOCK_CTX, MOCK_SERVICES, PREVIEW_TOKEN } from '../_mock';
+
+type Errors = Partial<Record<'date' | 'address', string>>;
 
 function BookForm() {
   const params = useSearchParams();
@@ -25,6 +34,7 @@ function BookForm() {
   const [address, setAddress] = useState<string>(LONDON_PROPERTIES.soho.address);
   const [notes, setNotes] = useState<string>('');
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
 
   // Keep the selected service in sync if the user lands here from the
   // service catalog sheet (which sets ?service=… in the URL).
@@ -36,7 +46,25 @@ function BookForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const next: Errors = {};
+    if (!date.trim()) next.date = 'Elige una fecha';
+    if (!address.trim()) next.address = 'Indica una dirección';
+    if (Object.keys(next).length > 0) {
+      setErrors(next);
+      return;
+    }
+    setErrors({});
     setSubmitted(true);
+  }
+
+  function resetForm() {
+    setService(MOCK_SERVICES[0].id);
+    setDate('');
+    setTime('10:00');
+    setAddress(LONDON_PROPERTIES.soho.address);
+    setNotes('');
+    setSubmitted(false);
+    setErrors({});
   }
 
   if (submitted) {
@@ -47,19 +75,17 @@ function BookForm() {
           <CheckCircle2 className="h-8 w-8 animate-pulse" />
         </span>
         <h2 className="font-display text-lg font-bold text-slate-900">
-          ¡Solicitud enviada!
+          ¡Tu reserva fue creada!
         </h2>
         <p className="text-[13px] text-slate-600">
-          Tu reserva está siendo procesada — te avisamos cuando un cleaner la
-          acepte.
+          Te lo confirmamos por email en unos minutos.
         </p>
         <div className="w-full rounded-2xl bg-slate-50 p-3 text-left text-[12px] text-slate-700">
           <p>
             <span className="font-bold">Servicio:</span> {svcName}
           </p>
           <p>
-            <span className="font-bold">Cuándo:</span> {date || '(sin fecha)'} ·{' '}
-            {time}
+            <span className="font-bold">Cuándo:</span> {date} · {time}
           </p>
           <p>
             <span className="font-bold">Dónde:</span> {address}
@@ -69,15 +95,27 @@ function BookForm() {
               <span className="font-bold">Notas:</span> {notes}
             </p>
           )}
+          <p className="mt-2 flex items-center gap-1 text-[11px] text-emerald-700">
+            <Mail className="h-3 w-3" /> Confirmación enviada a sofia@example.com
+          </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setSubmitted(false)}
-          title="Hacer otra reserva"
-          className="rounded-full bg-slate-900 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
-        >
-          Hacer otra reserva
-        </button>
+        <div className="flex w-full flex-col gap-2">
+          <Link
+            href={`/client/${PREVIEW_TOKEN}/cleanings`}
+            title="Ver todas tus reservas"
+            className="flex h-11 items-center justify-center rounded-2xl bg-blue-600 px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.6)] hover:bg-blue-700"
+          >
+            Ver mis reservas
+          </Link>
+          <button
+            type="button"
+            onClick={resetForm}
+            title="Crear otra reserva"
+            className="rounded-full bg-slate-100 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
+          >
+            Hacer otra reserva
+          </button>
+        </div>
       </div>
     );
   }
@@ -137,8 +175,13 @@ function BookForm() {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               title="Elige el día de la limpieza"
-              className="mt-1 block h-11 w-full rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className={`mt-1 block h-11 w-full rounded-2xl border bg-white px-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                errors.date ? 'border-rose-300' : 'border-slate-200'
+              }`}
             />
+            {errors.date && (
+              <p className="mt-1 text-[10.5px] text-rose-600">{errors.date}</p>
+            )}
           </label>
           <label className="block">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
@@ -168,8 +211,13 @@ function BookForm() {
             onChange={(e) => setAddress(e.target.value)}
             placeholder="e.g. 22 Old Compton St, Soho, London W1D 4TR"
             title="Indica la dirección de la limpieza"
-            className="mt-1 block h-11 w-full rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className={`mt-1 block h-11 w-full rounded-2xl border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+              errors.address ? 'border-rose-300' : 'border-slate-200'
+            }`}
           />
+          {errors.address && (
+            <p className="mt-1 text-[10.5px] text-rose-600">{errors.address}</p>
+          )}
         </label>
       </section>
 

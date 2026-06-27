@@ -7,9 +7,25 @@
  * swaps the inputs to real <input> elements and a "Guardar" button writes
  * back to local state so the new values render immediately. UK phone +
  * London address used to stay consistent with the rest of the demo.
+ *
+ * Additional functional bits: avatar cycler, notification + dark-mode +
+ * language toggles, and a fake "Cerrar sesión" that pops a demo toast.
  */
 import { useState } from 'react';
-import { HelpCircle, Mail, MapPin, Pencil, Phone, User } from 'lucide-react';
+import {
+  Bell,
+  Camera,
+  Globe,
+  HelpCircle,
+  LogOut,
+  Mail,
+  MapPin,
+  Moon,
+  Pencil,
+  Phone,
+  RotateCcw,
+  User,
+} from 'lucide-react';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 
 type Profile = {
@@ -28,40 +44,111 @@ const INITIAL_PROFILE: Profile = {
   address: '14 Queens Gate Mews, London SW7 5QN',
 };
 
+// Cycleable avatar pool (Unsplash portraits, plain <img>, no domain config).
+const AVATAR_POOL = [
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&auto=format&fit=crop&q=70',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&auto=format&fit=crop&q=70',
+  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&auto=format&fit=crop&q=70',
+  'https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=200&h=200&auto=format&fit=crop&q=70',
+];
+
+type FieldErrors = Partial<Record<keyof Profile, string>>;
+
+function validate(p: Profile): FieldErrors {
+  const errors: FieldErrors = {};
+  if (!p.name.trim()) errors.name = 'El nombre es obligatorio.';
+  if (!p.phone.trim()) errors.phone = 'El teléfono es obligatorio.';
+  if (!p.email.trim()) {
+    errors.email = 'El email es obligatorio.';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email.trim())) {
+    errors.email = 'Email no válido.';
+  }
+  if (!p.address.trim()) errors.address = 'La dirección es obligatoria.';
+  return errors;
+}
+
 export default function OperativePreviewProfile() {
+  const [resetKey, setResetKey] = useState(0);
+  return <ProfileBody key={resetKey} onReset={() => setResetKey((k) => k + 1)} />;
+}
+
+function ProfileBody({ onReset }: { onReset: () => void }) {
   const [profile, setProfile] = useState<Profile>(INITIAL_PROFILE);
   const [draft, setDraft] = useState<Profile>(INITIAL_PROFILE);
+  const [errors, setErrors] = useState<FieldErrors>({});
   const [isEditing, setIsEditing] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
+  const [avatarIdx, setAvatarIdx] = useState(0);
+  const [notifications, setNotifications] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
+  const [language, setLanguage] = useState<'es' | 'en'>('es');
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    window.setTimeout(() => setToast(null), 2200);
+  }
 
   function startEditing() {
     setDraft(profile);
+    setErrors({});
     setIsEditing(true);
   }
 
   function cancelEditing() {
     setDraft(profile);
+    setErrors({});
     setIsEditing(false);
   }
 
   function saveChanges() {
+    const e = validate(draft);
+    setErrors(e);
+    if (Object.keys(e).length > 0) return;
     setProfile(draft);
     setIsEditing(false);
     setSavedFlash(true);
     window.setTimeout(() => setSavedFlash(false), 1800);
   }
 
+  function cycleAvatar() {
+    setAvatarIdx((i) => (i + 1) % AVATAR_POOL.length);
+    showToast('Foto de perfil actualizada');
+  }
+
+  function fakeSignOut() {
+    showToast('Demo · esto cerraría sesión en la app real');
+  }
+
   return (
     <main className="min-h-screen bg-canvas pb-24">
       <div className="mx-auto max-w-md px-4 py-6">
         <header className="mb-6 flex items-start justify-between gap-3">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-              Mi perfil
-            </p>
-            <h1 className="mt-1 font-display text-2xl font-semibold text-text-1">
-              {profile.name}
-            </h1>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={AVATAR_POOL[avatarIdx]}
+                alt={`Foto de perfil de ${profile.name}`}
+                className="h-14 w-14 rounded-full object-cover ring-2 ring-brand-500/30"
+              />
+              <button
+                type="button"
+                onClick={cycleAvatar}
+                title="Cambiar foto de perfil — cicla por las opciones disponibles"
+                className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-brand-600 text-white shadow ring-2 ring-canvas hover:bg-brand-700"
+              >
+                <Camera className="h-3 w-3" />
+              </button>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
+                Mi perfil
+              </p>
+              <h1 className="mt-0.5 font-display text-xl font-semibold text-text-1">
+                {profile.name}
+              </h1>
+            </div>
           </div>
           {!isEditing ? (
             <button
@@ -78,7 +165,7 @@ export default function OperativePreviewProfile() {
 
         {savedFlash ? (
           <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[12px] font-semibold text-emerald-800">
-            Cambios guardados.
+            ✓ Cambios guardados.
           </div>
         ) : null}
 
@@ -109,6 +196,7 @@ export default function OperativePreviewProfile() {
             type="text"
             onChange={(v) => setDraft((d) => ({ ...d, name: v }))}
             title="Tu nombre como aparece para los clientes y en los recibos"
+            error={errors.name}
           />
 
           <Field
@@ -119,6 +207,7 @@ export default function OperativePreviewProfile() {
             type="tel"
             onChange={(v) => setDraft((d) => ({ ...d, phone: v }))}
             title="Número UK para que clientes y manager te llamen"
+            error={errors.phone}
           />
 
           <Field
@@ -129,6 +218,7 @@ export default function OperativePreviewProfile() {
             type="email"
             onChange={(v) => setDraft((d) => ({ ...d, email: v }))}
             title="Email donde recibir asignaciones y notificaciones"
+            error={errors.email}
           />
 
           <Field
@@ -139,6 +229,7 @@ export default function OperativePreviewProfile() {
             type="text"
             onChange={(v) => setDraft((d) => ({ ...d, address: v }))}
             title="Dirección base para calcular distancias y tiempos a las propiedades"
+            error={errors.address}
           />
 
           {isEditing ? (
@@ -162,7 +253,102 @@ export default function OperativePreviewProfile() {
             </div>
           ) : null}
         </div>
+
+        {/* Preferences */}
+        <section className="mt-8 rounded-3xl border border-surface-2 bg-surface-0 p-5 shadow-card">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
+            Preferencias
+          </p>
+
+          <ToggleRow
+            icon={<Bell className="h-4 w-4 text-brand-600" />}
+            label="Notificaciones push"
+            description="Recibe avisos cuando te asignen una nueva tarea"
+            on={notifications}
+            onToggle={() => {
+              setNotifications((v) => !v);
+              showToast(`Notificaciones ${!notifications ? 'activadas' : 'desactivadas'}`);
+            }}
+            title="Activar o desactivar las notificaciones push del móvil"
+          />
+
+          <ToggleRow
+            icon={<Moon className="h-4 w-4 text-brand-600" />}
+            label="Modo oscuro"
+            description="Tema oscuro para usar la app de noche"
+            on={darkMode}
+            onToggle={() => {
+              setDarkMode((v) => !v);
+              showToast(`Modo oscuro ${!darkMode ? 'activado' : 'desactivado'}`);
+            }}
+            title="Cambiar entre tema claro y oscuro"
+          />
+
+          <div className="mt-4">
+            <p className="inline-flex items-center gap-2 text-[12px] font-semibold text-text-1">
+              <Globe className="h-4 w-4 text-brand-600" />
+              Idioma
+            </p>
+            <p className="ml-6 text-[11px] text-text-3">
+              Idioma de la interfaz de la app
+            </p>
+            <div className="ml-6 mt-2 inline-flex rounded-full border border-line bg-paper p-0.5">
+              {(['es', 'en'] as const).map((lng) => (
+                <button
+                  key={lng}
+                  type="button"
+                  onClick={() => {
+                    setLanguage(lng);
+                    showToast(`Idioma: ${lng === 'es' ? 'Español' : 'English'}`);
+                  }}
+                  title={`Cambiar el idioma de la app a ${lng === 'es' ? 'Español' : 'English'}`}
+                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                    language === lng
+                      ? 'bg-brand-600 text-white shadow-sm'
+                      : 'text-text-3 hover:text-text-1'
+                  }`}
+                >
+                  {lng === 'es' ? 'Español' : 'English'}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-6 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={onReset}
+            title="Reiniciar la demo — devuelve el perfil al estado inicial"
+            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-line bg-paper text-[12px] font-bold uppercase tracking-[0.14em] text-text-3 transition hover:text-text-1"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reiniciar demo
+          </button>
+          <button
+            type="button"
+            onClick={fakeSignOut}
+            title="Cerrar sesión — en la app real te lleva a la pantalla de login"
+            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-red-200 bg-red-50 text-[12px] font-bold uppercase tracking-[0.14em] text-red-700 transition hover:bg-red-100"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            Cerrar sesión
+          </button>
+        </div>
       </div>
+
+      {/* Toast */}
+      {toast ? (
+        <div
+          className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
+          aria-live="polite"
+        >
+          <div className="rounded-full bg-slate-900/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur">
+            {toast}
+          </div>
+        </div>
+      ) : null}
+
       <PreviewBottomTabBar active="perfil" />
     </main>
   );
@@ -176,6 +362,7 @@ function Field({
   type,
   onChange,
   title,
+  error,
 }: {
   label: string;
   icon: React.ReactNode;
@@ -184,6 +371,7 @@ function Field({
   type: 'text' | 'tel' | 'email';
   onChange: (v: string) => void;
   title?: string;
+  error?: string;
 }) {
   return (
     <label className="block" title={title}>
@@ -200,12 +388,61 @@ function Field({
           readOnly={!editable}
           onChange={(e) => onChange(e.target.value)}
           className={`block h-11 w-full rounded-xl border pl-9 pr-3 text-sm text-text-1 placeholder:text-text-3 focus:outline-none focus:ring-2 ${
-            editable
-              ? 'border-brand-400 bg-surface-0 focus:border-brand-600 focus:ring-brand-600/20'
-              : 'border-surface-2 bg-surface-1/60 focus:border-brand-600 focus:ring-brand-600/20'
+            error
+              ? 'border-red-400 bg-red-50/40 focus:border-red-500 focus:ring-red-500/20'
+              : editable
+                ? 'border-brand-400 bg-surface-0 focus:border-brand-600 focus:ring-brand-600/20'
+                : 'border-surface-2 bg-surface-1/60 focus:border-brand-600 focus:ring-brand-600/20'
           }`}
         />
       </div>
+      {error ? (
+        <p className="mt-1 text-[11px] font-semibold text-red-600">{error}</p>
+      ) : null}
     </label>
+  );
+}
+
+function ToggleRow({
+  icon,
+  label,
+  description,
+  on,
+  onToggle,
+  title,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  description: string;
+  on: boolean;
+  onToggle: () => void;
+  title?: string;
+}) {
+  return (
+    <div className="mt-4 flex items-start justify-between gap-3" title={title}>
+      <div className="min-w-0 flex-1">
+        <p className="inline-flex items-center gap-2 text-[12px] font-semibold text-text-1">
+          {icon}
+          {label}
+        </p>
+        <p className="ml-6 text-[11px] text-text-3">{description}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={on}
+        onClick={onToggle}
+        title={title}
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
+          on ? 'bg-blue-600' : 'bg-slate-200'
+        }`}
+      >
+        <span
+          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+            on ? 'translate-x-5' : 'translate-x-0.5'
+          }`}
+        />
+      </button>
+    </div>
   );
 }

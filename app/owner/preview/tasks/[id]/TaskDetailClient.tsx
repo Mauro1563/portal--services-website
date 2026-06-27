@@ -51,6 +51,14 @@ const STATUS: Record<TaskStatus, { label: string; cls: string; icon: typeof Cloc
   cancelled: { label: 'Cancelada', cls: 'bg-rose-100 text-rose-700', icon: Clock },
 };
 
+const STATUS_ORDER: TaskStatus[] = ['pending', 'in_progress', 'completed', 'cancelled'];
+const CLEANER_OPTIONS = [
+  'Carmen Ruiz',
+  'Lucía Vega',
+  'Pedro Kovac',
+  'María Reyes',
+];
+
 const WORK_PHOTOS = [
   'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&auto=format&fit=crop&q=70',
   'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=800&auto=format&fit=crop&q=70',
@@ -141,10 +149,24 @@ export function TaskDetailClient({ id }: { id: string }) {
   ]);
   const [chatDraft, setChatDraft] = useState('');
 
+  const [photos, setPhotos] = useState<string[]>(WORK_PHOTOS.slice(0, 3));
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const st = STATUS[task.status];
   const StIcon = st.icon;
+
+  function showToast(text: string) {
+    setToast(text);
+    window.setTimeout(() => setToast(null), 1800);
+  }
+
+  function setStatus(status: TaskStatus) {
+    setTask((t) => ({ ...t, status }));
+    setStatusOpen(false);
+    showToast(`Estado: ${STATUS[status].label}`);
+  }
 
   function saveEdits() {
     setTask((t) => ({
@@ -154,6 +176,21 @@ export function TaskDetailClient({ id }: { id: string }) {
       notes: draftNotes,
     }));
     setEditing(false);
+    showToast('Cambios guardados');
+  }
+
+  function deletePhoto(idx: number) {
+    setPhotos((prev) => prev.filter((_, i) => i !== idx));
+    setLightboxIdx(null);
+    showToast('Foto eliminada');
+  }
+
+  function addPhoto() {
+    setPhotos((prev) => {
+      const next = WORK_PHOTOS[(prev.length) % WORK_PHOTOS.length];
+      return [...prev, next];
+    });
+    showToast('Foto subida');
   }
 
   function sendChat() {
@@ -184,12 +221,36 @@ export function TaskDetailClient({ id }: { id: string }) {
 
       <div className="mx-auto max-w-4xl px-5 py-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ${st.cls}`}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setStatusOpen((s) => !s)}
+              title="Cambiar el estado de la tarea"
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider transition hover:brightness-95 ${st.cls}`}
             >
               <StIcon className="h-3 w-3" /> {st.label}
-            </span>
+              <span aria-hidden className="text-[10px] opacity-60">▾</span>
+            </button>
+            {statusOpen ? (
+              <div className="absolute left-0 top-9 z-30 w-44 overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-slate-200">
+                {STATUS_ORDER.map((s) => {
+                  const cfg = STATUS[s];
+                  const Icon = cfg.icon;
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setStatus(s)}
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition hover:bg-slate-50 ${
+                        s === task.status ? 'font-bold text-slate-900' : 'text-slate-700'
+                      }`}
+                    >
+                      <Icon className="h-3.5 w-3.5" /> {cfg.label}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
             <h1 className="mt-3 text-2xl font-semibold text-slate-900">
               {task.property}
             </h1>
@@ -207,14 +268,45 @@ export function TaskDetailClient({ id }: { id: string }) {
               <span>· {task.date} {task.time}</span>
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setEditing((e) => !e)}
-            title="Cambiar cleaner asignado, hora o notas"
-            className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            {editing ? 'Cerrar' : 'Editar'}
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setEditing((e) => !e)}
+              title="Cambiar cleaner asignado, hora o notas"
+              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              {editing ? 'Cerrar' : 'Editar'}
+            </button>
+            {task.status !== 'cancelled' && task.status !== 'completed' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirm('¿Cancelar esta tarea?')) {
+                    setStatus('cancelled');
+                  }
+                }}
+                title="Marcar la tarea como cancelada"
+                className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100"
+              >
+                Cancelar tarea
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm('¿Eliminar definitivamente esta tarea?')) {
+                  showToast('Tarea eliminada');
+                  window.setTimeout(() => {
+                    window.location.href = '/owner/preview/tasks';
+                  }, 600);
+                }
+              }}
+              title="Eliminar definitivamente la tarea (no se puede deshacer)"
+              className="rounded-xl border border-rose-300 bg-white px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50"
+            >
+              Eliminar
+            </button>
+          </div>
         </div>
 
         {editing ? (
@@ -222,11 +314,17 @@ export function TaskDetailClient({ id }: { id: string }) {
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block text-xs font-semibold text-slate-700">
                 Cleaner asignado
-                <input
+                <select
                   value={draftCleaner}
                   onChange={(e) => setDraftCleaner(e.target.value)}
                   className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
-                />
+                >
+                  {(CLEANER_OPTIONS.includes(draftCleaner)
+                    ? CLEANER_OPTIONS
+                    : [draftCleaner, ...CLEANER_OPTIONS]).map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
               </label>
               <label className="block text-xs font-semibold text-slate-700">
                 Hora
@@ -290,14 +388,24 @@ export function TaskDetailClient({ id }: { id: string }) {
             </div>
 
             <div>
-              <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
-                <Info className="h-3 w-3" /> Toca una foto para ampliarla
-              </p>
+              <div className="mb-2 flex items-center justify-between">
+                <p className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+                  <Info className="h-3 w-3" /> Toca una foto para ampliarla
+                </p>
+                <button
+                  type="button"
+                  onClick={addPhoto}
+                  title="Añadir una foto nueva al trabajo (simula la subida del cleaner)"
+                  className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1 text-[10.5px] font-semibold text-white hover:bg-blue-700"
+                >
+                  + Subir foto
+                </button>
+              </div>
               <div className="grid grid-cols-3 gap-3">
-                {WORK_PHOTOS.slice(0, 3).map((src, i) => (
+                {photos.map((src, i) => (
                   <button
                     type="button"
-                    key={src}
+                    key={`${src}-${i}`}
                     onClick={() => setLightboxIdx(i)}
                     title={`Ver foto ${i + 1} a tamaño completo`}
                     className="group relative overflow-hidden rounded-xl ring-1 ring-slate-200"
@@ -313,6 +421,11 @@ export function TaskDetailClient({ id }: { id: string }) {
                     </span>
                   </button>
                 ))}
+                {photos.length === 0 ? (
+                  <p className="col-span-3 rounded-xl border border-dashed border-slate-200 bg-white p-4 text-center text-[11px] text-slate-500">
+                    Sin fotos todavía.
+                  </p>
+                ) : null}
               </div>
             </div>
 
@@ -481,7 +594,7 @@ export function TaskDetailClient({ id }: { id: string }) {
       ) : null}
 
       {/* Photo lightbox */}
-      {lightboxIdx !== null ? (
+      {lightboxIdx !== null && photos[lightboxIdx] ? (
         <div
           className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-black/85 p-4"
           onClick={() => setLightboxIdx(null)}
@@ -494,8 +607,19 @@ export function TaskDetailClient({ id }: { id: string }) {
           >
             <X className="h-5 w-5" />
           </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              deletePhoto(lightboxIdx);
+            }}
+            title="Eliminar esta foto"
+            className="absolute left-4 top-4 rounded-full bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-700"
+          >
+            Eliminar foto
+          </button>
           <img
-            src={WORK_PHOTOS[lightboxIdx]}
+            src={photos[lightboxIdx]}
             alt={`Foto ${lightboxIdx + 1}`}
             className="max-h-[70vh] max-w-full rounded-xl object-contain"
             onClick={(e) => e.stopPropagation()}
@@ -504,10 +628,10 @@ export function TaskDetailClient({ id }: { id: string }) {
             className="flex gap-2 overflow-x-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            {WORK_PHOTOS.map((src, i) => (
+            {photos.map((src, i) => (
               <button
                 type="button"
-                key={src}
+                key={`${src}-${i}`}
                 onClick={() => setLightboxIdx(i)}
                 title={`Ver foto ${i + 1}`}
                 className={`overflow-hidden rounded-md ring-2 transition ${
@@ -521,6 +645,14 @@ export function TaskDetailClient({ id }: { id: string }) {
                 />
               </button>
             ))}
+          </div>
+        </div>
+      ) : null}
+
+      {toast ? (
+        <div className="pointer-events-none fixed bottom-20 left-1/2 z-50 -translate-x-1/2">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+            ✓ {toast}
           </div>
         </div>
       ) : null}

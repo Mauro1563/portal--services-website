@@ -23,11 +23,13 @@ import {
   MapPin,
   Navigation2,
   Play,
+  RotateCcw,
+  Trash2,
   X,
 } from 'lucide-react';
 import { AgendaHeader } from '@/components/operative/AgendaHeader';
 import { EarningsStrip } from '@/components/operative/EarningsStrip';
-import { DemoPhotoStrip, DEMO_PHOTOS } from '@/components/preview/DemoPhotoStrip';
+import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
@@ -141,9 +143,26 @@ function nowHHMM(): string {
 
 export default function OperativePreviewHome() {
   const now = useMemo(() => new Date(), []);
+  const [resetKey, setResetKey] = useState(0);
+  return <OperativePreviewHomeBody key={resetKey} now={now} onReset={() => setResetKey((k) => k + 1)} />;
+}
+
+function OperativePreviewHomeBody({
+  now,
+  onReset,
+}: {
+  now: Date;
+  onReset: () => void;
+}) {
   const [tasks, setTasks] = useState<DemoTask[]>(INITIAL_TASKS);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<{ taskId: string; idx: number } | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(message: string) {
+    setToast(message);
+    window.setTimeout(() => setToast(null), 1800);
+  }
 
   // Hero card = next non-completed task, or last task if all done.
   const heroTask =
@@ -159,6 +178,7 @@ export default function OperativePreviewHome() {
           : t,
       ),
     );
+    showToast('Check-in registrado');
   }
 
   function handleComplete(taskId: string) {
@@ -169,6 +189,7 @@ export default function OperativePreviewHome() {
           : t,
       ),
     );
+    showToast('Tarea completada');
   }
 
   function handleUploadPhoto(taskId: string) {
@@ -180,11 +201,28 @@ export default function OperativePreviewHome() {
         return { ...t, photos: [...t.photos, next] };
       }),
     );
+    // Make sure user can see the new photo
+    setExpandedId(taskId);
+    showToast('Foto subida');
+  }
+
+  function handleDeletePhoto(taskId: string, idx: number) {
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === taskId ? { ...t, photos: t.photos.filter((_, i) => i !== idx) } : t,
+      ),
+    );
+    setLightbox(null);
+    showToast('Foto eliminada');
   }
 
   function toggleExpand(taskId: string) {
     setExpandedId((cur) => (cur === taskId ? null : taskId));
   }
+
+  const lightboxTask = lightbox ? tasks.find((t) => t.id === lightbox.taskId) : null;
+  const lightboxSrc =
+    lightboxTask && lightbox ? lightboxTask.photos[lightbox.idx] : null;
 
   return (
     <main className="min-h-screen bg-canvas pb-24">
@@ -415,8 +453,8 @@ export default function OperativePreviewHome() {
                                   <button
                                     type="button"
                                     key={`${src}-${i}`}
-                                    onClick={() => setLightboxIdx(i)}
-                                    title="Ampliar foto"
+                                    onClick={() => setLightbox({ taskId: task.id, idx: i })}
+                                    title="Ampliar foto — desde el lightbox puedes eliminarla"
                                     className="overflow-hidden rounded-lg ring-1 ring-surface-2"
                                   >
                                     <img
@@ -447,10 +485,10 @@ export default function OperativePreviewHome() {
       </div>
 
       {/* Photo lightbox */}
-      {lightboxIdx !== null ? (
+      {lightbox && lightboxSrc && lightboxTask ? (
         <div
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setLightboxIdx(null)}
+          onClick={() => setLightbox(null)}
         >
           <div
             className="relative w-full max-w-md"
@@ -458,7 +496,7 @@ export default function OperativePreviewHome() {
           >
             <button
               type="button"
-              onClick={() => setLightboxIdx(null)}
+              onClick={() => setLightbox(null)}
               title="Cerrar"
               className="absolute -top-10 right-0 grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white backdrop-blur"
             >
@@ -466,16 +504,50 @@ export default function OperativePreviewHome() {
             </button>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={DEMO_PHOTOS[lightboxIdx % DEMO_PHOTOS.length].src}
-              alt="Foto del trabajo"
+              src={lightboxSrc}
+              alt={`Foto del trabajo en ${lightboxTask.property_name}`}
               className="w-full rounded-2xl"
             />
-            <p className="mt-2 text-center text-[11px] text-white/80">
-              {DEMO_PHOTOS[lightboxIdx % DEMO_PHOTOS.length].label}
-            </p>
+            <div className="mt-3 flex items-center justify-between gap-2">
+              <p className="text-[11px] text-white/80">
+                {lightboxTask.property_name} · foto {lightbox.idx + 1} de {lightboxTask.photos.length}
+              </p>
+              <button
+                type="button"
+                onClick={() => handleDeletePhoto(lightbox.taskId, lightbox.idx)}
+                title="Eliminar esta foto del registro de la tarea"
+                className="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-red-500"
+              >
+                <Trash2 className="h-3 w-3" />
+                Eliminar foto
+              </button>
+            </div>
           </div>
         </div>
       ) : null}
+
+      {/* Toast */}
+      {toast ? (
+        <div
+          className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
+          aria-live="polite"
+        >
+          <div className="rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition">
+            ✓ {toast}
+          </div>
+        </div>
+      ) : null}
+
+      {/* Reset demo */}
+      <button
+        type="button"
+        onClick={onReset}
+        title="Reiniciar la demo — vuelve al estado inicial sin recargar"
+        className="fixed bottom-20 right-3 z-[55] inline-flex items-center gap-1 rounded-full bg-paper/90 px-3 py-1.5 text-[10px] font-semibold text-text-3 shadow ring-1 ring-surface-2 backdrop-blur hover:text-text-1"
+      >
+        <RotateCcw className="h-3 w-3" />
+        Reiniciar demo
+      </button>
 
       <PreviewBottomTabBar active="agenda" />
     </main>

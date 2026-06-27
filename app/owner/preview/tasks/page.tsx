@@ -4,8 +4,9 @@
  */
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -51,27 +52,71 @@ const statusConfig: Record<TaskStatus, { label: string; bg: string; icon: typeof
 };
 
 type Filter = 'all' | 'today' | 'tomorrow';
+type StatusFilter = 'all' | TaskStatus;
+
+const PROPERTY_OPTIONS = [
+  'Soho Loft',
+  'Camden House',
+  'Notting Hill Flat',
+  'Mayfair Studio',
+  'Shoreditch Penthouse',
+  'Hackney Studio',
+];
+const CLEANER_OPTIONS = [
+  'Sin asignar',
+  'Carmen R.',
+  'Lucía V.',
+  'Pedro K.',
+  'María R.',
+];
 
 export default function OwnerTasksPreview() {
+  return (
+    <Suspense fallback={null}>
+      <OwnerTasksPreviewInner />
+    </Suspense>
+  );
+}
+
+function OwnerTasksPreviewInner() {
+  const searchParams = useSearchParams();
+  const propertyParam = searchParams.get('property') ?? '';
+
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [filter, setFilter] = useState<Filter>('all');
-  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [query, setQuery] = useState(propertyParam);
   const [showNew, setShowNew] = useState(false);
-  const [newProperty, setNewProperty] = useState('');
+  const [newProperty, setNewProperty] = useState(PROPERTY_OPTIONS[0]);
+  const [newCleaner, setNewCleaner] = useState(CLEANER_OPTIONS[0]);
+  const [newDate, setNewDate] = useState('Hoy');
   const [newTime, setNewTime] = useState('');
+  const [newNotes, setNewNotes] = useState('');
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Update search when property query param appears (e.g. from properties page).
+  useEffect(() => {
+    if (propertyParam) setQuery(propertyParam);
+  }, [propertyParam]);
+
+  function showToast(text: string) {
+    setToast(text);
+    window.setTimeout(() => setToast(null), 1800);
+  }
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return tasks.filter((t) => {
       if (filter === 'today' && t.date !== 'Hoy') return false;
       if (filter === 'tomorrow' && t.date !== 'Mañana') return false;
+      if (statusFilter !== 'all' && t.status !== statusFilter) return false;
       if (q) {
         const hay = `${t.property} ${t.address} ${t.cleaner}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
-  }, [tasks, filter, query]);
+  }, [tasks, filter, statusFilter, query]);
 
   function updateStatus(id: string, status: TaskStatus) {
     setTasks((prev) =>
@@ -85,17 +130,27 @@ export default function OwnerTasksPreview() {
       ...prev,
       {
         id: `new-${prev.length + 1}`,
-        date: 'Hoy',
+        date: newDate,
         time: newTime,
         property: newProperty,
         address: 'London',
-        cleaner: 'Sin asignar',
+        cleaner: newCleaner,
         status: 'pending',
       },
     ]);
-    setNewProperty('');
+    setNewProperty(PROPERTY_OPTIONS[0]);
+    setNewCleaner(CLEANER_OPTIONS[0]);
+    setNewDate('Hoy');
     setNewTime('');
+    setNewNotes('');
     setShowNew(false);
+    showToast('Limpieza programada');
+  }
+
+  function deleteTask(id: string) {
+    if (!confirm('¿Eliminar esta tarea?')) return;
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+    showToast('Tarea eliminada');
   }
 
   const pillCls = (active: boolean) =>
@@ -157,19 +212,67 @@ export default function OwnerTasksPreview() {
               </button>
             </div>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <input
-                value={newProperty}
-                onChange={(e) => setNewProperty(e.target.value)}
-                placeholder="Propiedad (ej. Soho Loft)"
-                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
-              />
-              <input
-                value={newTime}
-                onChange={(e) => setNewTime(e.target.value)}
-                placeholder="Hora (ej. 12:30)"
-                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
-              />
+              <label className="block text-[11px] font-semibold text-slate-700">
+                Propiedad
+                <select
+                  value={newProperty}
+                  onChange={(e) => setNewProperty(e.target.value)}
+                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                >
+                  {PROPERTY_OPTIONS.map((p) => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-[11px] font-semibold text-slate-700">
+                Cleaner
+                <select
+                  value={newCleaner}
+                  onChange={(e) => setNewCleaner(e.target.value)}
+                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                >
+                  {CLEANER_OPTIONS.map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-[11px] font-semibold text-slate-700">
+                Día
+                <select
+                  value={newDate}
+                  onChange={(e) => setNewDate(e.target.value)}
+                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                >
+                  <option>Hoy</option>
+                  <option>Mañana</option>
+                  <option>Vie</option>
+                </select>
+              </label>
+              <label className="block text-[11px] font-semibold text-slate-700">
+                Hora
+                <input
+                  value={newTime}
+                  onChange={(e) => setNewTime(e.target.value)}
+                  placeholder="ej. 12:30"
+                  className="mt-1 h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm"
+                />
+              </label>
+              <label className="sm:col-span-2 block text-[11px] font-semibold text-slate-700">
+                Notas
+                <textarea
+                  value={newNotes}
+                  onChange={(e) => setNewNotes(e.target.value)}
+                  rows={2}
+                  placeholder="Acceso, instrucciones, suministros…"
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"
+                />
+              </label>
             </div>
+            {!newTime.trim() ? (
+              <p className="mt-2 text-[10.5px] text-rose-600">
+                Indica la hora para programar la limpieza.
+              </p>
+            ) : null}
             <button
               type="button"
               onClick={addTask}
@@ -220,6 +323,53 @@ export default function OwnerTasksPreview() {
             <Info className="h-3 w-3" /> Los filtros se aplican al instante.
           </span>
         </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            Estado:
+          </span>
+          {(
+            [
+              { key: 'all', label: 'Todos' },
+              { key: 'pending', label: 'Pendiente' },
+              { key: 'in_progress', label: 'En curso' },
+              { key: 'completed', label: 'Completada' },
+              { key: 'cancelled', label: 'Cancelada' },
+            ] as Array<{ key: StatusFilter; label: string }>
+          ).map((opt) => (
+            <button
+              key={opt.key}
+              type="button"
+              onClick={() => setStatusFilter(opt.key)}
+              title={
+                opt.key === 'all'
+                  ? 'Mostrar tareas de cualquier estado'
+                  : `Mostrar sólo tareas con estado ${opt.label.toLowerCase()}`
+              }
+              className={`h-7 rounded-full px-2.5 text-[10.5px] font-semibold transition ${
+                statusFilter === opt.key
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
+        {propertyParam ? (
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700">
+            Filtrado por propiedad: {propertyParam}
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              aria-label="Quitar filtro"
+              className="rounded-full p-0.5 hover:bg-blue-100"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </p>
+        ) : null}
 
         <div className="mt-4 space-y-3">
           {visible.map((t) => {
@@ -282,6 +432,14 @@ export default function OwnerTasksPreview() {
                     Completar
                   </button>
                 ) : null}
+                <button
+                  type="button"
+                  onClick={() => deleteTask(t.id)}
+                  title="Eliminar esta tarea de la lista"
+                  className="rounded-lg bg-white px-2 py-1 text-[10px] font-semibold text-rose-600 ring-1 ring-rose-200 hover:bg-rose-50"
+                >
+                  Eliminar
+                </button>
                 <Link
                   href={`/owner/preview/tasks/${t.id}`}
                   aria-label="Abrir detalle"
@@ -299,6 +457,14 @@ export default function OwnerTasksPreview() {
           ) : null}
         </div>
       </div>
+
+      {toast ? (
+        <div className="pointer-events-none fixed bottom-20 left-1/2 z-50 -translate-x-1/2">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+            ✓ {toast}
+          </div>
+        </div>
+      ) : null}
 
       <DemoBottomTabBar active="tasks" />
     </main>

@@ -13,11 +13,16 @@ import {
   ArrowLeft,
   Calendar,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   Clock,
   HelpCircle,
   MapPin,
+  Play,
   PoundSterling,
+  RotateCcw,
   Star,
+  X,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
@@ -217,28 +222,84 @@ const FILTERS: Array<{ key: Filter; label: string; title: string }> = [
   },
 ];
 
-export default function OperativePreviewWeek() {
-  const [filter, setFilter] = useState<Filter>('all');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+function nowHHMM(): string {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
 
-  const totalMinutes = 540;
-  const totalEarnings = 28000;
+export default function OperativePreviewWeek() {
+  const [resetKey, setResetKey] = useState(0);
+  return <OperativePreviewWeekBody key={resetKey} onReset={() => setResetKey((k) => k + 1)} />;
+}
+
+function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
+  const [filter, setFilter] = useState<Filter>('all');
+  const [collapsedDays, setCollapsedDays] = useState<Set<string>>(new Set());
+  const [days, setDays] = useState<Day[]>(DAYS);
+  const [selectedTask, setSelectedTask] = useState<{ dayLabel: string; taskId: string } | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(message: string) {
+    setToast(message);
+    window.setTimeout(() => setToast(null), 1800);
+  }
+
+  const allTasks = useMemo(() => days.flatMap((d) => d.tasks), [days]);
+  const totalMinutes = useMemo(
+    () => allTasks.reduce((sum, t) => sum + t.estimated_duration_min, 0),
+    [allTasks],
+  );
+  const totalEarnings = useMemo(
+    () =>
+      allTasks
+        .filter((t) => t.status === 'completed')
+        .reduce((sum, t) => sum + t.price_pence, 0),
+    [allTasks],
+  );
   const avgStars = 4.8;
-  const ratingCount = 6;
+  const ratingCount = allTasks.filter((t) => t.status === 'completed').length;
 
   const filteredDays = useMemo<Day[]>(
     () =>
-      DAYS.map((d) => ({
+      days.map((d) => ({
         ...d,
         tasks:
           filter === 'all' ? d.tasks : d.tasks.filter((t) => t.status === filter),
       })),
-    [filter],
+    [filter, days],
   );
 
-  function toggleExpand(id: string) {
-    setExpandedId((cur) => (cur === id ? null : id));
+  function toggleDay(label: string) {
+    setCollapsedDays((prev) => {
+      const next = new Set(prev);
+      if (next.has(label)) {
+        next.delete(label);
+      } else {
+        next.add(label);
+      }
+      return next;
+    });
   }
+
+  function updateTaskStatus(taskId: string, status: DemoStatus) {
+    setDays((prev) =>
+      prev.map((d) => ({
+        ...d,
+        tasks: d.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)),
+      })),
+    );
+    if (status === 'in_progress') {
+      showToast(`Check-in registrado a las ${nowHHMM()}`);
+    } else if (status === 'completed') {
+      showToast('Tarea marcada como completada');
+    }
+  }
+
+  const selected =
+    selectedTask &&
+    days
+      .find((d) => d.label === selectedTask.dayLabel)
+      ?.tasks.find((t) => t.id === selectedTask.taskId);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
@@ -322,31 +383,44 @@ export default function OperativePreviewWeek() {
         </div>
 
         <section className="mt-6 space-y-4">
-          {filteredDays.map((day) => (
-            <div key={day.label}>
-              <h2
-                className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider ${
-                  day.isToday ? 'text-brand-600' : 'text-graphite-3'
-                }`}
-              >
-                <Calendar className="h-3 w-3" />
-                {day.label}
-                {day.isToday ? ' · TODAY' : ''}
-              </h2>
-              {day.tasks.length === 0 ? (
-                <p className="mt-1 ml-5 text-[11px] text-graphite-3">
-                  {filter === 'all' ? 'No cleanings' : 'Sin coincidencias'}
-                </p>
-              ) : (
-                <ul className="mt-2 space-y-2">
-                  {day.tasks.map((t, idx) => {
-                    const isExpanded = expandedId === t.id;
-                    return (
+          {filteredDays.map((day) => {
+            const isCollapsed = collapsedDays.has(day.label);
+            return (
+              <div key={day.label}>
+                <button
+                  type="button"
+                  onClick={() => toggleDay(day.label)}
+                  title={isCollapsed ? 'Mostrar tareas de este día' : 'Ocultar tareas de este día'}
+                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left transition hover:bg-surface-2/40 ${
+                    day.isToday ? 'text-brand-600' : 'text-graphite-3'
+                  }`}
+                >
+                  <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+                    <Calendar className="h-3 w-3" />
+                    {day.label}
+                    {day.isToday ? ' · TODAY' : ''}
+                    <span className="rounded-full bg-surface-2 px-1.5 text-[9px] font-bold text-graphite-3">
+                      {day.tasks.length}
+                    </span>
+                  </h2>
+                  {isCollapsed ? (
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  ) : (
+                    <ChevronUp className="h-3.5 w-3.5" />
+                  )}
+                </button>
+                {isCollapsed ? null : day.tasks.length === 0 ? (
+                  <p className="mt-1 ml-5 text-[11px] text-graphite-3">
+                    {filter === 'all' ? 'No cleanings' : 'Sin coincidencias'}
+                  </p>
+                ) : (
+                  <ul className="mt-2 space-y-2">
+                    {day.tasks.map((t, idx) => (
                       <li key={t.id}>
                         <button
                           type="button"
-                          onClick={() => toggleExpand(t.id)}
-                          title="Toca para ver las notas del cliente para esta tarea"
+                          onClick={() => setSelectedTask({ dayLabel: day.label, taskId: t.id })}
+                          title="Abrir detalles de la tarea — incluye Check-in y Completar"
                           className="flex w-full items-start gap-3 rounded-2xl border border-line bg-paper p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
                         >
                           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
@@ -369,33 +443,160 @@ export default function OperativePreviewWeek() {
                                 <PoundSterling className="h-3 w-3" />
                                 {formatMoney(t.price_pence)}
                               </span>
+                              <StatusBadge status={t.status} />
                             </div>
-                            {isExpanded ? (
-                              <div className="mt-2 rounded-lg border border-dashed border-line bg-surface-1/40 p-2">
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
-                                  Notas
-                                </p>
-                                <p className="mt-0.5 text-[11px] leading-relaxed text-graphite-1">
-                                  {t.notes}
-                                </p>
-                              </div>
-                            ) : null}
                           </div>
                           {t.status === 'completed' ? (
                             <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                           ) : null}
                         </button>
                       </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-          ))}
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
         </section>
       </div>
+
+      {/* Task details sheet */}
+      {selected && selectedTask ? (
+        <div
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center"
+          onClick={() => setSelectedTask(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-t-3xl bg-paper p-5 shadow-2xl sm:rounded-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-graphite-3">
+                  {selectedTask.dayLabel} · {selected.service_name}
+                </p>
+                <h2 className="mt-1 font-display text-lg font-semibold text-graphite-1">
+                  {selected.property.name}
+                </h2>
+                <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-brand-600">
+                  <MapPin className="h-3 w-3" /> {selected.property.address}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedTask(null)}
+                title="Cerrar"
+                className="grid h-8 w-8 place-items-center rounded-full text-graphite-3 hover:bg-surface-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-graphite-3">
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {formatHours(selected.estimated_duration_min)}
+              </span>
+              <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                <PoundSterling className="h-3 w-3" />
+                {formatMoney(selected.price_pence)}
+              </span>
+              <StatusBadge status={selected.status} />
+            </div>
+
+            <div className="mt-4 rounded-xl border border-dashed border-line bg-surface-1/40 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
+                Notas
+              </p>
+              <p className="mt-1 text-[12px] leading-relaxed text-graphite-1">
+                {selected.notes}
+              </p>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              {selected.status === 'scheduled' ? (
+                <button
+                  type="button"
+                  onClick={() => updateTaskStatus(selected.id, 'in_progress')}
+                  title="Marcar que has llegado al cliente — registra hora de inicio"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-500 px-3 py-2.5 text-[12px] font-bold text-white shadow"
+                >
+                  <Play className="h-3.5 w-3.5" /> Check-in
+                </button>
+              ) : null}
+              {selected.status === 'in_progress' ? (
+                <button
+                  type="button"
+                  onClick={() => updateTaskStatus(selected.id, 'completed')}
+                  title="Marcar la tarea como terminada"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-[12px] font-bold text-white shadow"
+                >
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Completar
+                </button>
+              ) : null}
+              {selected.status === 'completed' ? (
+                <button
+                  type="button"
+                  onClick={() => updateTaskStatus(selected.id, 'scheduled')}
+                  title="Revertir esta tarea a pendiente (sólo demo)"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line bg-paper px-3 py-2.5 text-[12px] font-bold text-graphite-1"
+                >
+                  Reabrir
+                </button>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => setSelectedTask(null)}
+                title="Cerrar el panel sin cambios"
+                className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line bg-paper px-3 py-2.5 text-[12px] font-bold text-graphite-1"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Toast */}
+      {toast ? (
+        <div
+          className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
+          aria-live="polite"
+        >
+          <div className="rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur">
+            ✓ {toast}
+          </div>
+        </div>
+      ) : null}
+
+      {/* Reset demo */}
+      <button
+        type="button"
+        onClick={onReset}
+        title="Reiniciar la demo — vuelve al estado inicial sin recargar"
+        className="fixed bottom-20 right-3 z-[55] inline-flex items-center gap-1 rounded-full bg-paper/90 px-3 py-1.5 text-[10px] font-semibold text-graphite-3 shadow ring-1 ring-line backdrop-blur hover:text-graphite-1"
+      >
+        <RotateCcw className="h-3 w-3" />
+        Reiniciar demo
+      </button>
+
       <PreviewBottomTabBar active="tareas" />
     </main>
+  );
+}
+
+const STATUS_LABEL: Record<DemoStatus, { label: string; cls: string }> = {
+  scheduled: { label: 'Pendiente', cls: 'bg-slate-100 text-slate-700' },
+  in_progress: { label: 'En curso', cls: 'bg-amber-100 text-amber-800' },
+  completed: { label: 'Completada', cls: 'bg-emerald-100 text-emerald-800' },
+};
+
+function StatusBadge({ status }: { status: DemoStatus }) {
+  const s = STATUS_LABEL[status];
+  return (
+    <span className={`rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold ${s.cls}`}>
+      {s.label}
+    </span>
   );
 }
 

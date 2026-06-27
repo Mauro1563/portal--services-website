@@ -95,23 +95,38 @@ const platformChip: Record<Property['platform'], string> = {
   direct: 'bg-emerald-100 text-emerald-700',
 };
 
+type PlatformFilter = Property['platform'] | 'all';
+
 export default function OwnerPropertiesPreview() {
   const [properties, setProperties] = useState<Property[]>(initialProperties);
   const [query, setQuery] = useState('');
+  const [platform, setPlatform] = useState<PlatformFilter>('all');
   const [openId, setOpenId] = useState<string | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAddress, setNewAddress] = useState('');
+  const [newBeds, setNewBeds] = useState('2');
+  const [newBaths, setNewBaths] = useState('1');
+  const [newArea, setNewArea] = useState('50');
+  const [newPlatform, setNewPlatform] = useState<Property['platform']>('direct');
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(text: string) {
+    setToast(text);
+    window.setTimeout(() => setToast(null), 1800);
+  }
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return properties;
-    return properties.filter(
-      (p) =>
+    return properties.filter((p) => {
+      if (platform !== 'all' && p.platform !== platform) return false;
+      if (!q) return true;
+      return (
         p.name.toLowerCase().includes(q) ||
-        p.address.toLowerCase().includes(q),
-    );
-  }, [properties, query]);
+        p.address.toLowerCase().includes(q)
+      );
+    });
+  }, [properties, query, platform]);
 
   function addProperty() {
     if (!newName.trim() || !newAddress.trim()) return;
@@ -122,16 +137,38 @@ export default function OwnerPropertiesPreview() {
         name: newName.trim(),
         address: newAddress.trim(),
         mapsQuery: encodeURIComponent(newAddress.trim()).replace(/%20/g, '+'),
-        beds: 2, baths: 1, area: 50, guests: 2,
-        platform: 'direct',
+        beds: Number(newBeds) || 0,
+        baths: Number(newBaths) || 1,
+        area: Number(newArea) || 50,
+        guests: (Number(newBeds) || 0) * 2 || 2,
+        platform: newPlatform,
         cleanings: 0,
         photo: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=70',
       },
     ]);
     setNewName('');
     setNewAddress('');
+    setNewBeds('2');
+    setNewBaths('1');
+    setNewArea('50');
+    setNewPlatform('direct');
     setShowNewForm(false);
+    showToast('Propiedad añadida');
   }
+
+  function deleteProperty(id: string) {
+    if (!confirm('¿Eliminar esta propiedad?')) return;
+    setProperties((prev) => prev.filter((p) => p.id !== id));
+    if (openId === id) setOpenId(null);
+    showToast('Propiedad eliminada');
+  }
+
+  const platformPill = (active: boolean) =>
+    `h-8 rounded-full px-3 text-[11px] font-semibold transition ${
+      active
+        ? 'bg-blue-600 text-white shadow-sm'
+        : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50'
+    }`;
 
   return (
     <main className="min-h-screen bg-slate-50 pb-20">
@@ -199,7 +236,47 @@ export default function OwnerPropertiesPreview() {
                 placeholder="5 Bond St, Mayfair, London W1S 1SF"
                 className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
               />
+              <input
+                type="number"
+                min={0}
+                value={newBeds}
+                onChange={(e) => setNewBeds(e.target.value)}
+                placeholder="Dormitorios"
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              />
+              <input
+                type="number"
+                min={1}
+                value={newBaths}
+                onChange={(e) => setNewBaths(e.target.value)}
+                placeholder="Baños"
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              />
+              <input
+                type="number"
+                min={1}
+                value={newArea}
+                onChange={(e) => setNewArea(e.target.value)}
+                placeholder="m²"
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              />
+              <select
+                value={newPlatform}
+                onChange={(e) =>
+                  setNewPlatform(e.target.value as Property['platform'])
+                }
+                className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm"
+              >
+                <option value="direct">Directo</option>
+                <option value="airbnb">Airbnb</option>
+                <option value="booking">Booking</option>
+              </select>
             </div>
+            {(!newName.trim() || !newAddress.trim()) ? (
+              <p className="mt-2 text-[10.5px] text-rose-600">
+                Nombre y dirección son obligatorios.
+              </p>
+            ) : null}
             <button
               type="button"
               onClick={addProperty}
@@ -219,6 +296,44 @@ export default function OwnerPropertiesPreview() {
             placeholder="Buscar propiedad…"
             className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
           />
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setPlatform('all')}
+            title="Mostrar propiedades de cualquier plataforma"
+            className={platformPill(platform === 'all')}
+          >
+            Todas
+          </button>
+          <button
+            type="button"
+            onClick={() => setPlatform('airbnb')}
+            title="Filtrar sólo propiedades publicadas en Airbnb"
+            className={platformPill(platform === 'airbnb')}
+          >
+            Airbnb
+          </button>
+          <button
+            type="button"
+            onClick={() => setPlatform('booking')}
+            title="Filtrar sólo propiedades publicadas en Booking.com"
+            className={platformPill(platform === 'booking')}
+          >
+            Booking
+          </button>
+          <button
+            type="button"
+            onClick={() => setPlatform('direct')}
+            title="Filtrar sólo reservas directas"
+            className={platformPill(platform === 'direct')}
+          >
+            Direct
+          </button>
+          <span className="ml-auto text-[11px] text-slate-500">
+            {visible.length} resultado{visible.length === 1 ? '' : 's'}
+          </span>
         </div>
 
         <p className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-slate-500">
@@ -299,12 +414,20 @@ export default function OwnerPropertiesPreview() {
                         <MapPin className="h-3 w-3" /> Ver en mapa
                       </a>
                       <Link
-                        href="/owner/preview/tasks"
-                        title="Ver las limpiezas programadas para esta propiedad"
+                        href={`/owner/preview/tasks?property=${encodeURIComponent(p.name)}`}
+                        title={`Ver las limpiezas programadas para ${p.name}`}
                         className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-100"
                       >
                         <Camera className="h-3 w-3" /> Ver limpiezas
                       </Link>
+                      <button
+                        type="button"
+                        onClick={() => deleteProperty(p.id)}
+                        title="Eliminar esta propiedad del panel"
+                        className="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-rose-600 ring-1 ring-rose-200 hover:bg-rose-50"
+                      >
+                        Eliminar
+                      </button>
                     </div>
                   </div>
                 ) : null}
@@ -319,6 +442,14 @@ export default function OwnerPropertiesPreview() {
           </p>
         ) : null}
       </div>
+
+      {toast ? (
+        <div className="pointer-events-none fixed bottom-20 left-1/2 z-50 -translate-x-1/2">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+            ✓ {toast}
+          </div>
+        </div>
+      ) : null}
 
       <DemoBottomTabBar active="properties" />
     </main>
