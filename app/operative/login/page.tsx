@@ -25,25 +25,24 @@ export default async function OperativeLogin({ searchParams }: Props) {
       subtitle="Tu manager te dio un PIN de 6 dígitos."
       error={error ? decodeURIComponent(error) : undefined}
     >
-      <div className="p-5 sm:p-7">
+      <div>
         {/* PRIMARY CTA — the demo escape hatch. Anyone landing here from the
             marketing site has no real cleaner PIN, so the no-auth demo must
             be the unmistakable primary action above the fold. */}
         <Link
           href="/operative/preview"
           title="Entra al demo del operario sin necesidad de PIN"
-          className="group flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 px-4 py-4 text-left shadow-[0_14px_30px_-12px_rgba(5,150,105,0.55)] transition hover:from-emerald-400 hover:to-teal-500"
-          style={{ minHeight: '64px' }}
+          className="group flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 px-4 py-3 text-left shadow-[0_14px_30px_-12px_rgba(5,150,105,0.55)] transition hover:from-emerald-400 hover:to-teal-500"
         >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white text-emerald-600 shadow-sm">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-emerald-600 shadow-sm">
             <PlayCircle className="h-5 w-5" />
           </span>
           <span className="flex-1 min-w-0">
-            <span className="block text-base font-bold leading-tight text-white">
-              Probar como cleaner — sin código
+            <span className="block text-[15px] font-bold leading-tight text-white">
+              Probar el demo
             </span>
             <span className="mt-0.5 block text-[11px] leading-snug text-emerald-50">
-              Entra al demo en vivo y juega con la app del operario.
+              Entra como cleaner sin código
             </span>
           </span>
           <ChevronRight className="h-5 w-5 shrink-0 text-white transition-transform duration-300 group-hover:translate-x-1" />

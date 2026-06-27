@@ -29,9 +29,14 @@ export async function updateSession(request: NextRequest) {
   // the PIN login flow), NOT by Supabase JWT — so calling supabase.auth.
   // getUser() here is a wasted HTTP round-trip (150-400ms per request).
   // Check the cookie directly and return without ever constructing the
-  // Supabase client. /operative/login is intentionally public.
+  // Supabase client. /operative/login and /operative/preview are
+  // intentionally public (preview is the marketing-site demo CTA — if
+  // we redirect it to /operative/login the demo card looks broken).
   if (pathname.startsWith('/operative')) {
-    if (!pathname.startsWith('/operative/login')) {
+    if (
+      !pathname.startsWith('/operative/login') &&
+      !pathname.startsWith('/operative/preview')
+    ) {
       const cleanerSession = request.cookies.get('cleaner_session');
       if (!cleanerSession) {
         const url = request.nextUrl.clone();
