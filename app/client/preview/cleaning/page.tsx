@@ -68,7 +68,7 @@ export default function ClientCleaningPreview() {
       activeTab="reservas"
       title="Detalle de limpieza"
       showBack
-      backHref={`/client/${PREVIEW_TOKEN}/cleanings`}
+      backHref="/client/preview/cleanings"
     >
       <div className="space-y-4">
         {/* Status header */}
@@ -115,7 +115,7 @@ export default function ClientCleaningPreview() {
               <p className="text-xs text-slate-500">London Sparkle Cleaning Co.</p>
             </div>
             <Link
-              href={`/client/${PREVIEW_TOKEN}/messages`}
+              href="/client/preview/messages"
               title="Enviar un mensaje a Carmen sobre esta limpieza"
               className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
             >
@@ -348,7 +348,7 @@ export default function ClientCleaningPreview() {
             <FileText className="h-3.5 w-3.5" /> Pedir factura
           </button>
           <Link
-            href={`/client/${PREVIEW_TOKEN}/book?service=profunda`}
+            href="/client/preview/book?service=profunda"
             title="Reservar otra vez este mismo servicio"
             className="inline-flex flex-1 items-center justify-center rounded-2xl bg-blue-600 px-3 py-2.5 text-[11.5px] font-bold uppercase tracking-wider text-white hover:bg-blue-700"
           >

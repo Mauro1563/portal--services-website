@@ -258,7 +258,7 @@ function ClientPreviewInner({
       </div>
 
       <Link
-        href={`/client/${PREVIEW_TOKEN}/book`}
+        href="/client/preview/book"
         title="Reservar una nueva limpieza"
         className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-4 text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] transition hover:from-blue-700 hover:to-blue-900"
       >
@@ -282,7 +282,7 @@ function ClientPreviewInner({
           label="Próximas"
           value="2"
           title="Ver las limpiezas programadas en los próximos días"
-          onClick={() => router.push(`/client/${PREVIEW_TOKEN}/cleanings?status=upcoming`)}
+          onClick={() => router.push('/client/preview/cleanings?status=upcoming')}
         />
         <StatChip
           icon={CheckCircle2}
@@ -290,7 +290,7 @@ function ClientPreviewInner({
           label="Hechas"
           value="12"
           title="Ver el historial de limpiezas completadas"
-          onClick={() => router.push(`/client/${PREVIEW_TOKEN}/cleanings?status=done`)}
+          onClick={() => router.push('/client/preview/cleanings?status=done')}
         />
         <StatChip
           icon={Star}
@@ -410,7 +410,7 @@ function ClientPreviewInner({
                 </p>
               </div>
               <Link
-                href={`/client/${PREVIEW_TOKEN}/cleaning`}
+                href="/client/preview/cleaning"
                 title="Ver detalle completo de la visita"
                 className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white transition hover:bg-slate-700"
               >
@@ -550,7 +550,7 @@ function ClientPreviewInner({
               </ul>
             </div>
             <Link
-              href={`/client/${PREVIEW_TOKEN}/book`}
+              href="/client/preview/book"
               title={`Pedir que ${openCleaner.name} sea tu cleaner asignado`}
               className="mt-4 flex h-11 items-center justify-center rounded-2xl bg-blue-600 px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] hover:bg-blue-700"
               onClick={() => setCleanerOpen(null)}

@@ -3,6 +3,9 @@
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+// `revalidatePath` is kept for `signout` only — sign-in flows below
+// rely on `redirect()` to bust the destination layout cache, which
+// avoids paying for a full RSC re-render before the navigation.
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getSuperAdminEmails } from '@/lib/super-admin';
@@ -87,11 +90,12 @@ export async function signIn(formData: FormData) {
     if (err) {
       redirect('/login?error=' + encodeURIComponent(err));
     }
-    // Scope cache invalidation to the destination layout — a global
-    // revalidatePath('/', 'layout') wipes EVERY page's RSC cache before
-    // redirect, adding 100s of ms to the click→navigate gap. The fresh
-    // auth cookie alone is enough for the destination to re-render.
-    revalidatePath(destination, 'layout');
+    // No revalidatePath here: `redirect()` already bypasses the RSC
+    // cache for the destination on next navigation, and the fresh auth
+    // cookie is enough for the destination to re-render with the new
+    // user. Calling revalidatePath('/', 'layout') was wiping EVERY
+    // page's RSC cache (100s of ms of waste); even scoped to /owner it
+    // forces a synchronous re-render before redirect with no upside.
     redirect(destination);
   }
 
@@ -117,9 +121,9 @@ export async function signIn(formData: FormData) {
     redirect('/login?error=' + encodeURIComponent(detail));
   }
 
-  // Scope to the destination layout only — see note above for why we
-  // dropped the global revalidatePath('/', 'layout') here.
-  revalidatePath(destination, 'layout');
+  // No revalidatePath — see the comment in the master-password branch
+  // above for the reasoning. `redirect()` already bypasses the cached
+  // RSC payload for the destination on the resulting navigation.
   redirect(destination);
 }
 

@@ -101,7 +101,7 @@ function BookForm() {
         </div>
         <div className="flex w-full flex-col gap-2">
           <Link
-            href={`/client/${PREVIEW_TOKEN}/cleanings`}
+            href="/client/preview/cleanings"
             title="Ver todas tus reservas"
             className="flex h-11 items-center justify-center rounded-2xl bg-blue-600 px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.6)] hover:bg-blue-700"
           >
@@ -261,7 +261,7 @@ export default function ClientBookPreview() {
       activeTab="reservas"
       title="Reservar limpieza"
       showBack
-      backHref={`/client/${PREVIEW_TOKEN}`}
+      backHref="/client/preview"
     >
       <Suspense fallback={<p className="text-sm text-slate-500">Cargando…</p>}>
         <BookForm />

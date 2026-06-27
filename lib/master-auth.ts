@@ -35,25 +35,59 @@ export async function masterSignInAsEmail(email: string): Promise<string | null>
   const admin = createAdminClient();
   const lower = email.toLowerCase();
 
-  // Walk the user list to find this email. We previously had `perPage:200`
-  // and looped up to 5 times — 5 sequential round-trips before we even
-  // start auth. Use the max page size (1000) and cap the loop at 2 pages:
-  // - Page 1: covers the first 1000 users in a single HTTP call (vs. the
-  //   old 5×200=1000 sequential calls).
-  // - Page 2: safety net for installations >1000 users.
-  // We also start building the SSR client in parallel since createClient()
-  // touches request cookies and doesn't depend on the user lookup.
+  // Find this email via the GoTrue admin REST endpoint's `?email=` filter
+  // — a single HTTP call that returns at most one user. The supabase-js
+  // SDK doesn't expose this filter on `auth.admin.listUsers()`, so we
+  // call /admin/users directly with the service-role key.
+  //
+  // History: this used to be `listUsers({perPage:200})` looped up to 5
+  // times (5 sequential round-trips before we could even start auth).
+  // Then perPage:1000 ×2 (2 round-trips). Now it's 1 round-trip —
+  // bounded, regardless of how many users the project has.
+  //
+  // We also build the SSR client in parallel since createClient() touches
+  // request cookies and doesn't depend on the user lookup.
   const ssrPromise = createClient();
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!supabaseUrl || !serviceKey) {
+    return 'env:NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY missing';
+  }
+
   let user: { id: string; email?: string | null } | undefined;
-  for (let page = 1; page <= 2; page++) {
-    const { data: list, error: listErr } = await admin.auth.admin.listUsers({
-      page,
-      perPage: 1000,
-    });
-    if (listErr) return `list:${listErr.message}`;
-    user = list?.users.find((u) => u.email?.toLowerCase() === lower);
-    if (user || !list?.users.length || list.users.length < 1000) break;
+  try {
+    const resp = await fetch(
+      `${supabaseUrl}/auth/v1/admin/users?email=${encodeURIComponent(lower)}`,
+      {
+        method: 'GET',
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+        },
+        // Auth admin lookups are always per-request — never cache.
+        cache: 'no-store',
+      },
+    );
+    if (resp.ok) {
+      const body = (await resp.json()) as
+        | { users?: Array<{ id: string; email?: string | null }> }
+        | { id: string; email?: string | null };
+      // GoTrue returns `{users:[...]}` when filtered, or sometimes the
+      // single user object directly — handle both shapes.
+      if ('users' in body && Array.isArray(body.users)) {
+        user = body.users.find((u) => u.email?.toLowerCase() === lower);
+      } else if ('id' in body) {
+        user = body;
+      }
+    } else if (resp.status !== 404) {
+      // 404 means "no user with that email" — treat as not-found, not
+      // an error. Any other non-OK is a real failure worth surfacing.
+      const text = await resp.text().catch(() => '');
+      return `list:${resp.status}:${text.slice(0, 120)}`;
+    }
+  } catch (err) {
+    return `list:${(err as Error).message}`;
   }
 
   const tempPwd = `Md${Date.now()}!Xy`;

@@ -330,7 +330,7 @@ function CleaningsInner() {
       )}
 
       <Link
-        href={`/client/${PREVIEW_TOKEN}/book`}
+        href="/client/preview/book"
         title="Crear una nueva reserva"
         className="mt-6 flex h-12 items-center justify-center rounded-2xl bg-blue-600 px-4 text-sm font-bold text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] transition hover:bg-blue-700"
       >
@@ -433,7 +433,7 @@ function CleaningsInner() {
                 onClick={() => {
                   setDetail(null);
                   router.push(
-                    `/client/${PREVIEW_TOKEN}/book?service=${detail.serviceId}`,
+                    `/client/preview/book?service=${detail.serviceId}`,
                   );
                 }}
                 title="Reservar otra vez este mismo servicio"
@@ -443,7 +443,7 @@ function CleaningsInner() {
               </button>
               {detail.status === 'upcoming' && (
                 <Link
-                  href={`/client/${PREVIEW_TOKEN}/cleaning`}
+                  href="/client/preview/cleaning"
                   onClick={() => setDetail(null)}
                   title="Ver pantalla completa con todos los detalles"
                   className="flex h-11 items-center justify-center rounded-2xl bg-slate-900 px-4 text-[12px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"

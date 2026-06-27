@@ -473,7 +473,7 @@ export default function ClientProfilePreview() {
         <p className="text-[11px] text-slate-500">
           ¿Necesitas ayuda? Escríbele a{' '}
           <Link
-            href={`/client/${PREVIEW_TOKEN}/messages`}
+            href="/client/preview/messages"
             title="Abrir el chat con London Sparkle Cleaning Co."
             className="font-semibold text-blue-700 underline-offset-2 hover:underline"
           >
