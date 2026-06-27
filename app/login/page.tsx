@@ -1,5 +1,13 @@
 import Link from 'next/link';
-import { ArrowRight, Mail, ShieldCheck } from 'lucide-react';
+import {
+  ArrowRight,
+  Building2,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+  Users,
+} from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { PasswordInput } from './PasswordInput';
@@ -24,6 +32,11 @@ const COPY: Record<
     operativeHint: string;
     showPassword: string;
     hidePassword: string;
+    demoEyebrow: string;
+    demoTitle: string;
+    demoOwner: string;
+    demoCleaner: string;
+    demoClient: string;
   }
 > = {
   en: {
@@ -32,6 +45,11 @@ const COPY: Record<
     operativeHint: 'Cleaner? Leave password empty — your PIN is enough.',
     showPassword: 'Show password',
     hidePassword: 'Hide password',
+    demoEyebrow: 'No account yet?',
+    demoTitle: 'Try the live demos — no sign-up',
+    demoOwner: 'Owner dashboard',
+    demoCleaner: 'Cleaner app',
+    demoClient: 'Customer portal',
   },
   es: {
     identifierLabel: 'Email o PIN',
@@ -39,6 +57,11 @@ const COPY: Record<
     operativeHint: '¿Operario? Deja la contraseña vacía — tu PIN ya alcanza.',
     showPassword: 'Mostrar contraseña',
     hidePassword: 'Ocultar contraseña',
+    demoEyebrow: '¿Aún no tienes cuenta?',
+    demoTitle: 'Prueba los demos en vivo — sin registro',
+    demoOwner: 'Panel del dueño',
+    demoCleaner: 'App del operario',
+    demoClient: 'Portal del cliente',
   },
   pt: {
     identifierLabel: 'Email ou PIN',
@@ -46,6 +69,11 @@ const COPY: Record<
     operativeHint: 'Operário? Deixe a senha vazia — o teu PIN já chega.',
     showPassword: 'Mostrar senha',
     hidePassword: 'Ocultar senha',
+    demoEyebrow: 'Ainda sem conta?',
+    demoTitle: 'Experimenta os demos ao vivo — sem registo',
+    demoOwner: 'Painel do dono',
+    demoCleaner: 'App do operário',
+    demoClient: 'Portal do cliente',
   },
 };
 
@@ -185,6 +213,52 @@ export default async function LoginPage({ searchParams }: Props) {
               <span className="min-w-0 break-words">{message}</span>
             </p>
           ) : null}
+
+          {/* Demo escape hatches — anyone who lands on /login without a
+              real account (the common path for prospects coming from the
+              marketing site) gets a direct, no-PIN one-tap entry into the
+              three live previews. */}
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-blue-50/40 p-3">
+            <p className="px-1 text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
+              <Sparkles className="-mt-px mr-1 inline h-3 w-3" />
+              {copy.demoEyebrow}
+            </p>
+            <p className="mt-0.5 px-1 text-[12px] font-bold text-slate-900">
+              {copy.demoTitle}
+            </p>
+            <div className="mt-2.5 grid grid-cols-3 gap-1.5">
+              <Link
+                href="/owner/preview"
+                title={copy.demoOwner}
+                className="group flex flex-col items-center gap-1 rounded-xl bg-slate-900 px-2 py-2.5 text-white transition hover:bg-slate-800"
+              >
+                <Building2 className="h-4 w-4 text-cyan-300 transition group-hover:scale-110" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">
+                  Owner
+                </span>
+              </Link>
+              <Link
+                href="/operative/preview"
+                title={copy.demoCleaner}
+                className="group flex flex-col items-center gap-1 rounded-xl bg-emerald-600 px-2 py-2.5 text-white transition hover:bg-emerald-500"
+              >
+                <Users className="h-4 w-4 transition group-hover:scale-110" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">
+                  Cleaner
+                </span>
+              </Link>
+              <Link
+                href="/client/preview"
+                title={copy.demoClient}
+                className="group flex flex-col items-center gap-1 rounded-xl bg-blue-600 px-2 py-2.5 text-white transition hover:bg-blue-500"
+              >
+                <UserRound className="h-4 w-4 transition group-hover:scale-110" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">
+                  Client
+                </span>
+              </Link>
+            </div>
+          </div>
 
           <form action={signIn} className="mt-7 space-y-4">
             <label className="block">

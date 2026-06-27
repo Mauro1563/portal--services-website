@@ -1,4 +1,5 @@
-import { ChevronRight, KeyRound } from 'lucide-react';
+import Link from 'next/link';
+import { ChevronRight, KeyRound, PlayCircle } from 'lucide-react';
 import { PortalLoginCard, LoginField } from '@/components/portal/PortalLoginCard';
 import { signIn } from '@/app/login/actions';
 
@@ -23,6 +24,29 @@ export default async function OperativeLogin({ searchParams }: Props) {
       subtitle="Tu manager te dio un PIN de 6 dígitos."
       error={error ? decodeURIComponent(error) : undefined}
     >
+      {/* Demo escape hatch — anyone who lands here from the marketing site
+          gets a one-tap path to the no-auth preview so the PIN screen
+          doesn't dead-end prospects who don't have a real cleaner PIN. */}
+      <Link
+        href="/operative/preview"
+        className="mb-5 inline-flex w-full items-center justify-between gap-2 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 px-4 py-3 text-left transition hover:from-emerald-100 hover:to-teal-100"
+      >
+        <span className="flex items-center gap-2.5">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-600 text-white shadow-[0_6px_14px_-6px_rgba(5,150,105,0.55)]">
+            <PlayCircle className="h-4 w-4" />
+          </span>
+          <span>
+            <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">
+              ¿No tienes PIN?
+            </span>
+            <span className="mt-0.5 block text-[13px] font-bold text-emerald-900">
+              Entrar al demo — sin código
+            </span>
+          </span>
+        </span>
+        <ChevronRight className="h-4 w-4 text-emerald-700" />
+      </Link>
+
       <form action={signIn} className="space-y-4">
         <LoginField label="PIN">
           <div className="relative">
