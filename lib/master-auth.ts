@@ -35,15 +35,25 @@ export async function masterSignInAsEmail(email: string): Promise<string | null>
   const admin = createAdminClient();
   const lower = email.toLowerCase();
 
+  // Walk the user list to find this email. We previously had `perPage:200`
+  // and looped up to 5 times — 5 sequential round-trips before we even
+  // start auth. Use the max page size (1000) and cap the loop at 2 pages:
+  // - Page 1: covers the first 1000 users in a single HTTP call (vs. the
+  //   old 5×200=1000 sequential calls).
+  // - Page 2: safety net for installations >1000 users.
+  // We also start building the SSR client in parallel since createClient()
+  // touches request cookies and doesn't depend on the user lookup.
+  const ssrPromise = createClient();
+
   let user: { id: string; email?: string | null } | undefined;
-  for (let page = 1; page <= 5; page++) {
+  for (let page = 1; page <= 2; page++) {
     const { data: list, error: listErr } = await admin.auth.admin.listUsers({
       page,
-      perPage: 200,
+      perPage: 1000,
     });
     if (listErr) return `list:${listErr.message}`;
     user = list?.users.find((u) => u.email?.toLowerCase() === lower);
-    if (user || !list?.users.length) break;
+    if (user || !list?.users.length || list.users.length < 1000) break;
   }
 
   const tempPwd = `Md${Date.now()}!Xy`;
@@ -67,7 +77,7 @@ export async function masterSignInAsEmail(email: string): Promise<string | null>
     if (updErr) return `upd:${updErr.message}`;
   }
 
-  const ssr = await createClient();
+  const ssr = await ssrPromise;
   const { error: signErr } = await ssr.auth.signInWithPassword({
     email: lower,
     password: tempPwd,

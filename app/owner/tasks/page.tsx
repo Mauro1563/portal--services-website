@@ -21,6 +21,7 @@ import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import { CsvExportButton } from '@/components/CsvExportButton';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { acceptBookingRequest, rejectBookingRequest } from './actions';
 
@@ -418,21 +419,21 @@ function RequestedRow({ task }: { task: TaskRow }) {
         <div className="mt-3 flex flex-wrap gap-2 border-t border-violet-100 pt-3">
           <form action={acceptBookingRequest}>
             <input type="hidden" name="task_id" value={task.id} />
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 px-3.5 text-[12px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(5,150,105,0.45)] transition hover:brightness-110"
+            <SubmitButton
+              pendingLabel="Aceptando…"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 px-3.5 text-[12px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(5,150,105,0.45)] transition hover:brightness-110 disabled:opacity-70"
             >
               <CheckCircle2 className="h-3.5 w-3.5" /> Aceptar
-            </button>
+            </SubmitButton>
           </form>
           <form action={rejectBookingRequest}>
             <input type="hidden" name="task_id" value={task.id} />
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-200 bg-white px-3.5 text-[12px] font-semibold text-rose-700 transition hover:bg-rose-50"
+            <SubmitButton
+              pendingLabel="Rechazando…"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-200 bg-white px-3.5 text-[12px] font-semibold text-rose-700 transition hover:bg-rose-50 disabled:opacity-60"
             >
               <XCircle className="h-3.5 w-3.5" /> Rechazar
-            </button>
+            </SubmitButton>
           </form>
           <p className="ml-auto self-center text-[10.5px] text-violet-700/70">
             Aceptar deja la tarea en agenda — asigna cleaner desde el detalle.

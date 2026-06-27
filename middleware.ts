@@ -1,4 +1,4 @@
-import { type NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n';
 import { updateSession } from '@/lib/supabase/middleware';
@@ -38,6 +38,30 @@ export async function middleware(request: NextRequest) {
   );
 
   if (isAppRoute) {
+    // /operative uses a cookie-based PIN session (no Supabase auth) —
+    // bouncing through supabase.auth.getUser() on every nav adds
+    // 150-400ms for nothing. Just gate on the cookie and pass through.
+    if (
+      pathname.startsWith('/operative') &&
+      !pathname.startsWith('/operative/login') &&
+      !pathname.startsWith('/operative/preview')
+    ) {
+      const cleanerSession = request.cookies.get('cleaner_session');
+      if (!cleanerSession) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/operative/login';
+        return NextResponse.redirect(url);
+      }
+      return NextResponse.next({ request });
+    }
+
+    // /client/* is gated by the token in the URL itself — there's no
+    // auth-cookie check to do here, and the page component already
+    // notFound()'s on an invalid token. Skip the Supabase round-trip.
+    if (pathname.startsWith('/client/')) {
+      return NextResponse.next({ request });
+    }
+
     return await updateSession(request);
   }
 

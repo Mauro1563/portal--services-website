@@ -15,6 +15,7 @@ import { requireOwner } from '@/lib/auth';
 import { cleanerLoginUrl } from '@/lib/cleaner-link';
 import { getT } from '@/lib/i18n';
 import { getOwnerProfile } from '@/lib/owner-profile';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import {
   onboardingAddProperty,
   onboardingAddCleaner,
@@ -183,9 +184,9 @@ function BusinessTypeCard({
   return (
     <form action={setBusinessType} className={fullWidth ? 'mt-3' : ''}>
       <input type="hidden" name="business_type" value={type} />
-      <button
-        type="submit"
-        className="group flex h-full w-full flex-col rounded-3xl border border-surface-2 bg-surface-0 p-6 text-left transition hover:border-brand-600/40 hover:bg-brand-600/[0.04] active:scale-[0.99]"
+      <SubmitButton
+        pendingLabel="Cargando…"
+        className="group flex h-full w-full flex-col items-stretch rounded-3xl border border-surface-2 bg-surface-0 p-6 text-left transition hover:border-brand-600/40 hover:bg-brand-600/[0.04] active:scale-[0.99] disabled:opacity-80"
       >
         <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600/10 ring-1 ring-inset ring-brand-600/20">
           {icon}
@@ -203,7 +204,7 @@ function BusinessTypeCard({
         <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-brand-600 transition group-hover:gap-2">
           {chooseLabel} <ArrowRight className="h-3.5 w-3.5" />
         </span>
-      </button>
+      </SubmitButton>
     </form>
   );
 }
@@ -283,12 +284,12 @@ function StepProperty({ email, t }: { email: string; t: T }) {
           <Link href="/owner" className="text-xs text-text-2 hover:text-text-1">
             {t('common.skip')}
           </Link>
-          <button
-            type="submit"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-5 text-sm font-medium text-text-1 shadow-lg hover:brightness-110"
+          <SubmitButton
+            pendingLabel="Continuando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-5 text-sm font-medium text-text-1 shadow-lg hover:brightness-110 disabled:opacity-70"
           >
             {t('common.continue')} <ArrowRight className="h-4 w-4" />
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </section>
@@ -330,12 +331,12 @@ function StepCleaner({ t }: { t: T }) {
           <Link href="/owner" className="text-xs text-text-2 hover:text-text-1">
             {t('common.skip')}
           </Link>
-          <button
-            type="submit"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-5 text-sm font-medium text-text-1 shadow-lg hover:brightness-110"
+          <SubmitButton
+            pendingLabel="Continuando…"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 px-5 text-sm font-medium text-text-1 shadow-lg hover:brightness-110 disabled:opacity-70"
           >
             {t('common.continue')} <ArrowRight className="h-4 w-4" />
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </section>

@@ -68,9 +68,14 @@ export async function markCompleted(formData: FormData) {
     );
   }
 
-  // Only notify on success — otherwise the owner gets an email about a
-  // task that never actually completed.
-  await notifyOwnerOfCompletion(taskId);
+  // Fire-and-forget the email — the cleaner's UI shouldn't wait 500-1500ms
+  // for an HTTP POST to Resend + 2 Supabase reads before the redirect.
+  // We `void` it so the action returns immediately; failures are logged
+  // but never block the cleaner's flow. (Best would be a real queue /
+  // waitUntil, but this is the high-impact 80% fix.)
+  void notifyOwnerOfCompletion(taskId).catch((err) => {
+    console.error('[markCompleted] notifyOwner failed', err);
+  });
 
   revalidatePath('/operative');
 }
@@ -140,6 +145,64 @@ export async function saveCleanerNote(formData: FormData) {
   revalidatePath(`/operative/tasks/${taskId}`);
   revalidatePath(`/owner/tasks/${taskId}`);
   redirect(`/operative/tasks/${taskId}?note_saved=1`);
+}
+
+/**
+ * Cleaner-reported hours worked for a task. Drives the cleaner's
+ * earnings calculation (actual_hours * cleaner_pay_rate_pence) and
+ * the owner's revenue figure on the same task. Stored as NUMERIC(4,2)
+ * — we accept up to 2 decimals (e.g. 2.75 = 2h 45m).
+ *
+ * Sending an empty value clears the field (NULL), which means the task
+ * is effectively "hours not yet reported" — earnings drop back to just
+ * the tip.
+ */
+export async function saveActualHours(formData: FormData) {
+  const cleanerId = await requireCleaner();
+  const taskId = ((formData.get('task_id') as string) ?? '').trim();
+  const raw = ((formData.get('actual_hours') as string) ?? '').trim();
+  if (!taskId) redirect('/operative');
+
+  let hours: number | null = null;
+  if (raw !== '') {
+    const parsed = Number(raw.replace(',', '.'));
+    if (!Number.isFinite(parsed) || parsed < 0 || parsed > 99.99) {
+      redirect(
+        `/operative/tasks/${taskId}?error=` +
+          encodeURIComponent('Horas inválidas (0 – 99.99).'),
+      );
+    }
+    // Round to 2dp to match NUMERIC(4,2) — avoids the DB rejecting
+    // floats like 2.7499999 that look fine in the input.
+    hours = Math.round(parsed * 100) / 100;
+  }
+
+  const admin = createAdminClient();
+  const { data: task } = await admin
+    .from('tasks')
+    .select('id, cleaner_id')
+    .eq('id', taskId)
+    .maybeSingle();
+  if (!task || task.cleaner_id !== cleanerId) redirect('/operative');
+
+  const { error } = await admin
+    .from('tasks')
+    .update({ actual_hours: hours })
+    .eq('id', taskId);
+
+  if (error) {
+    redirect(
+      `/operative/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
+
+  // The earnings strip on /operative reads from tasks too, so revalidate
+  // both pages — otherwise the cleaner saves hours and the strip stays
+  // stale until next navigation.
+  revalidatePath(`/operative/tasks/${taskId}`);
+  revalidatePath('/operative');
+  revalidatePath('/operative/earnings');
+  redirect(`/operative/tasks/${taskId}?hours_saved=1`);
 }
 
 export async function signOutOperative() {

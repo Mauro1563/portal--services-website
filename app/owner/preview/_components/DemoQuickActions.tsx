@@ -9,6 +9,8 @@ import {
   ChevronRight,
   Info,
   ListChecks,
+  Megaphone,
+  Palette,
   Plus,
   Sparkles,
   Users,
@@ -56,6 +58,22 @@ const TILES: Tile[] = [
     Icon: BarChart3,
     accent: 'from-slate-700 to-slate-900',
     title: 'Lista de clientes y acceso a sus portales',
+  },
+  {
+    href: '/owner/preview/branding',
+    label: 'Branding',
+    hint: 'logo y colores',
+    Icon: Palette,
+    accent: 'from-fuchsia-500 to-purple-600',
+    title: 'Personaliza el nombre, logo y colores del portal de tus clientes',
+  },
+  {
+    href: '/owner/preview/marketing',
+    label: 'Marketing',
+    hint: 'QR, promos, redes',
+    Icon: Megaphone,
+    accent: 'from-rose-500 to-pink-600',
+    title: 'Comparte tu enlace, crea códigos promocionales y descarga material',
   },
 ];
 

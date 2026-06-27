@@ -5,6 +5,7 @@ import {
   Download,
   KeyRound,
   Mail,
+  PoundSterling,
   Trash2,
   Upload,
   X,
@@ -13,12 +14,14 @@ import { createClient } from '@/lib/supabase/server';
 import { signout } from '@/app/login/actions';
 import { PLAN_LABELS, type PlanTier } from '@/lib/stripe';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { getOwnerProfile } from '@/lib/owner-profile';
 import {
   deleteAccount,
   removeBusinessLogo,
   updateBusinessProfile,
+  updateDefaultRate,
   updateEmail,
   updatePassword,
 } from './actions';
@@ -138,6 +141,44 @@ export default async function SettingsPage({
             </button>
           </form>
         ) : null}
+      </Section>
+
+      {/* Tarifas por defecto */}
+      <Section
+        icon={<PoundSterling className="h-5 w-5 text-brand-600" />}
+        title="Tarifas por defecto"
+        description="Tarifa por hora que cobrás a tus clientes cuando ni la tarea ni la propiedad tienen una tarifa propia. Podés sobreescribirla por propiedad y por tarea."
+      >
+        <form action={updateDefaultRate} className="space-y-3">
+          <label className="block">
+            <span className="text-xs font-medium text-text-2">
+              Tarifa por hora cobrada al cliente (£/h)
+            </span>
+            <div className="relative mt-1.5">
+              <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-sm font-medium text-text-3">
+                £
+              </span>
+              <input
+                type="number"
+                name="default_charge_rate"
+                step="0.01"
+                min="0"
+                defaultValue={
+                  profile.default_charge_rate_pence != null
+                    ? (profile.default_charge_rate_pence / 100).toFixed(2)
+                    : ''
+                }
+                placeholder="0.00"
+                className="block w-full rounded-xl border border-surface-2 bg-surface-0 py-2.5 pl-7 pr-4 text-sm text-text-1 placeholder:text-text-3 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+              />
+            </div>
+            <span className="mt-1 block text-[11px] text-text-3">
+              Dejá vacío para no aplicar tarifa por defecto. Se usa solo cuando
+              la propiedad y la tarea no la definen.
+            </span>
+          </label>
+          <SubmitButton>{t('common.saveChanges')}</SubmitButton>
+        </form>
       </Section>
 
       {/* Plan */}
@@ -357,13 +398,3 @@ function Field({
   );
 }
 
-function SubmitButton({ children }: { children: React.ReactNode }) {
-  return (
-    <button
-      type="submit"
-      className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow"
-    >
-      {children}
-    </button>
-  );
-}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Camera,
   CheckCircle2,
@@ -49,6 +50,7 @@ function uid(): string {
 }
 
 export function PhotoUploadButton({ taskId }: { taskId: string }) {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [pending, setPending] = useState<Pending[]>([]);
   const [processing, setProcessing] = useState(false);
@@ -123,7 +125,13 @@ export function PhotoUploadButton({ taskId }: { taskId: string }) {
       const serverError = finalUrl.searchParams.get('error');
       if (serverError) throw new Error(serverError);
       pending.forEach((p) => URL.revokeObjectURL(p.previewUrl));
-      window.location.assign('/operative');
+      // Soft SPA nav instead of `window.location.assign('/operative')` —
+      // the hard reload was forcing the browser to re-parse all the JS,
+      // CSS and HTML for a page the user was already on, doubling the
+      // perceived latency vs a router refresh + push.
+      setPending([]);
+      router.replace('/operative');
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
       setUploading(false);

@@ -103,6 +103,41 @@ export async function updateBusinessProfile(formData: FormData) {
   redirectWithMessage('Business profile updated.');
 }
 
+export async function updateDefaultRate(formData: FormData) {
+  const { user } = await requireOwner();
+
+  // Optional input. Empty string → clears the field (NULL).
+  const raw = ((formData.get('default_charge_rate') as string) ?? '').trim();
+  let pence: number | null = null;
+  if (raw !== '') {
+    const n = Number(raw);
+    if (!Number.isFinite(n) || n < 0) {
+      redirectWithMessage('Default rate must be a non-negative number.', 'error');
+    }
+    pence = Math.round(n * 100);
+  }
+
+  // Upsert via admin to dodge RLS edge cases (same approach the business
+  // profile mutation uses — the column lives on owner_profiles).
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from('owner_profiles')
+    .upsert(
+      {
+        owner_id: user.id,
+        default_charge_rate_pence: pence,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'owner_id' },
+    );
+
+  if (error) redirectWithMessage(error.message, 'error');
+
+  revalidatePath('/owner');
+  revalidatePath('/owner/settings');
+  redirectWithMessage('Tarifa por defecto actualizada.');
+}
+
 export async function removeBusinessLogo() {
   const { supabase, user } = await requireOwner();
   const { error } = await supabase

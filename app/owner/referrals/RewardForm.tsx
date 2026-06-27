@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Gift } from 'lucide-react';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { addReward } from './actions';
 
 const inputCls =
@@ -79,12 +80,12 @@ export function RewardForm() {
           />
         </label>
 
-        <button
-          type="submit"
-          className="flex h-10 items-center justify-center rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow"
+        <SubmitButton
+          pendingLabel="Añadiendo…"
+          className="flex h-10 items-center justify-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
         >
           Añadir premio
-        </button>
+        </SubmitButton>
       </form>
     </section>
   );

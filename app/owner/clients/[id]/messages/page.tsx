@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import { Send } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { sendOwnerMessage } from '../../actions';
 import { OwnerChatAutoRefresh } from './OwnerChatAutoRefresh';
 
@@ -117,13 +118,13 @@ export default async function OwnerClientMessages({ params, searchParams }: Prop
           placeholder={`Reply to ${client.name.split(/\s+/)[0]}…`}
           className="block min-h-[40px] max-h-32 flex-1 resize-none rounded-xl border-0 bg-transparent px-3 py-2 text-sm text-text-1 placeholder:text-text-3 focus:outline-none focus:ring-0"
         />
-        <button
-          type="submit"
-          aria-label="Send"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-brand-glow"
+        <SubmitButton
+          ariaLabel="Send"
+          pendingLabel=""
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-brand-glow disabled:opacity-70"
         >
           <Send className="h-4 w-4" />
-        </button>
+        </SubmitButton>
       </form>
     </LightLayout>
   );

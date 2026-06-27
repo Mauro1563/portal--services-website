@@ -29,6 +29,9 @@ export const MOCK_CTX: ClientContext = {
     business_logo_url: null,
     business_type: 'hybrid',
     brand_color: null,
+    brand_primary_color: null,
+    brand_secondary_color: null,
+    default_charge_rate_pence: 1700,
     email: 'hello@londonsparkle.co.uk',
   },
 };

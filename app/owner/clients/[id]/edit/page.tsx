@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { Home, KeyRound, User, Wifi } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { updateClient } from '../../actions';
 
 type Props = {
@@ -117,12 +118,12 @@ export default async function EditClientPage({ params, searchParams }: Props) {
         </Section>
 
         <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            className="flex h-11 flex-1 items-center justify-center rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow"
+          <SubmitButton
+            pendingLabel="Guardando…"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow disabled:opacity-80"
           >
             Guardar cambios
-          </button>
+          </SubmitButton>
           <Link
             href={`/owner/clients/${id}`}
             className="flex h-11 items-center justify-center rounded-2xl border border-surface-2 bg-surface-0 px-5 text-sm font-medium text-text-2 hover:bg-surface-1"

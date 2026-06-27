@@ -11,6 +11,8 @@ import {
   Settings,
   MoreHorizontal,
   Gift,
+  Megaphone,
+  Palette,
   ChevronLeft,
 } from 'lucide-react';
 import { Suspense } from 'react';
@@ -59,8 +61,10 @@ function buildGroups(
       label: 'Administración',
       items: [
         { key: 'reports', href: '/owner/analytics', label: 'Reportes', Icon: BarChart3 },
+        { key: 'marketing', href: '/owner/marketing', label: 'Marketing', Icon: Megaphone },
         { key: 'referrals', href: '/owner/referrals', label: 'Referidos', Icon: Gift },
         { key: 'billing', href: '/owner/billing', label: 'Facturación', Icon: CreditCard },
+        { key: 'branding', href: '/owner/branding', label: 'Branding', Icon: Palette },
         { key: 'settings', href: '/owner/settings', label: 'Configuración', Icon: Settings },
         { key: 'more', href: '/owner/more', label: 'Más', Icon: MoreHorizontal, tab: 'more' },
       ],

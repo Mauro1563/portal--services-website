@@ -113,6 +113,23 @@ export async function updateProperty(formData: FormData) {
   const platformRaw = (formData.get('platform') as string)?.trim();
 
   const clientId = (formData.get('client_id') as string)?.trim() || null;
+
+  // Per-property hourly charge rate (optional). NULL → falls back to the
+  // org-wide default at revenue-calculation time. Column is NOT NULL with
+  // a default of 0 (migration 0035), so we store 0 when the owner blanks it.
+  const rateRaw = ((formData.get('default_charge_rate') as string) ?? '').trim();
+  let defaultChargeRatePence = 0;
+  if (rateRaw !== '') {
+    const n = Number(rateRaw);
+    if (!Number.isFinite(n) || n < 0) {
+      redirect(
+        `/owner/properties/${propertyId}/edit?error=` +
+          encodeURIComponent('Tarifa de la propiedad inválida'),
+      );
+    }
+    defaultChargeRatePence = Math.round(n * 100);
+  }
+
   const { error } = await supabase
     .from('properties')
     .update({
@@ -127,6 +144,7 @@ export async function updateProperty(formData: FormData) {
       contact_name: (formData.get('contact_name') as string)?.trim() || null,
       contact_phone: (formData.get('contact_phone') as string)?.trim() || null,
       contact_email: (formData.get('contact_email') as string)?.trim() || null,
+      default_charge_rate_pence: defaultChargeRatePence,
     })
     .eq('id', propertyId)
     .eq('owner_id', user.id);

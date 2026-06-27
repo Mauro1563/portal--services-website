@@ -10,7 +10,7 @@ import {
   Star,
 } from 'lucide-react';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { getClientByToken } from '@/lib/client-auth';
+import { getClientRowByToken, getOwnerContext } from '@/lib/client-auth';
 import { getUnreadOwnerMessageCount } from '@/lib/client-messages';
 import { ClientShell } from '@/components/client/ClientShell';
 import { EcoGreeting } from '@/components/client/EcoGreeting';
@@ -58,46 +58,59 @@ export default async function ClientHome({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const ctx = await getClientByToken(token);
-  if (!ctx) notFound();
+  // First hop: just the clients row. Everything else depends on
+  // client.id / client.owner_id — once we have those we fire
+  // owner-context (profile + auth.email) IN PARALLEL with the page's
+  // own 5 queries instead of waiting for it sequentially.
+  const client = await getClientRowByToken(token);
+  if (!client) notFound();
 
   const admin = createAdminClient();
   const today = new Date().toISOString().slice(0, 10);
 
-  const [upcomingRes, pastRes, ratingsRes, servicesRes, unread] =
-    await Promise.all([
-      admin
-        .from('tasks')
-        .select(
-          'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
-        )
-        .eq('client_id', ctx.client.id)
-        .gte('scheduled_for', today)
-        .order('scheduled_for', { ascending: true })
-        .limit(5),
-      admin
-        .from('tasks')
-        .select(
-          'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
-        )
-        .eq('client_id', ctx.client.id)
-        .lt('scheduled_for', today)
-        .order('scheduled_for', { ascending: false })
-        .limit(10),
-      admin
-        .from('task_ratings')
-        .select('stars, cleaner_id')
-        .eq('client_id', ctx.client.id),
-      admin
-        .from('service_types')
-        .select('id, name')
-        .eq('owner_id', ctx.client.owner_id)
-        .eq('is_active', true)
-        .order('sort_order', { ascending: true })
-        .order('created_at', { ascending: true })
-        .limit(8),
-      getUnreadOwnerMessageCount(ctx.client.id),
-    ]);
+  const [
+    upcomingRes,
+    pastRes,
+    ratingsRes,
+    servicesRes,
+    unread,
+    ownerCtx,
+  ] = await Promise.all([
+    admin
+      .from('tasks')
+      .select(
+        'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
+      )
+      .eq('client_id', client.id)
+      .gte('scheduled_for', today)
+      .order('scheduled_for', { ascending: true })
+      .limit(5),
+    admin
+      .from('tasks')
+      .select(
+        'id, scheduled_for, status, cleaner_id, cleaner:cleaners (id, name), property:properties (name)',
+      )
+      .eq('client_id', client.id)
+      .lt('scheduled_for', today)
+      .order('scheduled_for', { ascending: false })
+      .limit(10),
+    admin
+      .from('task_ratings')
+      .select('stars, cleaner_id')
+      .eq('client_id', client.id),
+    admin
+      .from('service_types')
+      .select('id, name')
+      .eq('owner_id', client.owner_id)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
+      .limit(8),
+    getUnreadOwnerMessageCount(client.id),
+    getOwnerContext(client.owner_id),
+  ]);
+
+  const ctx = { client, owner: ownerCtx };
 
   const services = (servicesRes.data ?? []) as CatalogService[];
   const upcoming = (upcomingRes.data ?? []) as unknown as TaskRow[];
@@ -163,17 +176,17 @@ export default async function ClientHome({
       <section className="mt-4">
         <Link
           href={`/client/${token}/book`}
-          className="group flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 px-5 py-4 text-white shadow-[0_14px_30px_-12px_rgba(37,99,235,0.55)] transition hover:brightness-110 active:scale-[0.99]"
+          className="group flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary px-5 py-4 text-on-brand shadow-[0_14px_30px_-12px_rgba(15,23,42,0.45)] transition hover:brightness-110 active:scale-[0.99]"
         >
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-100">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] opacity-80">
               Pídelo ahora
             </p>
             <p className="mt-1 font-display text-base font-bold">
               Reservar limpieza
             </p>
           </div>
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-white transition group-hover:translate-x-0.5">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 text-on-brand transition group-hover:translate-x-0.5">
             <ChevronRight className="h-5 w-5" />
           </span>
         </Link>

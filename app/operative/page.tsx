@@ -12,6 +12,7 @@ import { BottomTabBar } from '@/components/operative/BottomTabBar';
 import { getUnreadOwnerMessagesForCleaner } from '@/lib/cleaner-messages';
 import { PWAInstall } from '@/components/operative/PWAInstall';
 import { routeUrl, singleStopUrl, telUrl, type Stop } from '@/lib/maps';
+import { sumEarningsPence } from '@/lib/cleaner-earnings';
 
 type OperativeTask = {
   id: string;
@@ -23,6 +24,9 @@ type OperativeTask = {
   completed_at: string | null;
   estimated_duration_min: number | null;
   price_pence: number | null;
+  actual_hours: number | string | null;
+  cleaner_pay_rate_pence: number | null;
+  tip_pence: number | null;
   property: { name: string | null; address: string | null } | null;
   client: {
     name: string | null;
@@ -51,23 +55,25 @@ export default async function OperativeHome({ searchParams }: Props) {
   if (!cleanerId) redirect('/operative/login');
 
   const admin = createAdminClient();
-  const { data: cleaner } = await admin
-    .from('cleaners')
-    .select('id, name')
-    .eq('id', cleanerId)
-    .maybeSingle();
-  if (!cleaner) redirect('/operative/login');
-
   const { error } = await searchParams;
   const now = new Date();
   const today = now.toISOString().split('T')[0];
   const weekStartIso = startOfWeek(now);
 
-  const [{ data }, unreadChat] = await Promise.all([
+  // Run cleaner lookup, tasks, and unread chat IN PARALLEL — the cleaner
+  // row is just a name lookup, no other query depends on it. The old
+  // shape awaited cleaner first, adding a serial round-trip to every
+  // operative dashboard render.
+  const [cleanerRes, { data }, unreadChat] = await Promise.all([
+    admin
+      .from('cleaners')
+      .select('id, name, default_hourly_pay_pence')
+      .eq('id', cleanerId)
+      .maybeSingle(),
     admin
       .from('tasks')
       .select(
-        'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, estimated_duration_min, price_pence, property:properties (name, address), client:clients (name, address, postcode, phone)',
+        'id, scheduled_for, start_time, status, notes, checked_in_at, completed_at, estimated_duration_min, price_pence, actual_hours, cleaner_pay_rate_pence, tip_pence, property:properties (name, address), client:clients (name, address, postcode, phone)',
       )
       .eq('cleaner_id', cleanerId)
       .gte('scheduled_for', weekStartIso)
@@ -76,6 +82,9 @@ export default async function OperativeHome({ searchParams }: Props) {
     getUnreadOwnerMessagesForCleaner(cleanerId),
   ]);
 
+  const cleaner = cleanerRes.data;
+  if (!cleaner) redirect('/operative/login');
+
   const tasks = (data ?? []) as unknown as OperativeTask[];
   const todayTasks = tasks.filter((t) => t.scheduled_for === today);
   const todayInProgress = todayTasks.filter((t) => t.status === 'in_progress');
@@ -83,16 +92,18 @@ export default async function OperativeHome({ searchParams }: Props) {
   const todayCompleted = todayTasks.filter((t) => t.status === 'completed');
   const heroTask = todayInProgress[0] ?? todayPending[0] ?? null;
 
-  // Earnings — today vs week.
-  const todayEarnings = todayCompleted.reduce(
-    (sum, t) => sum + (t.price_pence ?? 0),
-    0,
-  );
-  const weekCompleted = tasks.filter((t) => t.status === 'completed');
-  const weekEarnings = weekCompleted.reduce(
-    (sum, t) => sum + (t.price_pence ?? 0),
-    0,
-  );
+  // Earnings — today vs week. Computed from the cleaner's actual reported
+  // hours and per-task pay rate (NOT the service sticker price the client
+  // sees), plus tips which go 100% to the cleaner. We include every task
+  // the cleaner has touched this week — not just completed ones — because
+  // hours can be reported on an in-progress job and tips can land on a
+  // completed-yesterday job after the client paid. The earlier
+  // "completed-only on price_pence" logic was both wrong (showed gross
+  // revenue, not pay) and lossy (hid tips on already-completed jobs).
+  const defaultRate = (cleanerRes.data as { default_hourly_pay_pence?: number } | null)
+    ?.default_hourly_pay_pence ?? 0;
+  const todayEarnings = sumEarningsPence(todayTasks, defaultRate);
+  const weekEarnings = sumEarningsPence(tasks, defaultRate);
 
   // Multi-stop "Open route" — only for non-completed stops.
   const remaining = todayTasks.filter(

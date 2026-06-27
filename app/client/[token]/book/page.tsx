@@ -227,9 +227,12 @@ export default async function BookingPage({
               />
             </label>
 
+            {/* Submit picks up the owner's brand colors via the CSS vars
+                set by <BrandThemeProvider> in the portal layout. Falls
+                back to Portal Home blue when colors aren't configured. */}
             <button
               type="submit"
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-sm font-bold uppercase tracking-wider text-white shadow-[0_14px_30px_-12px_rgba(5,150,105,0.6)] transition hover:brightness-110 active:scale-[0.99]"
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold uppercase tracking-wider text-on-brand shadow-[0_14px_30px_-12px_rgba(15,23,42,0.45)] transition hover:brightness-110 active:scale-[0.99]"
             >
               Enviar solicitud
             </button>

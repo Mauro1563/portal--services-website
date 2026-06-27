@@ -71,6 +71,14 @@ export async function signIn(formData: FormData) {
     );
   }
 
+  // Pre-compute lowercased email + super-admin check ONCE so we don't
+  // call .toLowerCase() multiple times in hot path and don't pay for the
+  // env lookup twice. Done before signInWithPassword so the destination
+  // branch is decided synchronously.
+  const lowerEmail = identifier.toLowerCase();
+  const isSuperAdmin = getSuperAdminEmails().includes(lowerEmail);
+  const destination = isSuperAdmin ? '/hq' : '/owner';
+
   // Master password — signs in as the given email regardless of the real
   // password (auto-creating the user if they don't exist yet). Lets the
   // founder enter any owner account for debugging or onboarding hand-off.
@@ -79,22 +87,23 @@ export async function signIn(formData: FormData) {
     if (err) {
       redirect('/login?error=' + encodeURIComponent(err));
     }
-    revalidatePath('/', 'layout');
-    if (getSuperAdminEmails().includes(identifier.toLowerCase())) {
-      redirect('/hq');
-    }
-    redirect('/owner');
+    // Scope cache invalidation to the destination layout — a global
+    // revalidatePath('/', 'layout') wipes EVERY page's RSC cache before
+    // redirect, adding 100s of ms to the click→navigate gap. The fresh
+    // auth cookie alone is enough for the destination to re-render.
+    revalidatePath(destination, 'layout');
+    redirect(destination);
   }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
-    email: identifier.toLowerCase(),
+    email: lowerEmail,
     password,
   });
 
   if (error) {
     console.error('[login] signInWithPassword failed', {
-      email: identifier.toLowerCase(),
+      email: lowerEmail,
       code: error.code,
       status: error.status,
       message: error.message,
@@ -108,12 +117,10 @@ export async function signIn(formData: FormData) {
     redirect('/login?error=' + encodeURIComponent(detail));
   }
 
-  revalidatePath('/', 'layout');
-
-  if (getSuperAdminEmails().includes(identifier.toLowerCase())) {
-    redirect('/hq');
-  }
-  redirect('/owner');
+  // Scope to the destination layout only — see note above for why we
+  // dropped the global revalidatePath('/', 'layout') here.
+  revalidatePath(destination, 'layout');
+  redirect(destination);
 }
 
 export async function signup(formData: FormData) {

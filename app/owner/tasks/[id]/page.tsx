@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import {
   cancelTaskDetail,
@@ -376,12 +377,12 @@ export default async function TaskDetail({ params, searchParams }: Props) {
                 </option>
               ))}
             </select>
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center rounded-xl bg-brand-600/10 px-3 text-xs font-semibold text-brand-700 ring-1 ring-inset ring-brand-600/20 hover:bg-brand-600/15"
+            <SubmitButton
+              pendingLabel="Guardando…"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-brand-600/10 px-3 text-xs font-semibold text-brand-700 ring-1 ring-inset ring-brand-600/20 hover:bg-brand-600/15 disabled:opacity-60"
             >
               {task.cleaner ? 'Reasignar' : 'Asignar'}
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </section>
@@ -428,22 +429,22 @@ export default async function TaskDetail({ params, searchParams }: Props) {
           {task.status !== 'cancelled' && task.status !== 'completed' && (
             <form action={cancelTaskDetail}>
               <input type="hidden" name="task_id" value={task.id} />
-              <button
-                type="submit"
-                className="inline-flex h-9 items-center gap-2 rounded-xl border border-amber-300 bg-white px-3 text-xs font-medium text-amber-700 hover:bg-amber-50"
+              <SubmitButton
+                pendingLabel="Cancelando…"
+                className="inline-flex h-9 items-center gap-2 rounded-xl border border-amber-300 bg-white px-3 text-xs font-medium text-amber-700 hover:bg-amber-50 disabled:opacity-60"
               >
                 <RotateCcw className="h-3.5 w-3.5" /> Cancelar
-              </button>
+              </SubmitButton>
             </form>
           )}
           <form action={deleteTaskDetail}>
             <input type="hidden" name="task_id" value={task.id} />
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center gap-2 rounded-xl border border-rose-300 bg-white px-3 text-xs font-medium text-rose-700 hover:bg-rose-50"
+            <SubmitButton
+              pendingLabel="Borrando…"
+              className="inline-flex h-9 items-center gap-2 rounded-xl border border-rose-300 bg-white px-3 text-xs font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60"
             >
               <Trash2 className="h-3.5 w-3.5" /> Borrar
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </section>
@@ -545,12 +546,12 @@ function PaymentCard({ task }: { task: TaskRow }) {
             <option value="google_pay">🔵 Google Pay</option>
             <option value="other">📋 Otro</option>
           </select>
-          <button
-            type="submit"
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-emerald-500/10 px-3 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/30 hover:bg-emerald-500/15"
+          <SubmitButton
+            pendingLabel="Guardando…"
+            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-emerald-500/10 px-3 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-500/30 hover:bg-emerald-500/15 disabled:opacity-60"
           >
             <BadgePoundSterling className="h-3.5 w-3.5" /> Marcar pagada
-          </button>
+          </SubmitButton>
         </form>
       ) : null}
     </div>

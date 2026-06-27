@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import {
   BarChart3,
   Bell,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getOwnerProfile, displayNameFrom } from '@/lib/owner-profile';
+import { fetchOwnerNotifications } from '@/app/owner/notifications/actions';
 import { signout } from '@/app/login/actions';
 import { TasksAutoRefresh } from '@/components/owner/TasksAutoRefresh';
 import { CorporateHeader } from '@/components/owner/CorporateHeader';
@@ -88,6 +90,9 @@ export default async function OwnerHome() {
     new Date(now.getFullYear(), now.getMonth(), 0),
   );
 
+  // Owner profile is folded into the same Promise.all — it used to run
+  // sequentially after these 12 queries, adding a wasted serial round-trip
+  // (sometimes two, since getOwnerProfile previously tried user+admin).
   const [
     propsRes,
     cleanersRes,
@@ -101,6 +106,8 @@ export default async function OwnerHome() {
     prevMonthPaidRes,
     weekPaidRes,
     fieldRes,
+    profile,
+    notifications,
   ] = await Promise.all([
     supabase.from('properties').select('id', { count: 'exact', head: true }),
     supabase.from('cleaners').select('id', { count: 'exact', head: true }),
@@ -155,6 +162,10 @@ export default async function OwnerHome() {
       .gte('checked_in_at', eightHoursAgo)
       .order('checked_in_at', { ascending: false })
       .limit(6),
+    getOwnerProfile(user.id),
+    // Pre-fetch notifications so <NotificationsBell> hydrates with real
+    // data instead of firing its own 4-query server action on mount.
+    fetchOwnerNotifications().catch(() => ({ items: [], unreadCount: 0 })),
   ]);
 
   const propertiesCount = propsRes.count ?? 0;
@@ -201,7 +212,6 @@ export default async function OwnerHome() {
     checkedInAt: r.checked_in_at,
   }));
 
-  const profile = await getOwnerProfile(user.id);
   const metadataName = (user.user_metadata?.name as string | undefined)?.trim();
   const fullName =
     metadataName || displayNameFrom(profile, user.email ?? null);
@@ -227,6 +237,7 @@ export default async function OwnerHome() {
           firstName={firstName}
           businessName={businessName}
           subtitle={subtitle}
+          initialNotifications={notifications}
         />
 
         <TasksAutoRefresh ownerId={user.id} />
@@ -265,13 +276,20 @@ export default async function OwnerHome() {
           revenueDelta={deltaPct(monthRevenuePence, prevMonthRevenuePence)}
         />
 
-        {/* Chart + field cleaners — two columns on desktop, stacked mobile */}
+        {/* Chart + field cleaners — two columns on desktop, stacked mobile.
+            Suspense around each so the cheap hero/stats above paint
+            immediately while these heavier widgets stream in (RevenueChart
+            pulls recharts; CleanersField waits on the wide tasks join). */}
         <div className="mt-3 grid grid-cols-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <RevenueChart data={chartData} />
+            <Suspense fallback={<ChartSkeleton />}>
+              <RevenueChart data={chartData} />
+            </Suspense>
           </div>
           <div className="lg:col-span-2">
-            <CleanersField checkins={fieldCheckins} />
+            <Suspense fallback={<FieldSkeleton />}>
+              <CleanersField checkins={fieldCheckins} />
+            </Suspense>
           </div>
         </div>
 
@@ -368,6 +386,46 @@ function QuickTile({
         </span>
       </span>
     </Link>
+  );
+}
+
+function ChartSkeleton() {
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5">
+      <div className="mb-4 flex items-end justify-between gap-3">
+        <div className="space-y-2">
+          <div className="h-3 w-32 animate-pulse rounded bg-slate-200/70" />
+          <div className="h-4 w-40 animate-pulse rounded bg-slate-200/70" />
+        </div>
+        <div className="h-5 w-16 animate-pulse rounded bg-slate-200/70" />
+      </div>
+      <div className="h-40 w-full animate-pulse rounded-xl bg-slate-100" />
+    </section>
+  );
+}
+
+function FieldSkeleton() {
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5">
+      <div className="space-y-2">
+        <div className="h-3 w-32 animate-pulse rounded bg-slate-200/70" />
+        <div className="h-4 w-40 animate-pulse rounded bg-slate-200/70" />
+      </div>
+      <ul className="mt-4 space-y-2">
+        {[0, 1, 2].map((i) => (
+          <li
+            key={i}
+            className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/40 px-3 py-2.5"
+          >
+            <span className="h-9 w-9 shrink-0 animate-pulse rounded-full bg-slate-200/70" />
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <div className="h-3 w-3/4 animate-pulse rounded bg-slate-200/70" />
+              <div className="h-2.5 w-1/2 animate-pulse rounded bg-slate-200/70" />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

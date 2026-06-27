@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  ArrowRight,
   Building2,
   Mail,
   ShieldCheck,
@@ -11,6 +10,8 @@ import {
 import { Logo } from '@/components/Logo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { PasswordInput } from './PasswordInput';
+import { SubmitButton } from './SubmitButton';
+import { PrefetchRoutes } from './PrefetchRoutes';
 import { signIn } from './actions';
 import { getT, getLocale, type Locale } from '@/lib/i18n';
 
@@ -32,6 +33,7 @@ const COPY: Record<
     operativeHint: string;
     showPassword: string;
     hidePassword: string;
+    signingIn: string;
     demoEyebrow: string;
     demoTitle: string;
     demoOwner: string;
@@ -45,6 +47,7 @@ const COPY: Record<
     operativeHint: 'Cleaner? Leave password empty — your PIN is enough.',
     showPassword: 'Show password',
     hidePassword: 'Hide password',
+    signingIn: 'Signing in…',
     demoEyebrow: 'No account yet?',
     demoTitle: 'Try the live demos — no sign-up',
     demoOwner: 'Owner dashboard',
@@ -57,6 +60,7 @@ const COPY: Record<
     operativeHint: '¿Operario? Deja la contraseña vacía — tu PIN ya alcanza.',
     showPassword: 'Mostrar contraseña',
     hidePassword: 'Ocultar contraseña',
+    signingIn: 'Entrando…',
     demoEyebrow: '¿Aún no tienes cuenta?',
     demoTitle: 'Prueba los demos en vivo — sin registro',
     demoOwner: 'Panel del dueño',
@@ -69,6 +73,7 @@ const COPY: Record<
     operativeHint: 'Operário? Deixe a senha vazia — o teu PIN já chega.',
     showPassword: 'Mostrar senha',
     hidePassword: 'Ocultar senha',
+    signingIn: 'A entrar…',
     demoEyebrow: 'Ainda sem conta?',
     demoTitle: 'Experimenta os demos ao vivo — sem registo',
     demoOwner: 'Painel do dono',
@@ -306,15 +311,14 @@ export default async function LoginPage({ searchParams }: Props) {
               </Link>
             </div>
 
-            <button
-              type="submit"
-              className="group relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-[13px] font-bold uppercase tracking-[0.20em] text-white shadow-[0_14px_28px_-10px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition hover:brightness-[1.08] active:translate-y-px"
-            >
-              <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-              {t('login.signInBtn')}
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-            </button>
+            <SubmitButton
+              label={t('login.signInBtn')}
+              pendingLabel={copy.signingIn}
+            />
           </form>
+          {/* Warm the router cache for /owner, /operative, /hq so the
+              post-redirect navigation feels instant. */}
+          <PrefetchRoutes />
 
           <p className="mt-6 text-center text-xs text-slate-500">
             <Link href="/" className="font-medium hover:text-slate-900">

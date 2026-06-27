@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { Calendar, FileText, Home, Info, User } from 'lucide-react';
+import { Calendar, FileText, Home, Info, PoundSterling, User } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { updateProperty } from '../actions';
 
 type Props = {
@@ -24,7 +25,7 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
     supabase
       .from('properties')
       .select(
-        'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, client_id, contact_name, contact_phone, contact_email',
+        'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, client_id, contact_name, contact_phone, contact_email, default_charge_rate_pence',
       )
       .eq('id', id)
       .maybeSingle(),
@@ -155,6 +156,42 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
           />
         </Section>
 
+        {/* ── Tarifa de esta propiedad ─────────────────────────────── */}
+        <Section
+          icon={PoundSterling}
+          title="Tarifa de esta propiedad"
+          subtitle="Tarifa por hora que cobrás al cliente por las limpiezas en esta propiedad. Sobreescribe la tarifa por defecto de tu negocio, y puede a su vez ser sobreescrita en cada tarea."
+        >
+          <label className="block">
+            <span className="text-xs font-medium text-text-2">
+              Tarifa por hora cobrada al cliente (£/h)
+            </span>
+            <div className="relative mt-1.5">
+              <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-sm font-medium text-text-3">
+                £
+              </span>
+              <input
+                type="number"
+                name="default_charge_rate"
+                step="0.01"
+                min="0"
+                defaultValue={
+                  property.default_charge_rate_pence != null &&
+                  property.default_charge_rate_pence > 0
+                    ? (property.default_charge_rate_pence / 100).toFixed(2)
+                    : ''
+                }
+                placeholder="0.00"
+                className="block w-full rounded-xl border border-surface-2 bg-surface-0 py-2.5 pl-7 pr-4 text-sm text-text-1 placeholder:text-text-3 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+              />
+            </div>
+            <span className="mt-1 block text-[11px] text-text-3">
+              Dejá vacío para usar la tarifa por defecto de tu negocio
+              (Ajustes → Tarifas por defecto).
+            </span>
+          </label>
+        </Section>
+
         {/* ── Integración Airbnb / Booking ──────────────────────────── */}
         <Section
           icon={Calendar}
@@ -183,12 +220,12 @@ export default async function EditPropertyPage({ params, searchParams }: Props) 
         </Section>
 
         <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            className="flex h-11 flex-1 items-center justify-center rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow active:scale-[0.99]"
+          <SubmitButton
+            pendingLabel="Guardando…"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow active:scale-[0.99] disabled:opacity-80"
           >
             Guardar cambios
-          </button>
+          </SubmitButton>
           <Link
             href={`/owner/properties/${id}`}
             className="flex h-11 items-center justify-center rounded-2xl border border-surface-2 bg-surface-0 px-5 text-sm font-medium text-text-2 hover:bg-surface-1"

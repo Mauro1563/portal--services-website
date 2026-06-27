@@ -9,6 +9,9 @@ import {
   type NotificationsPayload,
 } from '@/app/owner/notifications/actions';
 
+const FOCUS_THROTTLE_MS = 30_000;
+const POLL_MS = 60_000;
+
 const ICON: Record<Notification['kind'], React.ComponentType<{ className?: string }>> = {
   message: MessageCircle,
   completion: CheckCircle2,
@@ -34,31 +37,53 @@ function relative(iso: string): string {
 }
 
 /**
- * Header bell for the owner portal. Fetches recent notifications
- * (unread messages, today's completions, recent ratings) on mount and
- * on a 60s interval. Shows the unread count as a badge on the bell;
- * opening the dropdown lists the latest 10 items, each a deep link.
+ * Header bell for the owner portal. Caller passes the initial
+ * `NotificationsPayload` from the server component so the bell renders
+ * with real data on first paint (no on-mount fetch). Then we poll every
+ * 60s, refresh on window focus (throttled to once per 30s), and skip
+ * everything when the tab is hidden.
+ *
+ * The previous version fired an extra server-action call on EVERY mount
+ * (4 Supabase queries: requireOwner + 3 parallel) for every owner page
+ * that includes the bell, plus another 4 on every focus. With multiple
+ * tabs open that became a steady background hum slowing down every
+ * navigation.
  */
-export function NotificationsBell() {
-  const [data, setData] = useState<NotificationsPayload | null>(null);
+export function NotificationsBell({
+  initialData,
+}: {
+  initialData?: NotificationsPayload;
+}) {
+  const [data, setData] = useState<NotificationsPayload | null>(
+    initialData ?? null,
+  );
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastFetchRef = useRef(initialData ? Date.now() : 0);
 
   const refresh = () => {
+    if (typeof document !== 'undefined' && document.hidden) return;
+    lastFetchRef.current = Date.now();
     fetchOwnerNotifications()
       .then(setData)
       .catch(() => setData({ items: [], unreadCount: 0 }));
   };
 
   useEffect(() => {
-    refresh();
-    const interval = setInterval(refresh, 60_000);
-    const onFocus = () => refresh();
+    // Only fetch on mount if the server didn't pre-hydrate us — saves
+    // ~4 Supabase calls per owner page nav on the common path.
+    if (!initialData) refresh();
+    const interval = setInterval(refresh, POLL_MS);
+    const onFocus = () => {
+      if (Date.now() - lastFetchRef.current < FOCUS_THROTTLE_MS) return;
+      refresh();
+    };
     window.addEventListener('focus', onFocus);
     return () => {
       clearInterval(interval);
       window.removeEventListener('focus', onFocus);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -97,7 +122,22 @@ export function NotificationsBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-[min(360px,calc(100vw-2rem))] origin-top-right overflow-hidden rounded-2xl border border-surface-2 bg-white shadow-xl">
+        <>
+          {/* Mobile backdrop for the bottom-sheet variant — tap to dismiss
+              and stop the page behind from receiving the tap. The
+              click-outside handler in the effect above still covers
+              keyboard/Escape, this is just a visual scrim + a wider hit
+              target on touch. */}
+          <div
+            aria-hidden
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm sm:hidden"
+          />
+          <div
+            role="dialog"
+            aria-label="Notificaciones"
+            className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] origin-bottom overflow-hidden rounded-t-2xl border border-surface-2 bg-white shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-full sm:mt-2 sm:max-h-none sm:w-[min(360px,calc(100vw-2rem))] sm:origin-top-right sm:rounded-2xl sm:shadow-xl"
+          >
           <header className="flex items-center justify-between border-b border-surface-2 px-4 py-3">
             <div>
               <h3 className="font-display text-sm font-semibold text-text-1">
@@ -172,7 +212,8 @@ export function NotificationsBell() {
               </Link>
             </div>
           )}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { ensureDefaultServices } from '@/lib/default-services';
 import { updateTask } from '../actions';
@@ -352,13 +353,13 @@ export default async function EditTaskPage({ params, searchParams }: Props) {
             >
               {t('common.cancel')}
             </Link>
-            <button
-              type="submit"
-              className="group flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
+            <SubmitButton
+              pendingLabel="Guardando…"
+              className="group flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 disabled:opacity-80"
             >
               <Save className="h-4 w-4" />
               Guardar cambios
-            </button>
+            </SubmitButton>
           </div>
         </div>
       </form>

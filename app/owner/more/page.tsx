@@ -9,6 +9,8 @@ import {
   Gift,
   Globe,
   LogOut,
+  Megaphone,
+  Palette,
   Settings,
   Sparkles,
   UserPlus,
@@ -76,6 +78,12 @@ export default async function MorePage() {
           showFor: ['house_cleaning', 'hybrid'],
         },
         {
+          icon: Megaphone,
+          label: 'Marketing',
+          description: 'Enlace público, QR, redes, códigos promo y material para imprimir.',
+          href: '/owner/marketing',
+        },
+        {
           icon: Gift,
           label: 'Referidos',
           description: 'Premios por recomendación que tus clientes pueden ganar.',
@@ -98,6 +106,12 @@ export default async function MorePage() {
           label: t('more.billing'),
           description: t('more.billingDesc'),
           href: '/owner/billing',
+        },
+        {
+          icon: Palette,
+          label: 'Branding',
+          description: 'Logo y colores que ven tus clientes en el portal.',
+          href: '/owner/branding',
         },
         {
           icon: Settings,

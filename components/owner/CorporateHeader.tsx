@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Bell, Building2, Settings } from 'lucide-react';
+import { Building2, Settings } from 'lucide-react';
 import { NotificationsBell } from '@/components/owner/NotificationsBell';
+import type { NotificationsPayload } from '@/app/owner/notifications/actions';
 
 /**
  * Dark navy hero header for the owner dashboard — the "Corporate Trust"
@@ -12,24 +13,28 @@ export function CorporateHeader({
   firstName,
   businessName,
   subtitle,
+  initialNotifications,
 }: {
   firstName: string;
   businessName: string;
   /** Optional second line under the name — e.g. "12 cleanings hoy". */
   subtitle?: string;
+  /** Pre-fetched on the server so the bell doesn't pay a round-trip on mount. */
+  initialNotifications?: NotificationsPayload;
 }) {
   return (
     <header className="-mx-3 -mt-4 mb-5 sm:-mx-4 sm:-mt-5 lg:-mx-8 lg:-mt-7">
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
-        {/* Subtle radial glow for depth */}
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
+        {/* Subtle radial glow for depth — clipped in its own layer so it
+            doesn't crop absolutely-positioned descendants (the
+            NotificationsBell dropdown anchored below the bell). */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-blue-600/15 blur-3xl"
-        />
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-blue-600/15 blur-3xl" />
+        </div>
 
         <div className="relative flex items-start justify-between gap-4">
           <div className="min-w-0">
@@ -45,7 +50,7 @@ export function CorporateHeader({
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <div className="rounded-full bg-white/10 p-1 backdrop-blur">
-              <NotificationsBell />
+              <NotificationsBell initialData={initialNotifications} />
             </div>
             <Link
               href="/owner/settings"

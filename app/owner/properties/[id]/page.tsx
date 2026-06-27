@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { deleteProperty, syncProperty } from './actions';
 
 type Props = {
@@ -200,12 +201,12 @@ export default async function PropertyDetail({ params, searchParams }: Props) {
         </p>
         <form action={deleteProperty} className="mt-3">
           <input type="hidden" name="property_id" value={property.id} />
-          <button
-            type="submit"
-            className="inline-flex h-9 items-center gap-2 rounded-xl border border-rose-300 bg-white px-3 text-xs font-medium text-rose-700 hover:bg-rose-50"
+          <SubmitButton
+            pendingLabel="Borrando…"
+            className="inline-flex h-9 items-center gap-2 rounded-xl border border-rose-300 bg-white px-3 text-xs font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60"
           >
             <Trash2 className="h-3.5 w-3.5" /> Borrar propiedad
-          </button>
+          </SubmitButton>
         </form>
       </section>
     </LightLayout>
@@ -459,12 +460,12 @@ function DetallesTab({ property }: { property: PropertyRow }) {
               </p>
             </div>
             <input type="hidden" name="property_id" value={property.id} />
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center gap-2 rounded-xl bg-brand-gradient px-3 text-xs font-medium text-white shadow-brand-glow"
+            <SubmitButton
+              pendingLabel="Sincronizando…"
+              className="inline-flex h-9 items-center gap-2 rounded-xl bg-brand-gradient px-3 text-xs font-medium text-white shadow-brand-glow disabled:opacity-70"
             >
               <RefreshCw className="h-3.5 w-3.5" /> Sync
-            </button>
+            </SubmitButton>
           </form>
         ) : (
           <div className="mt-2 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-4 text-sm text-text-2">

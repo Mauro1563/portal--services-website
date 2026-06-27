@@ -21,12 +21,13 @@ export type ClientContext = {
 };
 
 /**
- * Look up a client by their magic-link token. Bypasses RLS via service role.
- * Returns null when the token doesn't match any client.
+ * Fast first hop — just the clients row. Lets callers fire downstream
+ * queries that depend on client.id (tasks, ratings, services) in
+ * parallel with the slower owner/profile lookups via `getOwnerContext`.
  */
-export async function getClientByToken(
+export async function getClientRowByToken(
   token: string,
-): Promise<ClientContext | null> {
+): Promise<ClientRow | null> {
   if (!token || token.length < 10) return null;
   const admin = createAdminClient();
   const { data } = await admin
@@ -36,16 +37,35 @@ export async function getClientByToken(
     )
     .eq('access_token', token)
     .maybeSingle();
-  if (!data) return null;
+  return (data as ClientRow | null) ?? null;
+}
 
-  const client = data as ClientRow;
-  const profile = await getOwnerProfile(client.owner_id);
+/** Profile + auth email for an owner — both fire in parallel. */
+export async function getOwnerContext(
+  ownerId: string,
+): Promise<OwnerProfile & { email: string | null }> {
+  const admin = createAdminClient();
+  const [profile, { data: userData }] = await Promise.all([
+    getOwnerProfile(ownerId),
+    admin.auth.admin.getUserById(ownerId),
+  ]);
+  return { ...profile, email: userData?.user?.email ?? null };
+}
 
-  const { data: userData } = await admin.auth.admin.getUserById(client.owner_id);
-  const ownerEmail = userData?.user?.email ?? null;
-
-  return {
-    client,
-    owner: { ...profile, email: ownerEmail },
-  };
+/**
+ * Look up a client by their magic-link token. Bypasses RLS via service role.
+ * Returns null when the token doesn't match any client.
+ *
+ * Convenience wrapper around `getClientRowByToken` + `getOwnerContext` —
+ * page.tsx prefers to split these calls so it can run owner-context in
+ * parallel with the page's own data fetches; other callers (book/, refer/,
+ * messages/, reviews/) use this one-shot form.
+ */
+export async function getClientByToken(
+  token: string,
+): Promise<ClientContext | null> {
+  const client = await getClientRowByToken(token);
+  if (!client) return null;
+  const owner = await getOwnerContext(client.owner_id);
+  return { client, owner };
 }

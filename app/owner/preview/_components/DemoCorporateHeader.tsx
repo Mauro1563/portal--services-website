@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Bell, Building2, Check, Globe, Settings, Clock, X } from 'lucide-react';
 
 type Notification = {
@@ -53,7 +53,31 @@ export function DemoCorporateHeader({
     'Europe/London',
   );
 
+  const popoverRef = useRef<HTMLDivElement>(null);
   const unread = notifs.filter((n) => !n.read).length;
+
+  // Click-outside + Escape close for both popovers.
+  useEffect(() => {
+    if (!notifOpen && !settingsOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (!popoverRef.current?.contains(e.target as Node)) {
+        setNotifOpen(false);
+        setSettingsOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setNotifOpen(false);
+        setSettingsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [notifOpen, settingsOpen]);
 
   function openNotifs() {
     setSettingsOpen(false);
@@ -74,15 +98,16 @@ export function DemoCorporateHeader({
 
   return (
     <header className="-mx-3 -mt-4 mb-5 sm:-mx-4 sm:-mt-5 lg:-mx-8 lg:-mt-7">
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
+        {/* Blur glows clipped in their own layer so they don't crop the
+            notifications/settings dropdowns anchored to the bell/gear. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-blue-600/15 blur-3xl"
-        />
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-blue-600/15 blur-3xl" />
+        </div>
 
         <div className="relative flex items-start justify-between gap-4">
           <div className="min-w-0">
@@ -94,7 +119,7 @@ export function DemoCorporateHeader({
             </h1>
             <p className="mt-1 text-[13px] text-white/65">{subtitle}</p>
           </div>
-          <div className="relative flex shrink-0 items-center gap-2">
+          <div ref={popoverRef} className="relative flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={openNotifs}
@@ -120,7 +145,14 @@ export function DemoCorporateHeader({
             </button>
 
             {notifOpen ? (
-              <div className="absolute right-0 top-11 z-40 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl bg-white text-slate-900 shadow-xl ring-1 ring-slate-200">
+              <>
+                {/* Mobile scrim — also tap-to-dismiss. */}
+                <div
+                  aria-hidden
+                  onClick={() => setNotifOpen(false)}
+                  className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm sm:hidden"
+                />
+              <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-hidden rounded-t-2xl bg-white text-slate-900 shadow-2xl ring-1 ring-slate-200 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-11 sm:max-h-none sm:w-80 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:shadow-xl">
                 <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-slate-700">
                     Notificaciones
@@ -178,10 +210,17 @@ export function DemoCorporateHeader({
                   ) : null}
                 </ul>
               </div>
+              </>
             ) : null}
 
             {settingsOpen ? (
-              <div className="absolute right-0 top-11 z-40 w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl bg-white text-slate-900 shadow-xl ring-1 ring-slate-200">
+              <>
+                <div
+                  aria-hidden
+                  onClick={() => setSettingsOpen(false)}
+                  className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm sm:hidden"
+                />
+              <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-hidden rounded-t-2xl bg-white text-slate-900 shadow-2xl ring-1 ring-slate-200 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-11 sm:max-h-none sm:w-72 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:shadow-xl">
                 <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                   <p className="text-xs font-bold uppercase tracking-wider text-slate-700">
                     Preferencias
@@ -269,6 +308,7 @@ export function DemoCorporateHeader({
                   </div>
                 </div>
               </div>
+              </>
             ) : null}
           </div>
         </div>

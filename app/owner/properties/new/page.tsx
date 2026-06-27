@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Calendar, FileText, Home, Info, User } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { getT } from '@/lib/i18n';
 import { addProperty } from '@/app/owner/actions';
 
@@ -172,12 +173,12 @@ export default async function NewPropertyPage({ searchParams }: Props) {
         </Section>
 
         <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            className="flex h-11 flex-1 items-center justify-center rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow"
+          <SubmitButton
+            pendingLabel="Creando…"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-2xl bg-brand-gradient text-sm font-semibold text-white shadow-brand-glow disabled:opacity-80"
           >
             {t('properties.createBtn')}
-          </button>
+          </SubmitButton>
           <Link
             href="/owner/properties"
             className="flex h-11 items-center justify-center rounded-2xl border border-surface-2 bg-surface-0 px-5 text-sm font-medium text-text-2 hover:bg-surface-1"

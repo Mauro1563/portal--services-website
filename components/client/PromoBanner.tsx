@@ -38,18 +38,21 @@ export function PromoBanner({
         <Sparkles />
       </span>
 
-      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.55)]">
+      {/* Brand-driven swatch — uses the owner's --brand-primary / secondary
+          when mounted under <BrandThemeProvider>; falls back to blue/cyan
+          Portal Home defaults everywhere else. */}
+      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-on-brand shadow-[0_8px_18px_-8px_rgba(15,23,42,0.35)]">
         <Gift className="h-5 w-5" />
       </span>
 
       <div className="relative min-w-0 flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-primary">
           {eyebrow ?? 'Refer & Earn'}
         </p>
         <p className="mt-1 font-display text-sm font-bold text-slate-900">
           {title ?? 'Invita a un amigo y gana un premio'}
         </p>
-        <span className="mt-1 inline-flex h-7 items-center rounded-full bg-blue-600 px-3 text-[10.5px] font-bold uppercase tracking-wider text-white transition group-hover:bg-blue-700">
+        <span className="mt-1 inline-flex h-7 items-center rounded-full bg-brand-primary px-3 text-[10.5px] font-bold uppercase tracking-wider text-on-brand transition group-hover:brightness-110">
           {cta ?? 'Ver detalles'}
         </span>
       </div>

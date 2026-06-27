@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { Trash2, Users } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import { RewardForm } from './RewardForm';
 import { toggleReward, deleteReward, setReferralStatus } from './actions';
 
@@ -139,22 +140,22 @@ export default async function ReferralsPage({ searchParams }: Props) {
                       <form action={toggleReward}>
                         <input type="hidden" name="reward_id" value={r.id} />
                         <input type="hidden" name="active" value={r.is_active ? '1' : '0'} />
-                        <button
-                          type="submit"
-                          className="rounded-lg border border-surface-2 bg-surface-0 px-2.5 py-1 text-[11px] text-text-2 hover:bg-surface-1"
+                        <SubmitButton
+                          pendingLabel="…"
+                          className="inline-flex items-center gap-1 rounded-lg border border-surface-2 bg-surface-0 px-2.5 py-1 text-[11px] text-text-2 hover:bg-surface-1 disabled:opacity-60"
                         >
                           {r.is_active ? 'Desactivar' : 'Activar'}
-                        </button>
+                        </SubmitButton>
                       </form>
                       <form action={deleteReward}>
                         <input type="hidden" name="reward_id" value={r.id} />
-                        <button
-                          type="submit"
-                          aria-label="Eliminar"
-                          className="rounded-lg border border-rose-200 bg-white px-2 py-1 text-rose-700 hover:bg-rose-50"
+                        <SubmitButton
+                          ariaLabel="Eliminar"
+                          pendingLabel=""
+                          className="inline-flex items-center rounded-lg border border-rose-200 bg-white px-2 py-1 text-rose-700 hover:bg-rose-50 disabled:opacity-60"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
-                        </button>
+                        </SubmitButton>
                       </form>
                     </div>
                   </div>
@@ -236,12 +237,12 @@ export default async function ReferralsPage({ searchParams }: Props) {
                           </option>
                         ))}
                       </select>
-                      <button
-                        type="submit"
-                        className="inline-flex h-9 items-center rounded-lg bg-brand-600/10 px-3 text-[12px] font-medium text-brand-700 ring-1 ring-inset ring-brand-600/30 hover:bg-brand-600/15"
+                      <SubmitButton
+                        pendingLabel="Guardando…"
+                        className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-brand-600/10 px-3 text-[12px] font-medium text-brand-700 ring-1 ring-inset ring-brand-600/30 hover:bg-brand-600/15 disabled:opacity-60"
                       >
                         Guardar
-                      </button>
+                      </SubmitButton>
                     </form>
                   </li>
                 );

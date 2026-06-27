@@ -31,7 +31,37 @@
   --psd-graphite-4: #94A3B8;
 
   --psd-gradient: linear-gradient(135deg, #3dc5f0 0%, #2563eb 50%, #1d4ed8 100%);
+
+  /* ============================================================
+     Per-owner brand colors. Defaults match Portal Home (cyan-400
+     accent + blue-600 primary). Each client portal layout swaps
+     these on document.documentElement via <BrandThemeProvider>
+     so the owner's chosen brand colors take over without any
+     per-component plumbing. The owner dashboard intentionally
+     leaves these untouched so admin UI stays on Portal Home.
+     ============================================================ */
+  --brand-primary: #2563eb;   /* blue-600 — main CTA / accent */
+  --brand-secondary: #22d3ee; /* cyan-400 — soft accent / gradient companion */
+  --brand-primary-contrast: #ffffff;
 }
+
+/* Brand utility classes — read straight from the CSS vars above
+   so any component that opts into them gets the owner's palette
+   for free on the client portal, and Portal Home defaults
+   everywhere else. */
+.bg-brand-primary { background-color: var(--brand-primary); }
+.bg-brand-secondary { background-color: var(--brand-secondary); }
+.text-brand-primary { color: var(--brand-primary); }
+.text-brand-secondary { color: var(--brand-secondary); }
+.border-brand-primary { border-color: var(--brand-primary); }
+.border-brand-secondary { border-color: var(--brand-secondary); }
+.ring-brand-primary { --tw-ring-color: var(--brand-primary); }
+.from-brand-primary { --tw-gradient-from: var(--brand-primary) var(--tw-gradient-from-position); --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.to-brand-secondary { --tw-gradient-to: var(--brand-secondary) var(--tw-gradient-to-position); }
+.to-brand-primary { --tw-gradient-to: var(--brand-primary) var(--tw-gradient-to-position); }
+.from-brand-secondary { --tw-gradient-from: var(--brand-secondary) var(--tw-gradient-from-position); --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.hover\:bg-brand-primary:hover { background-color: var(--brand-primary); }
+.text-on-brand { color: var(--brand-primary-contrast); }
 
 html, body {
   background-color: var(--psd-bg-canvas);

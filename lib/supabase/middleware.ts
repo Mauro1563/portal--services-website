@@ -25,21 +25,13 @@ export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
 
-  const supabaseUrl = asciiEnv('NEXT_PUBLIC_SUPABASE_URL');
-  const supabaseAnon = asciiEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-
-  // If env is missing/garbled, don't 500. Let public pages render and
-  // protected routes redirect normally — better degraded than dead.
-  if (!supabaseUrl || !supabaseAnon) {
-    console.error(
-      '[middleware] Supabase env missing or non-ASCII — skipping auth check',
-      { hasUrl: !!supabaseUrl, hasAnon: !!supabaseAnon },
-    );
-
-    if (
-      pathname.startsWith('/operative') &&
-      !pathname.startsWith('/operative/login')
-    ) {
+  // Fast path: /operative is gated by the `cleaner_session` cookie (set by
+  // the PIN login flow), NOT by Supabase JWT — so calling supabase.auth.
+  // getUser() here is a wasted HTTP round-trip (150-400ms per request).
+  // Check the cookie directly and return without ever constructing the
+  // Supabase client. /operative/login is intentionally public.
+  if (pathname.startsWith('/operative')) {
+    if (!pathname.startsWith('/operative/login')) {
       const cleanerSession = request.cookies.get('cleaner_session');
       if (!cleanerSession) {
         const url = request.nextUrl.clone();
@@ -47,6 +39,21 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url);
       }
     }
+    return supabaseResponse;
+  }
+
+  const supabaseUrl = asciiEnv('NEXT_PUBLIC_SUPABASE_URL');
+  const supabaseAnon = asciiEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+
+  // If env is missing/garbled, don't 500. Let public pages render and
+  // protected routes redirect normally — better degraded than dead.
+  // (/operative is already short-circuited above so we don't need its
+  // cookie check here.)
+  if (!supabaseUrl || !supabaseAnon) {
+    console.error(
+      '[middleware] Supabase env missing or non-ASCII — skipping auth check',
+      { hasUrl: !!supabaseUrl, hasAnon: !!supabaseAnon },
+    );
     return supabaseResponse;
   }
 
@@ -124,18 +131,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Protect /operative routes (except /operative/login) — require PIN session cookie
-  if (
-    pathname.startsWith('/operative') &&
-    !pathname.startsWith('/operative/login')
-  ) {
-    const cleanerSession = request.cookies.get('cleaner_session');
-    if (!cleanerSession) {
-      const url = request.nextUrl.clone();
-      url.pathname = '/operative/login';
-      return NextResponse.redirect(url);
-    }
-  }
+  // /operative is short-circuited at the top of this function (cleaner
+  // PIN cookie, no Supabase call needed) so we don't re-check it here.
 
   return supabaseResponse;
 }

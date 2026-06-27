@@ -42,6 +42,7 @@ export function BottomTabBar({ active }: { active: Tab }) {
             <li key={key} className="flex-1">
               <Link
                 href={href}
+                prefetch={true}
                 className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider transition ${
                   isActive
                     ? 'text-brand-700'

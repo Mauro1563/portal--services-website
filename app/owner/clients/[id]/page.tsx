@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
+import { SubmitButton } from '@/components/forms/SubmitButton';
 import {
   clientPortalUrl,
   deleteClient,
@@ -251,12 +252,12 @@ export default async function ClientDetail({ params, searchParams }: Props) {
 
         <form action={regenerateAccessToken} className="mt-3">
           <input type="hidden" name="client_id" value={client.id} />
-          <button
-            type="submit"
-            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-surface-2 bg-surface-0 px-2.5 text-[11px] text-text-2 hover:bg-surface-1"
+          <SubmitButton
+            pendingLabel="Regenerando…"
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-surface-2 bg-surface-0 px-2.5 text-[11px] text-text-2 hover:bg-surface-1 disabled:opacity-60"
           >
             <RefreshCw className="h-3.5 w-3.5" /> Regenerate link (invalidates the old one)
-          </button>
+          </SubmitButton>
         </form>
       </section>
 
@@ -367,12 +368,12 @@ export default async function ClientDetail({ params, searchParams }: Props) {
         </p>
         <form action={deleteClient} className="mt-3">
           <input type="hidden" name="client_id" value={client.id} />
-          <button
-            type="submit"
-            className="inline-flex h-9 items-center gap-2 rounded-xl border border-rose-300 bg-white px-3 text-xs font-medium text-rose-700 hover:bg-rose-50"
+          <SubmitButton
+            pendingLabel="Borrando…"
+            className="inline-flex h-9 items-center gap-2 rounded-xl border border-rose-300 bg-white px-3 text-xs font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-60"
           >
             <Trash2 className="h-3.5 w-3.5" /> Delete client
-          </button>
+          </SubmitButton>
         </form>
       </section>
     </LightLayout>
