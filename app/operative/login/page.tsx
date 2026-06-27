@@ -25,61 +25,70 @@ export default async function OperativeLogin({ searchParams }: Props) {
       subtitle="Tu manager te dio un PIN de 6 dígitos."
       error={error ? decodeURIComponent(error) : undefined}
     >
-      {/* Demo escape hatch — anyone who lands here from the marketing site
-          gets a one-tap path to the no-auth preview so the PIN screen
-          doesn't dead-end prospects who don't have a real cleaner PIN. */}
-      <Link
-        href="/operative/preview"
-        className="mb-5 inline-flex w-full items-center justify-between gap-2 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 px-4 py-3 text-left transition hover:from-emerald-100 hover:to-teal-100"
-      >
-        <span className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-600 text-white shadow-[0_6px_14px_-6px_rgba(5,150,105,0.55)]">
-            <PlayCircle className="h-4 w-4" />
-          </span>
-          <span>
-            <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">
-              ¿No tienes PIN?
-            </span>
-            <span className="mt-0.5 block text-[13px] font-bold text-emerald-900">
-              Entrar al demo — sin código
-            </span>
-          </span>
-        </span>
-        <ChevronRight className="h-4 w-4 text-emerald-700" />
-      </Link>
-
-      <form action={signIn} className="space-y-4">
-        <LoginField label="PIN">
-          <div className="relative">
-            <KeyRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
-            <input
-              type="text"
-              name="identifier"
-              required
-              inputMode="numeric"
-              pattern="[0-9]{4,8}"
-              autoFocus
-              autoComplete="one-time-code"
-              defaultValue={prefillPin}
-              placeholder="026389"
-              className="block h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-3 text-center font-mono text-lg tracking-[0.4em] text-[#0b1d3a] placeholder:font-normal placeholder:tracking-[0.3em] placeholder:text-slate-300 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
-            />
-          </div>
-        </LoginField>
-
-        {/* Password input is required by /login's signIn action shape but
-            unused for PIN auth — submit empty. */}
-        <input type="hidden" name="password" value="" />
-
-        <SubmitButton
-          pendingLabel="Entrando…"
-          className="group relative inline-flex h-14 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#22d3ee] via-[#2563eb] to-[#1d4ed8] text-sm font-bold uppercase tracking-[0.22em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition-all duration-300 hover:brightness-[1.08] active:translate-y-px disabled:opacity-80"
+      <div className="p-5 sm:p-7">
+        {/* PRIMARY CTA — the demo escape hatch. Anyone landing here from the
+            marketing site has no real cleaner PIN, so the no-auth demo must
+            be the unmistakable primary action above the fold. */}
+        <Link
+          href="/operative/preview"
+          title="Entra al demo del operario sin necesidad de PIN"
+          className="group flex w-full items-center gap-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 px-4 py-4 text-left shadow-[0_14px_30px_-12px_rgba(5,150,105,0.55)] transition hover:from-emerald-400 hover:to-teal-500"
+          style={{ minHeight: '64px' }}
         >
-          <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-          Entrar
-          <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </SubmitButton>
-      </form>
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white text-emerald-600 shadow-sm">
+            <PlayCircle className="h-5 w-5" />
+          </span>
+          <span className="flex-1 min-w-0">
+            <span className="block text-base font-bold leading-tight text-white">
+              Probar como cleaner — sin código
+            </span>
+            <span className="mt-0.5 block text-[11px] leading-snug text-emerald-50">
+              Entra al demo en vivo y juega con la app del operario.
+            </span>
+          </span>
+          <ChevronRight className="h-5 w-5 shrink-0 text-white transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+
+        {/* Divider — funnels real-PIN cleaners to the demoted form below. */}
+        <div className="my-5 flex items-center gap-3">
+          <hr className="flex-1 border-t border-slate-200" />
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            ¿Eres cleaner con PIN real?
+          </span>
+          <hr className="flex-1 border-t border-slate-200" />
+        </div>
+
+        <form action={signIn} className="space-y-3">
+          <LoginField label="PIN">
+            <div className="relative">
+              <KeyRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                name="identifier"
+                required
+                inputMode="numeric"
+                pattern="[0-9]{4,8}"
+                autoComplete="one-time-code"
+                defaultValue={prefillPin}
+                placeholder="Tu PIN de 6 dígitos"
+                className="block h-11 w-full rounded-xl border border-slate-200 bg-white pl-11 pr-3 text-center font-mono text-base tracking-[0.35em] text-[#0b1d3a] placeholder:font-normal placeholder:text-[12px] placeholder:tracking-normal placeholder:text-slate-400 transition focus:border-[#0b1d3a] focus:outline-none focus:ring-4 focus:ring-[#0b1d3a]/10"
+              />
+            </div>
+          </LoginField>
+
+          {/* Password input is required by /login's signIn action shape but
+              unused for PIN auth — submit empty. */}
+          <input type="hidden" name="password" value="" />
+
+          <SubmitButton
+            pendingLabel="Entrando…"
+            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 text-[12px] font-semibold uppercase tracking-[0.18em] text-slate-700 transition hover:bg-slate-100 active:translate-y-px disabled:opacity-70"
+          >
+            Entrar con PIN
+            <ChevronRight className="h-4 w-4" />
+          </SubmitButton>
+        </form>
+      </div>
     </PortalLoginCard>
   );
 }
