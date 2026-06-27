@@ -22,6 +22,7 @@ import {
 import { ClientShell } from '@/components/client/ClientShell';
 import { DemoLightbox } from '@/components/preview/DemoLightbox';
 import { DemoToast } from '@/components/preview/DemoSheet';
+import { CleanerEtaRibbon } from '../_components/CleanerEtaRibbon';
 import { DEMO_PHOTOS, LONDON_PROPERTIES, MOCK_CTX, PREVIEW_TOKEN } from '../_mock';
 
 const PROPERTY = LONDON_PROPERTIES.soho;
@@ -72,6 +73,10 @@ export default function ClientCleaningPreview() {
       backHref="/client/preview/cleanings"
     >
       <div className="space-y-4">
+        {/* Live cleaner ETA ribbon — sticky-translucent at the top of
+            the page so it follows scroll. Tap to expand the route. */}
+        <CleanerEtaRibbon cleanerInitials="CR" cleanerName="Carmen R." />
+
         {/* Status header — solid emerald surface signals status without
             the medical-success gradient + glow cliché. */}
         <div className="rounded-2xl bg-emerald-600 p-5 text-white">

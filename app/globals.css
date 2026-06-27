@@ -251,3 +251,161 @@ html.capacitor .overflow-y-scroll {
 html.capacitor {
   background-color: #0b1d3a;
 }
+
+/* ============================================================================
+   Owner preview — demo-only motion primitives.
+   Only used in /owner/preview/* to power the live ops pulse line,
+   command palette, hero spotlight, and pull-to-summarize heatmap.
+   Respect prefers-reduced-motion — all animations stop when set.
+   ============================================================================ */
+@keyframes demo-slide-up {
+  0% { transform: translateY(8px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes demo-halo-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes demo-spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes demo-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes demo-scale-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.demo-puck-track {
+  transition: transform 2.8s linear;
+}
+.demo-whisper {
+  animation: demo-slide-up 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.demo-halo {
+  animation: demo-halo-pulse 600ms ease-out 1 both;
+}
+.demo-spotlight {
+  animation: demo-spin-slow 6s linear infinite;
+}
+.demo-pop {
+  animation: demo-scale-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ============================================================================
+   Client preview — innovative interactions for /client/preview.
+   Live ETA ribbon breathing dot, swipe-to-confirm, digit-flip counters,
+   concierge sheet streaming, 3D card flip, completion seal.
+   ============================================================================ */
+@keyframes client-eta-breath {
+  0%   { transform: scale(1);   opacity: 0.85; }
+  50%  { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+@keyframes client-digit-flip-in {
+  0%   { transform: translateY(40%); opacity: 0; }
+  100% { transform: translateY(0);   opacity: 1; }
+}
+@keyframes client-digit-flip-out {
+  0%   { transform: translateY(0);    opacity: 1; }
+  100% { transform: translateY(-40%); opacity: 0; }
+}
+@keyframes client-seal-drop {
+  0%   { transform: translateY(-80px) rotate(-16deg) scale(0.9); opacity: 0; }
+  70%  { transform: translateY(0)      rotate(8deg)   scale(1.12); opacity: 1; }
+  100% { transform: translateY(0)      rotate(8deg)   scale(1);    opacity: 1; }
+}
+@keyframes client-seal-dust {
+  0%   { transform: scale(0);   opacity: 0.4; }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+@keyframes client-sparkle-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes client-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+@keyframes client-stream-caret {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+.client-eta-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: client-eta-breath 1800ms ease-out infinite;
+  pointer-events: none;
+}
+.client-digit-col {
+  display: inline-flex;
+  flex-direction: column;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.client-digit-cell {
+  height: 1em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.client-card-flip {
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.client-card-flip > .client-card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.client-card-flip > .client-card-back {
+  transform: rotateY(180deg);
+}
+.client-card-flipped {
+  transform: rotateY(180deg);
+}
+.client-seal-drop {
+  animation: client-seal-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.client-seal-dust {
+  animation: client-seal-dust 600ms ease-out 80ms both;
+}
+.client-sparkle-mask {
+  background: conic-gradient(from 0deg, #60a5fa, #c084fc, #60a5fa);
+  animation: client-sparkle-spin 4000ms linear infinite;
+}
+.client-stream-caret {
+  animation: client-stream-caret 800ms steps(1, end) infinite;
+}
+.client-fade-up {
+  animation: client-fade-up 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.client-spring-snap {
+  transition: transform 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.client-eta-squiggle path {
+  transition: stroke-dashoffset 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-puck-track { transition: none !important; }
+  .demo-whisper,
+  .demo-halo,
+  .demo-spotlight,
+  .demo-pop { animation: none !important; }
+  .client-eta-pulse::after,
+  .client-sparkle-mask,
+  .client-stream-caret,
+  .client-fade-up,
+  .client-seal-drop,
+  .client-seal-dust { animation: none !important; }
+  .client-card-flip,
+  .client-digit-col,
+  .client-eta-squiggle path,
+  .client-spring-snap { transition: none !important; }
+}

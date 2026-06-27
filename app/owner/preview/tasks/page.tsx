@@ -4,7 +4,7 @@
  */
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -379,8 +379,14 @@ function OwnerTasksPreviewInner() {
             const cfg = statusConfig[t.status];
             const Icon = cfg.icon;
             return (
-              <div
+              <SwipeRow
                 key={t.id}
+                taskId={t.id}
+                enabled={t.status === 'pending'}
+                onAccept={() => updateStatus(t.id, 'in_progress')}
+                onReassign={() => updateStatus(t.id, 'cancelled')}
+              >
+              <div
                 className="group relative flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-300 hover:shadow"
               >
                 <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 ring-1 ring-blue-100">
@@ -451,6 +457,7 @@ function OwnerTasksPreviewInner() {
                   <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 transition group-hover:text-slate-500" />
                 </Link>
               </div>
+              </SwipeRow>
             );
           })}
           {visible.length === 0 ? (
@@ -471,5 +478,156 @@ function OwnerTasksPreviewInner() {
 
       <DemoBottomTabBar active="tasks" />
     </main>
+  );
+}
+
+/**
+ * Swipe-to-assign wrapper for pending task rows. Pointer Events drive a
+ * direct transform on the row element (no re-render per frame) with a
+ * rubber-band feel past the 96px threshold. Releasing past 72px commits
+ * the gesture: left → "Reasignar" (cancel), right → "Aceptar" (in_progress).
+ * Desktop hover buttons keep working — gestures only apply to coarse
+ * pointer / touch input and gracefully no-op otherwise.
+ *
+ * Reduced motion: gesture disabled entirely, only the hover buttons fire.
+ */
+function SwipeRow({
+  taskId,
+  enabled,
+  onAccept,
+  onReassign,
+  children,
+}: {
+  taskId: string;
+  enabled: boolean;
+  onAccept: () => void;
+  onReassign: () => void;
+  children: React.ReactNode;
+}) {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef(0);
+  const dxRef = useRef(0);
+  const activeRef = useRef(false);
+  const [hint, setHint] = useState<'accept' | 'reassign' | null>(null);
+
+  function setDx(dx: number) {
+    dxRef.current = dx;
+    const el = rowRef.current;
+    if (!el) return;
+    const ax = Math.abs(dx);
+    const limited =
+      ax > 96 ? Math.sign(dx) * (96 + (ax - 96) * 0.35) : dx;
+    el.style.transform = `translateX(${limited}px)`;
+    if (limited > 24) setHint('accept');
+    else if (limited < -24) setHint('reassign');
+    else setHint(null);
+  }
+
+  function reset(animated = true) {
+    const el = rowRef.current;
+    if (!el) return;
+    if (animated && typeof el.animate === 'function') {
+      const from = el.style.transform || 'translateX(0px)';
+      el.animate(
+        [
+          { transform: from },
+          { transform: 'translateX(0px)' },
+        ],
+        { duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+      );
+    }
+    el.style.transform = 'translateX(0px)';
+    dxRef.current = 0;
+    setHint(null);
+  }
+
+  function commit(direction: 1 | -1) {
+    const el = rowRef.current;
+    if (!el) return;
+    const target = direction > 0 ? 'translateX(120%)' : 'translateX(-120%)';
+    if (typeof el.animate === 'function') {
+      const anim = el.animate(
+        [
+          { transform: el.style.transform || 'translateX(0px)' },
+          { transform: target },
+        ],
+        { duration: 180, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+      );
+      anim.onfinish = () => {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+          try { navigator.vibrate?.(8); } catch { /* noop */ }
+        }
+        if (direction > 0) onAccept();
+        else onReassign();
+        // After state update the row will re-mount in a new status section,
+        // but if still mounted, snap it back so it doesn't stay off-screen.
+        window.setTimeout(() => reset(false), 30);
+      };
+    } else {
+      if (direction > 0) onAccept();
+      else onReassign();
+      reset(false);
+    }
+  }
+
+  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    if (!enabled) return;
+    if (e.pointerType === 'mouse') return; // mouse users keep the buttons
+    if (typeof window !== 'undefined' &&
+        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    activeRef.current = true;
+    startXRef.current = e.clientX;
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+  }
+
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!activeRef.current) return;
+    const dx = e.clientX - startXRef.current;
+    setDx(dx);
+  }
+
+  function onPointerEnd() {
+    if (!activeRef.current) return;
+    activeRef.current = false;
+    const dx = dxRef.current;
+    if (dx > 72) commit(1);
+    else if (dx < -72) commit(-1);
+    else reset(true);
+  }
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl" data-task-id={taskId}>
+      {/* Action panels behind the row */}
+      {enabled ? (
+        <>
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-y-0 left-0 flex w-1/2 items-center justify-start rounded-2xl bg-gradient-to-r from-emerald-500/95 to-emerald-500/0 px-5 text-[12px] font-semibold text-white transition-opacity duration-150 ${
+              hint === 'accept' ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            ✓ Aceptar
+          </div>
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-y-0 right-0 flex w-1/2 items-center justify-end rounded-2xl bg-gradient-to-l from-rose-500/95 to-rose-500/0 px-5 text-[12px] font-semibold text-white transition-opacity duration-150 ${
+              hint === 'reassign' ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            Reasignar →
+          </div>
+        </>
+      ) : null}
+      <div
+        ref={rowRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerEnd}
+        onPointerCancel={onPointerEnd}
+        style={{ touchAction: enabled ? 'pan-y' : undefined, willChange: enabled ? 'transform' : undefined }}
+      >
+        {children}
+      </div>
+    </div>
   );
 }

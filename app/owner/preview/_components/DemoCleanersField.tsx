@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { MapPin, Radio } from 'lucide-react';
+import { DemoLiveOpsPulse } from './DemoLiveOpsPulse';
 
 export type DemoFieldCheckin = {
   taskId: string;
@@ -36,6 +37,8 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
           Ver todos →
         </Link>
       </header>
+
+      <DemoLiveOpsPulse />
 
       <ul className="mt-3 space-y-2">
         {checkins.map((c) => {

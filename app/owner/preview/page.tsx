@@ -11,6 +11,9 @@ import { DemoCleanersField, type DemoFieldCheckin } from './_components/DemoClea
 import { DemoBottomTabBar } from './_components/DemoBottomTabBar';
 import { DemoQuickActions } from './_components/DemoQuickActions';
 import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
+import { DemoTodayHero } from './_components/DemoTodayHero';
+import { DemoCommandPalette } from './_components/DemoCommandPalette';
+import { DemoPullSummary } from './_components/DemoPullSummary';
 
 export const metadata = {
   title: 'Demo · Owner',
@@ -67,6 +70,10 @@ export default function OwnerPreviewHome() {
           subtitle="Alan Cleaners · 4 limpiezas hoy"
         />
 
+        <div className="mb-4 flex justify-end">
+          <DemoPullSummary />
+        </div>
+
         <div>
           <DemoStatCardsRow
             cleanersActive={3}
@@ -82,6 +89,10 @@ export default function OwnerPreviewHome() {
 
           <div className="mt-4">
             <DemoCleanersField checkins={checkins} />
+          </div>
+
+          <div className="mt-6">
+            <DemoTodayHero />
           </div>
 
           <div className="mt-8">
@@ -117,6 +128,7 @@ export default function OwnerPreviewHome() {
         </div>
       </div>
 
+      <DemoCommandPalette />
       <DemoBottomTabBar active="home" />
     </main>
   );

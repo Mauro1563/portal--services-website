@@ -1,11 +1,23 @@
+'use client';
+
 /**
  * Demo-only fork of components/owner/StatCardsRow. Identical visuals,
  * but each tile is wrapped in <Link> so the preview dashboard tiles
  * navigate to drill-down pages instead of sitting there inert.
  *
- * Kept as a separate file to avoid coupling the real (production)
- * shared StatCardsRow to demo URLs.
+ * Animated touches:
+ *   - Revenue + Profit values tick from £0 → final using ease-out-expo
+ *     with a 1-digit overshoot (useCountUp). IntersectionObserver gates
+ *     the first run so it only fires when the card is on screen.
+ *   - Delta chips "pop" in (scale 0.6 → 1, slate → emerald colour sweep)
+ *     synchronized with the final landing of the digits.
+ *   - When a new mock booking lands (revenueMonthPence changes), the
+ *     number ticks up and the chip flashes once.
+ *
+ * Kept as a separate file from production StatCardsRow so demo URLs and
+ * motion stay isolated from the real owner dashboard.
  */
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   CalendarPlus,
@@ -14,16 +26,24 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
+import { useCountUp } from './useCountUp';
+
+type AnimatedValue =
+  | { kind: 'text'; value: string }
+  | { kind: 'money'; pence: number };
 
 type StatProps = {
   label: string;
-  value: string;
   hint?: string;
   delta?: { label: string; positive?: boolean };
   Icon: React.ComponentType<{ className?: string }>;
   accent: 'brand' | 'emerald' | 'amber' | 'violet' | 'rose';
   href?: string;
   title?: string;
+  /** Either a static label or a money amount to animate. */
+  value: AnimatedValue;
+  /** Whether to drive the count-up + chip pop on this card. */
+  animateMoney?: boolean;
 };
 
 const ACCENT: Record<
@@ -57,6 +77,20 @@ const ACCENT: Record<
   },
 };
 
+function fmtMoney(p: number) {
+  const abs = Math.abs(p);
+  const formatted = `£${(abs / 100).toLocaleString('en-GB', {
+    maximumFractionDigits: 0,
+  })}`;
+  return p < 0 ? `-${formatted}` : formatted;
+}
+
+function AnimatedMoney({ pence, run }: { pence: number; run: boolean }) {
+  const target = run ? pence : 0;
+  const v = useCountUp(target, { immediate: !run });
+  return <>{fmtMoney(Math.round(v))}</>;
+}
+
 function StatCardInner({
   label,
   value,
@@ -64,23 +98,77 @@ function StatCardInner({
   delta,
   Icon,
   accent,
+  animateMoney,
 }: Omit<StatProps, 'href' | 'title'>) {
   const cls = ACCENT[accent];
+  const sentinelRef = useRef<HTMLSpanElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [chipFlash, setChipFlash] = useState(false);
+  const lastValueRef = useRef<number | string | null>(null);
+
+  useEffect(() => {
+    const node = sentinelRef.current;
+    if (!node || visible) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setVisible(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setVisible(true);
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, [visible]);
+
+  // Trigger chip flash whenever the underlying money value changes
+  // (post first-paint) — gives the "money arrived" effect.
+  useEffect(() => {
+    const current =
+      value.kind === 'money' ? value.pence : value.value;
+    if (lastValueRef.current === null) {
+      lastValueRef.current = current;
+      return;
+    }
+    if (lastValueRef.current !== current) {
+      setChipFlash(true);
+      const t = window.setTimeout(() => setChipFlash(false), 800);
+      lastValueRef.current = current;
+      return () => window.clearTimeout(t);
+    }
+  }, [value]);
+
   return (
     <>
       <div className="flex items-start justify-between gap-1">
         <span
+          ref={sentinelRef}
           className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9 sm:rounded-xl ${cls.iconBg} ${cls.iconText} ring-1 ${cls.ring}`}
         >
           <Icon className="h-4 w-4" />
         </span>
         {delta ? (
           <span
-            className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums ${
+            className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums transition-all duration-300 ${
+              visible ? 'scale-100 opacity-100' : 'scale-[0.6] opacity-0'
+            } ${
+              chipFlash
+                ? 'ring-2 ring-emerald-300 ring-offset-1'
+                : ''
+            } ${
               delta.positive
                 ? 'bg-emerald-50 text-emerald-700'
                 : 'bg-rose-50 text-rose-700'
             }`}
+            style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
           >
             <TrendingUp
               className={`h-2.5 w-2.5 ${delta.positive ? '' : 'rotate-180'}`}
@@ -94,7 +182,11 @@ function StatCardInner({
           {label}
         </p>
         <p className="mt-1 font-display text-xl font-bold tabular-nums leading-none text-slate-900 sm:text-2xl">
-          {value}
+          {value.kind === 'money' ? (
+            <AnimatedMoney pence={value.pence} run={Boolean(animateMoney && visible)} />
+          ) : (
+            value.value
+          )}
         </p>
         {hint ? (
           <p className="mt-1 text-[11.5px] text-slate-500 sm:text-[12px]">
@@ -148,14 +240,6 @@ export function DemoStatCardsRow({
   profitMonthPence?: number;
   profitDelta?: { label: string; positive: boolean };
 }) {
-  const fmtMoney = (p: number) => {
-    const abs = Math.abs(p);
-    const formatted = `£${(abs / 100).toLocaleString('en-GB', {
-      maximumFractionDigits: 0,
-    })}`;
-    return p < 0 ? `-${formatted}` : formatted;
-  };
-
   const showProfit = typeof profitMonthPence === 'number';
 
   return (
@@ -168,7 +252,7 @@ export function DemoStatCardsRow({
     >
       <StatCard
         label="Cleaners activos"
-        value={String(cleanersActive)}
+        value={{ kind: 'text', value: String(cleanersActive) }}
         hint="en tu equipo"
         Icon={Users}
         accent="brand"
@@ -177,7 +261,7 @@ export function DemoStatCardsRow({
       />
       <StatCard
         label="Nuevas reservas"
-        value={String(bookingsWeek)}
+        value={{ kind: 'text', value: String(bookingsWeek) }}
         hint="vs. semana pasada"
         delta={bookingsDelta}
         Icon={CalendarPlus}
@@ -187,24 +271,26 @@ export function DemoStatCardsRow({
       />
       <StatCard
         label="Ingresos"
-        value={fmtMoney(revenueMonthPence)}
+        value={{ kind: 'money', pence: revenueMonthPence }}
         hint="vs. mes pasado"
         delta={revenueDelta}
         Icon={PoundSterling}
         accent="emerald"
         href="/owner/preview/analytics"
         title="Ver tendencias de ingresos y KPIs detallados"
+        animateMoney
       />
       {showProfit ? (
         <StatCard
           label="Beneficio"
-          value={fmtMoney(profitMonthPence)}
+          value={{ kind: 'money', pence: profitMonthPence as number }}
           hint="ingresos − pagado"
           delta={profitDelta}
           Icon={PiggyBank}
-          accent={profitMonthPence >= 0 ? 'violet' : 'rose'}
+          accent={(profitMonthPence as number) >= 0 ? 'violet' : 'rose'}
           href="/owner/preview/analytics"
           title="Ver desglose de costes vs. ingresos"
+          animateMoney
         />
       ) : null}
     </section>

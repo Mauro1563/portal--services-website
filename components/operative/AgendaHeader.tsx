@@ -29,6 +29,7 @@ export function AgendaHeader({
   totalCount,
   weekHref = '/operative/week',
   inProgressTaskId,
+  decorationSlot,
 }: {
   cleanerName: string;
   /** Pass `new Date()` from the server component — keeps SSR deterministic. */
@@ -41,6 +42,10 @@ export function AgendaHeader({
    *  tapping it scrolls the in-progress task card into view. When omitted,
    *  the chip is hidden (the per-task status pill already conveys it). */
   inProgressTaskId?: string;
+  /** Optional decorative slot rendered directly under the "Cleaner · name"
+   *  caption. The /operative/preview demo uses this to drop in the kintsugi
+   *  progress thread. Prod /operative leaves it undefined. */
+  decorationSlot?: React.ReactNode;
 }) {
   const firstName = cleanerName.split(' ')[0];
   const dayFull = DAY_FULL[now.getDay()];
@@ -58,6 +63,7 @@ export function AgendaHeader({
           <h1 className="mt-1 font-display text-[15px] font-medium text-white/85">
             Tu agenda hoy
           </h1>
+          {decorationSlot ? <div className="mt-1">{decorationSlot}</div> : null}
         </div>
         <div className="flex items-center gap-1.5">
           <ThemeToggle />

@@ -10,7 +10,7 @@
  * components/preview/* (incl. PreviewBottomTabBar) so the auth-gated
  * /operative route is unaffected.
  */
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Camera,
@@ -30,9 +30,17 @@ import {
   X,
 } from 'lucide-react';
 import { AgendaHeader } from '@/components/operative/AgendaHeader';
-import { EarningsStrip } from '@/components/operative/EarningsStrip';
 import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
+import { SwipeableTaskCard } from '@/components/preview/SwipeableTaskCard';
+import {
+  EarningsAnimationProvider,
+  useEarningsAnimation,
+} from '@/components/preview/EarningsCoinAnimator';
+import { PreviewEarningsStrip } from '@/components/preview/PreviewEarningsStrip';
+import { PullToCheckInHero } from '@/components/preview/PullToCheckInHero';
+import { KintsugiThread } from '@/components/preview/KintsugiThread';
+import { AsistenteSheet } from '@/components/preview/AsistenteSheet';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
 
@@ -161,7 +169,11 @@ function nowHHMM(): string {
 export default function OperativePreviewHome() {
   const now = useMemo(() => new Date(), []);
   const [resetKey, setResetKey] = useState(0);
-  return <OperativePreviewHomeBody key={resetKey} now={now} onReset={() => setResetKey((k) => k + 1)} />;
+  return (
+    <EarningsAnimationProvider key={resetKey}>
+      <OperativePreviewHomeBody now={now} onReset={() => setResetKey((k) => k + 1)} />
+    </EarningsAnimationProvider>
+  );
 }
 
 function OperativePreviewHomeBody({
@@ -177,6 +189,12 @@ function OperativePreviewHomeBody({
   const [toast, setToast] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState(false);
   const [agendaHelpOpen, setAgendaHelpOpen] = useState(false);
+  const [asistenteOpen, setAsistenteOpen] = useState(false);
+  /** Refs to each task <li> so the coin can spawn from the row that
+   *  just got swiped — captured at the moment of completion. */
+  const taskRowRefs = useRef<Record<string, HTMLLIElement | null>>({});
+  const { flyFrom, rollTo } = useEarningsAnimation();
+  const prevTodayPenceRef = useRef<number>(0);
 
   function showToast(message: string) {
     setToast(message);
@@ -207,6 +225,12 @@ function OperativePreviewHomeBody({
   // completes the last task. Stays sensible whether today=£0 or today=£40.
   const PRIOR_DAYS_PENCE = 21800; // £218 across Mon-Thu
   const weekPence = PRIOR_DAYS_PENCE + todayPence;
+
+  // Seed the "previous" snapshot on the very first render so the next
+  // completion knows where to start the odometer roll from.
+  if (prevTodayPenceRef.current === 0 && todayPence > 0) {
+    prevTodayPenceRef.current = todayPence;
+  }
 
   function handleSetHours(taskId: string, hours: number) {
     setTasks((prev) =>
@@ -240,14 +264,42 @@ function OperativePreviewHomeBody({
   }
 
   function handleComplete(taskId: string) {
-    setTasks((prev) =>
-      prev.map((t) =>
+    // Spawn the coin from the row's centre before we lose the rect to
+    // a re-render. The animator handles reduced-motion internally.
+    const rowEl = taskRowRefs.current[taskId];
+    const rect = rowEl?.getBoundingClientRect() ?? null;
+    flyFrom(rect);
+
+    setTasks((prev) => {
+      const next = prev.map((t) =>
         t.id === taskId
           ? { ...t, status: 'completed' as DemoStatus, completedAt: nowHHMM() }
           : t,
-      ),
-    );
+      );
+      // Compute the new "Hoy" figure from the next state and roll the
+      // counter directly via rAF (no React re-render cost on the digits).
+      const nextTodayPence = next
+        .filter((t) => t.status === 'completed')
+        .reduce((acc, t) => {
+          const hours = t.actualHours ?? 0;
+          const labour = Math.round(hours * t.cleanerPayRatePence);
+          return acc + Math.max(0, labour + (t.tipPence ?? 0));
+        }, 0);
+      const prevPence = prevTodayPenceRef.current;
+      prevTodayPenceRef.current = nextTodayPence;
+      // Delay the counter roll until the coin lands (~420ms).
+      window.setTimeout(() => rollTo(prevPence, nextTodayPence), 380);
+      return next;
+    });
     showToast('Tarea completada');
+  }
+
+  function handleCallClient(taskId: string) {
+    const t = tasks.find((x) => x.id === taskId);
+    if (!t) return;
+    // In a real app this would open tel: — for the demo we surface a
+    // toast so the visitor sees the action was recognised by the swipe.
+    showToast(`Llamando a ${t.client_name}…`);
   }
 
   function handleUploadPhoto(taskId: string) {
@@ -292,9 +344,12 @@ function OperativePreviewHomeBody({
           totalCount={tasks.length}
           weekHref="/operative/preview/week"
           inProgressTaskId={inProgressTaskId}
+          decorationSlot={
+            <KintsugiThread doneCount={doneCount} totalCount={tasks.length} />
+          }
         />
 
-        <EarningsStrip
+        <PreviewEarningsStrip
           todayPence={todayPence}
           weekPence={weekPence}
           href="/operative/preview/week"
@@ -306,7 +361,12 @@ function OperativePreviewHomeBody({
             the single source of truth (no double-rendering the in-progress
             task in two surfaces). */}
         {heroTask && heroTask.status !== 'completed' ? (
-          <section className="mt-5 rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
+          <div className="mt-5">
+          <PullToCheckInHero
+            enabled={heroTask.status === 'scheduled'}
+            onCheckIn={() => handleCheckIn(heroTask.id)}
+          >
+          <section className="rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
             <div className="flex items-center justify-between gap-2">
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">
                 Siguiente parada
@@ -343,6 +403,8 @@ function OperativePreviewHomeBody({
               </a>
             </div>
           </section>
+          </PullToCheckInHero>
+          </div>
         ) : null}
 
         {/* Agenda timeline — interactive */}
@@ -391,7 +453,14 @@ function OperativePreviewHomeBody({
               const st = STATUS_META[task.status];
               const isExpanded = expandedId === task.id;
               return (
-                <li key={task.id} id={`task-${task.id}`} className="relative pb-3 last:pb-0 scroll-mt-24">
+                <li
+                  key={task.id}
+                  id={`task-${task.id}`}
+                  ref={(el) => {
+                    taskRowRefs.current[task.id] = el;
+                  }}
+                  className="relative pb-3 last:pb-0 scroll-mt-24"
+                >
                   <div className="flex items-stretch gap-3">
                     {/* Time column */}
                     <div className="flex w-[52px] shrink-0 flex-col items-end pt-2.5">
@@ -412,8 +481,16 @@ function OperativePreviewHomeBody({
                       />
                     </span>
 
-                    {/* Card */}
-                    <div className="min-w-0 flex-1 rounded-2xl border border-surface-2 bg-paper p-3 shadow-card transition">
+                    {/* Card — wrapped in SwipeableTaskCard so the
+                        in-progress row can be swiped right to complete
+                        or left to call the client. */}
+                    <div className="min-w-0 flex-1">
+                    <SwipeableTaskCard
+                      enabled={task.status === 'in_progress'}
+                      onComplete={() => handleComplete(task.id)}
+                      onCallClient={() => handleCallClient(task.id)}
+                    >
+                    <div className="rounded-2xl border border-surface-2 bg-paper p-3 shadow-card transition">
                       <button
                         type="button"
                         onClick={() => toggleExpand(task.id)}
@@ -609,6 +686,8 @@ function OperativePreviewHomeBody({
                         </div>
                       ) : null}
                     </div>
+                    </SwipeableTaskCard>
+                    </div>
                   </div>
                 </li>
               );
@@ -695,7 +774,35 @@ function OperativePreviewHomeBody({
         </div>
       ) : null}
 
-      <PreviewBottomTabBar active="agenda" />
+      <AsistenteSheet
+        open={asistenteOpen}
+        onClose={() => setAsistenteOpen(false)}
+        tasks={tasks}
+        onAction={(s) => {
+          // Map the suggestion back to a concrete demo behaviour so the
+          // sheet feels causally connected to the agenda state.
+          if (s.kind === 'report-hours') {
+            const inProg = tasks.find((t) => t.status === 'in_progress');
+            if (inProg) {
+              setExpandedId(inProg.id);
+              handleSetHours(inProg.id, 1);
+              showToast('Horas pre-rellenadas');
+            }
+          } else if (s.kind === 'call-client') {
+            const next = tasks.find((t) => t.status === 'scheduled');
+            if (next) handleCallClient(next.id);
+          } else if (s.kind === 'upload-photo') {
+            const done = tasks.find((t) => t.status === 'completed' && t.photos.length === 0);
+            if (done) handleUploadPhoto(done.id);
+          }
+        }}
+      />
+
+      <PreviewBottomTabBar
+        active="agenda"
+        onAsistentePress={() => setAsistenteOpen(true)}
+        onAsistentePullUp={() => setAsistenteOpen(true)}
+      />
     </main>
   );
 }

@@ -35,6 +35,11 @@ import { ServiceCatalog } from '@/components/client/ServiceCatalog';
 import { DemoPhotoStrip, DEMO_PHOTOS } from '@/components/preview/DemoPhotoStrip';
 import { DemoSheet, DemoToast } from '@/components/preview/DemoSheet';
 import { DemoLightbox } from '@/components/preview/DemoLightbox';
+import { CompletionSeal } from './_components/CompletionSeal';
+import { ConciergeSheet } from './_components/ConciergeSheet';
+import { FlippableCleanerCard } from './_components/FlippableCleanerCard';
+import { RollingStat } from './_components/RollingStat';
+import { SwipeVisitCard } from './_components/SwipeVisitCard';
 import {
   LONDON_PROPERTIES,
   MOCK_CLEANERS,
@@ -59,6 +64,8 @@ function StatChip({
   tone: 'blue' | 'emerald' | 'amber';
   /**
    * 'accent' — the single live/primary metric (filled tone surface).
+   * The accent chip also fires a single quiet ring pulse after the
+   * digit-flip tally finishes on first mount.
    * 'neutral' — secondary metrics rendered as quiet pills with a
    *             tone-colored dot, so the accent metric leads.
    */
@@ -106,7 +113,9 @@ function StatChip({
         >
           {label}
         </p>
-        <p className="text-sm font-bold">{value}</p>
+        <p className="text-sm font-bold">
+          <RollingStat value={value} pulse={isAccent} />
+        </p>
       </div>
     </button>
   );
@@ -164,6 +173,10 @@ function ClientPreviewInner({
   const [nextStatus, setNextStatus] = useState<
     'pending' | 'accepted' | 'done' | 'rejected'
   >('pending');
+  // Drives the wax-seal celebration overlay on the visit card. Decoupled
+  // from `nextStatus` so the seal can auto-dismiss (~2.4s) while the
+  // status stays 'done' for the rest of the session.
+  const [sealVisible, setSealVisible] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
   // Search + filter state for Categorías and Tu equipo.
@@ -442,39 +455,49 @@ function ClientPreviewInner({
             </button>
           </div>
         ) : (
-          <div className="mt-3 rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
-            <Link
-              href="/client/preview/cleaning"
-              title="Toca para ver el detalle completo de la visita"
-              className="group -m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
-            >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
-                <CalendarCheck className="h-5 w-5" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-blue-700">
-                  Mañana · 10:00
-                </p>
-                <p className="mt-0.5 font-display text-sm font-bold text-slate-900">
-                  Limpieza estándar
-                </p>
-                <p className="mt-0.5 text-[12px] text-slate-600">
-                  Con Ana Ruiz · ~2 h
-                </p>
-                <p className="mt-1 flex items-center gap-1 text-[11px] text-slate-500">
-                  <MapPin className="h-3 w-3 shrink-0" />
-                  <span className="truncate">{PROPERTY.address}</span>
-                </p>
-              </div>
-              <span className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white transition group-hover:bg-slate-700">
-                Ver
-              </span>
-            </Link>
+          <div className="relative mt-3 rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
+            {/* Wax-seal celebration overlay — only when status flips to
+                'done'. Auto-dismisses; the underlying status sticks. */}
+            <CompletionSeal
+              visible={sealVisible && nextStatus === 'done'}
+              onDone={() => setSealVisible(false)}
+            />
 
-            {/* Quick actions: state transitions */}
-            <div className="mt-3 flex gap-2">
-              {nextStatus === 'pending' && (
-                <>
+            {(() => {
+              const visitCardBody = (
+                <Link
+                  href="/client/preview/cleaning"
+                  title="Toca para ver el detalle completo de la visita"
+                  className="group -m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
+                >
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
+                    <CalendarCheck className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-blue-700">
+                      Mañana · 10:00
+                    </p>
+                    <p className="mt-0.5 font-display text-sm font-bold text-slate-900">
+                      Limpieza estándar
+                    </p>
+                    <p className="mt-0.5 text-[12px] text-slate-600">
+                      Con Ana Ruiz · ~2 h
+                    </p>
+                    <p className="mt-1 flex items-center gap-1 text-[11px] text-slate-500">
+                      <MapPin className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{PROPERTY.address}</span>
+                    </p>
+                  </div>
+                  <span className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white transition group-hover:bg-slate-700">
+                    Ver
+                  </span>
+                </Link>
+              );
+
+              // Legacy fallback row — keyboard / reduced-motion users
+              // get the classic two-button accept/reject as before.
+              const fallbackRow = (
+                <div className="mt-3 flex gap-2">
                   <button
                     type="button"
                     onClick={(e) => {
@@ -499,28 +522,58 @@ function ClientPreviewInner({
                   >
                     Rechazar
                   </button>
-                </>
-              )}
-              {nextStatus === 'accepted' && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setNextStatus('done');
-                    showToast('Marcada como completada');
-                  }}
-                  title="Marcar la limpieza como completada"
-                  className="flex-1 rounded-xl bg-emerald-600 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-white hover:bg-emerald-700"
-                >
-                  Marcar completada
-                </button>
-              )}
-              {nextStatus === 'done' && (
-                <div className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-inset ring-emerald-100">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Completada · ahora
                 </div>
-              )}
-            </div>
+              );
+
+              return (
+                <>
+                  {nextStatus === 'pending' ? (
+                    <SwipeVisitCard
+                      enabled
+                      onAccept={() => {
+                        setNextStatus('accepted');
+                        showToast('Visita confirmada');
+                      }}
+                      onReject={() => {
+                        setNextStatus('rejected');
+                        showToast('Visita cancelada');
+                      }}
+                      fallback={fallbackRow}
+                    >
+                      {visitCardBody}
+                    </SwipeVisitCard>
+                  ) : (
+                    visitCardBody
+                  )}
+
+                  {/* Quick actions: state transitions for non-pending. */}
+                  {nextStatus === 'accepted' && (
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setNextStatus('done');
+                          setSealVisible(true);
+                          showToast('Marcada como completada');
+                        }}
+                        title="Marcar la limpieza como completada"
+                        className="flex-1 rounded-xl bg-emerald-600 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-white hover:bg-emerald-700"
+                      >
+                        Marcar completada
+                      </button>
+                    </div>
+                  )}
+                  {nextStatus === 'done' && (
+                    <div className="mt-3 flex gap-2">
+                      <div className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-inset ring-emerald-100">
+                        <CheckCircle2 className="h-3.5 w-3.5" /> Completada · ahora
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         )}
       </section>
@@ -577,37 +630,47 @@ function ClientPreviewInner({
       >
         {openCleaner && (
           <>
-            <div className="flex items-center gap-3 pr-8">
-              <div className="grid h-14 w-14 place-items-center rounded-full bg-slate-700 text-lg font-bold text-white">
-                {openCleaner.name.split(' ').map((w) => w[0]).join('')}
-              </div>
-              <div className="flex-1">
-                <p className="inline-flex items-center gap-1 text-[12px] text-amber-700">
-                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                  {openCleaner.avgStars?.toFixed(1) ?? '—'} ·{' '}
-                  {openCleaner.ratingCount} reviews
-                </p>
-              </div>
-            </div>
-            <div className="mt-4 rounded-2xl bg-slate-50 p-3 ring-1 ring-inset ring-slate-100">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                Trabajos recientes
-              </p>
-              <ul className="mt-2 space-y-1.5 text-[12.5px] text-slate-700">
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
-                  Limpieza profunda · {LONDON_PROPERTIES.soho.address}
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
-                  Limpieza estándar · {LONDON_PROPERTIES.notting.address}
-                </li>
-                <li className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
-                  Cristales · {LONDON_PROPERTIES.camden.address}
-                </li>
-              </ul>
-            </div>
+            {/* Flippable cleaner card — front is the existing facts;
+                back is the "cómo trabaja" personality side reached via
+                the discrete "Conócela" chip in the corner. */}
+            <FlippableCleanerCard
+              cleanerName={openCleaner.name}
+              front={
+                <div className="rounded-2xl p-1">
+                  <div className="flex items-center gap-3 pr-8">
+                    <div className="grid h-14 w-14 place-items-center rounded-full bg-slate-700 text-lg font-bold text-white">
+                      {openCleaner.name.split(' ').map((w) => w[0]).join('')}
+                    </div>
+                    <div className="flex-1">
+                      <p className="inline-flex items-center gap-1 text-[12px] text-amber-700">
+                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                        {openCleaner.avgStars?.toFixed(1) ?? '—'} ·{' '}
+                        {openCleaner.ratingCount} reviews
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 rounded-2xl bg-slate-50 p-3 ring-1 ring-inset ring-slate-100">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      Trabajos recientes
+                    </p>
+                    <ul className="mt-2 space-y-1.5 text-[12.5px] text-slate-700">
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                        Limpieza profunda · {LONDON_PROPERTIES.soho.address}
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                        Limpieza estándar · {LONDON_PROPERTIES.notting.address}
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                        Cristales · {LONDON_PROPERTIES.camden.address}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              }
+            />
             <Link
               href="/client/preview/book"
               title={`Pedir que ${openCleaner.name} sea tu cleaner asignado`}
@@ -773,6 +836,10 @@ function ClientPreviewInner({
         onClose={() => setPhotoIndex(null)}
         onChange={setPhotoIndex}
       />
+
+      {/* Floating "Pregúntame algo" pill that morphs into the Sofía
+          AI concierge bottom sheet. Lives above the tab bar. */}
+      <ConciergeSheet />
 
       {/* Floating toast */}
       <DemoToast show={toast != null} message={toast ?? ''} />

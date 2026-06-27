@@ -138,7 +138,17 @@ export function DemoCorporateHeader({
             <h1 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
               Hola, {firstName}
             </h1>
-            <p className="mt-1.5 text-[13px] font-medium text-white/90">{subtitle}</p>
+            <p className="mt-1.5 flex items-center gap-2 text-[13px] font-medium text-white/90">
+              <span
+                aria-hidden
+                className="relative inline-flex h-2 w-2"
+                title="Tu equipo está activo ahora mismo"
+              >
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              {subtitle}
+            </p>
           </div>
           <div ref={popoverRef} className="relative flex shrink-0 items-center gap-2">
             <button
