@@ -11,6 +11,7 @@ import { EcoGreeting } from '@/components/client/EcoGreeting';
 import { FeaturedCleaners } from '@/components/client/FeaturedCleaners';
 import { PromoBanner } from '@/components/client/PromoBanner';
 import { ServiceCatalog } from '@/components/client/ServiceCatalog';
+import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 import { MOCK_CLEANERS, MOCK_CTX, MOCK_SERVICES, PREVIEW_TOKEN } from './_mock';
 
 export const metadata = {
@@ -51,7 +52,7 @@ function StatChip({
 
 export default function ClientPreview() {
   return (
-    <ClientShell ctx={MOCK_CTX} token={PREVIEW_TOKEN} activeTab="home">
+    <ClientShell ctx={MOCK_CTX} token={PREVIEW_TOKEN} activeTab="home" hideHeader>
       <EcoGreeting
         firstName="Sofía"
         businessName={MOCK_CTX.owner.business_name ?? ''}
@@ -96,6 +97,11 @@ export default function ClientPreview() {
       <ServiceCatalog token={PREVIEW_TOKEN} services={MOCK_SERVICES} />
 
       <FeaturedCleaners token={PREVIEW_TOKEN} cleaners={MOCK_CLEANERS} />
+
+      <DemoPhotoStrip
+        title="Limpiezas anteriores"
+        caption="Mira el resultado de servicios recientes — fotos cargadas por tu equipo después de cada visita."
+      />
 
       <section className="mt-6">
         <h2 className="text-[13px] font-bold text-slate-900">Próxima visita</h2>

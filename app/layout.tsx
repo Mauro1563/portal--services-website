@@ -5,6 +5,7 @@ import './globals.css';
 import './psd.css';
 import { ThemeManager } from '@/components/ThemeManager';
 import { CapacitorBridge } from '@/components/CapacitorBridge';
+import { getLocale } from '@/lib/i18n';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -106,9 +107,10 @@ const softwareLd = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${poppins.variable}`}>
       <head>
         <meta
           name="viewport"

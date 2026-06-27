@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Route-scoped fallback for /login. If the server render of the login
@@ -11,7 +11,75 @@ import { useEffect } from 'react';
  * The form posts to /login the same way the real page does — Next picks
  * it up via the form action. Identifier + password inputs match the
  * signIn action's expected formData shape.
+ *
+ * i18n: since this is a client component and the server render already
+ * failed, we can't safely call `getLocale()` here. We read the
+ * `portal_locale` cookie directly from `document.cookie` and fall back
+ * to English. Inline COPY map keeps the fallback self-contained — if
+ * the i18n catalog itself is what broke upstream, this still renders.
  */
+type Locale = 'en' | 'es' | 'pt';
+const SUPPORTED: readonly Locale[] = ['en', 'es', 'pt'];
+
+const COPY: Record<
+  Locale,
+  {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    identifierLabel: string;
+    passwordLabel: string;
+    submit: string;
+    retry: string;
+    techDetail: string;
+    noMessage: string;
+  }
+> = {
+  en: {
+    eyebrow: 'Portal Home',
+    title: 'Sign in',
+    subtitle:
+      'Minimal view — the full page had a loading issue. You can still sign in.',
+    identifierLabel: 'PIN or email',
+    passwordLabel: 'Password (empty for cleaner with PIN)',
+    submit: 'Sign in',
+    retry: 'Retry loading the full page',
+    techDetail: 'Technical detail',
+    noMessage: '(no message)',
+  },
+  es: {
+    eyebrow: 'Portal Home',
+    title: 'Iniciar sesión',
+    subtitle:
+      'Vista mínima — la página completa tuvo un problema cargando. Igual puedes entrar.',
+    identifierLabel: 'PIN o email',
+    passwordLabel: 'Contraseña (vacía para cleaner con PIN)',
+    submit: 'Entrar',
+    retry: 'Reintentar cargar la página completa',
+    techDetail: 'Detalle técnico',
+    noMessage: '(sin mensaje)',
+  },
+  pt: {
+    eyebrow: 'Portal Home',
+    title: 'Iniciar sessão',
+    subtitle:
+      'Vista mínima — a página completa teve um problema a carregar. Mesmo assim podes entrar.',
+    identifierLabel: 'PIN ou email',
+    passwordLabel: 'Senha (vazia para limpador com PIN)',
+    submit: 'Entrar',
+    retry: 'Tentar carregar a página completa',
+    techDetail: 'Detalhe técnico',
+    noMessage: '(sem mensagem)',
+  },
+};
+
+function readLocaleFromCookie(): Locale {
+  if (typeof document === 'undefined') return 'en';
+  const match = document.cookie.match(/(?:^|;\s*)portal_locale=([^;]+)/);
+  const v = match ? (decodeURIComponent(match[1]) as Locale) : 'en';
+  return SUPPORTED.includes(v) ? v : 'en';
+}
+
 export default function LoginError({
   error,
   reset,
@@ -19,6 +87,14 @@ export default function LoginError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // Initialize from cookie on mount — keeps SSR/CSR stable since this
+  // component is client-only and rendered after the server render fails.
+  const [locale, setLocale] = useState<Locale>('en');
+  useEffect(() => {
+    setLocale(readLocaleFromCookie());
+  }, []);
+  const copy = COPY[locale];
+
   useEffect(() => {
     console.error('[login] server render failed', error);
   }, [error]);
@@ -56,7 +132,7 @@ export default function LoginError({
             color: '#22d3ee',
           }}
         >
-          Portal Home
+          {copy.eyebrow}
         </p>
         <h1
           style={{
@@ -66,7 +142,7 @@ export default function LoginError({
             color: '#fff',
           }}
         >
-          Iniciar sesión
+          {copy.title}
         </h1>
         <p
           style={{
@@ -75,8 +151,7 @@ export default function LoginError({
             color: '#94a3b8',
           }}
         >
-          Vista mínima — la página completa tuvo un problema cargando. Igual
-          puedes entrar.
+          {copy.subtitle}
         </p>
 
         <form
@@ -86,7 +161,7 @@ export default function LoginError({
         >
           <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontSize: 11, color: '#94a3b8' }}>
-              PIN o email
+              {copy.identifierLabel}
             </span>
             <input
               type="text"
@@ -106,7 +181,7 @@ export default function LoginError({
           </label>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <span style={{ fontSize: 11, color: '#94a3b8' }}>
-              Contraseña (vacía para cleaner con PIN)
+              {copy.passwordLabel}
             </span>
             <input
               type="password"
@@ -138,7 +213,7 @@ export default function LoginError({
               cursor: 'pointer',
             }}
           >
-            Entrar
+            {copy.submit}
           </button>
         </form>
 
@@ -156,7 +231,7 @@ export default function LoginError({
             cursor: 'pointer',
           }}
         >
-          Reintentar cargar la página completa
+          {copy.retry}
         </button>
 
         <details style={{ marginTop: 18 }}>
@@ -170,7 +245,7 @@ export default function LoginError({
               fontWeight: 600,
             }}
           >
-            Detalle técnico
+            {copy.techDetail}
           </summary>
           <pre
             style={{
@@ -185,7 +260,7 @@ export default function LoginError({
               wordBreak: 'break-word',
             }}
           >
-            {error.message || '(sin mensaje)'}
+            {error.message || copy.noMessage}
             {error.digest ? `\nDigest: ${error.digest}` : ''}
             {error.stack ? `\n\n${error.stack}` : ''}
           </pre>

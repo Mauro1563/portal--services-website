@@ -15,6 +15,7 @@ import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart
 import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
 import { DemoCleanersField, type DemoFieldCheckin } from './_components/DemoCleanersField';
 import { DemoBottomTabBar } from './_components/DemoBottomTabBar';
+import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 
 export const metadata = {
   title: 'Demo · Owner',
@@ -166,6 +167,10 @@ export default function OwnerPreviewHome() {
             <ChevronRight className="h-5 w-5 text-white/70" />
           </Link>
         </div>
+        <DemoPhotoStrip
+          title="Limpiezas recientes del equipo"
+          caption="Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante."
+        />
       </div>
 
       <DemoBottomTabBar active="home" />

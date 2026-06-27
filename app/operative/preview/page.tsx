@@ -8,6 +8,7 @@ import { AgendaHeader } from '@/components/operative/AgendaHeader';
 import { AgendaTimeline, type AgendaTask } from '@/components/operative/AgendaTimeline';
 import { EarningsStrip } from '@/components/operative/EarningsStrip';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
+import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 
 export const metadata = {
   title: 'Demo · Cleaner',
@@ -119,6 +120,11 @@ export default function OperativePreviewHome() {
           </div>
           <AgendaTimeline tasks={MOCK_TASKS} />
         </section>
+
+        <DemoPhotoStrip
+          title="Tus últimas limpiezas"
+          caption="Las fotos que subes después de cada servicio quedan guardadas — y el cliente las ve."
+        />
       </div>
 
       <BottomTabBar active="agenda" />

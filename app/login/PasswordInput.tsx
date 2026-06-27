@@ -3,7 +3,17 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Lock } from 'lucide-react';
 
-export function PasswordInput() {
+type Props = {
+  /** Localized aria-label when the input is hidden — clicking will reveal. */
+  showLabel?: string;
+  /** Localized aria-label when the input is visible — clicking will hide. */
+  hideLabel?: string;
+};
+
+export function PasswordInput({
+  showLabel = 'Show password',
+  hideLabel = 'Hide password',
+}: Props = {}) {
   const [show, setShow] = useState(false);
   return (
     <div className="relative w-full min-w-0">
@@ -18,7 +28,7 @@ export function PasswordInput() {
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        aria-label={show ? 'Hide password' : 'Show password'}
+        aria-label={show ? hideLabel : showLabel}
         className="absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-[#0b1d3a]"
       >
         {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

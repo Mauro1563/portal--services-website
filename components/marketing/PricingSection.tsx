@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { Check, Sparkles } from "lucide-react";
+import { getLocale, type Locale } from "@/lib/i18n";
 
+/**
+ * Per-locale copy. Kept inline here so the marketing landing stays
+ * self-contained and we don't have to seed messages JSON for every tweak.
+ * Pricing is in EUR (€) across all locales — Portal Home is European.
+ */
 type Plan = {
   id: string;
   name: string;
@@ -12,58 +18,195 @@ type Plan = {
   highlighted?: boolean;
 };
 
-const plans: Plan[] = [
-  {
-    id: "starter",
-    name: "STARTER",
-    price: "£0",
-    priceSuffix: "14 días",
-    description: "Prueba todas las funciones esenciales sin compromiso.",
-    features: [
-      "Hasta 50 reservas al mes",
-      "1 usuario operativo",
-      "Panel de gestión básico",
-      "Notificaciones por email",
-      "Soporte por correo",
-    ],
-    cta: "Empezar gratis",
-  },
-  {
-    id: "pro",
-    name: "PRO",
-    price: "£39",
-    priceSuffix: "/mes",
-    description: "Para negocios en crecimiento que quieren escalar.",
-    features: [
-      "Reservas ilimitadas",
-      "Hasta 10 usuarios operativos",
-      "Pagos online y facturación",
-      "Recordatorios automáticos",
-      "Informes y analíticas avanzadas",
-      "Soporte prioritario",
-    ],
-    cta: "Probar PRO",
-    highlighted: true,
-  },
-  {
-    id: "premium",
-    name: "PREMIUM",
-    price: "£99",
-    priceSuffix: "/mes",
-    description: "Para equipos grandes con necesidades avanzadas.",
-    features: [
-      "Todo lo de PRO",
-      "Usuarios ilimitados",
-      "Multi-sucursal y multi-marca",
-      "Integraciones a medida (API)",
-      "Account manager dedicado",
-      "SLA 99,9% y soporte 24/7",
-    ],
-    cta: "Hablar con ventas",
-  },
-];
+type PricingCopy = {
+  eyebrow: string;
+  heading: string;
+  sub: string;
+  mostPopular: string;
+  footnote: string;
+  plans: Plan[];
+};
 
-export default function PricingSection() {
+const COPY: Record<Locale, PricingCopy> = {
+  es: {
+    eyebrow: "Precios",
+    heading: "Planes pensados para tu negocio",
+    sub: "Elige el plan que mejor se adapta a tu tamaño. Sin permanencia, cambia o cancela cuando quieras.",
+    mostPopular: "Más popular",
+    footnote:
+      "Todos los precios en euros (EUR), IVA no incluido. Cancela cuando quieras.",
+    plans: [
+      {
+        id: "starter",
+        name: "STARTER",
+        price: "€0",
+        priceSuffix: "14 días",
+        description: "Prueba todas las funciones esenciales sin compromiso.",
+        features: [
+          "Hasta 50 reservas al mes",
+          "1 usuario operativo",
+          "Panel de gestión básico",
+          "Notificaciones por email",
+          "Soporte por correo",
+        ],
+        cta: "Empezar gratis",
+      },
+      {
+        id: "pro",
+        name: "PRO",
+        price: "€39",
+        priceSuffix: "/mes",
+        description: "Para negocios en crecimiento que quieren escalar.",
+        features: [
+          "Reservas ilimitadas",
+          "Hasta 10 usuarios operativos",
+          "Pagos online y facturación",
+          "Recordatorios automáticos",
+          "Informes y analíticas avanzadas",
+          "Soporte prioritario",
+        ],
+        cta: "Probar PRO",
+        highlighted: true,
+      },
+      {
+        id: "premium",
+        name: "PREMIUM",
+        price: "€99",
+        priceSuffix: "/mes",
+        description: "Para equipos grandes con necesidades avanzadas.",
+        features: [
+          "Todo lo de PRO",
+          "Usuarios ilimitados",
+          "Multi-sucursal y multi-marca",
+          "Integraciones a medida (API)",
+          "Account manager dedicado",
+          "SLA 99,9% y soporte 24/7",
+        ],
+        cta: "Hablar con ventas",
+      },
+    ],
+  },
+  en: {
+    eyebrow: "Pricing",
+    heading: "Plans built for your business",
+    sub: "Pick the plan that fits your size. No lock-in — change or cancel anytime.",
+    mostPopular: "Most popular",
+    footnote:
+      "All prices in euros (EUR), VAT not included. Cancel anytime.",
+    plans: [
+      {
+        id: "starter",
+        name: "STARTER",
+        price: "€0",
+        priceSuffix: "14 days",
+        description: "Try every essential feature with no commitment.",
+        features: [
+          "Up to 50 bookings per month",
+          "1 operative user",
+          "Basic management dashboard",
+          "Email notifications",
+          "Email support",
+        ],
+        cta: "Start free",
+      },
+      {
+        id: "pro",
+        name: "PRO",
+        price: "€39",
+        priceSuffix: "/month",
+        description: "For growing businesses ready to scale.",
+        features: [
+          "Unlimited bookings",
+          "Up to 10 operative users",
+          "Online payments and invoicing",
+          "Automated reminders",
+          "Advanced reports and analytics",
+          "Priority support",
+        ],
+        cta: "Try PRO",
+        highlighted: true,
+      },
+      {
+        id: "premium",
+        name: "PREMIUM",
+        price: "€99",
+        priceSuffix: "/month",
+        description: "For large teams with advanced needs.",
+        features: [
+          "Everything in PRO",
+          "Unlimited users",
+          "Multi-branch and multi-brand",
+          "Custom integrations (API)",
+          "Dedicated account manager",
+          "99.9% SLA and 24/7 support",
+        ],
+        cta: "Talk to sales",
+      },
+    ],
+  },
+  pt: {
+    eyebrow: "Preços",
+    heading: "Planos pensados para o seu negócio",
+    sub: "Escolha o plano que melhor se adapta ao seu tamanho. Sem fidelização, mude ou cancele quando quiser.",
+    mostPopular: "Mais popular",
+    footnote:
+      "Todos os preços em euros (EUR), IVA não incluído. Cancele quando quiser.",
+    plans: [
+      {
+        id: "starter",
+        name: "STARTER",
+        price: "€0",
+        priceSuffix: "14 dias",
+        description: "Experimente todas as funções essenciais sem compromisso.",
+        features: [
+          "Até 50 reservas por mês",
+          "1 utilizador operacional",
+          "Painel de gestão básico",
+          "Notificações por email",
+          "Suporte por email",
+        ],
+        cta: "Começar grátis",
+      },
+      {
+        id: "pro",
+        name: "PRO",
+        price: "€39",
+        priceSuffix: "/mês",
+        description: "Para negócios em crescimento que querem escalar.",
+        features: [
+          "Reservas ilimitadas",
+          "Até 10 utilizadores operacionais",
+          "Pagamentos online e faturação",
+          "Lembretes automáticos",
+          "Relatórios e análises avançadas",
+          "Suporte prioritário",
+        ],
+        cta: "Experimentar PRO",
+        highlighted: true,
+      },
+      {
+        id: "premium",
+        name: "PREMIUM",
+        price: "€99",
+        priceSuffix: "/mês",
+        description: "Para equipas grandes com necessidades avançadas.",
+        features: [
+          "Tudo o do PRO",
+          "Utilizadores ilimitados",
+          "Multi-sucursal e multi-marca",
+          "Integrações à medida (API)",
+          "Account manager dedicado",
+          "SLA 99,9% e suporte 24/7",
+        ],
+        cta: "Falar com vendas",
+      },
+    ],
+  },
+};
+
+export default async function PricingSection() {
+  const locale = await getLocale();
+  const t = COPY[locale];
   return (
     <section
       id="precios"
@@ -82,18 +225,18 @@ export default function PricingSection() {
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
-            Precios
+            {t.eyebrow}
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-            Planes pensados para tu negocio
+            {t.heading}
           </h2>
           <p className="mt-4 text-base text-slate-600 sm:text-lg">
-            Elige el plan que mejor se adapta a tu tamaño. Sin permanencia, cambia o cancela cuando quieras.
+            {t.sub}
           </p>
         </div>
 
         <div className="mt-14 grid gap-6 sm:gap-8 md:grid-cols-3 md:items-stretch">
-          {plans.map((plan) => {
+          {t.plans.map((plan) => {
             const isHighlighted = plan.highlighted === true;
             return (
               <div
@@ -108,7 +251,7 @@ export default function PricingSection() {
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900 shadow-lg">
                       <Sparkles className="h-3 w-3" />
-                      Más popular
+                      {t.mostPopular}
                     </span>
                   </div>
                 )}
@@ -203,7 +346,7 @@ export default function PricingSection() {
         </div>
 
         <p className="mt-10 text-center text-xs text-slate-500">
-          Todos los precios en libras esterlinas (GBP), IVA no incluido. Cancela cuando quieras.
+          {t.footnote}
         </p>
       </div>
     </section>

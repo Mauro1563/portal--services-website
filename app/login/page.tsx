@@ -4,7 +4,7 @@ import { Logo } from '@/components/Logo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { PasswordInput } from './PasswordInput';
 import { signIn } from './actions';
-import { getT, getLocale } from '@/lib/i18n';
+import { getT, getLocale, type Locale } from '@/lib/i18n';
 
 type Props = {
   searchParams: Promise<{
@@ -13,10 +13,47 @@ type Props = {
   }>;
 };
 
+// Locale-keyed copy for strings on /login that aren't yet in messages/*.json.
+// Kept inline so the page is self-contained — the rest of the page still uses
+// `t(...)` for keys that already exist in the message catalogs.
+const COPY: Record<
+  Locale,
+  {
+    identifierLabel: string;
+    identifierPh: string;
+    operativeHint: string;
+    showPassword: string;
+    hidePassword: string;
+  }
+> = {
+  en: {
+    identifierLabel: 'Email or PIN',
+    identifierPh: 'you@example.com — or your PIN',
+    operativeHint: 'Cleaner? Leave password empty — your PIN is enough.',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
+  },
+  es: {
+    identifierLabel: 'Email o PIN',
+    identifierPh: 'tucorreo@ejemplo.com — o tu PIN',
+    operativeHint: '¿Operario? Deja la contraseña vacía — tu PIN ya alcanza.',
+    showPassword: 'Mostrar contraseña',
+    hidePassword: 'Ocultar contraseña',
+  },
+  pt: {
+    identifierLabel: 'Email ou PIN',
+    identifierPh: 'tucorreio@exemplo.com — ou o teu PIN',
+    operativeHint: 'Operário? Deixe a senha vazia — o teu PIN já chega.',
+    showPassword: 'Mostrar senha',
+    hidePassword: 'Ocultar senha',
+  },
+};
+
 export default async function LoginPage({ searchParams }: Props) {
   const { error, message } = await searchParams;
   const t = await getT();
   const locale = await getLocale();
+  const copy = COPY[locale];
 
   return (
     <main className="min-h-screen lg:grid lg:grid-cols-[1.05fr_1fr]">
@@ -152,7 +189,7 @@ export default async function LoginPage({ searchParams }: Props) {
           <form action={signIn} className="mt-7 space-y-4">
             <label className="block">
               <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-700">
-                Email o PIN
+                {copy.identifierLabel}
               </span>
               <div className="relative mt-1.5">
                 <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -165,7 +202,7 @@ export default async function LoginPage({ searchParams }: Props) {
                   required
                   autoComplete="username"
                   inputMode="text"
-                  placeholder="tucorreo@ejemplo.com — o tu PIN"
+                  placeholder={copy.identifierPh}
                   className="block h-12 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 transition focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-600/15"
                 />
               </div>
@@ -176,10 +213,13 @@ export default async function LoginPage({ searchParams }: Props) {
                 {t('login.password')}
               </span>
               <div className="mt-1.5">
-                <PasswordInput />
+                <PasswordInput
+                  showLabel={copy.showPassword}
+                  hideLabel={copy.hidePassword}
+                />
               </div>
               <span className="mt-1.5 block text-[11px] text-slate-500">
-                ¿Operativo? Dejá la contraseña vacía — tu PIN ya alcanza.
+                {copy.operativeHint}
               </span>
             </label>
 

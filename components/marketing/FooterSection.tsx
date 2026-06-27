@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Logo } from '@/components/Logo';
+import { getLocale, type Locale } from '@/lib/i18n';
 
 type FooterLink = {
   label: string;
@@ -12,47 +13,186 @@ type FooterColumn = {
   links: FooterLink[];
 };
 
-const columns: FooterColumn[] = [
+/**
+ * Per-locale copy for the marketing footer. Mirrors the COPY pattern used in
+ * HeroSection.tsx so all marketing strings stay co-located with their
+ * component and we don't have to round-trip through messages JSON for tweaks.
+ *
+ * `/ca` is intentionally omitted from the language column — the Catalan locale
+ * is not implemented yet and would 404.
+ */
+const COPY: Record<
+  Locale,
   {
-    eyebrow: 'Producto',
-    links: [
-      { label: 'Funciones', href: '/#features' },
-      { label: 'Precios', href: '/#pricing' },
-      { label: 'Portales', href: '/#portals' },
-      { label: 'Integraciones', href: '/#integrations' },
+    tagline: string;
+    columns: FooterColumn[];
+    ctaEyebrow: string;
+    ctaHeadlineLead: string;
+    ctaHeadlineAccent: string;
+    ctaSub: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    copyright: (year: number) => string;
+    legalShort: { privacy: string; terms: string; status: string };
+  }
+> = {
+  es: {
+    tagline: 'Una plataforma. Un lugar. Todos conectados.',
+    columns: [
+      {
+        eyebrow: 'Producto',
+        links: [
+          { label: 'Funciones', href: '/#features' },
+          { label: 'Precios', href: '/#pricing' },
+          { label: 'Portales', href: '/#portals' },
+          { label: 'Integraciones', href: '/#integrations' },
+        ],
+      },
+      {
+        eyebrow: 'Empresa',
+        links: [
+          { label: 'Sobre nosotros', href: '/about' },
+          { label: 'Clientes', href: '/customers' },
+          { label: 'Contacto', href: '/contact' },
+          { label: 'Empleo', href: '/careers' },
+        ],
+      },
+      {
+        eyebrow: 'Legal',
+        links: [
+          { label: 'Privacidad', href: '/es/privacy' },
+          { label: 'Términos', href: '/es/terms' },
+          { label: 'Cookies', href: '/es/cookies' },
+          { label: 'Seguridad', href: '/security' },
+        ],
+      },
+      {
+        eyebrow: 'Idioma',
+        links: [
+          { label: 'Español', href: '/es' },
+          { label: 'English', href: '/en' },
+          { label: 'Português', href: '/pt' },
+        ],
+      },
     ],
+    ctaEyebrow: 'Empieza hoy',
+    ctaHeadlineLead: '¿Listo para empezar?',
+    ctaHeadlineAccent: 'Prueba 14 días gratis',
+    ctaSub: 'Sin tarjeta. Sin compromisos. Activa Portal Home en minutos y empieza a gestionar tu equipo, clientes y reservas desde un solo lugar.',
+    ctaPrimary: 'Prueba 14 días gratis',
+    ctaSecondary: 'Hablar con ventas',
+    copyright: (year) =>
+      `© ${year} Portal Home. Todos los derechos reservados. Hecho con cariño en Barcelona.`,
+    legalShort: { privacy: 'Privacidad', terms: 'Términos', status: 'Estado' },
   },
-  {
-    eyebrow: 'Empresa',
-    links: [
-      { label: 'Sobre nosotros', href: '/about' },
-      { label: 'Clientes', href: '/customers' },
-      { label: 'Contacto', href: '/contact' },
-      { label: 'Empleo', href: '/careers' },
+  en: {
+    tagline: 'One platform. One place. Everyone connected.',
+    columns: [
+      {
+        eyebrow: 'Product',
+        links: [
+          { label: 'Features', href: '/#features' },
+          { label: 'Pricing', href: '/#pricing' },
+          { label: 'Portals', href: '/#portals' },
+          { label: 'Integrations', href: '/#integrations' },
+        ],
+      },
+      {
+        eyebrow: 'Company',
+        links: [
+          { label: 'About', href: '/about' },
+          { label: 'Customers', href: '/customers' },
+          { label: 'Contact', href: '/contact' },
+          { label: 'Careers', href: '/careers' },
+        ],
+      },
+      {
+        eyebrow: 'Legal',
+        links: [
+          { label: 'Privacy', href: '/en/privacy' },
+          { label: 'Terms', href: '/en/terms' },
+          { label: 'Cookies', href: '/en/cookies' },
+          { label: 'Security', href: '/security' },
+        ],
+      },
+      {
+        eyebrow: 'Language',
+        links: [
+          { label: 'Español', href: '/es' },
+          { label: 'English', href: '/en' },
+          { label: 'Português', href: '/pt' },
+        ],
+      },
     ],
+    ctaEyebrow: 'Start today',
+    ctaHeadlineLead: 'Ready to get started?',
+    ctaHeadlineAccent: 'Try it free for 14 days',
+    ctaSub: 'No credit card. No commitment. Set up Portal Home in minutes and start managing your team, customers and bookings from one place.',
+    ctaPrimary: 'Start 14-day free trial',
+    ctaSecondary: 'Talk to sales',
+    copyright: (year) =>
+      `© ${year} Portal Home. All rights reserved. Made with care in Barcelona.`,
+    legalShort: { privacy: 'Privacy', terms: 'Terms', status: 'Status' },
   },
-  {
-    eyebrow: 'Legal',
-    links: [
-      { label: 'Privacidad', href: '/es/privacy' },
-      { label: 'Términos', href: '/es/terms' },
-      { label: 'Cookies', href: '/es/cookies' },
-      { label: 'Seguridad', href: '/security' },
+  pt: {
+    tagline: 'Uma plataforma. Um lugar. Todos conectados.',
+    columns: [
+      {
+        eyebrow: 'Produto',
+        links: [
+          { label: 'Funcionalidades', href: '/#features' },
+          { label: 'Preços', href: '/#pricing' },
+          { label: 'Portais', href: '/#portals' },
+          { label: 'Integrações', href: '/#integrations' },
+        ],
+      },
+      {
+        eyebrow: 'Empresa',
+        links: [
+          { label: 'Sobre nós', href: '/about' },
+          { label: 'Clientes', href: '/customers' },
+          { label: 'Contacto', href: '/contact' },
+          { label: 'Carreiras', href: '/careers' },
+        ],
+      },
+      {
+        eyebrow: 'Legal',
+        links: [
+          { label: 'Privacidade', href: '/pt/privacy' },
+          { label: 'Termos', href: '/pt/terms' },
+          { label: 'Cookies', href: '/pt/cookies' },
+          { label: 'Segurança', href: '/security' },
+        ],
+      },
+      {
+        eyebrow: 'Idioma',
+        links: [
+          { label: 'Español', href: '/es' },
+          { label: 'English', href: '/en' },
+          { label: 'Português', href: '/pt' },
+        ],
+      },
     ],
+    ctaEyebrow: 'Comece hoje',
+    ctaHeadlineLead: 'Pronto para começar?',
+    ctaHeadlineAccent: 'Experimente 14 dias grátis',
+    ctaSub: 'Sem cartão. Sem compromissos. Active o Portal Home em minutos e comece a gerir a sua equipa, clientes e reservas num só lugar.',
+    ctaPrimary: 'Experimentar 14 dias grátis',
+    ctaSecondary: 'Falar com vendas',
+    copyright: (year) =>
+      `© ${year} Portal Home. Todos os direitos reservados. Feito com carinho em Barcelona.`,
+    legalShort: { privacy: 'Privacidade', terms: 'Termos', status: 'Estado' },
   },
-  {
-    eyebrow: 'Idioma',
-    links: [
-      { label: 'Español', href: '/es' },
-      { label: 'English', href: '/en' },
-      { label: 'Català', href: '/ca' },
-      { label: 'Português', href: '/pt' },
-    ],
-  },
-];
+};
 
-export default function FooterSection() {
+export default async function FooterSection() {
+  const locale = await getLocale();
+  const t = COPY[locale];
   const year = new Date().getFullYear();
+  // Legal short-links at the bottom of the footer mirror the locale-prefixed
+  // routes from the Legal column above, so both stay in sync per locale.
+  const privacyHref = `/${locale}/privacy`;
+  const termsHref = `/${locale}/terms`;
 
   return (
     <footer className="relative bg-slate-50">
@@ -74,19 +214,17 @@ export default function FooterSection() {
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15 backdrop-blur">
                 <Sparkles className="h-3 w-3 text-cyan-300" aria-hidden="true" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300">
-                  Empieza hoy
+                  {t.ctaEyebrow}
                 </span>
               </div>
               <h2 className="font-display mt-5 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-                ¿Listo para empezar?{' '}
+                {t.ctaHeadlineLead}{' '}
                 <span className="bg-gradient-to-r from-cyan-200 to-sky-300 bg-clip-text text-transparent">
-                  Prueba 14 días gratis
+                  {t.ctaHeadlineAccent}
                 </span>
               </h2>
               <p className="mt-4 max-w-xl text-base text-white/70 sm:text-lg">
-                Sin tarjeta. Sin compromisos. Activa Portal Home en minutos y
-                empieza a gestionar tu equipo, clientes y reservas desde un solo
-                lugar.
+                {t.ctaSub}
               </p>
             </div>
 
@@ -95,7 +233,7 @@ export default function FooterSection() {
                 href="/signup"
                 className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-7 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.7)] ring-1 ring-blue-400/30 transition hover:from-blue-500 hover:to-blue-600"
               >
-                Prueba 14 días gratis
+                {t.ctaPrimary}
                 <ArrowRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                   aria-hidden="true"
@@ -105,7 +243,7 @@ export default function FooterSection() {
                 href="/contact"
                 className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-white/80 transition hover:text-white"
               >
-                Hablar con ventas
+                {t.ctaSecondary}
               </Link>
             </div>
           </div>
@@ -119,11 +257,17 @@ export default function FooterSection() {
           <div className="col-span-2 lg:col-span-1">
             <Logo size="sm" />
             <p className="mt-4 max-w-xs text-sm text-slate-600">
-              Una plataforma. Un lugar. Todos conectados.
+              {t.tagline}
             </p>
+            <a
+              href="mailto:hola@portalservices.digital"
+              className="mt-3 inline-block text-sm text-slate-600 transition hover:text-blue-700"
+            >
+              hola@portalservices.digital
+            </a>
           </div>
 
-          {columns.map((col) => (
+          {t.columns.map((col) => (
             <div key={col.eyebrow}>
               <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
                 {col.eyebrow}
@@ -146,19 +290,16 @@ export default function FooterSection() {
 
         {/* Copyright */}
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row sm:items-center">
-          <p className="text-xs text-slate-500">
-            © {year} Portal Home. Todos los derechos reservados. Hecho con cariño
-            en Barcelona.
-          </p>
+          <p className="text-xs text-slate-500">{t.copyright(year)}</p>
           <div className="flex items-center gap-5 text-xs text-slate-500">
-            <Link href="/es/privacy" className="transition hover:text-slate-900">
-              Privacidad
+            <Link href={privacyHref} className="transition hover:text-slate-900">
+              {t.legalShort.privacy}
             </Link>
-            <Link href="/es/terms" className="transition hover:text-slate-900">
-              Términos
+            <Link href={termsHref} className="transition hover:text-slate-900">
+              {t.legalShort.terms}
             </Link>
             <Link href="/status" className="transition hover:text-slate-900">
-              Estado
+              {t.legalShort.status}
             </Link>
           </div>
         </div>

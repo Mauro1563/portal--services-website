@@ -16,6 +16,7 @@ export function ClientShell({
   showBack,
   backHref,
   unreadMessages = 0,
+  hideHeader = false,
   children,
 }: {
   ctx: ClientContext;
@@ -25,6 +26,7 @@ export function ClientShell({
   showBack?: boolean;
   backHref?: string;
   unreadMessages?: number;
+  hideHeader?: boolean;
   children: React.ReactNode;
 }) {
   const logoUrl = ctx.owner.business_logo_url;
@@ -37,38 +39,36 @@ export function ClientShell({
         showTabs ? 'pb-24' : 'pb-10'
       }`}
     >
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-md items-center justify-between px-4">
-          {showBack && backHref ? (
-            <Link
-              href={backHref}
-              aria-label="Atrás"
-              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-slate-700 hover:bg-slate-100"
-            >
-              <BackArrow />
-            </Link>
-          ) : (
-            <span className="-ml-2 flex h-9 w-9" aria-hidden />
-          )}
+      {!hideHeader && (
+        <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
+          <div className="mx-auto flex h-14 max-w-md items-center gap-3 px-4">
+            {showBack && backHref ? (
+              <Link
+                href={backHref}
+                aria-label="Atrás"
+                className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-slate-700 hover:bg-slate-100"
+              >
+                <BackArrow />
+              </Link>
+            ) : null}
 
-          {title ? (
-            <h1 className="font-display text-sm font-semibold tracking-tight text-slate-900">
-              {title}
-            </h1>
-          ) : logoUrl ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={logoUrl}
-              alt={businessName}
-              className="h-6 w-auto max-w-[140px] object-contain"
-            />
-          ) : (
-            <Logo size="sm" />
-          )}
-
-          <span className="-mr-2 flex h-9 w-9" aria-hidden />
-        </div>
-      </header>
+            {title ? (
+              <h1 className="font-display text-sm font-semibold tracking-tight text-slate-900">
+                {title}
+              </h1>
+            ) : logoUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={logoUrl}
+                alt={businessName}
+                className="h-6 w-auto max-w-[140px] object-contain"
+              />
+            ) : (
+              <Logo size="sm" />
+            )}
+          </div>
+        </header>
+      )}
 
       <div className="mx-auto max-w-md px-4 pt-4">{children}</div>
 
