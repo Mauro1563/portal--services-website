@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Clock,
   FileText,
+  HelpCircle,
   MapPin,
   MessageCircle,
   Star,
@@ -71,10 +72,11 @@ export default function ClientCleaningPreview() {
       backHref="/client/preview/cleanings"
     >
       <div className="space-y-4">
-        {/* Status header */}
-        <div className="rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-white shadow-[0_18px_36px_-14px_rgba(16,185,129,0.45)]">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/80">
-            <CheckCircle2 className="h-3 w-3" /> Completada
+        {/* Status header — solid emerald surface signals status without
+            the medical-success gradient + glow cliché. */}
+        <div className="rounded-2xl bg-emerald-600 p-5 text-white">
+          <div className="flex items-center gap-2 text-[11px] font-semibold text-white/85">
+            <CheckCircle2 className="h-3.5 w-3.5" /> Completada
           </div>
           <h1 className="mt-2 text-2xl font-semibold leading-tight">
             Limpieza profunda
@@ -87,7 +89,7 @@ export default function ClientCleaningPreview() {
             target="_blank"
             rel="noreferrer"
             title="Abrir dirección en Google Maps"
-            className="mt-1 inline-flex items-center gap-1.5 text-xs text-white/85 underline-offset-2 hover:underline"
+            className="mt-1 inline-flex items-center gap-1.5 text-xs text-white/90 underline-offset-2 hover:underline"
           >
             <MapPin className="h-3 w-3" /> {PROPERTY.address}
           </a>
@@ -96,18 +98,20 @@ export default function ClientCleaningPreview() {
         {/* Cleaner */}
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <p className="text-[11px] font-semibold text-slate-500">
               Equipo asignado
             </p>
-            <span
-              className="text-[10px] text-slate-400"
+            <button
+              type="button"
+              aria-label="La persona que realizó esta visita"
               title="La persona que realizó esta visita"
+              className="grid h-8 w-8 -m-2 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
-              ?
-            </span>
+              <HelpCircle className="h-3.5 w-3.5" />
+            </button>
           </div>
           <div className="mt-3 flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 font-bold text-white">
+            <div className="grid h-12 w-12 place-items-center rounded-full bg-slate-700 font-bold text-white">
               CR
             </div>
             <div className="flex-1">
@@ -117,7 +121,7 @@ export default function ClientCleaningPreview() {
             <Link
               href="/client/preview/messages"
               title="Enviar un mensaje a Carmen sobre esta limpieza"
-              className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
+              className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-slate-700"
             >
               <MessageCircle className="h-3 w-3" /> Chat
             </Link>
@@ -152,16 +156,16 @@ export default function ClientCleaningPreview() {
                   type="button"
                   onClick={() => setLightboxIndex(i)}
                   title={`Ver foto: ${p.label}`}
-                  className="group relative aspect-square overflow-hidden rounded-lg"
+                  className="relative aspect-square overflow-hidden rounded-lg ring-0 ring-blue-400 transition hover:ring-2 focus:outline-none focus-visible:ring-2"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.src}
                     alt={p.label}
                     loading="lazy"
-                    className="h-full w-full object-cover transition group-hover:scale-105"
+                    className="h-full w-full object-cover"
                   />
-                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1 text-left text-[9px] font-bold uppercase tracking-wider text-white">
+                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-1.5 py-1 text-left text-[10px] font-semibold text-white">
                     {p.label}
                   </span>
                 </button>
@@ -195,12 +199,14 @@ export default function ClientCleaningPreview() {
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-slate-700">¿Cómo estuvo?</p>
-            <span
-              className="text-[10px] text-slate-400"
+            <button
+              type="button"
+              aria-label="Tu valoración ayuda a tu cleaner y al equipo a mejorar"
               title="Tu valoración ayuda a tu cleaner y al equipo a mejorar"
+              className="grid h-8 w-8 -m-2 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
-              ?
-            </span>
+              <HelpCircle className="h-3.5 w-3.5" />
+            </button>
           </div>
 
           {submitted ? (
@@ -329,7 +335,7 @@ export default function ClientCleaningPreview() {
                 type="button"
                 onClick={() => setSubmitted(true)}
                 title="Enviar tu valoración a Carmen y al equipo"
-                className="mt-3 block w-full rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_12px_30px_-10px_rgba(37,99,235,0.55)] transition hover:brightness-110"
+                className="mt-3 block w-full rounded-xl bg-blue-600 py-3 text-sm font-bold text-white transition hover:bg-blue-700"
               >
                 Enviar valoración
               </button>

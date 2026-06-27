@@ -94,21 +94,24 @@ export function ServiceCatalog({
           Ver todo <ChevronRight className="h-3 w-3" />
         </Link>
       </div>
-      <div className="mt-3 grid grid-cols-4 gap-2.5">
-        {services.slice(0, 8).map((s) => {
+      <div className="mt-3 grid grid-cols-3 gap-2.5">
+        {services.slice(0, 6).map((s) => {
           const { Icon, bg, fg } = iconFor(s.name);
           return (
             <Link
               key={s.id}
               href={`/client/${token}/book?service=${s.id}`}
-              className="group flex flex-col items-center gap-1.5 rounded-2xl bg-white p-2.5 text-center ring-1 ring-inset ring-slate-100 transition hover:-translate-y-0.5 hover:ring-blue-200 hover:shadow-[0_8px_20px_-10px_rgba(37,99,235,0.35)]"
+              className="group flex flex-col items-center gap-2 rounded-2xl bg-white p-3 text-center ring-1 ring-inset ring-slate-100 transition hover:-translate-y-0.5 hover:ring-blue-200 hover:shadow-[0_8px_20px_-10px_rgba(37,99,235,0.35)]"
             >
               <span
                 className={`grid h-12 w-12 place-items-center rounded-2xl ${bg} ${fg}`}
               >
                 <Icon className="h-5 w-5" />
               </span>
-              <span className="line-clamp-2 text-[10.5px] font-semibold leading-tight text-slate-700 group-hover:text-blue-700">
+              <span
+                className="line-clamp-2 text-[12px] font-semibold leading-tight text-slate-700 group-hover:text-blue-700"
+                style={{ textWrap: 'balance' } as React.CSSProperties}
+              >
                 {s.name}
               </span>
             </Link>

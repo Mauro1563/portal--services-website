@@ -64,7 +64,7 @@ export function AgendaHeader({
           <form action={signOutOperative}>
             <button
               type="submit"
-              className="text-[10px] font-semibold uppercase tracking-wider text-white/55 hover:text-white"
+              className="rounded-full border border-white/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85 transition hover:border-white/50 hover:bg-white/10 hover:text-white"
             >
               Salir
             </button>
@@ -73,12 +73,20 @@ export function AgendaHeader({
       </div>
 
       <div className="mt-4 flex items-end justify-between gap-3">
-        <p className="font-display text-3xl font-bold leading-none tracking-tight">
-          <span className="text-white/70">{dayFull}</span>{' '}
-          <span className="text-white">{dayNum}</span>{' '}
-          <span className="text-white/70">{monthShort}</span>
-        </p>
-        <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-white/40 sm:inline">
+        <div className="flex items-baseline gap-2">
+          <span className="font-display text-5xl font-bold leading-none tracking-tight text-white tabular-nums">
+            {dayNum}
+          </span>
+          <div className="flex flex-col leading-tight">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85">
+              {dayFull}
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+              {monthShort}
+            </span>
+          </div>
+        </div>
+        <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-white/55 sm:inline">
           {dayShort} · {String(dayNum).padStart(2, '0')}/{String(now.getMonth() + 1).padStart(2, '0')}
         </span>
       </div>

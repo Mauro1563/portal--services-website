@@ -238,14 +238,27 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
   const [days, setDays] = useState<Day[]>(DAYS);
   const [selectedTask, setSelectedTask] = useState<{ dayLabel: string; taskId: string } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
   const [kpiSheet, setKpiSheet] = useState<'worked' | 'earnings' | 'rating' | null>(null);
 
   function showToast(message: string) {
     setToast(message);
+    window.requestAnimationFrame(() => setToastVisible(true));
+    window.setTimeout(() => setToastVisible(false), 1600);
     window.setTimeout(() => setToast(null), 1800);
   }
 
+  const [filterHelpOpen, setFilterHelpOpen] = useState(false);
   const allTasks = useMemo(() => days.flatMap((d) => d.tasks), [days]);
+  const filterCounts = useMemo(
+    () => ({
+      all: allTasks.length,
+      completed: allTasks.filter((t) => t.status === 'completed').length,
+      in_progress: allTasks.filter((t) => t.status === 'in_progress').length,
+      scheduled: allTasks.filter((t) => t.status === 'scheduled').length,
+    }),
+    [allTasks],
+  );
   const totalMinutes = useMemo(
     () => allTasks.reduce((sum, t) => sum + t.estimated_duration_min, 0),
     [allTasks],
@@ -321,7 +334,7 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
 
       <div className="mx-auto max-w-md px-4 py-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-500">
-          This week
+          Esta semana
         </p>
         <h1 className="mt-1 font-display text-2xl font-semibold text-graphite-1">
           23 Jun – 29 Jun
@@ -330,56 +343,77 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
         <div className="mt-4 grid grid-cols-3 gap-2">
           <Kpi
             icon={<Clock className="h-3.5 w-3.5 text-brand-500" />}
-            label="Worked"
+            label="Trabajado"
             value={formatHours(totalMinutes)}
             title="Ver el desglose de horas trabajadas por día"
             onClick={() => setKpiSheet('worked')}
           />
           <Kpi
             icon={<PoundSterling className="h-3.5 w-3.5 text-emerald-600" />}
-            label="Earnings"
+            label="Ganancias"
             value={formatMoney(totalEarnings)}
             title="Ver desglose de ganancias por tarea"
             onClick={() => setKpiSheet('earnings')}
           />
           <Kpi
             icon={<Star className="h-3.5 w-3.5 text-amber-500" />}
-            label={`Rating (${ratingCount})`}
+            label={`Valoración (${ratingCount})`}
             value={avgStars.toFixed(1)}
             title="Ver valoraciones recientes del cliente"
             onClick={() => setKpiSheet('rating')}
           />
         </div>
 
-        {/* Filter chips */}
+        {/* Filter segmented control — chips carry live counts, so the row
+            is informative even when the user doesn't change the filter. */}
         <div className="mt-5">
           <div className="flex items-center gap-1.5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-graphite-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-graphite-3">
               Filtrar
             </p>
-            <span
-              title="Toca un chip para filtrar las tareas por estado. El recuento se actualiza al instante."
-              className="grid h-3.5 w-3.5 cursor-help place-items-center rounded-full text-graphite-3"
+            <button
+              type="button"
+              aria-label="Ayuda sobre los filtros"
+              aria-expanded={filterHelpOpen}
+              aria-controls="filter-help"
+              onClick={() => setFilterHelpOpen((o) => !o)}
+              className="grid h-5 w-5 place-items-center rounded-full bg-surface-2 text-graphite-3 transition hover:bg-surface-3 hover:text-graphite-1"
             >
               <HelpCircle className="h-3 w-3" />
-            </span>
+            </button>
           </div>
-          <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {filterHelpOpen ? (
+            <p
+              id="filter-help"
+              className="mt-2 rounded-lg border border-dashed border-line bg-surface-1/60 px-3 py-2 text-[11px] leading-relaxed text-graphite-3"
+            >
+              Toca un chip para filtrar las tareas por estado. El recuento se actualiza al instante.
+            </p>
+          ) : null}
+          <div className="mt-2 inline-flex rounded-full border border-line bg-paper p-0.5">
             {FILTERS.map((f) => {
               const active = f.key === filter;
+              const count = filterCounts[f.key];
               return (
                 <button
                   key={f.key}
                   type="button"
                   onClick={() => setFilter(f.key)}
                   title={f.title}
-                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition ${
                     active
                       ? 'bg-brand-600 text-white shadow-sm'
-                      : 'border border-line bg-paper text-graphite-3 hover:text-graphite-1'
+                      : 'text-graphite-3 hover:text-graphite-1'
                   }`}
                 >
                   {f.label}
+                  <span
+                    className={`rounded-full px-1.5 text-[10px] font-bold tabular-nums ${
+                      active ? 'bg-white/25 text-white' : 'bg-surface-2 text-graphite-3'
+                    }`}
+                  >
+                    {count}
+                  </span>
                 </button>
               );
             })}
@@ -402,7 +436,7 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                   <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
                     <Calendar className="h-3 w-3" />
                     {day.label}
-                    {day.isToday ? ' · TODAY' : ''}
+                    {day.isToday ? ' · HOY' : ''}
                     <span className="rounded-full bg-surface-2 px-1.5 text-[9px] font-bold text-graphite-3">
                       {day.tasks.length}
                     </span>
@@ -415,7 +449,7 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                 </button>
                 {isCollapsed ? null : day.tasks.length === 0 ? (
                   <p className="mt-1 ml-5 text-[11px] text-graphite-3">
-                    {filter === 'all' ? 'No cleanings' : 'Sin coincidencias'}
+                    {filter === 'all' ? 'Sin limpiezas' : 'Sin coincidencias'}
                   </p>
                 ) : (
                   <ul className="mt-2 space-y-2">
@@ -431,28 +465,27 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                             {idx + 1}
                           </span>
                           <div className="min-w-0 flex-1">
-                            <p className="font-display text-sm font-semibold text-graphite-1">
-                              {t.property.name}
-                            </p>
+                            <div className="flex items-start justify-between gap-3">
+                              <p className="min-w-0 truncate font-display text-sm font-semibold text-graphite-1">
+                                {t.property.name}
+                              </p>
+                              <span className="shrink-0 font-display text-sm font-semibold tabular-nums text-emerald-700">
+                                {formatMoney(t.price_pence)}
+                              </span>
+                            </div>
                             <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600">
                               <MapPin className="h-3 w-3" /> {t.property.address}
                             </span>
-                            <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-graphite-3">
-                              <span>{t.service_name}</span>
-                              <span className="inline-flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {formatHours(t.estimated_duration_min)}
-                              </span>
-                              <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
-                                <PoundSterling className="h-3 w-3" />
-                                {formatMoney(t.price_pence)}
-                              </span>
+                            <p className="mt-1 truncate text-[11px] text-graphite-3">
+                              {t.service_name} · {formatHours(t.estimated_duration_min)}
+                            </p>
+                            <div className="mt-1.5 flex items-center gap-2">
                               <StatusBadge status={t.status} />
+                              {t.status === 'completed' ? (
+                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                              ) : null}
                             </div>
                           </div>
-                          {t.status === 'completed' ? (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                          ) : null}
                         </button>
                       </li>
                     ))}
@@ -462,6 +495,19 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
             );
           })}
         </section>
+
+        {/* Demo-only reset — quiet inline link, away from the thumb zone. */}
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={onReset}
+            title="Reiniciar la demo — vuelve al estado inicial sin recargar"
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-graphite-3 transition hover:text-graphite-1"
+          >
+            <RotateCcw className="h-3 w-3" />
+            Reiniciar demo
+          </button>
+        </div>
       </div>
 
       {/* Task details sheet */}
@@ -684,28 +730,21 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
         </div>
       ) : null}
 
-      {/* Toast */}
+      {/* Toast — animated for peripheral visibility. */}
       {toast ? (
         <div
           className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
           aria-live="polite"
         >
-          <div className="rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur">
+          <div
+            className={`rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
+              toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+            }`}
+          >
             ✓ {toast}
           </div>
         </div>
       ) : null}
-
-      {/* Reset demo */}
-      <button
-        type="button"
-        onClick={onReset}
-        title="Reiniciar la demo — vuelve al estado inicial sin recargar"
-        className="fixed bottom-20 right-3 z-[55] inline-flex items-center gap-1 rounded-full bg-paper/90 px-3 py-1.5 text-[10px] font-semibold text-graphite-3 shadow ring-1 ring-line backdrop-blur hover:text-graphite-1"
-      >
-        <RotateCcw className="h-3 w-3" />
-        Reiniciar demo
-      </button>
 
       <PreviewBottomTabBar active="tareas" />
     </main>

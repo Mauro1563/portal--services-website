@@ -72,8 +72,8 @@ export function ClientShell({
 
       <div className="mx-auto max-w-md px-4 pt-4">{children}</div>
 
-      <footer className="mx-auto mt-8 max-w-md px-4 pb-4 text-center text-[10px] text-slate-400">
-        Con tecnología de Portal Home
+      <footer className="mx-auto mt-8 max-w-md px-4 pb-4 text-center text-[12px] text-slate-500">
+        Portal · servicios de limpieza en Londres
       </footer>
 
       {showTabs && token && activeTab ? (

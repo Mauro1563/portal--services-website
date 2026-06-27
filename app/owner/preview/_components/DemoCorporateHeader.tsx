@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Bell, Building2, Check, Globe, Settings, Clock, X } from 'lucide-react';
+import { Bell, Check, Globe, Settings, Clock, X } from 'lucide-react';
 
 type Notification = {
   id: string;
@@ -54,21 +54,37 @@ export function DemoCorporateHeader({
   );
 
   const popoverRef = useRef<HTMLDivElement>(null);
+  const bellRef = useRef<HTMLButtonElement>(null);
+  const gearRef = useRef<HTMLButtonElement>(null);
+  const notifPanelRef = useRef<HTMLDivElement>(null);
+  const settingsPanelRef = useRef<HTMLDivElement>(null);
   const unread = notifs.filter((n) => !n.read).length;
 
-  // Click-outside + Escape close for both popovers.
+  // Click-outside + Escape close for both popovers, with focus restore.
   useEffect(() => {
     if (!notifOpen && !settingsOpen) return;
     const onClick = (e: MouseEvent) => {
       if (!popoverRef.current?.contains(e.target as Node)) {
-        setNotifOpen(false);
-        setSettingsOpen(false);
+        if (notifOpen) {
+          setNotifOpen(false);
+          bellRef.current?.focus();
+        }
+        if (settingsOpen) {
+          setSettingsOpen(false);
+          gearRef.current?.focus();
+        }
       }
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setNotifOpen(false);
-        setSettingsOpen(false);
+        if (notifOpen) {
+          setNotifOpen(false);
+          bellRef.current?.focus();
+        }
+        if (settingsOpen) {
+          setSettingsOpen(false);
+          gearRef.current?.focus();
+        }
       }
     };
     document.addEventListener('mousedown', onClick);
@@ -78,6 +94,24 @@ export function DemoCorporateHeader({
       document.removeEventListener('keydown', onKey);
     };
   }, [notifOpen, settingsOpen]);
+
+  // Focus the first actionable item when a panel opens.
+  useEffect(() => {
+    if (notifOpen) {
+      const first = notifPanelRef.current?.querySelector<HTMLElement>(
+        'button, [href], [tabindex]:not([tabindex="-1"])',
+      );
+      first?.focus();
+    }
+  }, [notifOpen]);
+  useEffect(() => {
+    if (settingsOpen) {
+      const first = settingsPanelRef.current?.querySelector<HTMLElement>(
+        'button, [href], select, [tabindex]:not([tabindex="-1"])',
+      );
+      first?.focus();
+    }
+  }, [settingsOpen]);
 
   function openNotifs() {
     setSettingsOpen(false);
@@ -99,33 +133,23 @@ export function DemoCorporateHeader({
   return (
     <header className="-mx-3 -mt-4 mb-5 sm:-mx-4 sm:-mt-5 lg:-mx-8 lg:-mt-7">
       <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
-        {/* Blur glows clipped in their own layer so they don't crop the
-            notifications/settings dropdowns anchored to the bell/gear. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl" />
-          <div className="absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-blue-600/15 blur-3xl" />
-        </div>
-
         <div className="relative flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300">
-              <Building2 className="h-3 w-3" /> Owner · Vista General
-            </p>
-            <h1 className="mt-2 font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            <h1 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
               Hola, {firstName}
             </h1>
-            <p className="mt-1 text-[13px] text-white/65">{subtitle}</p>
+            <p className="mt-1.5 text-[13px] font-medium text-white/90">{subtitle}</p>
           </div>
           <div ref={popoverRef} className="relative flex shrink-0 items-center gap-2">
             <button
+              ref={bellRef}
               type="button"
               onClick={openNotifs}
               aria-label="Notificaciones"
+              aria-haspopup="dialog"
+              aria-expanded={notifOpen}
               title="Ver notificaciones recientes (reservas, tareas completadas, reviews)"
-              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white/85 transition hover:bg-white/20"
+              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
             >
               <Bell className="h-4 w-4" />
               {unread > 0 ? (
@@ -135,11 +159,14 @@ export function DemoCorporateHeader({
               ) : null}
             </button>
             <button
+              ref={gearRef}
               type="button"
               onClick={openSettings}
               aria-label="Ajustes"
+              aria-haspopup="dialog"
+              aria-expanded={settingsOpen}
               title="Preferencias rápidas: notificaciones, idioma, zona horaria"
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white/85 transition hover:bg-white/20"
+              className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
             >
               <Settings className="h-4 w-4" />
             </button>
@@ -149,12 +176,21 @@ export function DemoCorporateHeader({
                 {/* Mobile scrim — also tap-to-dismiss. */}
                 <div
                   aria-hidden
-                  onClick={() => setNotifOpen(false)}
+                  onClick={() => {
+                    setNotifOpen(false);
+                    bellRef.current?.focus();
+                  }}
                   className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm sm:hidden"
                 />
-              <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-hidden rounded-t-2xl bg-white text-slate-900 shadow-2xl ring-1 ring-slate-200 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-11 sm:max-h-none sm:w-80 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:shadow-xl">
+              <div
+                ref={notifPanelRef}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Notificaciones"
+                className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-hidden rounded-t-2xl bg-white text-slate-900 shadow-2xl ring-1 ring-slate-200 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-11 sm:max-h-none sm:w-80 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:shadow-xl"
+              >
                 <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  <p className="text-sm font-semibold text-slate-900">
                     Notificaciones
                   </p>
                   <div className="flex items-center gap-1">
@@ -169,9 +205,12 @@ export function DemoCorporateHeader({
                     ) : null}
                     <button
                       type="button"
-                      onClick={() => setNotifOpen(false)}
+                      onClick={() => {
+                        setNotifOpen(false);
+                        bellRef.current?.focus();
+                      }}
                       aria-label="Cerrar"
-                      className="ml-1 rounded-full p-1 text-slate-400 hover:bg-slate-100"
+                      className="ml-1 rounded-full p-1 text-slate-500 hover:bg-slate-100"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
@@ -193,10 +232,10 @@ export function DemoCorporateHeader({
                           }`}
                         />
                         <span className="min-w-0 flex-1">
-                          <span className="block text-[12.5px] font-semibold text-slate-900">
+                          <span className="block text-[13px] font-semibold text-slate-900">
                             {n.title}
                           </span>
-                          <span className="mt-0.5 block text-[10.5px] text-slate-500">
+                          <span className="mt-0.5 block text-[11.5px] text-slate-600">
                             {n.meta}
                           </span>
                         </span>
@@ -217,19 +256,31 @@ export function DemoCorporateHeader({
               <>
                 <div
                   aria-hidden
-                  onClick={() => setSettingsOpen(false)}
+                  onClick={() => {
+                    setSettingsOpen(false);
+                    gearRef.current?.focus();
+                  }}
                   className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm sm:hidden"
                 />
-              <div className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-hidden rounded-t-2xl bg-white text-slate-900 shadow-2xl ring-1 ring-slate-200 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-11 sm:max-h-none sm:w-72 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:shadow-xl">
+              <div
+                ref={settingsPanelRef}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Preferencias"
+                className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-hidden rounded-t-2xl bg-white text-slate-900 shadow-2xl ring-1 ring-slate-200 sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-11 sm:max-h-none sm:w-72 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:shadow-xl"
+              >
                 <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
-                  <p className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  <p className="text-sm font-semibold text-slate-900">
                     Preferencias
                   </p>
                   <button
                     type="button"
-                    onClick={() => setSettingsOpen(false)}
+                    onClick={() => {
+                      setSettingsOpen(false);
+                      gearRef.current?.focus();
+                    }}
                     aria-label="Cerrar"
-                    className="rounded-full p-1 text-slate-400 hover:bg-slate-100"
+                    className="rounded-full p-1 text-slate-500 hover:bg-slate-100"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -237,10 +288,10 @@ export function DemoCorporateHeader({
                 <div className="space-y-3 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[12.5px] font-semibold text-slate-900">
+                      <p className="text-[13px] font-semibold text-slate-900">
                         Notificaciones push
                       </p>
-                      <p className="text-[10.5px] text-slate-500">
+                      <p className="text-[11.5px] text-slate-600">
                         Recibe alertas en tiempo real
                       </p>
                     </div>

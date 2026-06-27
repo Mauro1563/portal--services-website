@@ -15,16 +15,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import {
+  ArrowRight,
   CalendarCheck,
   Check,
   CheckCircle2,
   Copy,
   Hand,
+  HelpCircle,
   MapPin,
   RotateCcw,
   Search,
   SlidersHorizontal,
-  Sparkles,
   Star,
 } from 'lucide-react';
 import { ClientShell } from '@/components/client/ClientShell';
@@ -47,6 +48,8 @@ function StatChip({
   label,
   value,
   tone,
+  emphasis = 'neutral',
+  dotTone,
   title,
   onClick,
 }: {
@@ -54,24 +57,53 @@ function StatChip({
   label: string;
   value: string;
   tone: 'blue' | 'emerald' | 'amber';
+  /**
+   * 'accent' — the single live/primary metric (filled tone surface).
+   * 'neutral' — secondary metrics rendered as quiet pills with a
+   *             tone-colored dot, so the accent metric leads.
+   */
+  emphasis?: 'accent' | 'neutral';
+  dotTone?: 'blue' | 'emerald' | 'amber';
   title?: string;
   onClick?: () => void;
 }) {
-  const tones: Record<typeof tone, string> = {
-    blue: 'bg-blue-50 text-blue-700 ring-blue-100 hover:bg-blue-100',
-    emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-100 hover:bg-emerald-100',
-    amber: 'bg-amber-50 text-amber-700 ring-amber-100 hover:bg-amber-100',
+  const accentTones: Record<typeof tone, string> = {
+    blue: 'bg-blue-50 text-blue-800 ring-blue-100 hover:bg-blue-100',
+    emerald: 'bg-emerald-50 text-emerald-800 ring-emerald-100 hover:bg-emerald-100',
+    amber: 'bg-amber-50 text-amber-800 ring-amber-100 hover:bg-amber-100',
   };
+  const dotColors: Record<NonNullable<typeof dotTone>, string> = {
+    blue: 'bg-blue-500',
+    emerald: 'bg-emerald-500',
+    amber: 'bg-amber-500',
+  };
+  const isAccent = emphasis === 'accent';
+  const surface = isAccent
+    ? accentTones[tone]
+    : 'bg-white text-slate-700 ring-slate-200 hover:bg-slate-50';
   return (
     <button
       type="button"
       onClick={onClick}
       title={title}
-      className={`flex flex-1 items-center gap-2 rounded-2xl px-3 py-2.5 text-left ring-1 ring-inset transition ${tones[tone]}`}
+      className={`flex flex-1 items-center gap-2 rounded-2xl px-3 py-2.5 text-left ring-1 ring-inset transition ${surface}`}
     >
-      <Icon className="h-4 w-4 shrink-0" />
+      {isAccent ? (
+        <Icon className="h-4 w-4 shrink-0" />
+      ) : (
+        <span
+          aria-hidden="true"
+          className={`h-2 w-2 shrink-0 rounded-full ${
+            dotColors[dotTone ?? tone]
+          }`}
+        />
+      )}
       <div className="min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+        <p
+          className={`text-[11.5px] font-semibold ${
+            isAccent ? '' : 'text-slate-500'
+          }`}
+        >
           {label}
         </p>
         <p className="text-sm font-bold">{value}</p>
@@ -81,6 +113,24 @@ function StatChip({
 }
 
 const PROPERTY = LONDON_PROPERTIES.soho;
+
+/**
+ * Accessible help affordance — a real button with aria-label and a
+ * visible tooltip on hover/focus, sized for touch (≥44px hit area
+ * via padding) so it works on mobile.
+ */
+function HelpTip({ label }: { label: string }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+    >
+      <HelpCircle className="h-3.5 w-3.5" />
+    </button>
+  );
+}
 
 // Service-type and availability filter options used in the filter sheet.
 const SERVICE_FILTERS = ['Estándar', 'Profunda', 'Cristales', 'Mudanza'];
@@ -199,7 +249,7 @@ function ClientPreviewInner({
               Sofía
               <Hand className="h-5 w-5 -rotate-12 text-amber-400" />
             </p>
-            <p className="mt-0.5 text-[12.5px] text-slate-500">
+            <p className="mt-0.5 text-[13px] text-slate-600">
               Empecemos tu próxima limpieza
             </p>
           </div>
@@ -208,12 +258,12 @@ function ClientPreviewInner({
               type="button"
               onClick={onReset}
               title="Reiniciar la demo a su estado inicial"
-              className="grid h-9 w-9 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="grid h-10 w-10 place-items-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700"
               aria-label="Reiniciar demo"
             >
               <RotateCcw className="h-4 w-4" />
             </button>
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white shadow-[0_6px_14px_-6px_rgba(37,99,235,0.55)]">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white">
               S
             </span>
           </div>
@@ -240,11 +290,11 @@ function ClientPreviewInner({
             onClick={() => setFilterOpen(true)}
             aria-label="Filtros"
             title="Filtrar por tipo de servicio, valoración y disponibilidad"
-            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-slate-900 text-white transition hover:bg-slate-700"
+            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50"
           >
             <SlidersHorizontal className="h-4 w-4" />
             {activeFilterCount > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-amber-400 px-1 text-[9px] font-bold text-slate-900 ring-2 ring-white">
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-blue-600 px-1 text-[9px] font-bold text-white ring-2 ring-white">
                 {activeFilterCount}
               </span>
             )}
@@ -252,33 +302,37 @@ function ClientPreviewInner({
         </div>
       </section>
 
-      {/* Promo banner overlay — intercepts the click to open our sheet */}
+      {/* Primary action — owns the first viewport. The blue gradient is
+          reserved for this CTA only; secondary surfaces stay neutral. */}
+      <Link
+        href="/client/preview/book"
+        title="Reservar una nueva limpieza"
+        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-5 text-white shadow-[0_14px_32px_-14px_rgba(37,99,235,0.65)] transition hover:from-blue-700 hover:to-blue-900"
+      >
+        <div className="min-w-0">
+          <p className="text-[12px] font-semibold text-blue-100">
+            Listo en 30 segundos
+          </p>
+          <p className="mt-1 font-display text-xl font-bold leading-tight">
+            Reservar limpieza
+          </p>
+        </div>
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+          <ArrowRight className="h-5 w-5" />
+        </span>
+      </Link>
+
+      {/* Promo banner overlay — intercepts the click to open our sheet.
+          Demoted to a quiet row below the primary CTA. */}
       <div onClickCapture={(e) => { e.preventDefault(); setReferralOpen(true); }}>
         <PromoBanner token={PREVIEW_TOKEN} />
       </div>
 
-      <Link
-        href="/client/preview/book"
-        title="Reservar una nueva limpieza"
-        className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-4 text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] transition hover:from-blue-700 hover:to-blue-900"
-      >
-        <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-100">
-            Listo en 30 seg
-          </p>
-          <p className="mt-0.5 font-display text-base font-bold">
-            Reservar limpieza
-          </p>
-        </div>
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
-          <Sparkles className="h-5 w-5" />
-        </span>
-      </Link>
-
-      <div className="mt-4 flex gap-2">
+      <div className="mt-3 flex gap-2">
         <StatChip
           icon={CalendarCheck}
           tone="blue"
+          emphasis="accent"
           label="Próximas"
           value="2"
           title="Ver las limpiezas programadas en los próximos días"
@@ -287,6 +341,8 @@ function ClientPreviewInner({
         <StatChip
           icon={CheckCircle2}
           tone="emerald"
+          emphasis="neutral"
+          dotTone="emerald"
           label="Hechas"
           value="12"
           title="Ver el historial de limpiezas completadas"
@@ -295,6 +351,8 @@ function ClientPreviewInner({
         <StatChip
           icon={Star}
           tone="amber"
+          emphasis="neutral"
+          dotTone="amber"
           label="Rating"
           value="4.8"
           title="Ver las valoraciones recientes que has dado"
@@ -364,12 +422,7 @@ function ClientPreviewInner({
       <section className="mt-6">
         <div className="flex items-center justify-between">
           <h2 className="text-[13px] font-bold text-slate-900">Próxima visita</h2>
-          <span
-            className="text-[10px] text-slate-400"
-            title="La próxima limpieza programada en tu cuenta"
-          >
-            ?
-          </span>
+          <HelpTip label="Las visitas aceptadas aparecen aquí; las pendientes te pediremos confirmación." />
         </div>
         {nextStatus === 'rejected' ? (
           <div className="mt-3 rounded-3xl bg-white p-4 text-center ring-1 ring-inset ring-slate-100">
@@ -383,7 +436,7 @@ function ClientPreviewInner({
               type="button"
               onClick={() => setNextStatus('pending')}
               title="Restaurar la visita para probar otra acción"
-              className="mt-3 rounded-full bg-slate-900 px-4 py-2 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
+              className="mt-3 rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold text-white hover:bg-slate-700"
             >
               Restaurar (demo)
             </button>
@@ -393,30 +446,27 @@ function ClientPreviewInner({
             <Link
               href="/client/preview/cleaning"
               title="Toca para ver el detalle completo de la visita"
-              className="-m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
+              className="group -m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
             >
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
                 <CalendarCheck className="h-5 w-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-700">
+                <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-blue-700">
                   Mañana · 10:00
                 </p>
                 <p className="mt-0.5 font-display text-sm font-bold text-slate-900">
                   Limpieza estándar
                 </p>
-                <p className="mt-0.5 text-[12px] text-slate-500">
+                <p className="mt-0.5 text-[12px] text-slate-600">
                   Con Ana Ruiz · ~2 h
                 </p>
-                <p className="mt-1 flex items-center gap-1 text-[11px] text-slate-400">
+                <p className="mt-1 flex items-center gap-1 text-[11px] text-slate-500">
                   <MapPin className="h-3 w-3 shrink-0" />
                   <span className="truncate">{PROPERTY.address}</span>
                 </p>
               </div>
-              <span
-                aria-hidden="true"
-                className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white transition group-hover:bg-slate-700"
-              >
+              <span className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white transition group-hover:bg-slate-700">
                 Ver
               </span>
             </Link>
@@ -517,19 +567,22 @@ function ClientPreviewInner({
         </p>
       </DemoSheet>
 
-      {/* Cleaner profile sheet */}
-      <DemoSheet open={openCleaner != null} onClose={() => setCleanerOpen(null)}>
+      {/* Cleaner profile sheet — always carries a title so the dialog
+          is announced by assistive tech and the visible h3 acts as the
+          labelledby anchor. */}
+      <DemoSheet
+        open={openCleaner != null}
+        onClose={() => setCleanerOpen(null)}
+        title={openCleaner ? openCleaner.name : 'Cleaner'}
+      >
         {openCleaner && (
           <>
             <div className="flex items-center gap-3 pr-8">
-              <div className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-blue-500 to-blue-800 text-lg font-bold text-white">
+              <div className="grid h-14 w-14 place-items-center rounded-full bg-slate-700 text-lg font-bold text-white">
                 {openCleaner.name.split(' ').map((w) => w[0]).join('')}
               </div>
               <div className="flex-1">
-                <h3 className="font-display text-lg font-bold text-slate-900">
-                  {openCleaner.name}
-                </h3>
-                <p className="mt-0.5 inline-flex items-center gap-1 text-[12px] text-amber-700">
+                <p className="inline-flex items-center gap-1 text-[12px] text-amber-700">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                   {openCleaner.avgStars?.toFixed(1) ?? '—'} ·{' '}
                   {openCleaner.ratingCount} reviews

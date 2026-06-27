@@ -11,6 +11,7 @@ import { useSearchParams } from 'next/navigation';
 import {
   Calendar,
   CheckCircle2,
+  HelpCircle,
   Mail,
   MapPin,
   Sparkles,
@@ -71,9 +72,13 @@ function BookForm() {
     const svcName = MOCK_SERVICES.find((s) => s.id === service)?.name ?? '';
     return (
       <div className="flex flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center ring-1 ring-inset ring-emerald-100">
-        <span className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-600">
-          <CheckCircle2 className="h-8 w-8 animate-pulse" />
+        <span className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-600 motion-safe:[animation:bookingSuccessIn_0.45s_ease-out_both]">
+          <CheckCircle2 className="h-8 w-8" />
         </span>
+        <style>{`@keyframes bookingSuccessIn {
+          0% { opacity: 0; transform: scale(0.7); }
+          100% { opacity: 1; transform: scale(1); }
+        }`}</style>
         <h2 className="font-display text-lg font-bold text-slate-900">
           ¡Tu reserva fue creada!
         </h2>
@@ -128,12 +133,14 @@ function BookForm() {
             <Sparkles className="h-3.5 w-3.5 text-blue-600" />
             Servicio
           </h2>
-          <span
-            className="text-[10px] text-slate-400"
+          <button
+            type="button"
+            aria-label="Elige qué tipo de limpieza necesitas"
             title="Elige qué tipo de limpieza necesitas"
+            className="grid h-8 w-8 -m-2 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
           >
-            ?
-          </span>
+            <HelpCircle className="h-3.5 w-3.5" />
+          </button>
         </div>
         <ul className="mt-3 flex flex-col gap-2">
           {MOCK_SERVICES.map((s) => (
@@ -166,7 +173,7 @@ function BookForm() {
         </h2>
         <div className="mt-3 grid grid-cols-2 gap-2">
           <label className="block">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[12px] font-semibold text-slate-700">
               Fecha
             </span>
             <input
@@ -175,16 +182,24 @@ function BookForm() {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               title="Elige el día de la limpieza"
+              aria-invalid={errors.date ? true : undefined}
+              aria-describedby={errors.date ? 'book-date-error' : undefined}
               className={`mt-1 block h-11 w-full rounded-2xl border bg-white px-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
-                errors.date ? 'border-rose-300' : 'border-slate-200'
+                errors.date ? 'border-rose-400' : 'border-slate-200'
               }`}
             />
             {errors.date && (
-              <p className="mt-1 text-[10.5px] text-rose-600">{errors.date}</p>
+              <p
+                id="book-date-error"
+                role="alert"
+                className="mt-1 text-[12px] font-medium text-rose-700"
+              >
+                {errors.date}
+              </p>
             )}
           </label>
           <label className="block">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[12px] font-semibold text-slate-700">
               Hora
             </span>
             <input
@@ -201,7 +216,7 @@ function BookForm() {
 
       <section>
         <label className="block">
-          <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <span className="flex items-center gap-1 text-[12px] font-semibold text-slate-700">
             <MapPin className="h-3 w-3" /> Dirección
           </span>
           <input
@@ -211,19 +226,27 @@ function BookForm() {
             onChange={(e) => setAddress(e.target.value)}
             placeholder="e.g. 22 Old Compton St, Soho, London W1D 4TR"
             title="Indica la dirección de la limpieza"
+            aria-invalid={errors.address ? true : undefined}
+            aria-describedby={errors.address ? 'book-address-error' : undefined}
             className={`mt-1 block h-11 w-full rounded-2xl border bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
-              errors.address ? 'border-rose-300' : 'border-slate-200'
+              errors.address ? 'border-rose-400' : 'border-slate-200'
             }`}
           />
           {errors.address && (
-            <p className="mt-1 text-[10.5px] text-rose-600">{errors.address}</p>
+            <p
+              id="book-address-error"
+              role="alert"
+              className="mt-1 text-[12px] font-medium text-rose-700"
+            >
+              {errors.address}
+            </p>
           )}
         </label>
       </section>
 
       <section>
         <label className="block">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <span className="text-[12px] font-semibold text-slate-700">
             Notas (opcional)
           </span>
           <textarea

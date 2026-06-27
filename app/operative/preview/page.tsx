@@ -19,10 +19,12 @@ import {
   ChevronUp,
   Clock,
   HelpCircle,
-  Info,
   MapPin,
+  Minus,
   Navigation2,
+  Phone,
   Play,
+  Plus,
   RotateCcw,
   Trash2,
   X,
@@ -173,9 +175,14 @@ function OperativePreviewHomeBody({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<{ taskId: string; idx: number } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [agendaHelpOpen, setAgendaHelpOpen] = useState(false);
 
   function showToast(message: string) {
     setToast(message);
+    // Trigger enter transition on the next frame, then schedule the exit.
+    window.requestAnimationFrame(() => setToastVisible(true));
+    window.setTimeout(() => setToastVisible(false), 1600);
     window.setTimeout(() => setToast(null), 1800);
   }
 
@@ -195,8 +202,11 @@ function OperativePreviewHomeBody({
       const labour = Math.round(hours * t.cleanerPayRatePence);
       return acc + Math.max(0, labour + (t.tipPence ?? 0));
     }, 0);
-  // Week mock: today + four prior days at roughly the same cadence.
-  const weekPence = todayPence + 4 * Math.max(todayPence, 4000);
+  // Week total is a stable mocked figure (≈ five working days at this cadence).
+  // Decoupled from today's clicks so it doesn't leap 5× when the cleaner
+  // completes the last task. Stays sensible whether today=£0 or today=£40.
+  const PRIOR_DAYS_PENCE = 21800; // £218 across Mon-Thu
+  const weekPence = PRIOR_DAYS_PENCE + todayPence;
 
   function handleSetHours(taskId: string, hours: number) {
     setTasks((prev) =>
@@ -205,6 +215,16 @@ function OperativePreviewHomeBody({
           ? { ...t, actualHours: Number.isFinite(hours) && hours >= 0 ? hours : t.actualHours }
           : t,
       ),
+    );
+  }
+
+  function handleAdjustHours(taskId: string, delta: number) {
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id !== taskId) return t;
+        const next = Math.max(0, Math.round(((t.actualHours ?? 0) + delta) * 4) / 4);
+        return { ...t, actualHours: next };
+      }),
     );
   }
 
@@ -280,14 +300,18 @@ function OperativePreviewHomeBody({
           href="/operative/preview/week"
         />
 
-        {/* Hero card — siguiente parada */}
-        {heroTask ? (
-          <section className="mt-5 rounded-2xl border border-brand-600/30 bg-gradient-to-br from-white via-brand-50/40 to-cyan-50/40 p-4 shadow-card">
+        {/* Hero card — siguiente parada.
+            Only renders when there is genuinely a "next" job to act on. Once
+            everything is completed we drop the hero so the timeline becomes
+            the single source of truth (no double-rendering the in-progress
+            task in two surfaces). */}
+        {heroTask && heroTask.status !== 'completed' ? (
+          <section className="mt-5 rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-700">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">
                 Siguiente parada
               </p>
-              <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold tabular-nums text-white">
+              <span className="text-[11px] font-semibold tabular-nums text-text-3">
                 {heroTask.start_time}
               </span>
             </div>
@@ -299,42 +323,43 @@ function OperativePreviewHomeBody({
               {heroTask.address} · {heroTask.postcode}
             </p>
 
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-4 flex items-stretch gap-2">
               <a
                 href={heroTask.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Abrir esta dirección en Google Maps para navegar paso a paso"
-                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-3 py-2.5 text-[12px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.5)]"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.5)] transition active:scale-[0.99]"
               >
-                <Navigation2 className="h-3.5 w-3.5" /> Ir
+                <Navigation2 className="h-4 w-4" /> Ir a la dirección
               </a>
               <a
                 href={`tel:${heroTask.phone}`}
+                aria-label="Llamar al cliente"
                 title="Llamar al cliente o manager desde el teléfono"
-                className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-surface-2 bg-surface-0 px-3 py-2.5 text-[12px] font-bold text-text-1"
+                className="inline-flex h-auto min-h-[44px] w-12 shrink-0 items-center justify-center rounded-xl border border-surface-2 bg-surface-0 text-text-1 transition hover:border-brand-300 hover:text-brand-700"
               >
-                Llamar
+                <Phone className="h-4 w-4" />
               </a>
             </div>
-            <p className="mt-2 inline-flex items-center gap-1 text-[10px] text-text-3">
-              <Info className="h-3 w-3" />
-              "Ir" abre Google Maps y "Llamar" usa la app de teléfono — ambos funcionan en el móvil.
-            </p>
           </section>
         ) : null}
 
         {/* Agenda timeline — interactive */}
         <section className="mt-6">
           <div className="flex items-center justify-between">
-            <h2 className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
+            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-text-3">
               Agenda de hoy
-              <span
-                title="Toca cualquier tarea para ver las notas del cliente, hacer check-in o subir fotos."
-                className="grid h-3.5 w-3.5 cursor-help place-items-center rounded-full bg-surface-2 text-[8px] font-bold text-text-3"
+              <button
+                type="button"
+                aria-label="Ayuda sobre la agenda"
+                aria-expanded={agendaHelpOpen}
+                aria-controls="agenda-help"
+                onClick={() => setAgendaHelpOpen((o) => !o)}
+                className="grid h-5 w-5 place-items-center rounded-full bg-surface-2 text-text-3 transition hover:bg-surface-3 hover:text-text-1"
               >
                 <HelpCircle className="h-3 w-3" />
-              </span>
+              </button>
             </h2>
             <Link
               href="/operative/preview/week"
@@ -344,11 +369,23 @@ function OperativePreviewHomeBody({
               <Navigation2 className="h-3 w-3" /> Ver semana
             </Link>
           </div>
+          {agendaHelpOpen ? (
+            <p
+              id="agenda-help"
+              className="mt-2 rounded-lg border border-dashed border-surface-2 bg-surface-1/60 px-3 py-2 text-[11px] leading-relaxed text-text-2"
+            >
+              Toca cualquier tarea para ver notas del cliente, hacer check-in o subir fotos.
+            </p>
+          ) : null}
 
-          <ol className="relative mt-4">
+          <ol
+            className="relative mt-4"
+            style={{ ['--rail-offset' as string]: 'calc(52px + 0.75rem + 0.5rem)' }}
+          >
             <span
               aria-hidden
-              className="absolute left-[60px] top-3 bottom-3 w-px bg-surface-2"
+              className="absolute top-3 bottom-3 w-px bg-surface-2"
+              style={{ left: 'var(--rail-offset)' }}
             />
             {tasks.map((task) => {
               const st = STATUS_META[task.status];
@@ -427,38 +464,66 @@ function OperativePreviewHomeBody({
                           title="Propina del cliente — 100% para ti, ya sumada a tus ganancias del día"
                           className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800"
                         >
-                          Propina £{(task.tipPence / 100).toFixed(0)}
+                          Propina £{(task.tipPence / 100).toFixed(2)}
                         </span>
                       ) : null}
                       {task.status === 'in_progress' ? (
-                        <label className="mt-2 flex items-center gap-2 rounded-lg bg-amber-50 px-2 py-1.5 text-[10px] font-semibold text-amber-800 ring-1 ring-amber-100">
-                          <Clock className="h-3 w-3" />
-                          Marcar horas
-                          <input
-                            type="number"
-                            min={0}
-                            step={0.25}
-                            value={task.actualHours ?? ''}
-                            onChange={(e) => handleSetHours(task.id, Number(e.target.value))}
-                            placeholder="0.0"
-                            title="Reporta cuántas horas tardaste — actualiza tus ganancias al instante"
-                            className="ml-auto h-6 w-14 rounded border border-amber-200 bg-white px-1.5 text-[11px] tabular-nums text-text-1"
-                          />
-                          <span className="text-[10px] text-amber-700">h</span>
-                        </label>
+                        <div className="mt-2 rounded-xl bg-amber-50 px-3 py-2 ring-1 ring-amber-100">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800">
+                              <Clock className="h-3 w-3" />
+                              Horas trabajadas
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleAdjustHours(task.id, -0.25)}
+                                aria-label="Restar 15 minutos"
+                                title="Restar 15 minutos"
+                                disabled={(task.actualHours ?? 0) <= 0}
+                                className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-40"
+                              >
+                                <Minus className="h-4 w-4" />
+                              </button>
+                              <input
+                                type="number"
+                                min={0}
+                                step={0.25}
+                                value={task.actualHours ?? ''}
+                                onChange={(e) => handleSetHours(task.id, Number(e.target.value))}
+                                placeholder="0.0"
+                                aria-label="Horas trabajadas"
+                                title="Reporta cuántas horas tardaste — actualiza tus ganancias al instante"
+                                className="h-11 w-16 rounded-lg border border-amber-200 bg-white text-center text-[15px] font-semibold tabular-nums text-text-1"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleAdjustHours(task.id, 0.25)}
+                                aria-label="Sumar 15 minutos"
+                                title="Sumar 15 minutos"
+                                className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100"
+                              >
+                                <Plus className="h-4 w-4" />
+                              </button>
+                              <span className="text-[11px] font-semibold text-amber-700">h</span>
+                            </div>
+                          </div>
+                        </div>
                       ) : null}
 
+                      {/* Secondary actions: small icon chips, right-aligned, no
+                          single dominant primary in this row. */}
                       <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
                         <a
                           href={task.mapsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
+                          aria-label="Navegar con Google Maps"
                           title="Navegar a esta dirección con Google Maps"
-                          className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-semibold text-brand-700 transition hover:bg-brand-100"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition hover:bg-brand-100"
                         >
-                          <Navigation2 className="h-3 w-3" />
-                          Ir
+                          <Navigation2 className="h-3.5 w-3.5" />
                         </a>
                         {task.status === 'scheduled' ? (
                           <button
@@ -472,28 +537,32 @@ function OperativePreviewHomeBody({
                           </button>
                         ) : null}
                         {task.status === 'in_progress' ? (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => handleUploadPhoto(task.id)}
-                              title="Subir foto del trabajo terminado — el cliente la verá en su portal"
-                              className="inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-[10px] font-semibold text-cyan-700 transition hover:bg-cyan-100"
-                            >
-                              <Camera className="h-3 w-3" />
-                              Subir foto
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleComplete(task.id)}
-                              title="Marcar la tarea como terminada para liberarte de esta parada"
-                              className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700 transition hover:bg-emerald-100"
-                            >
-                              <CheckCircle2 className="h-3 w-3" />
-                              Marcar completada
-                            </button>
-                          </>
+                          <button
+                            type="button"
+                            onClick={() => handleUploadPhoto(task.id)}
+                            aria-label="Subir foto del trabajo"
+                            title="Subir foto del trabajo terminado — el cliente la verá en su portal"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-50 text-cyan-700 transition hover:bg-cyan-100"
+                          >
+                            <Camera className="h-3.5 w-3.5" />
+                          </button>
                         ) : null}
                       </div>
+
+                      {/* Primary action: full-width "Marcar completada" wins
+                          the decision-point at the end of the in-progress
+                          card — no other action competes with it. */}
+                      {task.status === 'in_progress' ? (
+                        <button
+                          type="button"
+                          onClick={() => handleComplete(task.id)}
+                          title="Marcar la tarea como terminada para liberarte de esta parada"
+                          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.55)] transition active:scale-[0.99]"
+                        >
+                          <CheckCircle2 className="h-4 w-4" />
+                          Marcar completada
+                        </button>
+                      ) : null}
 
                       {/* Expanded details + photo grid */}
                       {isExpanded ? (
@@ -551,6 +620,20 @@ function OperativePreviewHomeBody({
           title="Tus últimas limpiezas"
           caption="Las fotos que subes después de cada servicio quedan guardadas — y el cliente las ve."
         />
+
+        {/* Demo-only reset — kept as a quiet inline link, well clear of the
+            thumb zone, so demo chrome doesn't bleed into production-shaped UI. */}
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={onReset}
+            title="Reiniciar la demo — vuelve al estado inicial sin recargar"
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-text-3 transition hover:text-text-1"
+          >
+            <RotateCcw className="h-3 w-3" />
+            Reiniciar demo
+          </button>
+        </div>
       </div>
 
       {/* Photo lightbox */}
@@ -595,28 +678,22 @@ function OperativePreviewHomeBody({
         </div>
       ) : null}
 
-      {/* Toast */}
+      {/* Toast — fades + lifts in/out so the confirmation registers
+          peripherally without dominating the screen. */}
       {toast ? (
         <div
           className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
           aria-live="polite"
         >
-          <div className="rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition">
+          <div
+            className={`rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
+              toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+            }`}
+          >
             ✓ {toast}
           </div>
         </div>
       ) : null}
-
-      {/* Reset demo */}
-      <button
-        type="button"
-        onClick={onReset}
-        title="Reiniciar la demo — vuelve al estado inicial sin recargar"
-        className="fixed bottom-20 right-3 z-[55] inline-flex items-center gap-1 rounded-full bg-paper/90 px-3 py-1.5 text-[10px] font-semibold text-text-3 shadow ring-1 ring-surface-2 backdrop-blur hover:text-text-1"
-      >
-        <RotateCcw className="h-3 w-3" />
-        Reiniciar demo
-      </button>
 
       <PreviewBottomTabBar active="agenda" />
     </main>

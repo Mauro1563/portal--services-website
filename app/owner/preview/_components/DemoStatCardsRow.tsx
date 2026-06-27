@@ -28,26 +28,31 @@ type StatProps = {
 
 const ACCENT: Record<
   StatProps['accent'],
-  { iconBg: string; ring: string }
+  { iconBg: string; iconText: string; ring: string }
 > = {
   brand: {
-    iconBg: 'bg-gradient-to-br from-blue-600 to-blue-700',
+    iconBg: 'bg-blue-50',
+    iconText: 'text-blue-700',
     ring: 'ring-blue-100',
   },
   emerald: {
-    iconBg: 'bg-gradient-to-br from-emerald-500 to-emerald-700',
+    iconBg: 'bg-emerald-50',
+    iconText: 'text-emerald-700',
     ring: 'ring-emerald-100',
   },
   amber: {
-    iconBg: 'bg-gradient-to-br from-amber-400 to-amber-600',
+    iconBg: 'bg-amber-50',
+    iconText: 'text-amber-700',
     ring: 'ring-amber-100',
   },
   violet: {
-    iconBg: 'bg-gradient-to-br from-violet-500 to-purple-700',
+    iconBg: 'bg-violet-50',
+    iconText: 'text-violet-700',
     ring: 'ring-violet-100',
   },
   rose: {
-    iconBg: 'bg-gradient-to-br from-rose-500 to-rose-700',
+    iconBg: 'bg-rose-50',
+    iconText: 'text-rose-700',
     ring: 'ring-rose-100',
   },
 };
@@ -65,13 +70,13 @@ function StatCardInner({
     <>
       <div className="flex items-start justify-between gap-1">
         <span
-          className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9 sm:rounded-xl ${cls.iconBg} text-white shadow-sm ring-2 sm:ring-4 ${cls.ring}`}
+          className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9 sm:rounded-xl ${cls.iconBg} ${cls.iconText} ring-1 ${cls.ring}`}
         >
-          <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <Icon className="h-4 w-4" />
         </span>
         {delta ? (
           <span
-            className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold sm:px-2 sm:text-[10px] ${
+            className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums ${
               delta.positive
                 ? 'bg-emerald-50 text-emerald-700'
                 : 'bg-rose-50 text-rose-700'
@@ -85,14 +90,14 @@ function StatCardInner({
         ) : null}
       </div>
       <div className="min-w-0">
-        <p className="truncate text-[9px] font-bold uppercase tracking-[0.12em] text-slate-500 sm:text-[10px] sm:tracking-[0.15em]">
+        <p className="text-[12px] font-medium text-slate-600 sm:text-[13px]">
           {label}
         </p>
-        <p className="mt-0.5 font-display text-lg font-bold tabular-nums leading-none text-slate-900 sm:mt-1 sm:text-2xl">
+        <p className="mt-1 font-display text-xl font-bold tabular-nums leading-none text-slate-900 sm:text-2xl">
           {value}
         </p>
         {hint ? (
-          <p className="mt-0.5 truncate text-[9.5px] text-slate-500 sm:text-[10.5px]">
+          <p className="mt-1 text-[11.5px] text-slate-500 sm:text-[12px]">
             {hint}
           </p>
         ) : null}
@@ -158,7 +163,7 @@ export function DemoStatCardsRow({
       className={
         showProfit
           ? 'grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4'
-          : 'grid grid-cols-3 gap-2 sm:gap-3'
+          : 'grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3'
       }
     >
       <StatCard
@@ -171,9 +176,9 @@ export function DemoStatCardsRow({
         title="Ver y gestionar los cleaners activos de tu equipo"
       />
       <StatCard
-        label="Nuevas tareas"
+        label="Nuevas reservas"
         value={String(bookingsWeek)}
-        hint="esta semana"
+        hint="vs. semana pasada"
         delta={bookingsDelta}
         Icon={CalendarPlus}
         accent="amber"
@@ -181,20 +186,20 @@ export function DemoStatCardsRow({
         title="Ver las limpiezas programadas esta semana"
       />
       <StatCard
-        label="Revenue"
+        label="Ingresos"
         value={fmtMoney(revenueMonthPence)}
-        hint="este mes"
+        hint="vs. mes pasado"
         delta={revenueDelta}
         Icon={PoundSterling}
         accent="emerald"
         href="/owner/preview/analytics"
-        title="Ver tendencias de revenue y KPIs detallados"
+        title="Ver tendencias de ingresos y KPIs detallados"
       />
       {showProfit ? (
         <StatCard
-          label="Profit"
+          label="Beneficio"
           value={fmtMoney(profitMonthPence)}
-          hint="revenue − pagado"
+          hint="ingresos − pagado"
           delta={profitDelta}
           Icon={PiggyBank}
           accent={profitMonthPence >= 0 ? 'violet' : 'rose'}

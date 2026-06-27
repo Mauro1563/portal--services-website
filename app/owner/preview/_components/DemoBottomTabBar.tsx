@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import {
-  Building2,
   LayoutGrid,
   ListChecks,
   MessageCircle,
-  MoreHorizontal,
   Users,
+  UserSquare2,
 } from 'lucide-react';
 
 export type DemoTab =
@@ -22,12 +21,11 @@ const ITEMS: Array<{
   label: string;
   Icon: React.ComponentType<{ className?: string }>;
 }> = [
-  { key: 'home', href: '/owner/preview', label: 'Dashboard', Icon: LayoutGrid },
+  { key: 'home', href: '/owner/preview', label: 'Inicio', Icon: LayoutGrid },
   { key: 'tasks', href: '/owner/preview/tasks', label: 'Limpiezas', Icon: ListChecks },
-  { key: 'cleaners', href: '/owner/preview/cleaners', label: 'Cleaners', Icon: Users },
-  { key: 'properties', href: '/owner/preview/properties', label: 'Sitios', Icon: Building2 },
+  { key: 'cleaners', href: '/owner/preview/cleaners', label: 'Equipo', Icon: Users },
   { key: 'chat', href: '/owner/preview/chat-hub', label: 'Chat', Icon: MessageCircle },
-  { key: 'more', href: '/owner/preview/clients', label: 'Clientes', Icon: MoreHorizontal },
+  { key: 'more', href: '/owner/preview/clients', label: 'Clientes', Icon: UserSquare2 },
 ];
 
 /**
@@ -49,8 +47,8 @@ export function DemoBottomTabBar({ active }: { active: DemoTab }) {
             <li key={key} className="flex-1">
               <Link
                 href={href}
-                className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider transition ${
-                  isActive ? 'text-blue-700' : 'text-slate-500 hover:text-slate-900'
+                className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition ${
+                  isActive ? 'text-blue-700' : 'text-slate-600 hover:text-slate-900'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >

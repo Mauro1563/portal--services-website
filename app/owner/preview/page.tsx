@@ -3,7 +3,7 @@
  * No auth, no Supabase. Every link routes inside /owner/preview/*.
  */
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight, BarChart3 } from 'lucide-react';
 import { DemoStatCardsRow } from './_components/DemoStatCardsRow';
 import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
 import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
@@ -67,7 +67,7 @@ export default function OwnerPreviewHome() {
           subtitle="Alan Cleaners · 4 limpiezas hoy"
         />
 
-        <div className="space-y-5">
+        <div>
           <DemoStatCardsRow
             cleanersActive={3}
             bookingsWeek={12}
@@ -76,32 +76,45 @@ export default function OwnerPreviewHome() {
             revenueDelta={{ label: '+12%', positive: true }}
           />
 
-          <RevenueChart data={revenueData} />
+          <div className="mt-6">
+            <RevenueChart data={revenueData} />
+          </div>
 
-          <DemoCleanersField checkins={checkins} />
+          <div className="mt-4">
+            <DemoCleanersField checkins={checkins} />
+          </div>
 
-          <DemoQuickActions />
+          <div className="mt-8">
+            <DemoQuickActions />
+          </div>
 
           <Link
             href="/owner/preview/analytics"
             title="Ver tendencias semanales y KPIs detallados"
-            className="flex items-center justify-between rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 p-4 text-white shadow-sm hover:from-slate-800"
+            className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-blue-300 hover:bg-blue-50/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300">
-                Analytics
-              </p>
-              <p className="mt-1 text-sm font-semibold">
-                Tendencias semanales y KPIs
-              </p>
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-700">
+                <BarChart3 className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[15px] font-semibold text-slate-900">
+                  Ver analítica completa
+                </p>
+                <p className="mt-0.5 text-[12px] text-slate-600">
+                  Tendencias semanales, ingresos y KPIs detallados
+                </p>
+              </div>
             </div>
-            <ChevronRight className="h-5 w-5 text-white/70" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-blue-600" />
           </Link>
         </div>
-        <DemoPhotoStrip
-          title="Limpiezas recientes del equipo"
-          caption="Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante."
-        />
+        <div className="mt-10">
+          <DemoPhotoStrip
+            title="Limpiezas recientes del equipo"
+            caption="Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante."
+          />
+        </div>
       </div>
 
       <DemoBottomTabBar active="home" />

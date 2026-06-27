@@ -33,22 +33,22 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5">
       <header className="mb-4 flex items-end justify-between gap-3">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
-            Revenue · últimos 7 días
-          </p>
-          <h2 className="mt-1 font-display text-lg font-semibold text-slate-900">
-            Tendencia semanal
+          <h2 className="font-display text-lg font-semibold text-slate-900">
+            Ingresos esta semana
           </h2>
+          <p className="mt-0.5 text-[12.5px] text-slate-600">
+            Últimos 7 días
+          </p>
         </div>
-        <p className="font-display text-base font-bold tabular-nums text-blue-700">
+        <p className="font-display text-lg font-bold tabular-nums text-blue-700">
           {fmtMoney(data.reduce((sum, d) => sum + d.pence, 0))}
         </p>
       </header>
 
       {empty ? (
         <div className="flex h-40 items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/50 text-center">
-          <p className="px-6 text-xs text-slate-500">
-            Sin revenue aún. Cuando marques tareas como cobradas, aparecerá
+          <p className="px-6 text-[12.5px] text-slate-600">
+            Sin ingresos aún. Cuando marques tareas como cobradas, aparecerá
             la tendencia aquí.
           </p>
         </div>
@@ -81,7 +81,7 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
                   boxShadow: '0 4px 14px -4px rgba(15,23,42,0.12)',
                   fontSize: 12,
                 }}
-                formatter={(value) => [fmtMoney(Number(value) || 0), 'Revenue']}
+                formatter={(value) => [fmtMoney(Number(value) || 0), 'Ingresos']}
               />
               <Bar
                 dataKey="pence"
