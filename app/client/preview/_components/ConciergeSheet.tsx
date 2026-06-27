@@ -160,7 +160,7 @@ export function ConciergeSheet() {
           aria-label="Asistente Sofía"
         >
           <div
-            className="relative w-full max-w-md rounded-t-3xl bg-white p-5 pb-7 shadow-xl client-fade-up"
+            className="relative w-full max-w-md rounded-t-3xl bg-white p-5 pb-[calc(env(safe-area-inset-bottom)+5rem)] shadow-xl client-fade-up"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200" />

@@ -14,12 +14,22 @@ export function DemoSheet({
   title,
   children,
   maxWidth = 'max-w-md',
+  aboveTabBar = true,
 }: {
   open: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
   maxWidth?: string;
+  /**
+   * When true, the sheet reserves extra bottom padding on mobile so its
+   * last item isn't hidden behind the fixed bottom tab bar (e.g.
+   * ClientTabBar / PreviewBottomTabBar — ~56px tall + safe-area inset).
+   * Desktop centred layout (sm:) is unaffected.
+   * Defaults to true since every current consumer renders inside a
+   * portal shell with a bottom tab bar.
+   */
+  aboveTabBar?: boolean;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -31,13 +41,18 @@ export function DemoSheet({
   }, [open, onClose]);
 
   if (!open) return null;
+  // Mobile bottom-anchored sheet → add padding for tab bar + iOS safe
+  // area. Reset on `sm:` where the sheet is centred and not overlapped.
+  const tabBarPad = aboveTabBar
+    ? 'pb-[calc(env(safe-area-inset-bottom)+5rem)] sm:pb-5'
+    : '';
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center"
       onClick={onClose}
     >
       <div
-        className={`relative w-full ${maxWidth} rounded-t-3xl bg-white p-5 shadow-xl sm:rounded-3xl`}
+        className={`relative w-full ${maxWidth} rounded-t-3xl bg-white p-5 ${tabBarPad} shadow-xl sm:rounded-3xl`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200 sm:hidden" />
