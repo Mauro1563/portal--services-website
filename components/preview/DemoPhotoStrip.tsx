@@ -5,7 +5,7 @@ import { Camera, Star } from 'lucide-react';
  * Uses public Unsplash hot-linked URLs (no auth required, no image config
  * needed — these are plain <img> tags so they bypass next/image domain
  * allow-listing). Purely visual: photos are decorative samples, not real
- * customer data.
+ * customer data. Labels anchored to London (matching the demo property pool).
  */
 export type DemoPhoto = {
   src: string;
@@ -14,41 +14,52 @@ export type DemoPhoto = {
   rating?: number;
 };
 
+/**
+ * Curated set — each URL chosen so the photo clearly matches its label
+ * (kitchen looks like a kitchen, bathroom like a bathroom). All photos are
+ * "after cleaning" interiors — bright, tidy, sparkling. No house exteriors.
+ */
 export const DEMO_PHOTOS: DemoPhoto[] = [
   {
-    src: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&auto=format&fit=crop&q=70',
-    label: 'Cocina · Apto 2A',
+    src: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&auto=format&fit=crop&q=70',
+    label: 'Cocina · Soho Loft',
     meta: 'Limpieza profunda · 2h',
     rating: 5,
   },
   {
-    src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=70',
-    label: 'Sala · Casa Gómez',
+    src: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&auto=format&fit=crop&q=70',
+    label: 'Sala · Camden House',
     meta: 'Limpieza estándar · 1h 30m',
     rating: 5,
   },
   {
-    src: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&auto=format&fit=crop&q=70',
-    label: 'Baño · Loft Diagonal',
+    src: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&auto=format&fit=crop&q=70',
+    label: 'Baño · Mayfair Studio',
     meta: 'Limpieza estándar · 45m',
     rating: 5,
   },
   {
-    src: 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&auto=format&fit=crop&q=70',
-    label: 'Dormitorio · Studio',
+    src: 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&auto=format&fit=crop&q=70',
+    label: 'Dormitorio · Notting Hill',
     meta: 'Cambio de huésped · 1h',
-    rating: 4,
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1631889993959-41b4e9c6e3c5?w=600&auto=format&fit=crop&q=70',
-    label: 'Oficina · Coworking',
-    meta: 'Limpieza fin de día · 1h',
     rating: 5,
   },
   {
-    src: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=70',
-    label: 'Cocina · Piso turístico',
+    src: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&auto=format&fit=crop&q=70',
+    label: 'Cocina · Shoreditch Penthouse',
     meta: 'Check-out Airbnb · 2h 15m',
+    rating: 5,
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&auto=format&fit=crop&q=70',
+    label: 'Sala · Hackney Studio',
+    meta: 'Limpieza estándar · 1h',
+    rating: 4,
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1564540583246-934409427776?w=800&auto=format&fit=crop&q=70',
+    label: 'Baño · Kensington Mews',
+    meta: 'Limpieza profunda · 1h',
     rating: 5,
   },
 ];
