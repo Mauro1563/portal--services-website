@@ -210,7 +210,7 @@ export default async function PricingSection() {
   return (
     <section
       id="precios"
-      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 py-20 sm:py-28"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 py-12 sm:py-28"
     >
       {/* decorative blurs */}
       <div
@@ -235,7 +235,7 @@ export default async function PricingSection() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:gap-8 md:grid-cols-3 md:items-stretch">
+        <div className="mt-10 grid gap-6 sm:mt-14 sm:gap-8 md:grid-cols-3 md:items-stretch">
           {t.plans.map((plan) => {
             const isHighlighted = plan.highlighted === true;
             return (
@@ -243,8 +243,8 @@ export default async function PricingSection() {
                 key={plan.id}
                 className={
                   isHighlighted
-                    ? "relative flex flex-col rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900 to-blue-900 p-8 text-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.45)] ring-4 ring-blue-500/30 md:-mt-4 md:mb-4 md:scale-[1.04]"
-                    : "relative flex flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                    ? "relative flex flex-col rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900 to-blue-900 p-6 text-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.45)] ring-4 ring-blue-500/30 sm:p-8 md:-mt-4 md:mb-4 md:scale-[1.04]"
+                    : "relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8"
                 }
               >
                 {isHighlighted && (
@@ -267,12 +267,12 @@ export default async function PricingSection() {
                     {plan.name}
                   </p>
 
-                  <div className="mt-4 flex items-baseline gap-2">
+                  <div className="mt-3 flex items-baseline gap-2 sm:mt-4">
                     <span
                       className={
                         isHighlighted
-                          ? "font-display text-5xl font-bold tabular-nums text-white sm:text-6xl"
-                          : "font-display text-5xl font-bold tabular-nums text-slate-900 sm:text-6xl"
+                          ? "font-display text-4xl font-bold tabular-nums text-white sm:text-5xl md:text-6xl"
+                          : "font-display text-4xl font-bold tabular-nums text-slate-900 sm:text-5xl md:text-6xl"
                       }
                     >
                       {plan.price}
@@ -298,9 +298,16 @@ export default async function PricingSection() {
                     {plan.description}
                   </p>
 
-                  <ul className="mt-6 space-y-3">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
+                  <ul className="mt-4 space-y-2 sm:mt-6 sm:space-y-3">
+                    {plan.features.map((feature, idx) => (
+                      <li
+                        key={feature}
+                        className={
+                          idx > 3
+                            ? "hidden items-start gap-3 sm:flex"
+                            : "flex items-start gap-3"
+                        }
+                      >
                         <span
                           className={
                             isHighlighted
@@ -334,8 +341,8 @@ export default async function PricingSection() {
                   href="/signup"
                   className={
                     isHighlighted
-                      ? "mt-8 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-6 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:from-cyan-200 hover:to-blue-400"
-                      : "mt-8 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-md transition hover:from-blue-500 hover:to-blue-600"
+                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-6 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:from-cyan-200 hover:to-blue-400 sm:mt-8"
+                      : "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-md transition hover:from-blue-500 hover:to-blue-600 sm:mt-8"
                   }
                 >
                   {plan.cta}
@@ -345,7 +352,7 @@ export default async function PricingSection() {
           })}
         </div>
 
-        <p className="mt-10 text-center text-xs text-slate-500">
+        <p className="mt-6 text-center text-xs text-slate-500 sm:mt-10">
           {t.footnote}
         </p>
       </div>

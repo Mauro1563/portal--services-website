@@ -197,8 +197,8 @@ export default async function FooterSection() {
   return (
     <footer className="relative bg-slate-50">
       {/* CTA Banner */}
-      <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-6 py-12 shadow-[0_20px_60px_-20px_rgba(15,23,42,0.5)] sm:px-12 sm:py-16 lg:px-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 py-8 shadow-[0_20px_60px_-20px_rgba(15,23,42,0.5)] sm:rounded-3xl sm:px-12 sm:py-16 lg:px-16 lg:py-20">
           {/* Radial glow motifs */}
           <div
             aria-hidden="true"
@@ -217,13 +217,13 @@ export default async function FooterSection() {
                   {t.ctaEyebrow}
                 </span>
               </div>
-              <h2 className="font-display mt-5 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+              <h2 className="font-display mt-3 text-2xl font-bold leading-tight text-white sm:mt-5 sm:text-4xl lg:text-5xl">
                 {t.ctaHeadlineLead}{' '}
                 <span className="bg-gradient-to-r from-cyan-200 to-sky-300 bg-clip-text text-transparent">
                   {t.ctaHeadlineAccent}
                 </span>
               </h2>
-              <p className="mt-4 max-w-xl text-base text-white/70 sm:text-lg">
+              <p className="mt-3 max-w-xl text-sm text-white/70 sm:mt-4 sm:text-lg">
                 {t.ctaSub}
               </p>
             </div>
@@ -231,7 +231,7 @@ export default async function FooterSection() {
             <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-end">
               <Link
                 href="/signup"
-                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-7 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.7)] ring-1 ring-blue-400/30 transition hover:from-blue-500 hover:to-blue-600"
+                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.7)] ring-1 ring-blue-400/30 transition hover:from-blue-500 hover:to-blue-600 sm:px-7 sm:py-4 sm:text-base"
               >
                 {t.ctaPrimary}
                 <ArrowRight
@@ -251,7 +251,7 @@ export default async function FooterSection() {
       </div>
 
       {/* Footer columns */}
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
@@ -267,12 +267,12 @@ export default async function FooterSection() {
             </a>
           </div>
 
-          {t.columns.map((col) => (
-            <div key={col.eyebrow}>
+          {t.columns.map((col, idx) => (
+            <div key={col.eyebrow} className={idx === 3 ? 'hidden sm:block' : undefined}>
               <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
                 {col.eyebrow}
               </div>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-3 space-y-2 sm:mt-5 sm:space-y-3">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
@@ -289,7 +289,7 @@ export default async function FooterSection() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-slate-200 pt-8 sm:mt-14 sm:flex-row sm:items-center">
           <p className="text-xs text-slate-500">{t.copyright(year)}</p>
           <div className="flex items-center gap-5 text-xs text-slate-500">
             <Link href={privacyHref} className="transition hover:text-slate-900">

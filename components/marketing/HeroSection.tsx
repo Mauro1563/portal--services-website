@@ -276,25 +276,25 @@ export default async function HeroSection() {
         </nav>
 
         {/* Hero content */}
-        <div className="pt-10 pb-16 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
+        <div className="pt-6 pb-10 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
               <Sparkles className="h-3 w-3" />
               {t.eyebrow}
             </span>
 
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 font-display text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               {t.headlineA}
               <span className="block bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 bg-clip-text text-transparent">
                 {t.headlineB}
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base text-slate-600 sm:text-lg">
+            <p className="mt-4 max-w-2xl text-base text-slate-600 sm:mt-6 sm:text-lg">
               {t.sub}
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-4 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(37,99,235,0.45)] transition hover:from-blue-500 hover:to-blue-600"
@@ -314,7 +314,7 @@ export default async function HeroSection() {
           </div>
 
           {/* Three portal cards — now fully clickable demos */}
-          <div className="mt-14 sm:mt-16">
+          <div className="mt-8 sm:mt-16">
             <div className="mb-5 flex items-end justify-between gap-3">
               <div>
                 <h2 className="font-display text-lg font-semibold text-slate-900 sm:text-xl">
@@ -327,7 +327,7 @@ export default async function HeroSection() {
                 {t.demoBadge}
               </span>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+            <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto -mx-4 px-4 pb-2 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0">
               <PortalCard
                 label="Owner"
                 title={t.portals.owner.title}
@@ -416,11 +416,11 @@ function PortalCard({
     <Link
       href={href}
       aria-label={cta}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-5 shadow-[0_18px_34px_-18px_rgba(15,23,42,0.45)] ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-18px_rgba(15,23,42,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60`}
+      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-4 shadow-[0_18px_34px_-18px_rgba(15,23,42,0.45)] ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-18px_rgba(15,23,42,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:min-w-0 sm:p-5`}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-white/10 blur-2xl"
+        className="pointer-events-none absolute -top-10 -right-10 hidden h-32 w-32 rounded-full bg-white/10 blur-2xl sm:block"
       />
       <div className="relative flex items-start justify-between">
         <span
@@ -428,18 +428,18 @@ function PortalCard({
         >
           {label}
         </span>
-        <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20 sm:h-8 sm:w-8">
           {icon}
         </span>
       </div>
 
-      <div className="relative mt-8">
-        <p className="font-display text-base font-semibold text-white">{title}</p>
-        <p className="mt-1 text-xs leading-relaxed text-white/75">{description}</p>
+      <div className="relative mt-5 sm:mt-8">
+        <p className="font-display text-sm font-semibold text-white sm:text-base">{title}</p>
+        <p className="mt-1 text-[11px] leading-relaxed text-white/75 sm:text-xs">{description}</p>
       </div>
 
       {/* KPI mini-stats — gives buyers a glance at the kind of data each panel handles */}
-      <div className="relative mt-4 grid grid-cols-2 gap-2">
+      <div className="relative mt-3 hidden grid-cols-2 gap-2 sm:mt-4 sm:grid">
         {kpis.map((k) => (
           <div
             key={k.label}
@@ -456,11 +456,14 @@ function PortalCard({
       </div>
 
       {/* Feature bullets — what's inside */}
-      <ul className="relative mt-4 space-y-2">
+      <ul className="relative mt-3 space-y-2 sm:mt-4">
         {features.map((f, i) => {
           const Icon = featureIcons[i] ?? Star;
           return (
-            <li key={f} className="flex items-center gap-2 text-[12px] text-white/85">
+            <li
+              key={f}
+              className={`${i >= 2 ? 'hidden sm:flex' : 'flex'} items-center gap-2 text-[11px] text-white/85 sm:text-[12px]`}
+            >
               <span
                 className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ${bullet}`}
               >
@@ -473,8 +476,8 @@ function PortalCard({
       </ul>
 
       {/* CTA — makes the whole card visibly clickable */}
-      <div className="relative mt-5 flex items-center justify-between rounded-xl bg-white/12 px-3 py-2 ring-1 ring-white/15 transition group-hover:bg-white/20">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-white">
+      <div className="relative mt-4 flex items-center justify-between rounded-xl bg-white/12 px-3 py-1.5 ring-1 ring-white/15 transition group-hover:bg-white/20 sm:mt-5 sm:py-2">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-white sm:text-[11px]">
           {cta}
         </span>
         <ArrowRight className="h-4 w-4 text-white transition group-hover:translate-x-0.5" />

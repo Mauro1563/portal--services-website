@@ -134,7 +134,7 @@ export default async function TestimonialsSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="relative bg-slate-50 py-20 sm:py-28">
+    <section className="relative bg-slate-50 py-12 sm:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
@@ -146,21 +146,21 @@ export default async function TestimonialsSection() {
           <p className="mt-4 text-base text-slate-600">{t.sub}</p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {t.testimonials.map((item) => (
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-16 md:grid-cols-3">
+          {t.testimonials.map((item, idx) => (
             <article
               key={item.name}
-              className="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-shadow hover:shadow-md sm:p-8"
+              className={`relative ${idx === 0 ? 'flex' : 'hidden sm:flex'} flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-shadow hover:shadow-md sm:p-8`}
             >
               <div
-                className={`mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} text-white shadow-sm ring-2 ring-white`}
+                className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} text-white shadow-sm ring-2 ring-white sm:mb-5`}
               >
                 <Quote className="h-4 w-4" aria-hidden="true" />
               </div>
-              <blockquote className="flex-1 text-[15px] leading-relaxed text-slate-700">
+              <blockquote className="flex-1 text-sm leading-relaxed text-slate-700 sm:text-[15px]">
                 &ldquo;{item.quote}&rdquo;
               </blockquote>
-              <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
+              <div className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4 sm:mt-6 sm:pt-5">
                 <div
                   className={`flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br ${item.gradient} text-sm font-bold text-white shadow-[0_4px_12px_rgba(37,99,235,0.25)]`}
                   aria-hidden="true"
@@ -178,13 +178,13 @@ export default async function TestimonialsSection() {
           ))}
         </div>
 
-        <div className="mt-16">
+        <div className="mt-10 sm:mt-16">
           <p className="text-center text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
             {t.worksWith}
           </p>
           <ul className="mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {COMPANIES.map((name) => (
-              <li key={name}>
+            {COMPANIES.map((name, idx) => (
+              <li key={name} className={idx >= 3 ? 'hidden sm:block' : undefined}>
                 <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ring-1 ring-blue-100/40 sm:text-sm">
                   {name}
                 </span>

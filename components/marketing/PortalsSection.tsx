@@ -211,21 +211,21 @@ export default async function PortalsSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="bg-slate-50 py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section className="bg-slate-50 py-12 sm:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
             {t.eyebrow}
           </p>
-          <h2 className="mt-4 font-display text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
             {t.title}
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-slate-600">
+          <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
             {t.subtitle}
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 md:grid-cols-3">
           {PORTAL_STYLES.map((style) => {
             const { Icon } = style;
             const portal = t.portals[style.key];
@@ -236,10 +236,10 @@ export default async function PortalsSection() {
               >
                 <div className={`h-2 w-full ${style.headerGradient}`} />
 
-                <div className="flex flex-1 flex-col p-7">
+                <div className="flex flex-1 flex-col p-5 sm:p-7">
                   <div className="flex items-center gap-3">
                     <span
-                      className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${style.iconTileGradient} ${style.iconRing} shadow-sm`}
+                      className={`inline-flex h-10 w-10 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${style.iconTileGradient} ${style.iconRing} shadow-sm`}
                     >
                       <Icon className="h-5 w-5 text-white" />
                     </span>
@@ -250,18 +250,18 @@ export default async function PortalsSection() {
                     </span>
                   </div>
 
-                  <h3 className="mt-6 font-display text-2xl font-bold leading-tight text-slate-900">
+                  <h3 className="mt-4 font-display text-xl font-bold leading-tight text-slate-900 sm:mt-6 sm:text-2xl">
                     {portal.headline}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:mt-3">
                     {portal.description}
                   </p>
 
-                  <ul className="mt-6 space-y-3">
-                    {portal.features.map((feature) => (
+                  <ul className="mt-4 space-y-3 sm:mt-6">
+                    {portal.features.map((feature, idx) => (
                       <li
                         key={feature}
-                        className="flex items-start gap-3 text-sm text-slate-700"
+                        className={`flex items-start gap-3 text-sm text-slate-700 ${idx === 2 ? "hidden sm:flex" : ""}`}
                       >
                         <span className="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-slate-900/5">
                           <Check className="h-3.5 w-3.5 text-slate-900" />
@@ -271,7 +271,7 @@ export default async function PortalsSection() {
                     ))}
                   </ul>
 
-                  <div className="mt-8 pt-4">
+                  <div className="mt-6 pt-3 sm:mt-8 sm:pt-4">
                     <Link
                       href={style.href}
                       className={`inline-flex items-center gap-1 text-sm font-semibold transition ${style.linkClass}`}

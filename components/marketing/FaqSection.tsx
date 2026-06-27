@@ -208,7 +208,7 @@ export default async function FaqSection() {
   }));
 
   return (
-    <section className="relative overflow-hidden bg-slate-50 py-20 sm:py-28">
+    <section className="relative overflow-hidden bg-slate-50 py-12 sm:py-28">
       {/* Decorative blue/sky wash */}
       <div
         aria-hidden
@@ -237,19 +237,19 @@ export default async function FaqSection() {
         </div>
 
         {/* FAQ list */}
-        <ul className="mt-12 space-y-3 sm:space-y-4">
+        <ul className="mt-8 space-y-3 sm:mt-12 sm:space-y-4">
           {faqs.map((faq) => {
             const Icon = faq.icon;
             return (
               <li key={faq.question}>
                 <details className="group rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition open:shadow-[0_4px_16px_rgba(15,23,42,0.06)]">
-                  <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-5 sm:px-6 sm:py-6 [&::-webkit-details-marker]:hidden">
+                  <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6 sm:py-6 [&::-webkit-details-marker]:hidden">
                     <span
-                      className={`inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${faq.accent} text-white shadow-[0_4px_12px_rgba(37,99,235,0.18)] ring-4 ${faq.ring}`}
+                      className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${faq.accent} text-white shadow-[0_4px_12px_rgba(37,99,235,0.18)] ring-2 sm:h-10 sm:w-10 sm:ring-4 ${faq.ring}`}
                     >
                       <Icon className="h-4 w-4" aria-hidden />
                     </span>
-                    <span className="flex-1 text-left text-base font-semibold text-slate-900 sm:text-lg">
+                    <span className="flex-1 text-left text-sm font-semibold text-slate-900 sm:text-lg">
                       {faq.question}
                     </span>
                     <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-blue-600 group-open:text-white">
@@ -260,7 +260,7 @@ export default async function FaqSection() {
                     </span>
                   </summary>
                   <div className="px-5 pb-6 sm:px-6 sm:pb-7">
-                    <div className="ml-14 border-l-2 border-slate-100 pl-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+                    <div className="ml-0 border-l-0 border-slate-100 pl-0 text-sm leading-relaxed text-slate-600 sm:ml-14 sm:border-l-2 sm:pl-4 sm:text-base">
                       {faq.answer}
                     </div>
                   </div>
@@ -271,11 +271,11 @@ export default async function FaqSection() {
         </ul>
 
         {/* Footer CTA */}
-        <div className="mt-12 rounded-3xl bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50 px-6 py-8 text-center ring-1 ring-blue-100 sm:px-10 sm:py-10">
+        <div className="mt-12 rounded-2xl bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50 px-5 py-6 text-center ring-1 ring-blue-100 sm:rounded-3xl sm:px-10 sm:py-10">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
             {t.footerEyebrow}
           </p>
-          <h3 className="font-display mt-2 text-xl font-bold text-slate-900 sm:text-2xl">
+          <h3 className="font-display mt-2 text-lg font-bold text-slate-900 sm:text-2xl">
             {t.footerTitle}
           </h3>
           <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
