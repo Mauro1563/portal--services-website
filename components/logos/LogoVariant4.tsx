@@ -1,5 +1,12 @@
 import type { CSSProperties } from 'react';
 
+/**
+ * LogoVariant4 — Orbit / sparkle mark.
+ * A gradient-filled dot sits inside a hairline orbital ring with a tiny bead
+ * riding the orbit, evoking an "all-in-one" hub. Wordmark "Portal Home" in
+ * Poppins semibold; "Home" carries the cyan→blue accent gradient.
+ */
+
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
 interface LogoVariant4Props {
@@ -15,11 +22,6 @@ const sizePx: Record<Size, number> = {
   xl: 80,
 };
 
-/**
- * Variant 4 — Orbit / sparkle mark. A small filled gradient dot sits inside a
- * hairline orbital ring, slightly rotated. The "Home" half of the wordmark
- * picks up the cyan→blue gradient; "Portal" stays in ink.
- */
 export default function LogoVariant4({
   size = 'md',
   mono = false,
@@ -29,19 +31,19 @@ export default function LogoVariant4({
   const markSize = h;
 
   const wordSize = Math.round(h * 0.42);
-  const eyebrowSize = Math.max(8, Math.round(h * 0.13));
+  const eyebrowSize = Math.max(9, Math.round(h * 0.13));
   const gap = Math.round(h * 0.32);
+  const showEyebrow = size !== 'sm';
 
-  const isOnDark = /\b(bg-(?:slate|gray|zinc|neutral|stone|black|ink|navy)-?\d*|dark)\b/.test(
-    className,
-  );
+  const isOnDark =
+    /\btext-white\b/.test(className) ||
+    /\b(bg-(?:slate|gray|zinc|neutral|stone|black|ink|navy)-?\d*|dark)\b/.test(className);
   const monoColor = mono ? (isOnDark ? '#ffffff' : '#0f172a') : null;
 
   const gradientId = 'lv4-grad';
   const dotFill = mono ? (monoColor as string) : `url(#${gradientId})`;
   const ringStroke = mono ? (monoColor as string) : '#cbd5e1'; // slate-300
   const wordColor = mono ? (monoColor as string) : '#0f172a';
-  const accentColor = mono ? (monoColor as string) : `url(#${gradientId})`;
   const eyebrowColor = mono ? (monoColor as string) : '#475569';
 
   const wrapperStyle: CSSProperties = {
@@ -49,21 +51,20 @@ export default function LogoVariant4({
     gap,
   };
 
-  // viewBox is 80×80. Dot ~12px, ring ~32px in real px at md=40 -> scale by 2.
-  // Use 80-unit coords: dot r=12, ring r=32, stroke 2 (renders ~1px at md).
   return (
     <span
+      role="img"
+      aria-label="Portal Home"
       className={`inline-flex items-center ${className}`}
       style={wrapperStyle}
-      aria-label="Portal Home — Cleaning & Facilities"
     >
       <svg
         width={markSize}
         height={markSize}
         viewBox="0 0 80 80"
         xmlns="http://www.w3.org/2000/svg"
-        role="img"
         aria-hidden="true"
+        focusable="false"
       >
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
@@ -74,17 +75,16 @@ export default function LogoVariant4({
 
         {/* Hairline orbital ring, slightly rotated for an off-axis feel. */}
         <g transform="rotate(-22 40 40)">
-          <ellipse
+          <circle
             cx="40"
             cy="40"
-            rx="32"
-            ry="32"
+            r="32"
             fill="none"
             stroke={ringStroke}
             strokeWidth="2"
           />
           {/* A tiny sparkle bead riding the orbit. */}
-          <circle cx="72" cy="40" r="2.5" fill={dotFill} />
+          <circle cx="72" cy="40" r="3" fill={dotFill} />
         </g>
 
         {/* Filled gradient dot at the centre. */}
@@ -92,20 +92,21 @@ export default function LogoVariant4({
       </svg>
 
       <span className="flex flex-col justify-center leading-none">
+        {showEyebrow && (
+          <span
+            className="uppercase tracking-[0.18em]"
+            style={{
+              fontSize: eyebrowSize,
+              color: eyebrowColor,
+              marginBottom: Math.round(h * 0.08),
+              fontWeight: 500,
+            }}
+          >
+            Cleaning &amp; Facilities
+          </span>
+        )}
         <span
-          className="uppercase"
-          style={{
-            fontSize: eyebrowSize,
-            color: eyebrowColor,
-            letterSpacing: '0.18em',
-            marginBottom: Math.round(h * 0.08),
-            fontWeight: 500,
-          }}
-        >
-          Cleaning &amp; Facilities
-        </span>
-        <span
-          className="font-semibold"
+          className="font-display font-semibold"
           style={{
             fontSize: wordSize,
             fontFamily:
@@ -127,12 +128,6 @@ export default function LogoVariant4({
           >
             Home
           </span>
-        </span>
-        {/* Hidden accent reference to satisfy unused-var checks if linting strict. */}
-        <span style={{ display: 'none' }} aria-hidden="true">
-          <svg width="0" height="0">
-            <rect fill={accentColor} />
-          </svg>
         </span>
       </span>
     </span>

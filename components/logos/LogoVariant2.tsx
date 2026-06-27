@@ -1,3 +1,8 @@
+/**
+ * LogoVariant2 — Minimalist line-art house+door pictogram with keyhole dot.
+ * Design intent: a single continuous stroke traces the roof, walls and door
+ * cut-out, paired with a clean Poppins wordmark for an architectural feel.
+ */
 import * as React from 'react';
 
 type Size = 'sm' | 'md' | 'lg' | 'xl';
@@ -38,10 +43,12 @@ export default function LogoVariant2({
   const wordPx = WORDMARK_PX[size];
   const eyebrowPx = EYEBROW_PX[size];
   const gradientId = React.useId();
+  const showEyebrow = size !== 'sm';
 
-  const isDarkBg = /\b(bg-(slate|gray|zinc|neutral|stone|black)-(800|900|950)|bg-black|text-white|dark)\b/.test(
-    className,
-  );
+  const isDarkBg =
+    /\b(bg-(slate|gray|zinc|neutral|stone|black)-(800|900|950)|bg-black|text-white|dark)\b/.test(
+      className,
+    );
 
   const strokeColor = mono
     ? isDarkBg
@@ -49,13 +56,7 @@ export default function LogoVariant2({
       : '#0f172a'
     : `url(#${gradientId})`;
 
-  const wordmarkColor = mono
-    ? isDarkBg
-      ? 'text-white'
-      : 'text-slate-900'
-    : isDarkBg
-      ? 'text-white'
-      : 'text-slate-900';
+  const wordmarkColor = isDarkBg ? 'text-white' : 'text-slate-900';
 
   const eyebrowColor = mono
     ? isDarkBg
@@ -67,8 +68,9 @@ export default function LogoVariant2({
 
   return (
     <span
-      className={`inline-flex items-center gap-3 ${className}`}
+      role="img"
       aria-label="Portal Home"
+      className={`inline-flex items-center gap-3 ${className}`}
     >
       <svg
         width={px}
@@ -76,8 +78,8 @@ export default function LogoVariant2({
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        role="img"
         aria-hidden="true"
+        shapeRendering="geometricPrecision"
       >
         <defs>
           <linearGradient
@@ -92,9 +94,9 @@ export default function LogoVariant2({
             <stop offset="100%" stopColor="#2563eb" />
           </linearGradient>
         </defs>
-        {/* Single continuous-stroke house silhouette with door */}
+        {/* Continuous stroke: roof → right wall → door cut-out → left wall */}
         <path
-          d="M6 18 L20 6 L34 18 L34 34 L24 34 L24 22 L16 22 L16 34 L6 34 Z"
+          d="M5 19 L20 6 L35 19 L35 34 L24 34 L24 22 L16 22 L16 34 L5 34 Z"
           stroke={strokeColor}
           strokeWidth={2}
           strokeLinecap="round"
@@ -102,19 +104,25 @@ export default function LogoVariant2({
           fill="none"
         />
         {/* Keyhole dot on door */}
-        <circle cx="21.5" cy="28" r="1.1" fill={strokeColor} />
+        <circle cx="22" cy="28" r="1" fill={strokeColor} />
       </svg>
 
       <span className="flex flex-col leading-none">
+        {showEyebrow && (
+          <span
+            className={`font-sans uppercase tracking-[0.18em] font-medium ${eyebrowColor}`}
+            style={{ fontSize: eyebrowPx, lineHeight: 1 }}
+          >
+            Cleaning &amp; Facilities
+          </span>
+        )}
         <span
-          className={`uppercase tracking-[0.18em] font-medium ${eyebrowColor}`}
-          style={{ fontSize: eyebrowPx, lineHeight: 1 }}
-        >
-          Cleaning &amp; Facilities
-        </span>
-        <span
-          className={`font-semibold tracking-tight ${wordmarkColor}`}
-          style={{ fontSize: wordPx, lineHeight: 1.1, marginTop: eyebrowPx * 0.45 }}
+          className={`font-display font-semibold tracking-tight ${wordmarkColor}`}
+          style={{
+            fontSize: wordPx,
+            lineHeight: 1.1,
+            marginTop: showEyebrow ? eyebrowPx * 0.45 : 0,
+          }}
         >
           Portal Home
         </span>
