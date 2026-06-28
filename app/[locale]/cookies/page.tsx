@@ -27,7 +27,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         title: '2. What we use',
-        body: 'Portal Home uses a single first-party session cookie to keep you authenticated, plus a tiny preference cookie that remembers your chosen language. That is it. No advertising cookies, no third-party analytics that profile you across sites.',
+        body: 'Zapli uses a single first-party session cookie to keep you authenticated, plus a tiny preference cookie that remembers your chosen language. That is it. No advertising cookies, no third-party analytics that profile you across sites.',
       },
       {
         title: '3. Strictly necessary',
@@ -61,7 +61,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         title: '2. Qué usamos',
-        body: 'Portal Home usa una única cookie de sesión propia para mantenerte autenticado, y una pequeña cookie de preferencias que recuerda tu idioma. Nada más. Ni cookies publicitarias ni analíticas de terceros que te perfilan entre sitios.',
+        body: 'Zapli usa una única cookie de sesión propia para mantenerte autenticado, y una pequeña cookie de preferencias que recuerda tu idioma. Nada más. Ni cookies publicitarias ni analíticas de terceros que te perfilan entre sitios.',
       },
       {
         title: '3. Estrictamente necesarias',
@@ -95,7 +95,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         title: '2. O que usamos',
-        body: 'O Portal Home usa um único cookie de sessão próprio para te manter autenticado, e um pequeno cookie de preferência que guarda o teu idioma. Mais nada. Sem cookies de publicidade nem analíticos de terceiros que te perfilam entre sites.',
+        body: 'O Zapli usa um único cookie de sessão próprio para te manter autenticado, e um pequeno cookie de preferência que guarda o teu idioma. Mais nada. Sem cookies de publicidade nem analíticos de terceiros que te perfilam entre sites.',
       },
       {
         title: '3. Estritamente necessários',
@@ -128,7 +128,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const c = COPY[(locale as Locale) in COPY ? (locale as Locale) : 'en'];
   return {
-    title: `${c.title} — Portal Home`,
+    title: `${c.title} — Zapli`,
     description: c.sections[1].body,
   };
 }

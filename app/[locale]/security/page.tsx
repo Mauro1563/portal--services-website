@@ -109,7 +109,7 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const c = COPY[(locale as Locale) in COPY ? (locale as Locale) : 'en'];
-  return { title: `${c.eyebrow} — Portal Home`, description: c.lead };
+  return { title: `${c.eyebrow} — Zapli`, description: c.lead };
 }
 
 export default async function SecurityPage({

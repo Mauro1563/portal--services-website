@@ -23,7 +23,7 @@ const COPY: Record<Locale, Copy> = {
   en: {
     eyebrow: 'Careers',
     title: "We're a small team",
-    lead: 'Portal Home is built by a handful of people who care a lot about the craft. We are not hiring at the moment.',
+    lead: 'Zapli is built by a handful of people who care a lot about the craft. We are not hiring at the moment.',
     status: 'Current openings',
     statusBody:
       'No openings right now. If that changes, this page will be the first to know.',
@@ -42,7 +42,7 @@ const COPY: Record<Locale, Copy> = {
   es: {
     eyebrow: 'Carreras',
     title: 'Somos un equipo pequeño',
-    lead: 'Portal Home lo construye un puñado de personas que cuidan mucho el oficio. Ahora mismo no estamos contratando.',
+    lead: 'Zapli lo construye un puñado de personas que cuidan mucho el oficio. Ahora mismo no estamos contratando.',
     status: 'Ofertas abiertas',
     statusBody:
       'No hay vacantes ahora mismo. Si eso cambia, esta página será la primera en enterarse.',
@@ -61,7 +61,7 @@ const COPY: Record<Locale, Copy> = {
   pt: {
     eyebrow: 'Carreiras',
     title: 'Somos uma equipa pequena',
-    lead: 'O Portal Home é construído por um punhado de pessoas que se preocupam muito com o ofício. De momento não estamos a contratar.',
+    lead: 'O Zapli é construído por um punhado de pessoas que se preocupam muito com o ofício. De momento não estamos a contratar.',
     status: 'Vagas abertas',
     statusBody:
       'Não há vagas neste momento. Se isso mudar, esta página será a primeira a saber.',
@@ -86,7 +86,7 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const c = COPY[(locale as Locale) in COPY ? (locale as Locale) : 'en'];
-  return { title: `${c.eyebrow} — Portal Home`, description: c.lead };
+  return { title: `${c.eyebrow} — Zapli`, description: c.lead };
 }
 
 export default async function CareersPage({

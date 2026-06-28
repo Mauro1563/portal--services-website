@@ -21,46 +21,46 @@ const COPY: Record<Locale, Copy> = {
   en: {
     eyebrow: 'About',
     title: 'Built for the people who keep buildings working',
-    lead: 'Portal Home is the operations platform we wished existed when we managed cleaning rounds ourselves.',
+    lead: 'Zapli is the operations platform we wished existed when we managed cleaning rounds ourselves.',
     storyTitle: 'Our story',
     story:
-      'We started Portal Home after watching small cleaning teams juggle WhatsApp groups, paper checklists and spreadsheets. The work is hard enough without the tooling getting in the way — so we set out to build something that feels modern, calm and genuinely useful on a phone in the field.',
+      'We started Zapli after watching small cleaning teams juggle WhatsApp groups, paper checklists and spreadsheets. The work is hard enough without the tooling getting in the way — so we set out to build something that feels modern, calm and genuinely useful on a phone in the field.',
     missionTitle: 'Mission',
     mission:
       'Give independent cleaning, facilities and property-management teams the same operational quality the biggest brands enjoy — without a six-figure software budget.',
     forWhomTitle: 'Who it is for',
     forWhom:
-      'Owner-operators with one site, growing teams with twenty cleaners, and property managers coordinating dozens of homes. If you schedule cleans, send invoices and want proof the job was done well, Portal Home is for you.',
+      'Owner-operators with one site, growing teams with twenty cleaners, and property managers coordinating dozens of homes. If you schedule cleans, send invoices and want proof the job was done well, Zapli is for you.',
     cta: 'Sign up',
   },
   es: {
     eyebrow: 'Sobre nosotros',
     title: 'Hecho para quienes mantienen los edificios en marcha',
-    lead: 'Portal Home es la plataforma operativa que nos habría gustado tener cuando gestionábamos rondas de limpieza nosotros mismos.',
+    lead: 'Zapli es la plataforma operativa que nos habría gustado tener cuando gestionábamos rondas de limpieza nosotros mismos.',
     storyTitle: 'Nuestra historia',
     story:
-      'Empezamos Portal Home tras ver a pequeños equipos de limpieza haciendo malabares con grupos de WhatsApp, listas en papel y hojas de cálculo. El trabajo ya es duro como para que las herramientas estorben — así que decidimos crear algo moderno, tranquilo y realmente útil en el móvil sobre el terreno.',
+      'Empezamos Zapli tras ver a pequeños equipos de limpieza haciendo malabares con grupos de WhatsApp, listas en papel y hojas de cálculo. El trabajo ya es duro como para que las herramientas estorben — así que decidimos crear algo moderno, tranquilo y realmente útil en el móvil sobre el terreno.',
     missionTitle: 'Misión',
     mission:
       'Dar a equipos independientes de limpieza, facility y property management la misma calidad operativa que las grandes marcas — sin un presupuesto de software de seis cifras.',
     forWhomTitle: 'Para quién es',
     forWhom:
-      'Autónomos con un solo local, equipos en crecimiento con veinte limpiadoras y property managers que coordinan decenas de viviendas. Si planificas limpiezas, emites facturas y quieres pruebas de que el trabajo se hizo bien, Portal Home es para ti.',
+      'Autónomos con un solo local, equipos en crecimiento con veinte limpiadoras y property managers que coordinan decenas de viviendas. Si planificas limpiezas, emites facturas y quieres pruebas de que el trabajo se hizo bien, Zapli es para ti.',
     cta: 'Regístrate',
   },
   pt: {
     eyebrow: 'Sobre nós',
     title: 'Feito para quem mantém os edifícios a funcionar',
-    lead: 'Portal Home é a plataforma operacional que gostávamos de ter quando geríamos rondas de limpeza nós próprios.',
+    lead: 'Zapli é a plataforma operacional que gostávamos de ter quando geríamos rondas de limpeza nós próprios.',
     storyTitle: 'A nossa história',
     story:
-      'Começámos o Portal Home depois de vermos pequenas equipas de limpeza a fazer malabarismos com grupos de WhatsApp, listas em papel e folhas de cálculo. O trabalho já é difícil sem as ferramentas atrapalharem — por isso decidimos criar algo moderno, calmo e genuinamente útil no telemóvel, em campo.',
+      'Começámos o Zapli depois de vermos pequenas equipas de limpeza a fazer malabarismos com grupos de WhatsApp, listas em papel e folhas de cálculo. O trabalho já é difícil sem as ferramentas atrapalharem — por isso decidimos criar algo moderno, calmo e genuinamente útil no telemóvel, em campo.',
     missionTitle: 'Missão',
     mission:
       'Dar a equipas independentes de limpeza, facility e property management a mesma qualidade operacional que as grandes marcas — sem um orçamento de software de seis dígitos.',
     forWhomTitle: 'Para quem é',
     forWhom:
-      'Operadores com um único local, equipas em crescimento com vinte limpadoras e property managers que coordenam dezenas de casas. Se agendas limpezas, emites faturas e queres prova de que o trabalho foi bem feito, o Portal Home é para ti.',
+      'Operadores com um único local, equipas em crescimento com vinte limpadoras e property managers que coordenam dezenas de casas. Se agendas limpezas, emites faturas e queres prova de que o trabalho foi bem feito, o Zapli é para ti.',
     cta: 'Registar',
   },
 };
@@ -72,7 +72,7 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const c = COPY[(locale as Locale) in COPY ? (locale as Locale) : 'en'];
-  return { title: `${c.eyebrow} — Portal Home`, description: c.lead };
+  return { title: `${c.eyebrow} — Zapli`, description: c.lead };
 }
 
 export default async function AboutPage({

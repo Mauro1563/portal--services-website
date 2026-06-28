@@ -21,8 +21,8 @@ const COPY: Record<Locale, Copy> = {
   en: {
     eyebrow: 'Customers',
     title: 'Trusted by cleaning teams across Europe',
-    lead: 'From single-operator businesses to multi-site facilities companies, Portal Home runs the day-to-day for teams who care about quality.',
-    segmentsTitle: 'Who uses Portal Home',
+    lead: 'From single-operator businesses to multi-site facilities companies, Zapli runs the day-to-day for teams who care about quality.',
+    segmentsTitle: 'Who uses Zapli',
     segments: [
       'Independent cleaning companies coordinating recurring contracts.',
       'Short-stay and holiday-rental managers turning over flats between guests.',
@@ -49,8 +49,8 @@ const COPY: Record<Locale, Copy> = {
   es: {
     eyebrow: 'Clientes',
     title: 'La confianza de equipos de limpieza por toda Europa',
-    lead: 'Desde autónomos hasta empresas con varios centros, Portal Home gestiona el día a día de equipos que cuidan la calidad.',
-    segmentsTitle: 'Quién usa Portal Home',
+    lead: 'Desde autónomos hasta empresas con varios centros, Zapli gestiona el día a día de equipos que cuidan la calidad.',
+    segmentsTitle: 'Quién usa Zapli',
     segments: [
       'Empresas de limpieza independientes que coordinan contratos recurrentes.',
       'Gestores de alquiler vacacional que rotan pisos entre huéspedes.',
@@ -77,8 +77,8 @@ const COPY: Record<Locale, Copy> = {
   pt: {
     eyebrow: 'Clientes',
     title: 'A confiança de equipas de limpeza por toda a Europa',
-    lead: 'De negócios individuais a empresas com vários locais, o Portal Home gere o dia-a-dia de equipas que se preocupam com a qualidade.',
-    segmentsTitle: 'Quem usa o Portal Home',
+    lead: 'De negócios individuais a empresas com vários locais, o Zapli gere o dia-a-dia de equipas que se preocupam com a qualidade.',
+    segmentsTitle: 'Quem usa o Zapli',
     segments: [
       'Empresas de limpeza independentes que coordenam contratos recorrentes.',
       'Gestores de alojamento local que rodam apartamentos entre hóspedes.',
@@ -111,7 +111,7 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const c = COPY[(locale as Locale) in COPY ? (locale as Locale) : 'en'];
-  return { title: `${c.eyebrow} — Portal Home`, description: c.lead };
+  return { title: `${c.eyebrow} — Zapli`, description: c.lead };
 }
 
 export default async function CustomersPage({

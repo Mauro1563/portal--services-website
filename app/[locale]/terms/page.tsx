@@ -4,9 +4,9 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 
 export const metadata = {
-  title: 'Terms of Service — Portal Home',
+  title: 'Terms of Service — Zapli',
   description:
-    'The terms governing your use of Portal Home and the operations platform.',
+    'The terms governing your use of Zapli and the operations platform.',
 };
 
 export default async function TermsPage({
@@ -41,7 +41,7 @@ export default async function TermsPage({
         <div className="mx-auto max-w-3xl space-y-8 px-6 text-slate-300">
           <Section title="1. Agreement">
             <p>
-              By creating an account or using Portal Home ("the
+              By creating an account or using Zapli ("the
               Service"), you agree to these Terms. If you don't agree, don't use
               the Service.
             </p>
@@ -49,7 +49,7 @@ export default async function TermsPage({
 
           <Section title="2. The service">
             <p>
-              Portal Home is an operations platform for cleaning,
+              Zapli is an operations platform for cleaning,
               facilities and property-management teams. It includes a web
               dashboard for owners, a mobile-first app for operatives, GPS
               check-in, photo evidence, calendar synchronisation and billing.

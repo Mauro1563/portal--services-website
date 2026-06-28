@@ -20,7 +20,7 @@ const COPY: Record<Locale, Copy> = {
   en: {
     eyebrow: 'Status',
     title: 'All systems operational',
-    lead: 'A snapshot of how Portal Home is running right now.',
+    lead: 'A snapshot of how Zapli is running right now.',
     allOk: 'Operational',
     components: [
       { name: 'Web app', desc: 'portalservices.digital and hq subdomain' },
@@ -37,7 +37,7 @@ const COPY: Record<Locale, Copy> = {
   es: {
     eyebrow: 'Estado',
     title: 'Todos los sistemas funcionan',
-    lead: 'Una foto de cómo está funcionando Portal Home ahora mismo.',
+    lead: 'Una foto de cómo está funcionando Zapli ahora mismo.',
     allOk: 'Operativo',
     components: [
       { name: 'Aplicación web', desc: 'portalservices.digital y subdominio hq' },
@@ -54,7 +54,7 @@ const COPY: Record<Locale, Copy> = {
   pt: {
     eyebrow: 'Estado',
     title: 'Todos os sistemas operacionais',
-    lead: 'Uma fotografia de como o Portal Home está a correr agora.',
+    lead: 'Uma fotografia de como o Zapli está a correr agora.',
     allOk: 'Operacional',
     components: [
       { name: 'Aplicação web', desc: 'portalservices.digital e subdomínio hq' },
@@ -77,7 +77,7 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const c = COPY[(locale as Locale) in COPY ? (locale as Locale) : 'en'];
-  return { title: `${c.eyebrow} — Portal Home`, description: c.lead };
+  return { title: `${c.eyebrow} — Zapli`, description: c.lead };
 }
 
 export default async function StatusPage({
