@@ -50,6 +50,7 @@ import {
   TURNAROUND_TASKS,
   formatPence,
 } from '@/lib/preview-airbnb';
+import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
 
 // --- Local UI helpers (kept inline so the page is self-contained) ----------
 
@@ -181,6 +182,11 @@ export default function OwnerPreviewAirbnbHome() {
   return (
     <>
       <AirbnbDemoTopBar />
+      <PreviewFlavorToggle
+        active="airbnb"
+        hogarHref="/owner/preview"
+        airbnbHref="/owner/preview-airbnb"
+      />
       <main className="relative min-h-screen overflow-hidden bg-slate-50 pb-20">
         {/* Orange ambient blob — the Airbnb-adjacent accent that replaces the
             blue/cyan glow used on the residential preview. */}

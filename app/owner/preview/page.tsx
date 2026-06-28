@@ -15,6 +15,7 @@ import { DemoTodayHero } from './_components/DemoTodayHero';
 import { DemoCommandPalette } from './_components/DemoCommandPalette';
 import { DemoPullSummary } from './_components/DemoPullSummary';
 import { OwnerConciergeSheet } from './_components/OwnerConciergeSheet';
+import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
 
 export const metadata = {
   title: 'Demo · Owner',
@@ -65,6 +66,11 @@ const checkins: DemoFieldCheckin[] = [
 export default function OwnerPreviewHome() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-50 pb-20">
+      <PreviewFlavorToggle
+        active="hogar"
+        hogarHref="/owner/preview"
+        airbnbHref="/owner/preview-airbnb"
+      />
       {/* Ambient depth: cyan/blue blob top-right — sits behind content. */}
       <div
         aria-hidden

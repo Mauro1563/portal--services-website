@@ -40,6 +40,7 @@ import {
 import { PreviewEarningsStrip } from '@/components/preview/PreviewEarningsStrip';
 import { PullToCheckInHero } from '@/components/preview/PullToCheckInHero';
 import { KintsugiThread } from '@/components/preview/KintsugiThread';
+import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
 import { CleanerConciergeSheet } from './_components/CleanerConciergeSheet';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
@@ -335,6 +336,11 @@ function OperativePreviewHomeBody({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
+      <PreviewFlavorToggle
+        active="hogar"
+        hogarHref="/operative/preview"
+        airbnbHref="/operative/preview-airbnb"
+      />
       {/* Ambient depth: emerald/teal blob top-left — sits behind content. */}
       <div
         aria-hidden
