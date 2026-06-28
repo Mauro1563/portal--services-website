@@ -200,13 +200,13 @@ function StatCardInner({
 
 function StatCard(props: StatProps) {
   const wrapperCls =
-    'flex flex-col gap-1.5 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition sm:gap-2 sm:p-4';
+    'flex flex-col gap-1.5 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 sm:gap-2 sm:p-4';
   if (props.href) {
     return (
       <Link
         href={props.href}
         title={props.title}
-        className={`${wrapperCls} hover:border-blue-300 hover:shadow-md`}
+        className={`${wrapperCls} hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md`}
       >
         <StatCardInner {...props} />
       </Link>

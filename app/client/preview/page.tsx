@@ -93,7 +93,7 @@ function StatChip({
       type="button"
       onClick={onClick}
       title={title}
-      className={`flex flex-1 items-center gap-2 rounded-2xl px-3 py-2.5 text-left ring-1 ring-inset transition ${surface}`}
+      className={`flex flex-1 items-center gap-2 rounded-2xl px-3 py-2.5 text-left ring-1 ring-inset shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 ${surface}`}
     >
       {isAccent ? (
         <Icon className="h-4 w-4 shrink-0" />
@@ -253,9 +253,14 @@ function ClientPreviewInner({
 
   return (
     <ClientShell ctx={MOCK_CTX} token={PREVIEW_TOKEN} activeTab="home" hideHeader>
+      {/* Ambient depth: sky/indigo blob top-center — sits behind content. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed left-1/2 top-0 -z-0 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-br from-sky-300 to-indigo-400 opacity-30 blur-3xl"
+      />
       {/* Header: greeting + search/filter — wired to local state, not a
           GET-navigation, so the input actually filters the lists below. */}
-      <section className="px-1 pt-1">
+      <section className="relative px-1 pt-1">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="inline-flex items-center gap-1.5 font-display text-xl font-bold tracking-tight text-slate-900">
@@ -341,7 +346,12 @@ function ClientPreviewInner({
         <PromoBanner token={PREVIEW_TOKEN} />
       </div>
 
-      <div className="mt-3 flex gap-2">
+      <div className="relative mt-3">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -top-4 h-24 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.05),_transparent_60%)]"
+        />
+        <div className="relative flex gap-2">
         <StatChip
           icon={CalendarCheck}
           tone="blue"
@@ -371,6 +381,7 @@ function ClientPreviewInner({
           title="Ver las valoraciones recientes que has dado"
           onClick={() => setRatingsOpen(true)}
         />
+        </div>
       </div>
 
       {/* Categorías — filtered by local search + filter sheet */}
@@ -455,7 +466,8 @@ function ClientPreviewInner({
             </button>
           </div>
         ) : (
-          <div className="relative mt-3 rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
+          <div className="mt-3 rounded-3xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 p-[1px] shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)]">
+          <div className="relative rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
             {/* Wax-seal celebration overlay — only when status flips to
                 'done'. Auto-dismisses; the underlying status sticks. */}
             <CompletionSeal
@@ -574,6 +586,7 @@ function ClientPreviewInner({
                 </>
               );
             })()}
+          </div>
           </div>
         )}
       </section>

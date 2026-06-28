@@ -40,7 +40,7 @@ import {
 import { PreviewEarningsStrip } from '@/components/preview/PreviewEarningsStrip';
 import { PullToCheckInHero } from '@/components/preview/PullToCheckInHero';
 import { KintsugiThread } from '@/components/preview/KintsugiThread';
-import { AsistenteSheet } from '@/components/preview/AsistenteSheet';
+import { CleanerConciergeSheet } from './_components/CleanerConciergeSheet';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
 
@@ -189,7 +189,6 @@ function OperativePreviewHomeBody({
   const [toast, setToast] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState(false);
   const [agendaHelpOpen, setAgendaHelpOpen] = useState(false);
-  const [asistenteOpen, setAsistenteOpen] = useState(false);
   /** Refs to each task <li> so the coin can spawn from the row that
    *  just got swiped — captured at the moment of completion. */
   const taskRowRefs = useRef<Record<string, HTMLLIElement | null>>({});
@@ -335,8 +334,13 @@ function OperativePreviewHomeBody({
     lightboxTask && lightbox ? lightboxTask.photos[lightbox.idx] : null;
 
   return (
-    <main className="min-h-screen bg-canvas pb-24">
-      <div className="mx-auto max-w-md px-4 py-5">
+    <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
+      {/* Ambient depth: emerald/teal blob top-left — sits behind content. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-32 -left-32 z-0 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-emerald-300 to-teal-400 opacity-30 blur-3xl"
+      />
+      <div className="relative z-10 mx-auto max-w-md px-4 py-5">
         <AgendaHeader
           cleanerName="Carmen López"
           now={now}
@@ -349,11 +353,18 @@ function OperativePreviewHomeBody({
           }
         />
 
-        <PreviewEarningsStrip
-          todayPence={todayPence}
-          weekPence={weekPence}
-          href="/operative/preview/week"
-        />
+        {/* Soft radial highlight above the earnings stats */}
+        <div className="relative">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-4 h-24 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.05),_transparent_60%)]"
+          />
+          <PreviewEarningsStrip
+            todayPence={todayPence}
+            weekPence={weekPence}
+            href="/operative/preview/week"
+          />
+        </div>
 
         {/* Hero card — siguiente parada.
             Only renders when there is genuinely a "next" job to act on. Once
@@ -490,7 +501,14 @@ function OperativePreviewHomeBody({
                       onComplete={() => handleComplete(task.id)}
                       onCallClient={() => handleCallClient(task.id)}
                     >
-                    <div className="rounded-2xl border border-surface-2 bg-paper p-3 shadow-card transition">
+                    <div
+                      className={
+                        task.status === 'in_progress'
+                          ? 'rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 p-[1px]'
+                          : ''
+                      }
+                    >
+                    <div className="rounded-2xl border border-surface-2 bg-paper p-3 shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)] transition duration-200 hover:-translate-y-0.5">
                       <button
                         type="button"
                         onClick={() => toggleExpand(task.id)}
@@ -686,6 +704,7 @@ function OperativePreviewHomeBody({
                         </div>
                       ) : null}
                     </div>
+                    </div>
                     </SwipeableTaskCard>
                     </div>
                   </div>
@@ -774,35 +793,9 @@ function OperativePreviewHomeBody({
         </div>
       ) : null}
 
-      <AsistenteSheet
-        open={asistenteOpen}
-        onClose={() => setAsistenteOpen(false)}
-        tasks={tasks}
-        onAction={(s) => {
-          // Map the suggestion back to a concrete demo behaviour so the
-          // sheet feels causally connected to the agenda state.
-          if (s.kind === 'report-hours') {
-            const inProg = tasks.find((t) => t.status === 'in_progress');
-            if (inProg) {
-              setExpandedId(inProg.id);
-              handleSetHours(inProg.id, 1);
-              showToast('Horas pre-rellenadas');
-            }
-          } else if (s.kind === 'call-client') {
-            const next = tasks.find((t) => t.status === 'scheduled');
-            if (next) handleCallClient(next.id);
-          } else if (s.kind === 'upload-photo') {
-            const done = tasks.find((t) => t.status === 'completed' && t.photos.length === 0);
-            if (done) handleUploadPhoto(done.id);
-          }
-        }}
-      />
+      <CleanerConciergeSheet />
 
-      <PreviewBottomTabBar
-        active="agenda"
-        onAsistentePress={() => setAsistenteOpen(true)}
-        onAsistentePullUp={() => setAsistenteOpen(true)}
-      />
+      <PreviewBottomTabBar active="agenda" />
     </main>
   );
 }
