@@ -47,22 +47,22 @@ const BASE_CLASSES =
   'inline-flex items-center justify-center rounded-full font-semibold tracking-tight ' +
   'transition-all duration-200 ease-out ' +
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ' +
-  'focus-visible:ring-offset-[#0B1729] active:translate-y-px';
+  'focus-visible:ring-offset-[#0A0D18] active:translate-y-px';
 
 // Primary: dark ink on neon, with a 24px cyan glow that lifts on hover to
 // 32px @ 60% — matches the hero CTA in the brand reference.
 const PRIMARY_CLASSES =
-  'bg-[#00F5D4] text-[#0B1729] ' +
-  'shadow-[0_0_24px_rgba(0,245,212,0.45)] ' +
-  'hover:bg-[#4FFFE5] hover:shadow-[0_0_32px_rgba(0,245,212,0.6)] ' +
-  'focus-visible:ring-[#00F5D4]/40';
+  'bg-[#00D8C7] text-[#0A0D18] ' +
+  'shadow-[0_0_24px_rgba(0,216,199,0.45)] ' +
+  'hover:bg-[#2BF0DE] hover:shadow-[0_0_32px_rgba(0,216,199,0.6)] ' +
+  'focus-visible:ring-[#00D8C7]/40';
 
 // Ghost: transparent with hairline border; warms to a cyan-tinted border on
 // hover so it still feels Zapli-branded without competing with the primary.
 const GHOST_CLASSES =
   'bg-transparent border border-white/15 text-white ' +
-  'hover:bg-white/5 hover:border-[#00F5D4]/40 ' +
-  'focus-visible:ring-[#00F5D4]/40';
+  'hover:bg-white/5 hover:border-[#00D8C7]/40 ' +
+  'focus-visible:ring-[#00D8C7]/40';
 
 const DISABLED_CLASSES = 'opacity-50 cursor-not-allowed pointer-events-none';
 

@@ -234,7 +234,7 @@ export function LocaleSwitcher({
         'text-[13px] font-medium text-[#F8F9FA] ' +
         'border border-cyan-400/30 ' +
         'transition-colors hover:bg-[#15151B] ' +
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60'
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60'
       );
     }
     return (
@@ -256,7 +256,7 @@ export function LocaleSwitcher({
       const motion = reducedMotion ? '' : 'animate-locale-pop';
       return (
         'absolute right-0 top-[calc(100%+6px)] z-50 w-44 origin-top-right overflow-hidden rounded-xl ' +
-        'bg-[#0D0D11] ring-1 ring-[#00F5D4]/20 shadow-[0_8px_24px_-8px_rgba(0,245,212,0.25)] ' +
+        'bg-[#0D0D11] ring-1 ring-[#00D8C7]/20 shadow-[0_8px_24px_-8px_rgba(0,216,199,0.25)] ' +
         'py-1 ' +
         motion
       );
@@ -276,7 +276,7 @@ export function LocaleSwitcher({
       return (
         'flex w-full items-center justify-between gap-2 px-4 py-2.5 text-left text-[13.5px] transition-colors ' +
         (active
-          ? 'text-[#00F5D4] font-semibold'
+          ? 'text-[#00D8C7] font-semibold'
           : 'text-[#F8F9FA] hover:bg-white/5') +
         ' focus:outline-none focus-visible:bg-white/5'
       );
@@ -291,7 +291,7 @@ export function LocaleSwitcher({
 
   const checkClass =
     variant === 'premium'
-      ? 'h-4 w-4 text-[#00F5D4]'
+      ? 'h-4 w-4 text-[#00D8C7]'
       : variant === 'onLight'
       ? 'h-3.5 w-3.5 text-blue-600'
       : 'h-3.5 w-3.5 text-cyan-300';
@@ -309,14 +309,14 @@ export function LocaleSwitcher({
       >
         {variant === 'premium' ? (
           <>
-            <Globe className="h-4 w-4 text-[#00F5D4]" aria-hidden />
+            <Globe className="h-4 w-4 text-[#00D8C7]" aria-hidden />
             <span>
               {pending
                 ? '…'
                 : LOCALES.find((l) => l.code === current)?.label ?? 'English'}
             </span>
             <ChevronDown
-              className={`h-4 w-4 text-[#00F5D4] transition-transform ${
+              className={`h-4 w-4 text-[#00D8C7] transition-transform ${
                 open ? 'rotate-180' : ''
               }`}
               aria-hidden

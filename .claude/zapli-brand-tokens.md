@@ -8,7 +8,7 @@ in `tailwind.config.ts` so they're accessible via Tailwind utilities.
 | Token              | Hex       | Role                    |
 | ------------------ | --------- | ----------------------- |
 | `zapli.midnight`   | `#0D0D11` | background              |
-| `zapli.neon`       | `#00F5D4` | electric cyan accent    |
+| `zapli.neon`       | `#00D8C7` | electric cyan accent    |
 | `zapli.platinum`   | `#F8F9FA` | text white              |
 
 ## Usage examples

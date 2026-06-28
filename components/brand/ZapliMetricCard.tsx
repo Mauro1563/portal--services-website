@@ -43,11 +43,11 @@ const RESTING_SHADOW =
 // Hover shadow (link variant only): the ambient drop warms to cyan so the
 // lift feels branded, not generic.
 const HOVER_SHADOW =
-  'hover:shadow-[0_2px_4px_rgba(15,23,42,0.06),_0_12px_32px_-12px_rgba(0,245,212,0.18)]';
+  'hover:shadow-[0_2px_4px_rgba(15,23,42,0.06),_0_12px_32px_-12px_rgba(0,216,199,0.18)]';
 
 const BASE_CLASSES =
-  'relative block bg-white text-[#0F172A] ' +
-  'border border-[rgba(15,23,42,0.08)] rounded-2xl p-5 ' +
+  'relative block bg-white text-[#1A1A1A] ' +
+  'border border-[rgba(129,134,157,0.25)] rounded-2xl p-5 ' +
   'transition-all duration-200 ease-out';
 
 function CardChrome({
@@ -63,7 +63,7 @@ function CardChrome({
           keeps it visually pinned to the corner regardless of label length. */}
       <span
         aria-hidden="true"
-        className="absolute top-4 left-4 block h-1.5 w-1.5 rounded-full bg-[#00F5D4]"
+        className="absolute top-4 left-4 block h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
       />
 
       {(delta || icon) && (

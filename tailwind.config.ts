@@ -48,21 +48,18 @@ const config: Config = {
         // electric cyan neon accent, and platinum text white.
         zapli: {
           midnight: '#0D0D11', // background (legacy)
-          neon: '#00F5D4', // electric cyan accent (legacy)
+          neon: '#00D8C7', // electric cyan accent (legacy)
           platinum: '#F8F9FA', // text white (legacy)
-          // ── Full token namespace (image_4 spec) ──────────────────
-          bg: 'var(--zapli-bg)',
-          'bg-elev': 'var(--zapli-bg-elev)',
-          accent: 'var(--zapli-accent)',
-          'accent-hi': 'var(--zapli-accent-hi)',
-          surface: 'var(--zapli-surface)',
-          'surface-muted': 'var(--zapli-surface-muted)',
-          ink: 'var(--zapli-ink)',
-          'ink-muted': 'var(--zapli-ink-muted)',
-          text: 'var(--zapli-text)',
-          'text-muted': 'var(--zapli-text-muted)',
-          'hairline-dark': 'var(--zapli-hairline-dark)',
-          'hairline-light': 'var(--zapli-hairline-light)',
+          // ── Full token namespace (spec) ──────────────────
+          primary: '#00D8C7',
+          primaryHi: '#2BF0DE',
+          bgDeep: '#0A0D18',
+          bgSurface: '#FFFFFF',
+          bgCard: '#A1A6BA',
+          textOnDark: '#FFFFFF',
+          textOnLight: '#1A1A1A',
+          textSubtle: '#A1A6BA',
+          border: '#81869D',
         },
       },
       backgroundImage: {
@@ -85,6 +82,7 @@ const config: Config = {
         'brand-glow': '0 8px 30px -10px rgba(37,99,235,0.6)',
         'sparkle-glow': '0 8px 32px -8px rgba(34, 211, 238, 0.5)',
         'mint-glow': '0 8px 32px -8px rgba(16, 185, 129, 0.4)',
+        'zapli-glow': '0 0 24px rgba(0,216,199,0.45)',
         // Glassmorphism / depth
         glass: '0 8px 32px 0 rgba(31, 38, 135, 0.12)',
       },
