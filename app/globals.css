@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./zapli-tokens.css";
+
 /* Portal Services — brand tokens. Marketing pages render on a light canvas
    with strategic dark bands (hero accent, CTA, footer). The /hq admin
    routes opt back into the dark theme via .dark-shell. */

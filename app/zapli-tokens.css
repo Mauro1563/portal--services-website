@@ -1,0 +1,15 @@
+:root {
+  --zapli-bg: #0B1729;
+  --zapli-bg-elev: #0F1F35;
+  --zapli-accent: #00F5D4;
+  --zapli-accent-hi: #4FFFE5;
+  --zapli-surface: #FFFFFF;
+  --zapli-surface-muted: #F4F6F8;
+  --zapli-ink: #0F172A;
+  --zapli-ink-muted: #475569;
+  --zapli-text: #F8FAFC;
+  --zapli-text-muted: #94A3B8;
+  --zapli-hairline-dark: rgba(255,255,255,0.08);
+  --zapli-hairline-light: rgba(15,23,42,0.08);
+  --zapli-glow: 0 0 24px rgba(0,245,212,0.45);
+}

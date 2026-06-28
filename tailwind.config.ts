@@ -47,9 +47,22 @@ const config: Config = {
         // Exact spec colors from the Zapli brand: midnight background,
         // electric cyan neon accent, and platinum text white.
         zapli: {
-          midnight: '#0D0D11', // background
-          neon: '#00F5D4', // electric cyan accent
-          platinum: '#F8F9FA', // text white
+          midnight: '#0D0D11', // background (legacy)
+          neon: '#00F5D4', // electric cyan accent (legacy)
+          platinum: '#F8F9FA', // text white (legacy)
+          // ── Full token namespace (image_4 spec) ──────────────────
+          bg: 'var(--zapli-bg)',
+          'bg-elev': 'var(--zapli-bg-elev)',
+          accent: 'var(--zapli-accent)',
+          'accent-hi': 'var(--zapli-accent-hi)',
+          surface: 'var(--zapli-surface)',
+          'surface-muted': 'var(--zapli-surface-muted)',
+          ink: 'var(--zapli-ink)',
+          'ink-muted': 'var(--zapli-ink-muted)',
+          text: 'var(--zapli-text)',
+          'text-muted': 'var(--zapli-text-muted)',
+          'hairline-dark': 'var(--zapli-hairline-dark)',
+          'hairline-light': 'var(--zapli-hairline-light)',
         },
       },
       backgroundImage: {
