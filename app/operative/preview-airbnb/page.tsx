@@ -129,6 +129,19 @@ const COPY = {
     toastPhoto: 'Photo uploaded',
     toastPhotoDeleted: 'Photo deleted',
     toastCopied: (code: string) => `Code ${code} copied`,
+    statTodayLabel: "Today's earnings",
+    statHoursLabel: 'Week hours',
+    statTurnoversLabel: 'Turnovers',
+    statTurnoversValue: (done: number, total: number) => `${done} of ${total}`,
+    profileTitle: 'My profile',
+    profileRole: 'Airbnb operative · London',
+    profileKpiTurnovers: 'Turnovers / week',
+    profileKpiOnTime: 'On-time rate',
+    profileKpiRating: 'Guest rating',
+    weekCardTitle: 'This week',
+    weekCardHours: 'Hours worked',
+    weekCardTurnovers: 'Turnovers',
+    weekCardPayout: 'Estimated payout',
   },
   es: {
     statusScheduled: 'Pendiente',
@@ -210,6 +223,19 @@ const COPY = {
     toastPhoto: 'Foto subida',
     toastPhotoDeleted: 'Foto eliminada',
     toastCopied: (code: string) => `Código ${code} copiado`,
+    statTodayLabel: 'Hoy',
+    statHoursLabel: 'Horas semana',
+    statTurnoversLabel: 'Turnovers',
+    statTurnoversValue: (done: number, total: number) => `${done} de ${total}`,
+    profileTitle: 'Mi perfil',
+    profileRole: 'Operativa Airbnb · Londres',
+    profileKpiTurnovers: 'Turnovers / semana',
+    profileKpiOnTime: 'Puntualidad',
+    profileKpiRating: 'Valoración',
+    weekCardTitle: 'Esta semana',
+    weekCardHours: 'Horas trabajadas',
+    weekCardTurnovers: 'Turnovers',
+    weekCardPayout: 'Pago estimado',
   },
   pt: {
     statusScheduled: 'Pendente',
@@ -291,6 +317,19 @@ const COPY = {
     toastPhoto: 'Foto enviada',
     toastPhotoDeleted: 'Foto eliminada',
     toastCopied: (code: string) => `Código ${code} copiado`,
+    statTodayLabel: 'Hoje',
+    statHoursLabel: 'Horas semana',
+    statTurnoversLabel: 'Turnovers',
+    statTurnoversValue: (done: number, total: number) => `${done} de ${total}`,
+    profileTitle: 'O meu perfil',
+    profileRole: 'Operacional Airbnb · Londres',
+    profileKpiTurnovers: 'Turnovers / semana',
+    profileKpiOnTime: 'Pontualidade',
+    profileKpiRating: 'Avaliação',
+    weekCardTitle: 'Esta semana',
+    weekCardHours: 'Horas trabalhadas',
+    weekCardTurnovers: 'Turnovers',
+    weekCardPayout: 'Pagamento estimado',
   },
 } as const satisfies Record<ClientLocale, unknown>;
 
@@ -514,6 +553,16 @@ function formatDuration(minutes: number): string {
   return `${minutes}m`;
 }
 
+/** Format a fractional-hours value (e.g. 9.75) as "9h 45m". */
+function formatHoursValue(hours: number): string {
+  if (hours <= 0) return '0h';
+  const total = Math.round(hours * 60);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h === 0) return `${m}m`;
+  return m > 0 ? `${h}h ${m}m` : `${h}h`;
+}
+
 function nowHHMM(): string {
   const d = new Date();
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -607,6 +656,21 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
       const labour = Math.round(hours * t.cleanerPayRatePence);
       return acc + Math.max(0, labour + (t.tipPence ?? 0));
     }, 0);
+
+  // Weekly aggregates — start from a stable mocked "earlier in the week"
+  // baseline so the figures stay sensible whether the cleaner has marked
+  // 0 or 3 turnovers today, then layer on whatever they've actually done.
+  // Mirrors the Hogar preview's PRIOR_DAYS approach so payroll never
+  // disagrees with the demo.
+  const PRIOR_WEEK_HOURS = 8.25;
+  const PRIOR_WEEK_TURNOVERS = 2;
+  const PRIOR_WEEK_PENCE = 13200; // ~£132 Mon-Wed at this rate
+  const todayHoursWorked = tasks
+    .filter((t) => t.status === 'completed')
+    .reduce((acc, t) => acc + (t.actualHours ?? 0), 0);
+  const weekHours = PRIOR_WEEK_HOURS + todayHoursWorked;
+  const weekTurnoversDone = PRIOR_WEEK_TURNOVERS + doneCount;
+  const weekPayoutPence = PRIOR_WEEK_PENCE + todayPence;
 
   function handleToggleChecklist(taskId: string, itemId: ChecklistItemId) {
     setTasks((prev) =>
@@ -728,15 +792,68 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                 {t.summary(doneCount, tasks.length)}
               </p>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-                {t.todayEarnings}
+          </header>
+
+          {/* Three stat tiles — today's earnings, weekly hours, turnovers
+              done. Built inline (not reusing PreviewEarningsStrip) because
+              that component is locked to the Hogar emerald palette and
+              also depends on the EarningsAnimationProvider, which we
+              don't mount on this route. Tiles use the Zapli teal accent
+              (#00D8C7) to differentiate from in-card orange chrome while
+              keeping numbers high-contrast on midnight #0A0D18. */}
+          <section
+            aria-label={t.statTodayLabel}
+            className="mt-4 grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white/80 p-2 shadow-card"
+          >
+            <div className="rounded-xl bg-slate-50 px-2.5 py-2.5">
+              <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+                {t.statTodayLabel}
               </p>
-              <p className="mt-0.5 font-display text-xl font-bold tabular-nums text-text-1">
+              <p
+                className="mt-1 font-display text-[18px] font-bold leading-none tabular-nums"
+                style={{ color: '#0A0D18' }}
+              >
                 £{(todayPence / 100).toFixed(2)}
               </p>
+              <span
+                aria-hidden
+                className="mt-1.5 block h-0.5 w-6 rounded-full"
+                style={{ backgroundColor: '#00D8C7' }}
+              />
             </div>
-          </header>
+            <div className="rounded-xl bg-slate-50 px-2.5 py-2.5">
+              <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+                {t.statHoursLabel}
+              </p>
+              <p
+                className="mt-1 font-display text-[18px] font-bold leading-none tabular-nums"
+                style={{ color: '#0A0D18' }}
+              >
+                {formatHoursValue(weekHours)}
+              </p>
+              <span
+                aria-hidden
+                className="mt-1.5 block h-0.5 w-6 rounded-full"
+                style={{ backgroundColor: '#00D8C7' }}
+              />
+            </div>
+            <div className="rounded-xl bg-slate-50 px-2.5 py-2.5">
+              <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+                {t.statTurnoversLabel}
+              </p>
+              <p
+                className="mt-1 font-display text-[18px] font-bold leading-none tabular-nums"
+                style={{ color: '#0A0D18' }}
+              >
+                {t.statTurnoversValue(doneCount, tasks.length)}
+              </p>
+              <span
+                aria-hidden
+                className="mt-1.5 block h-0.5 w-6 rounded-full"
+                style={{ backgroundColor: '#00D8C7' }}
+              />
+            </div>
+          </section>
 
           {/* Hero card — próximo turnover.
               Only renders while there is a non-completed turn to act on. */}
@@ -791,6 +908,126 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                 );
               })}
             </ol>
+          </section>
+
+          {/* "Esta semana" mini card — three rows of weekly KPIs. Stats
+              are derived from the same task list state as the tiles above
+              so editing a turnover (or marking it complete) updates this
+              card on the same render. */}
+          <section className="mt-6 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-card">
+            <div className="flex items-center justify-between">
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.14em]"
+                style={{ color: '#0A0D18' }}
+              >
+                {t.weekCardTitle}
+              </p>
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: '#00D8C7' }}
+              />
+            </div>
+            <dl className="mt-3 space-y-2">
+              <div className="flex items-baseline justify-between gap-3 border-b border-slate-100 pb-2">
+                <dt className="text-[11.5px] text-text-3">{t.weekCardHours}</dt>
+                <dd
+                  className="font-display text-[15px] font-bold tabular-nums"
+                  style={{ color: '#0A0D18' }}
+                >
+                  {formatHoursValue(weekHours)}
+                </dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-3 border-b border-slate-100 pb-2">
+                <dt className="text-[11.5px] text-text-3">{t.weekCardTurnovers}</dt>
+                <dd
+                  className="font-display text-[15px] font-bold tabular-nums"
+                  style={{ color: '#0A0D18' }}
+                >
+                  {weekTurnoversDone}
+                </dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <dt className="text-[11.5px] text-text-3">{t.weekCardPayout}</dt>
+                <dd
+                  className="font-display text-[15px] font-bold tabular-nums"
+                  style={{ color: '#00D8C7' }}
+                >
+                  £{(weekPayoutPence / 100).toFixed(2)}
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          {/* "Mi perfil" card — avatar + name + role chip + a small KPI
+              row. The KPIs are presentational (mocked) so the demo always
+              shows a coherent operative profile regardless of which
+              turnovers the visitor marks done. */}
+          <section className="mt-4 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-card">
+            <p
+              className="text-[11px] font-bold uppercase tracking-[0.14em]"
+              style={{ color: '#0A0D18' }}
+            >
+              {t.profileTitle}
+            </p>
+            <div className="mt-3 flex items-center gap-3">
+              <span
+                aria-hidden
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-display text-[18px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(0,216,199,0.6)]"
+                style={{ backgroundColor: '#00D8C7' }}
+              >
+                C
+              </span>
+              <div className="min-w-0 flex-1">
+                <p
+                  className="truncate font-display text-[15px] font-semibold"
+                  style={{ color: '#0A0D18' }}
+                >
+                  Carmen Ruiz
+                </p>
+                <span
+                  className="mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                  style={{ backgroundColor: 'rgba(0,216,199,0.12)', color: '#0A0D18' }}
+                >
+                  {t.profileRole}
+                </span>
+              </div>
+            </div>
+            <dl className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 px-3 py-2.5">
+              <div>
+                <dt className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+                  {t.profileKpiTurnovers}
+                </dt>
+                <dd
+                  className="mt-0.5 font-display text-[14px] font-bold tabular-nums"
+                  style={{ color: '#0A0D18' }}
+                >
+                  14
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+                  {t.profileKpiOnTime}
+                </dt>
+                <dd
+                  className="mt-0.5 font-display text-[14px] font-bold tabular-nums"
+                  style={{ color: '#0A0D18' }}
+                >
+                  98%
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[9.5px] font-bold uppercase tracking-wider text-slate-500">
+                  {t.profileKpiRating}
+                </dt>
+                <dd
+                  className="mt-0.5 font-display text-[14px] font-bold tabular-nums"
+                  style={{ color: '#0A0D18' }}
+                >
+                  4.9
+                </dd>
+              </div>
+            </dl>
           </section>
 
           {/* Demo-only reset — kept quiet, well clear of the thumb zone. */}
