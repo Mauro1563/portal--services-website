@@ -50,7 +50,7 @@ export default function HQError({
         </div>
 
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-          Portal Services HQ
+          Zapli HQ
         </h1>
         <p className="mt-1 text-sm text-slate-600">
           Panel administrativo · Atajos a las secciones disponibles.
@@ -61,13 +61,13 @@ export default function HQError({
             <Link
               key={href}
               href={href}
-              className="group flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow"
+              className="group flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#00D8C7] hover:shadow"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-cyan-100 to-blue-100 text-blue-700">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#00D8C7]/15 text-[#0A0D18]">
                 <Icon className="h-5 w-5" />
               </span>
               <div>
-                <p className="font-semibold text-slate-900 group-hover:text-blue-700">
+                <p className="font-semibold text-slate-900 group-hover:text-[#0A0D18]">
                   {label}
                 </p>
                 <p className="text-xs text-slate-500">{desc}</p>

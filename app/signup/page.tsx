@@ -5,9 +5,9 @@ import { getLocale, getT, type Locale } from '@/lib/i18n';
 // messages/*.json via getT() and the SignupDict prop, so this just covers the
 // browser tab.
 const META_TITLE: Record<Locale, string> = {
-  en: 'Create account · Portal Home Digital',
-  es: 'Crear cuenta · Portal Home Digital',
-  pt: 'Criar conta · Portal Home Digital',
+  en: 'Create account · Zapli Digital',
+  es: 'Crear cuenta · Zapli Digital',
+  pt: 'Criar conta · Zapli Digital',
 };
 
 export async function generateMetadata() {

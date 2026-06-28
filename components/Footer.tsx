@@ -38,14 +38,14 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href={`/${locale}`} aria-label="Portal Services">
+            <Link href={`/${locale}`} aria-label="Zapli">
               {/* Crop the bottom of the PNG so the baked-in tagline doesn't
                   show twice (the brand mark already lives in the hero) */}
               <div className="overflow-hidden" style={{ height: '32px' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/portal-home-logo-v2.png"
-                  alt="Portal Home"
+                  alt="Zapli"
                   className="block w-auto"
                   style={{ height: '46px' }}
                 />
@@ -74,7 +74,7 @@ export function Footer() {
           ))}
         </div>
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-xs text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} Portal Services. {t('rights')}</p>
+          <p>© {new Date().getFullYear()} Zapli. {t('rights')}</p>
         </div>
       </div>
     </footer>

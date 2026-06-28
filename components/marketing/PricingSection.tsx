@@ -5,7 +5,7 @@ import { getLocale, type Locale } from "@/lib/i18n";
 /**
  * Per-locale copy. Kept inline here so the marketing landing stays
  * self-contained and we don't have to seed messages JSON for every tweak.
- * Pricing is in EUR (€) across all locales — Portal Home is European.
+ * Pricing is in EUR (€) across all locales — Zapli is European.
  */
 type Plan = {
   id: string;

@@ -38,7 +38,7 @@ export async function Pricing() {
                 key={tier.name}
                 tier={tier}
                 popularLabel={data.popular}
-                href={mailto(`Portal Services — ${tier.name}`)}
+                href={mailto(`Zapli — ${tier.name}`)}
               />
             ))}
           </div>

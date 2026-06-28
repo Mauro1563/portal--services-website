@@ -36,7 +36,7 @@ const COPY: Record<
   }
 > = {
   en: {
-    eyebrow: 'Portal Home',
+    eyebrow: 'Zapli',
     title: 'Sign in',
     subtitle:
       'Minimal view — the full page had a loading issue. You can still sign in.',
@@ -48,7 +48,7 @@ const COPY: Record<
     noMessage: '(no message)',
   },
   es: {
-    eyebrow: 'Portal Home',
+    eyebrow: 'Zapli',
     title: 'Iniciar sesión',
     subtitle:
       'Vista mínima — la página completa tuvo un problema cargando. Igual puedes entrar.',
@@ -60,7 +60,7 @@ const COPY: Record<
     noMessage: '(sin mensaje)',
   },
   pt: {
-    eyebrow: 'Portal Home',
+    eyebrow: 'Zapli',
     title: 'Iniciar sessão',
     subtitle:
       'Vista mínima — a página completa teve um problema a carregar. Mesmo assim podes entrar.',

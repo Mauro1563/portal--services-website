@@ -6,7 +6,7 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 /**
  * Mobile-first shell for the client portal. Uses the owner's white-label
- * logo if available; otherwise falls back to the Portal Home
+ * logo if available; otherwise falls back to the Zapli
  * brand. Light theme. Fixed bottom tab bar for the four primary views.
  */
 export function ClientShell({

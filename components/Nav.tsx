@@ -18,7 +18,7 @@ export function Nav() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Top row: logo + utilities */}
         <div className="flex h-14 items-center justify-between gap-3 md:h-16">
-          <Link href={`/${locale}`} aria-label="Portal Services" className="shrink-0">
+          <Link href={`/${locale}`} aria-label="Zapli" className="shrink-0">
             <Logo size="md" variant="icon" />
           </Link>
 

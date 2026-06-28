@@ -28,7 +28,7 @@ export default async function HQLogin({ searchParams }: Props) {
 
   return (
     <PortalLoginCard
-      badges={['Portal Services · Admin']}
+      badges={['Zapli · Admin']}
       title="Sign in to your account"
       subtitle="Acceso restringido. Solo correos autorizados."
       error={errorMessage}

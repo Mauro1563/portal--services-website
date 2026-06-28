@@ -12,7 +12,7 @@ export function MobileNav({ active }: { active: Active }) {
   return (
     <div className="lg:hidden">
       <div className="flex h-14 items-center justify-between border-b border-line bg-paper px-4">
-        <span className="font-display text-sm font-semibold text-graphite-1">Portal Services · HQ</span>
+        <span className="font-display text-sm font-semibold text-graphite-1">Zapli · HQ</span>
         <button onClick={() => setOpen(true)} aria-label="Menú" className="rounded-lg p-2 text-graphite-2 hover:bg-slate-100">
           <Menu className="h-5 w-5" />
         </button>

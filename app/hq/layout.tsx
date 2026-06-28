@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import '../hqx.css';
 
 export const metadata: Metadata = {
-  title: 'HQ · Portal Services',
-  description: 'Admin panel for the Portal Services marketing site.',
+  title: 'HQ · Zapli',
+  description: 'Admin panel for the Zapli marketing site.',
   robots: 'noindex, nofollow',
 };
 

@@ -116,7 +116,7 @@ export async function PortalLoginCard({
             {footer ? <div className="mt-3">{footer}</div> : null}
 
             <p className="mt-4 text-center text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-              © {new Date().getFullYear()} Portal Home
+              © {new Date().getFullYear()} Zapli
             </p>
           </div>
         </div>
