@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Check,
   Copy,
+  Droplets,
   ExternalLink,
   Facebook,
   FileText,
@@ -24,11 +25,15 @@ import {
   QrCode,
   Share2,
   Sparkles,
+  SprayCan,
+  Star,
   Tag,
   Twitter,
+  Wind,
   X,
 } from 'lucide-react';
 import { DemoBottomTabBar } from '../_components/DemoBottomTabBar';
+import { DemoSheet } from '@/components/preview/DemoSheet';
 
 type PromoCode = {
   code: string;
@@ -61,6 +66,7 @@ export default function OwnerMarketingPreview() {
 
   const [copied, setCopied] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [showLandingPreview, setShowLandingPreview] = useState(false);
 
   // New-promo modal state
   const [showNew, setShowNew] = useState(false);
@@ -170,15 +176,19 @@ export default function OwnerMarketingPreview() {
                 </>
               )}
             </button>
-            <a
-              href={publicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setShowLandingPreview(true)}
+              title="Vista previa del landing"
               className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-blue-600 px-3 text-xs font-semibold text-white hover:bg-blue-700"
             >
               <ExternalLink className="h-3.5 w-3.5" /> Abrir
-            </a>
+            </button>
           </div>
+          <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
+            En el demo, este enlace muestra un mockup. Al activar tu cuenta real
+            este URL será tu landing pública verdadera.
+          </p>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-[auto_1fr] sm:items-center">
             <div className="flex h-[180px] w-[180px] items-center justify-center self-center rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:self-start">
@@ -198,6 +208,9 @@ export default function OwnerMarketingPreview() {
               <p className="mt-2 leading-relaxed">
                 Imprime el QR y pégalo en recibos, flyers o el parabrisas de tu vehículo.
                 Los clientes escanean y van directo a tu landing.
+              </p>
+              <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+                El QR apunta a tu URL real cuando actives tu cuenta.
               </p>
               <a
                 href={qrSrc}
@@ -357,14 +370,13 @@ export default function OwnerMarketingPreview() {
               <span className="truncate font-mono text-[10px] text-slate-400">
                 {publicUrl}
               </span>
-              <a
-                href={publicUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => setShowLandingPreview(true)}
                 className="text-[10px] font-semibold text-blue-600 hover:underline"
               >
                 Abrir
-              </a>
+              </button>
             </div>
 
             <div className="grid gap-4 p-5 sm:grid-cols-[auto_1fr] sm:items-center">
@@ -502,6 +514,130 @@ export default function OwnerMarketingPreview() {
           </div>
         </div>
       ) : null}
+
+      {/* Landing public preview sheet — mockup, not the real (dead) URL */}
+      <DemoSheet
+        open={showLandingPreview}
+        onClose={() => setShowLandingPreview(false)}
+        title="Vista previa de tu landing pública"
+        maxWidth="max-w-lg"
+      >
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-600">
+          Demo — así se ve tu sitio cuando un cliente lo abre
+        </p>
+
+        <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          {/* Browser chrome */}
+          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-rose-400" />
+              <span className="h-2 w-2 rounded-full bg-amber-400" />
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            </div>
+            <span className="truncate font-mono text-[10px] text-slate-400">
+              {publicUrl}
+            </span>
+            <span className="w-8" />
+          </div>
+
+          {/* Hero */}
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 px-5 py-6 text-white">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-200">
+              Cleaning service · London
+            </p>
+            <h4 className="mt-1 text-xl font-bold leading-tight">
+              Alan Cleaners · London
+            </h4>
+            <p className="mt-2 text-[13px] leading-relaxed text-blue-50">
+              Limpiezas profesionales en menos de 30 segundos.
+            </p>
+            <button
+              type="button"
+              onClick={() => showToast('Demo — el cliente reservaría aquí')}
+              className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl bg-white px-4 text-xs font-bold text-blue-700 shadow-sm hover:bg-blue-50"
+            >
+              Reservar limpieza
+            </button>
+          </div>
+
+          {/* Services */}
+          <div className="space-y-3 px-5 py-5">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+              Servicios
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {(
+                [
+                  { label: 'Estándar', price: '£45', Icon: SprayCan },
+                  { label: 'Profunda', price: '£95', Icon: Droplets },
+                  { label: 'Cristales', price: '£65', Icon: Wind },
+                ] as const
+              ).map(({ label, price, Icon }) => (
+                <div
+                  key={label}
+                  className="flex flex-col items-center gap-1 rounded-xl border border-slate-200 bg-white p-3 text-center"
+                >
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <p className="text-[11px] font-semibold text-slate-900">
+                    {label}
+                  </p>
+                  <p className="text-[11px] font-bold text-blue-700">{price}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Testimonials */}
+          <div className="space-y-2 border-t border-slate-100 px-5 py-4">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+              Clientes felices
+            </p>
+            <div className="rounded-xl bg-slate-50 p-3">
+              <div className="flex items-center gap-1 text-amber-500">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} className="h-3 w-3 fill-current" />
+                ))}
+              </div>
+              <p className="mt-1.5 text-[12px] italic text-slate-700">
+                &ldquo;Increíble servicio&rdquo;
+              </p>
+              <p className="mt-1 text-[10px] font-semibold text-slate-500">
+                — Mr. Thompson, Soho
+              </p>
+            </div>
+            <div className="rounded-xl bg-slate-50 p-3">
+              <div className="flex items-center gap-1 text-amber-500">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} className="h-3 w-3 fill-current" />
+                ))}
+              </div>
+              <p className="mt-1.5 text-[12px] italic text-slate-700">
+                &ldquo;Puntuales y dejaron el piso impecable.&rdquo;
+              </p>
+              <p className="mt-1 text-[10px] font-semibold text-slate-500">
+                — Sarah K., Camden
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="border-t border-slate-100 bg-slate-50 px-5 py-3 text-center">
+            <p className="text-[10px] font-semibold text-slate-500">
+              Powered by Portal Home
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setShowLandingPreview(false)}
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-slate-900 px-4 text-xs font-semibold text-white hover:bg-slate-800"
+          >
+            Cerrar
+          </button>
+        </div>
+      </DemoSheet>
 
       {toast ? (
         <div className="pointer-events-none fixed bottom-20 left-1/2 z-50 -translate-x-1/2">
