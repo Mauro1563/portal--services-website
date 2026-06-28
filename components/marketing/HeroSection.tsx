@@ -238,19 +238,29 @@ export default async function HeroSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-sky-50/40 to-white">
-      {/* Soft decorative blobs — warm + airy instead of dark navy */}
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-[#F2FFFC] to-white">
+      {/* Soft decorative ambient — teal + midnight only */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-[#00D8C7]/15 blur-3xl"
+        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-[#00D8C7]/20 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-1/3 -right-40 h-[28rem] w-[28rem] rounded-full bg-blue-200/40 blur-3xl"
+        className="pointer-events-none absolute top-1/3 -right-40 h-[28rem] w-[28rem] rounded-full bg-[#00D8C7]/15 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-100/40 blur-3xl"
+        className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[#0A0D18]/[0.04] blur-3xl"
+      />
+      {/* Subtle dot grid for depth — almost invisible but kills the flat feeling */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, #0A0D18 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+        }}
       />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -261,12 +271,12 @@ export default async function HeroSection() {
             className="inline-flex items-center gap-2.5"
             aria-label="Zapli"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold text-white shadow-[0_8px_18px_-8px_rgba(34,211,238,0.6)]">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#0A0D18] text-sm font-bold text-[#00D8C7] ring-1 ring-[#00D8C7]/40 shadow-[0_8px_18px_-8px_rgba(0,216,199,0.55)]">
               Z
             </span>
             <span className="font-display text-base font-semibold leading-tight text-slate-900">
               Zapli
-              <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-blue-600">
+              <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-[#00B8A8]">
                 Smart Turnover &amp; Home Management
               </span>
             </span>
@@ -275,7 +285,7 @@ export default async function HeroSection() {
             <LocaleSwitcher current={locale} variant="premium" />
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/40"
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-[#00D8C7] hover:bg-[#00D8C7]/5"
             >
               {t.signIn}
               <ArrowRight className="h-3.5 w-3.5" />
@@ -320,14 +330,14 @@ export default async function HeroSection() {
             <div className="mt-4 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] transition hover:bg-[#2BF0DE]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_28px_rgba(0,216,199,0.55),_inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-[#00D8C7]/60 transition duration-300 hover:-translate-y-0.5 hover:bg-[#2BF0DE] hover:shadow-[0_8px_36px_rgba(0,216,199,0.7),_inset_0_1px_0_rgba(255,255,255,0.5)]"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/40"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#00D8C7] hover:bg-[#00D8C7]/5"
               >
                 {t.ctaSecondary}
               </Link>
@@ -345,7 +355,7 @@ export default async function HeroSection() {
                 </h2>
                 <p className="mt-1 text-sm text-slate-600">{t.portalsSub}</p>
               </div>
-              <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 sm:inline-flex">
+              <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-[#00D8C7]/30 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#0A0D18] sm:inline-flex">
                 <PlayCircle className="h-3 w-3" />
                 {t.demoBadge}
               </span>
@@ -361,10 +371,10 @@ export default async function HeroSection() {
                 featureIcons={[Calendar, DollarSign, Building2]}
                 icon={<Building2 className="h-4 w-4" />}
                 href="/owner/preview"
-                gradient="from-slate-800 via-slate-900 to-blue-900"
-                chip="text-cyan-300 border-cyan-300/30 bg-cyan-300/10"
-                accent="text-cyan-200"
-                bullet="bg-cyan-400/15 text-cyan-200 ring-cyan-300/20"
+                gradient="from-[#0A0D18] via-[#0A0D18] to-[#15151F]"
+                chip="text-[#00D8C7] border-[#00D8C7]/40 bg-[#00D8C7]/10"
+                accent="text-[#00D8C7]"
+                bullet="bg-[#00D8C7]/15 text-[#00D8C7] ring-[#00D8C7]/30"
               />
               <PortalCard
                 label="Cleaner"
@@ -376,10 +386,10 @@ export default async function HeroSection() {
                 featureIcons={[MapPin, Camera, Wallet]}
                 icon={<Users className="h-4 w-4" />}
                 href="/operative/preview"
-                gradient="from-emerald-500 via-emerald-600 to-teal-700"
-                chip="text-emerald-50 border-emerald-200/40 bg-emerald-100/10"
-                accent="text-emerald-50"
-                bullet="bg-emerald-400/15 text-emerald-50 ring-emerald-200/30"
+                gradient="from-[#0A0D18] via-[#0F1925] to-[#0A2522]"
+                chip="text-[#00D8C7] border-[#00D8C7]/50 bg-[#00D8C7]/15"
+                accent="text-[#4FFFE5]"
+                bullet="bg-[#00D8C7]/20 text-[#4FFFE5] ring-[#00D8C7]/40"
               />
               <PortalCard
                 label="Client"
@@ -391,10 +401,10 @@ export default async function HeroSection() {
                 featureIcons={[Bell, MessageSquare, CreditCard]}
                 icon={<UserRound className="h-4 w-4" />}
                 href="/client/preview"
-                gradient="from-sky-500 via-blue-600 to-blue-700"
-                chip="text-sky-100 border-sky-200/40 bg-sky-200/10"
-                accent="text-sky-50"
-                bullet="bg-sky-400/15 text-sky-50 ring-sky-200/30"
+                gradient="from-[#15151F] via-[#0A0D18] to-[#1A1F2E]"
+                chip="text-[#00D8C7] border-[#00D8C7]/30 bg-[#00D8C7]/10"
+                accent="text-[#A1A6BA]"
+                bullet="bg-[#00D8C7]/10 text-[#00D8C7] ring-[#00D8C7]/20"
               />
             </div>
           </div>
@@ -439,11 +449,11 @@ function PortalCard({
     <Link
       href={href}
       aria-label={cta}
-      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-4 shadow-[0_18px_34px_-18px_rgba(15,23,42,0.45)] ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-18px_rgba(15,23,42,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:min-w-0 sm:p-5`}
+      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-4 shadow-[0_22px_44px_-20px_rgba(10,13,24,0.6),_inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_56px_-18px_rgba(0,216,199,0.35),_inset_0_1px_0_rgba(255,255,255,0.1)] hover:ring-[#00D8C7]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60 sm:min-w-0 sm:p-5`}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-10 -right-10 hidden h-32 w-32 rounded-full bg-white/10 blur-2xl sm:block"
+        className="pointer-events-none absolute -top-10 -right-10 hidden h-32 w-32 rounded-full bg-[#00D8C7]/15 blur-2xl transition duration-500 group-hover:bg-[#00D8C7]/25 sm:block"
       />
       <div className="relative flex items-start justify-between">
         <span
