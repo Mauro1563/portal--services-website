@@ -3,7 +3,7 @@
  * No auth, no Supabase. Every link routes inside /owner/preview/*.
  */
 import Link from 'next/link';
-import { ArrowRight, BarChart3 } from 'lucide-react';
+import { ArrowRight, BarChart3, Sparkles } from 'lucide-react';
 import { DemoStatCardsRow } from './_components/DemoStatCardsRow';
 import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
 import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
@@ -110,6 +110,27 @@ export default function OwnerPreviewHome() {
               <DemoTodayHero />
             </div>
           </div>
+
+          <Link
+            href="/owner/preview/scheduler"
+            title="Programa la semana — asigna cleaners a propiedades"
+            className="group mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(37,99,235,0.25)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          >
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-sm">
+                <Sparkles className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[15px] font-semibold text-slate-900">
+                  Programar semana
+                </p>
+                <p className="mt-0.5 text-[12px] text-slate-600">
+                  Asigna cleaners a propiedades. Tu equipo y tus clientes lo ven al instante.
+                </p>
+              </div>
+            </div>
+            <ArrowRight className="h-5 w-5 shrink-0 text-blue-600 transition group-hover:translate-x-0.5" />
+          </Link>
 
           <div className="mt-8">
             <DemoQuickActions />

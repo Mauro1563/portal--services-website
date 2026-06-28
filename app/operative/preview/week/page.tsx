@@ -1,13 +1,14 @@
 'use client';
 
 /**
- * Public, no-auth preview of the Cleaner /week page. Mock data only.
+ * Public, no-auth preview of the Cleaner /week page.
  *
- * Now interactive: tap any day's task to expand inline notes, and use
- * the status filter chips at the top to slice the week by progress.
- * All state is in-memory — refreshing resets the demo.
+ * Reads from the shared preview schedule (lib/preview-schedule.ts) so
+ * changes the owner makes in /owner/preview/scheduler appear here on
+ * refresh. The cleaner persona is Carmen (cl-carmen) — we filter the
+ * weekly schedule down to only her assignments.
  */
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -18,171 +19,35 @@ import {
   Clock,
   HelpCircle,
   MapPin,
-  Play,
   PoundSterling,
-  RotateCcw,
+  RefreshCw,
+  Sparkles,
   Star,
+  User,
   X,
 } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
+import {
+  DAY_LABELS,
+  WEEK_DAYS,
+  loadSchedule,
+  type ScheduledTask,
+  type WeekDay,
+} from '@/lib/preview-schedule';
 
-type DemoStatus = 'scheduled' | 'completed' | 'in_progress';
+/** Persona for the cleaner demo — we slice the shared schedule down to
+ *  this cleaner so the operative portal feels personal. */
+const CURRENT_CLEANER_ID = 'cl-carmen';
 
-type MockWeekTask = {
-  id: string;
-  status: DemoStatus;
-  service_name: string;
-  price_pence: number;
-  estimated_duration_min: number;
-  property: { name: string; address: string };
-  notes: string;
-};
+type DemoStatus = ScheduledTask['status'];
 
 type Day = {
+  key: WeekDay;
   label: string;
   isToday: boolean;
-  tasks: MockWeekTask[];
+  tasks: ScheduledTask[];
 };
-
-const DAYS: Day[] = [
-  {
-    label: 'Lunes 23 Jun',
-    isToday: false,
-    tasks: [
-      {
-        id: 'w-1',
-        status: 'completed',
-        service_name: 'Limpieza profunda',
-        price_pence: 6500,
-        estimated_duration_min: 120,
-        property: {
-          name: 'Soho Loft',
-          address: '22 Old Compton St, London W1D 4TR',
-        },
-        notes: 'Cliente muy satisfecho. Pidió que la próxima vez se cambie el filtro de la campana.',
-      },
-    ],
-  },
-  {
-    label: 'Martes 24 Jun',
-    isToday: false,
-    tasks: [
-      {
-        id: 'w-2',
-        status: 'completed',
-        service_name: 'Mantenimiento',
-        price_pence: 4000,
-        estimated_duration_min: 90,
-        property: {
-          name: 'Hackney Studio',
-          address: '78 Mare St, London E8 4RT',
-        },
-        notes: 'Reponer pastillas del lavavajillas (quedaba solo una).',
-      },
-      {
-        id: 'w-3',
-        status: 'completed',
-        service_name: 'Check-out',
-        price_pence: 5500,
-        estimated_duration_min: 105,
-        property: {
-          name: 'Shoreditch Penthouse',
-          address: '31 Curtain Rd, London EC2A 3LT',
-        },
-        notes: 'Cambio de sábanas + reposición de amenities.',
-      },
-    ],
-  },
-  {
-    label: 'Miércoles 25 Jun',
-    isToday: false,
-    tasks: [],
-  },
-  {
-    label: 'Jueves 26 Jun',
-    isToday: false,
-    tasks: [
-      {
-        id: 'w-4',
-        status: 'completed',
-        service_name: 'Limpieza estándar',
-        price_pence: 4000,
-        estimated_duration_min: 75,
-        property: {
-          name: 'Notting Hill Flat',
-          address: '12 Portobello Rd, London W11 2DZ',
-        },
-        notes: 'Atención a la repisa de la ventana — el cliente lo pidió la última vez.',
-      },
-    ],
-  },
-  {
-    label: 'Viernes 27 Jun',
-    isToday: true,
-    tasks: [
-      {
-        id: 'w-5',
-        status: 'completed',
-        service_name: 'Limpieza estándar',
-        price_pence: 4000,
-        estimated_duration_min: 90,
-        property: {
-          name: 'Soho Loft',
-          address: '22 Old Compton St, London W1D 4TR',
-        },
-        notes: 'Listo a las 11:32, fotos subidas.',
-      },
-      {
-        id: 'w-6',
-        status: 'in_progress',
-        service_name: 'Mantenimiento',
-        price_pence: 3500,
-        estimated_duration_min: 60,
-        property: {
-          name: 'Hackney Studio',
-          address: '78 Mare St, London E8 4RT',
-        },
-        notes: 'En curso. Llaves en el lockbox (código 4421).',
-      },
-      {
-        id: 'w-7',
-        status: 'scheduled',
-        service_name: 'Check-out',
-        price_pence: 6500,
-        estimated_duration_min: 120,
-        property: {
-          name: 'Shoreditch Penthouse',
-          address: '31 Curtain Rd, London EC2A 3LT',
-        },
-        notes: 'Check-out Airbnb a las 14:30. Sábanas limpias en armario del pasillo.',
-      },
-    ],
-  },
-  {
-    label: 'Sábado 28 Jun',
-    isToday: false,
-    tasks: [
-      {
-        id: 'w-8',
-        status: 'scheduled',
-        service_name: 'Limpieza profunda',
-        price_pence: 7500,
-        estimated_duration_min: 150,
-        property: {
-          name: 'Mayfair Studio',
-          address: '8 Berkeley St, London W1J 8DY',
-        },
-        notes: 'Limpieza profunda mensual — traer aspirador grande.',
-      },
-    ],
-  },
-  {
-    label: 'Domingo 29 Jun',
-    isToday: false,
-    tasks: [],
-  },
-];
 
 function formatMoney(pence: number): string {
   return `£${(pence / 100).toFixed(2)}`;
@@ -197,59 +62,67 @@ function formatHours(minutes: number): string {
   return `${minutes}m`;
 }
 
+function expectedPayPence(t: ScheduledTask): number {
+  // Cleaner is paid per hour — payPence is the hourly rate in pence.
+  return Math.round((t.durationMin / 60) * t.payPence);
+}
+
 type Filter = 'all' | 'completed' | 'in_progress' | 'scheduled';
 
 const FILTERS: Array<{ key: Filter; label: string; title: string }> = [
-  {
-    key: 'all',
-    label: 'Todas',
-    title: 'Ver todas las tareas de la semana',
-  },
-  {
-    key: 'completed',
-    label: 'Completadas',
-    title: 'Filtrar solo las tareas terminadas',
-  },
-  {
-    key: 'in_progress',
-    label: 'En curso',
-    title: 'Filtrar solo las tareas que tienes ahora mismo en curso',
-  },
-  {
-    key: 'scheduled',
-    label: 'Pendientes',
-    title: 'Filtrar solo las tareas todavía por hacer',
-  },
+  { key: 'all', label: 'Todas', title: 'Ver todas las tareas de la semana' },
+  { key: 'completed', label: 'Completadas', title: 'Filtrar solo las tareas terminadas' },
+  { key: 'in_progress', label: 'En curso', title: 'Filtrar solo las tareas que tienes ahora mismo en curso' },
+  { key: 'scheduled', label: 'Pendientes', title: 'Filtrar solo las tareas todavía por hacer' },
 ];
 
-function nowHHMM(): string {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+/** Today's WeekDay key, so the matching day card gets the "HOY" badge. */
+function todayKey(): WeekDay {
+  // JS getDay: 0=Sun..6=Sat. Our schema starts on Monday.
+  const order: WeekDay[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  return order[new Date().getDay()];
 }
 
 export default function OperativePreviewWeek() {
-  const [resetKey, setResetKey] = useState(0);
-  return <OperativePreviewWeekBody key={resetKey} onReset={() => setResetKey((k) => k + 1)} />;
-}
-
-function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
+  const [tasks, setTasks] = useState<ScheduledTask[]>([]);
+  const [bannerVisible, setBannerVisible] = useState(true);
   const [filter, setFilter] = useState<Filter>('all');
-  const [collapsedDays, setCollapsedDays] = useState<Set<string>>(new Set());
-  const [days, setDays] = useState<Day[]>(DAYS);
-  const [selectedTask, setSelectedTask] = useState<{ dayLabel: string; taskId: string } | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
-  const [toastVisible, setToastVisible] = useState(false);
+  const [collapsedDays, setCollapsedDays] = useState<Set<WeekDay>>(new Set());
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [filterHelpOpen, setFilterHelpOpen] = useState(false);
   const [kpiSheet, setKpiSheet] = useState<'worked' | 'earnings' | 'rating' | null>(null);
 
-  function showToast(message: string) {
-    setToast(message);
-    window.requestAnimationFrame(() => setToastVisible(true));
-    window.setTimeout(() => setToastVisible(false), 1600);
-    window.setTimeout(() => setToast(null), 1800);
-  }
+  const refresh = useCallback(() => {
+    const all = loadSchedule();
+    setTasks(all.filter((t) => t.cleanerId === CURRENT_CLEANER_ID));
+  }, []);
 
-  const [filterHelpOpen, setFilterHelpOpen] = useState(false);
-  const allTasks = useMemo(() => days.flatMap((d) => d.tasks), [days]);
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const today = todayKey();
+
+  const days = useMemo<Day[]>(() => {
+    const sorted = [...tasks].sort((a, b) => a.startTime.localeCompare(b.startTime));
+    return WEEK_DAYS.map((key) => ({
+      key,
+      label: DAY_LABELS[key],
+      isToday: key === today,
+      tasks: sorted.filter((t) => t.day === key),
+    }));
+  }, [tasks, today]);
+
+  const filteredDays = useMemo<Day[]>(
+    () =>
+      days.map((d) => ({
+        ...d,
+        tasks: filter === 'all' ? d.tasks : d.tasks.filter((t) => t.status === filter),
+      })),
+    [filter, days],
+  );
+
+  const allTasks = tasks;
   const filterCounts = useMemo(
     () => ({
       all: allTasks.length,
@@ -260,60 +133,35 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
     [allTasks],
   );
   const totalMinutes = useMemo(
-    () => allTasks.reduce((sum, t) => sum + t.estimated_duration_min, 0),
+    () => allTasks.reduce((sum, t) => sum + t.durationMin, 0),
     [allTasks],
   );
   const totalEarnings = useMemo(
     () =>
       allTasks
         .filter((t) => t.status === 'completed')
-        .reduce((sum, t) => sum + t.price_pence, 0),
+        .reduce((sum, t) => sum + expectedPayPence(t), 0),
     [allTasks],
   );
   const avgStars = 4.8;
   const ratingCount = allTasks.filter((t) => t.status === 'completed').length;
 
-  const filteredDays = useMemo<Day[]>(
-    () =>
-      days.map((d) => ({
-        ...d,
-        tasks:
-          filter === 'all' ? d.tasks : d.tasks.filter((t) => t.status === filter),
-      })),
-    [filter, days],
-  );
-
-  function toggleDay(label: string) {
+  function toggleDay(key: WeekDay) {
     setCollapsedDays((prev) => {
       const next = new Set(prev);
-      if (next.has(label)) {
-        next.delete(label);
+      if (next.has(key)) {
+        next.delete(key);
       } else {
-        next.add(label);
+        next.add(key);
       }
       return next;
     });
   }
 
-  function updateTaskStatus(taskId: string, status: DemoStatus) {
-    setDays((prev) =>
-      prev.map((d) => ({
-        ...d,
-        tasks: d.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)),
-      })),
-    );
-    if (status === 'in_progress') {
-      showToast(`Check-in registrado a las ${nowHHMM()}`);
-    } else if (status === 'completed') {
-      showToast('Tarea marcada como completada');
-    }
-  }
-
-  const selected =
-    selectedTask &&
-    days
-      .find((d) => d.label === selectedTask.dayLabel)
-      ?.tasks.find((t) => t.id === selectedTask.taskId);
+  const selected = selectedTaskId
+    ? tasks.find((t) => t.id === selectedTaskId) ?? null
+    : null;
+  const selectedDayLabel = selected ? DAY_LABELS[selected.day] : '';
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
@@ -328,17 +176,49 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <Logo size="sm" />
-          <span className="-mr-2 flex h-9 w-9" aria-hidden />
+          <button
+            type="button"
+            onClick={refresh}
+            aria-label="Refrescar"
+            title="Refrescar — recarga los cambios que el manager acaba de hacer"
+            className="-mr-2 flex h-9 w-9 items-center justify-center rounded-full text-graphite-1 hover:bg-surface-2"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </button>
         </div>
       </header>
 
+      {/* Sticky "new tasks this week" banner — mock for demo punch. */}
+      {bannerVisible ? (
+        <div className="sticky top-14 z-30 border-b border-amber-200/70 bg-gradient-to-r from-amber-50 to-amber-100/80 backdrop-blur">
+          <div className="mx-auto flex max-w-md items-center gap-2 px-4 py-2">
+            <Sparkles className="h-3.5 w-3.5 shrink-0 text-amber-600" />
+            <p className="flex-1 text-[11.5px] font-semibold text-amber-900">
+              Acabas de recibir 2 nuevas tareas esta semana
+            </p>
+            <button
+              type="button"
+              onClick={() => setBannerVisible(false)}
+              aria-label="Descartar aviso"
+              title="Descartar"
+              className="grid h-5 w-5 place-items-center rounded-full text-amber-700 hover:bg-amber-200/70"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="mx-auto max-w-md px-4 py-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-500">
-          Esta semana
+          Tu ruta de la semana
         </p>
         <h1 className="mt-1 font-display text-2xl font-semibold text-graphite-1">
           23 Jun – 29 Jun
         </h1>
+        <p className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-graphite-3">
+          <User className="h-3 w-3" /> Asignada por Alan (tu manager)
+        </p>
 
         <div className="mt-4 grid grid-cols-3 gap-2">
           <Kpi
@@ -364,8 +244,6 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
           />
         </div>
 
-        {/* Filter segmented control — chips carry live counts, so the row
-            is informative even when the user doesn't change the filter. */}
         <div className="mt-5">
           <div className="flex items-center gap-1.5">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-graphite-3">
@@ -422,12 +300,12 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
 
         <section className="mt-6 space-y-4">
           {filteredDays.map((day) => {
-            const isCollapsed = collapsedDays.has(day.label);
+            const isCollapsed = collapsedDays.has(day.key);
             return (
-              <div key={day.label}>
+              <div key={day.key}>
                 <button
                   type="button"
-                  onClick={() => toggleDay(day.label)}
+                  onClick={() => toggleDay(day.key)}
                   title={isCollapsed ? 'Mostrar tareas de este día' : 'Ocultar tareas de este día'}
                   className={`flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left transition hover:bg-surface-2/40 ${
                     day.isToday ? 'text-brand-600' : 'text-graphite-3'
@@ -453,42 +331,48 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                   </p>
                 ) : (
                   <ul className="mt-2 space-y-2">
-                    {day.tasks.map((t, idx) => (
-                      <li key={t.id}>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedTask({ dayLabel: day.label, taskId: t.id })}
-                          title="Abrir detalles de la tarea — incluye Check-in y Completar"
-                          className="flex w-full items-start gap-3 rounded-2xl border border-line bg-paper p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
-                        >
-                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
-                            {idx + 1}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-start justify-between gap-3">
-                              <p className="min-w-0 truncate font-display text-sm font-semibold text-graphite-1">
-                                {t.property.name}
-                              </p>
-                              <span className="shrink-0 font-display text-sm font-semibold tabular-nums text-emerald-700">
-                                {formatMoney(t.price_pence)}
-                              </span>
-                            </div>
-                            <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600">
-                              <MapPin className="h-3 w-3" /> {t.property.address}
+                    {day.tasks.map((t, idx) => {
+                      const pay = expectedPayPence(t);
+                      return (
+                        <li key={t.id}>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedTaskId(t.id)}
+                            title="Abrir detalles de la tarea"
+                            className="flex w-full items-start gap-3 rounded-2xl border border-line bg-paper p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
+                          >
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
+                              {idx + 1}
                             </span>
-                            <p className="mt-1 truncate text-[11px] text-graphite-3">
-                              {t.service_name} · {formatHours(t.estimated_duration_min)}
-                            </p>
-                            <div className="mt-1.5 flex items-center gap-2">
-                              <StatusBadge status={t.status} />
-                              {t.status === 'completed' ? (
-                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                              ) : null}
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-start justify-between gap-3">
+                                <p className="min-w-0 truncate font-display text-sm font-semibold text-graphite-1">
+                                  {t.propertyName}
+                                </p>
+                                <span className="shrink-0 font-display text-sm font-semibold tabular-nums text-emerald-700">
+                                  {formatMoney(pay)}
+                                </span>
+                              </div>
+                              <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600">
+                                <MapPin className="h-3 w-3" /> {t.propertyAddress}
+                              </span>
+                              <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-graphite-3">
+                                <User className="h-3 w-3" /> {t.clientName}
+                              </p>
+                              <p className="mt-1 truncate text-[11px] text-graphite-3">
+                                {t.startTime} · {formatHours(t.durationMin)}
+                              </p>
+                              <div className="mt-1.5 flex items-center gap-2">
+                                <StatusBadge status={t.status} />
+                                {t.status === 'completed' ? (
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                                ) : null}
+                              </div>
                             </div>
-                          </div>
-                        </button>
-                      </li>
-                    ))}
+                          </button>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
@@ -496,25 +380,24 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
           })}
         </section>
 
-        {/* Demo-only reset — quiet inline link, away from the thumb zone. */}
         <div className="mt-8 flex justify-center">
           <button
             type="button"
-            onClick={onReset}
-            title="Reiniciar la demo — vuelve al estado inicial sin recargar"
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-graphite-3 transition hover:text-graphite-1"
+            onClick={refresh}
+            title="Recargar — trae los últimos cambios del manager"
+            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-[11px] font-medium text-graphite-3 transition hover:text-graphite-1"
           >
-            <RotateCcw className="h-3 w-3" />
-            Reiniciar demo
+            <RefreshCw className="h-3 w-3" />
+            Refrescar
           </button>
         </div>
       </div>
 
       {/* Task details sheet */}
-      {selected && selectedTask ? (
+      {selected ? (
         <div
           className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center"
-          onClick={() => setSelectedTask(null)}
+          onClick={() => setSelectedTaskId(null)}
         >
           <div
             className="w-full max-w-md rounded-t-3xl bg-paper p-5 shadow-2xl sm:rounded-3xl"
@@ -523,18 +406,21 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-graphite-3">
-                  {selectedTask.dayLabel} · {selected.service_name}
+                  {selectedDayLabel} · {selected.startTime}
                 </p>
                 <h2 className="mt-1 font-display text-lg font-semibold text-graphite-1">
-                  {selected.property.name}
+                  {selected.propertyName}
                 </h2>
                 <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-brand-600">
-                  <MapPin className="h-3 w-3" /> {selected.property.address}
+                  <MapPin className="h-3 w-3" /> {selected.propertyAddress}
+                </p>
+                <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-graphite-3">
+                  <User className="h-3 w-3" /> {selected.clientName}
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => setSelectedTask(null)}
+                onClick={() => setSelectedTaskId(null)}
                 title="Cerrar"
                 className="grid h-8 w-8 place-items-center rounded-full text-graphite-3 hover:bg-surface-2"
               >
@@ -545,59 +431,20 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
             <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-graphite-3">
               <span className="inline-flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                {formatHours(selected.estimated_duration_min)}
+                {formatHours(selected.durationMin)}
               </span>
               <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
                 <PoundSterling className="h-3 w-3" />
-                {formatMoney(selected.price_pence)}
+                {formatMoney(expectedPayPence(selected))}
               </span>
               <StatusBadge status={selected.status} />
             </div>
 
-            <div className="mt-4 rounded-xl border border-dashed border-line bg-surface-1/40 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-graphite-3">
-                Notas
-              </p>
-              <p className="mt-1 text-[12px] leading-relaxed text-graphite-1">
-                {selected.notes}
-              </p>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              {selected.status === 'scheduled' ? (
-                <button
-                  type="button"
-                  onClick={() => updateTaskStatus(selected.id, 'in_progress')}
-                  title="Marcar que has llegado al cliente — registra hora de inicio"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-500 px-3 py-2.5 text-[12px] font-bold text-white shadow"
-                >
-                  <Play className="h-3.5 w-3.5" /> Check-in
-                </button>
-              ) : null}
-              {selected.status === 'in_progress' ? (
-                <button
-                  type="button"
-                  onClick={() => updateTaskStatus(selected.id, 'completed')}
-                  title="Marcar la tarea como terminada"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-[12px] font-bold text-white shadow"
-                >
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Completar
-                </button>
-              ) : null}
-              {selected.status === 'completed' ? (
-                <button
-                  type="button"
-                  onClick={() => updateTaskStatus(selected.id, 'scheduled')}
-                  title="Revertir esta tarea a pendiente (sólo demo)"
-                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line bg-paper px-3 py-2.5 text-[12px] font-bold text-graphite-1"
-                >
-                  Reabrir
-                </button>
-              ) : null}
+            <div className="mt-4 grid grid-cols-1 gap-2">
               <button
                 type="button"
-                onClick={() => setSelectedTask(null)}
-                title="Cerrar el panel sin cambios"
+                onClick={() => setSelectedTaskId(null)}
+                title="Cerrar el panel"
                 className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line bg-paper px-3 py-2.5 text-[12px] font-bold text-graphite-1"
               >
                 Cerrar
@@ -643,9 +490,9 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
             {kpiSheet === 'worked' ? (
               <ul className="mt-4 divide-y divide-line rounded-xl border border-line">
                 {days.map((d) => {
-                  const mins = d.tasks.reduce((s, t) => s + t.estimated_duration_min, 0);
+                  const mins = d.tasks.reduce((s, t) => s + t.durationMin, 0);
                   return (
-                    <li key={d.label} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
+                    <li key={d.key} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
                       <span className={`font-medium ${d.isToday ? 'text-brand-600' : 'text-graphite-1'}`}>
                         {d.label}
                         {d.isToday ? ' · HOY' : ''}
@@ -671,14 +518,14 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                     <li key={t.id} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
                       <div className="min-w-0">
                         <p className="truncate font-medium text-graphite-1">
-                          {t.property.name}
+                          {t.propertyName}
                         </p>
                         <p className="truncate text-[10px] text-graphite-3">
-                          {t.service_name}
+                          {DAY_LABELS[t.day]} · {formatHours(t.durationMin)}
                         </p>
                       </div>
                       <span className="shrink-0 font-semibold tabular-nums text-emerald-700">
-                        {formatMoney(t.price_pence)}
+                        {formatMoney(expectedPayPence(t))}
                       </span>
                     </li>
                   ))}
@@ -706,7 +553,7 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                       <li key={t.id} className="rounded-xl border border-line bg-paper p-3">
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-[12px] font-semibold text-graphite-1">
-                            {t.property.name}
+                            {t.propertyName}
                           </p>
                           <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-amber-600">
                             {Array.from({ length: r.stars }).map((_, k) => (
@@ -726,22 +573,6 @@ function OperativePreviewWeekBody({ onReset }: { onReset: () => void }) {
                 </li>
               </ul>
             ) : null}
-          </div>
-        </div>
-      ) : null}
-
-      {/* Toast — animated for peripheral visibility. */}
-      {toast ? (
-        <div
-          className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
-          aria-live="polite"
-        >
-          <div
-            className={`rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
-              toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
-            }`}
-          >
-            ✓ {toast}
           </div>
         </div>
       ) : null}
@@ -777,9 +608,6 @@ function Kpi({
   label: string;
   value: string;
   title?: string;
-  /** When provided, the tile renders as a button — tap opens the matching
-   *  inline breakdown sheet. Same visual treatment plus a hover ring so
-   *  the affordance is discoverable. */
   onClick?: () => void;
 }) {
   const className =

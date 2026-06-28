@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   BarChart3,
   Building2,
+  CalendarDays,
   CheckCircle2,
   ChevronRight,
   Info,
@@ -28,6 +29,15 @@ type Tile = {
 };
 
 const PRIMARY: Tile[] = [
+  {
+    href: '/owner/preview/scheduler',
+    label: 'Programar',
+    hint: 'Calendario semanal',
+    Icon: CalendarDays,
+    iconBg: 'bg-indigo-50',
+    iconText: 'text-indigo-700',
+    title: 'Asigna cleaners a propiedades cada día de la semana',
+  },
   {
     href: '/owner/preview/tasks',
     label: 'Limpiezas',
