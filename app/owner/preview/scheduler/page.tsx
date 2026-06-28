@@ -76,6 +76,22 @@ const SERVICE_OPTIONS: Array<{ value: ScheduledTask['service']; label: string; p
   { value: 'mudanza', label: 'Mudanza', pence: 12500 },
 ];
 
+// Native <select> options every 30 min from 06:00 to 21:30.
+const START_TIME_OPTIONS: string[] = (() => {
+  const out: string[] = [];
+  for (let h = 6; h <= 21; h++) {
+    out.push(`${String(h).padStart(2, '0')}:00`);
+    out.push(`${String(h).padStart(2, '0')}:30`);
+  }
+  return out;
+})();
+
+const HOUR_OPTIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const MINUTE_OPTIONS = [0, 15, 30, 45];
+
+// Demo fallback: cleaner default hourly pay in pence (£12/h).
+const DEFAULT_CLEANER_HOURLY_PAY_PENCE = 1200;
+
 type SheetState =
   | { kind: 'edit'; task: ScheduledTask }
   | { kind: 'create'; day: WeekDay }
@@ -85,17 +101,25 @@ type FormState = {
   cleanerId: string;
   propertyId: string;
   startTime: string;
-  durationMin: number;
+  durationHours: number;
+  durationMinutes: number;
   service: ScheduledTask['service'];
+  chargePence: number;
+  payPence: number;
 };
 
 function emptyForm(): FormState {
+  const durationHours = 2;
+  const durationMinutes = 0;
   return {
     cleanerId: DEMO_CLEANERS[0].id,
     propertyId: DEMO_PROPERTIES[0].id,
     startTime: '10:00',
-    durationMin: 120,
+    durationHours,
+    durationMinutes,
     service: 'estandar',
+    chargePence: priceFor('estandar'),
+    payPence: DEFAULT_CLEANER_HOURLY_PAY_PENCE * durationHours,
   };
 }
 
@@ -104,8 +128,11 @@ function fromTask(t: ScheduledTask): FormState {
     cleanerId: t.cleanerId,
     propertyId: t.propertyId,
     startTime: t.startTime,
-    durationMin: t.durationMin,
+    durationHours: Math.floor(t.durationMin / 60),
+    durationMinutes: t.durationMin % 60,
     service: t.service,
+    chargePence: t.chargePence,
+    payPence: t.payPence,
   };
 }
 
@@ -174,8 +201,9 @@ export default function OwnerSchedulerPage() {
     if (!sheet) return;
     const cleaner = DEMO_CLEANERS.find((c) => c.id === form.cleanerId)!;
     const property = DEMO_PROPERTIES.find((p) => p.id === form.propertyId)!;
-    const chargePence = priceFor(form.service);
-    const payPence = Math.round(chargePence * 0.6);
+    const durationMin = form.durationHours * 60 + form.durationMinutes;
+    const chargePence = form.chargePence;
+    const payPence = form.payPence;
 
     if (sheet.kind === 'edit') {
       const updated: ScheduledTask = {
@@ -188,7 +216,7 @@ export default function OwnerSchedulerPage() {
         clientId: property.clientId,
         clientName: property.clientName,
         startTime: form.startTime,
-        durationMin: form.durationMin,
+        durationMin,
         service: form.service,
         chargePence,
         payPence,
@@ -199,7 +227,7 @@ export default function OwnerSchedulerPage() {
         id: makeId(),
         day: sheet.day,
         startTime: form.startTime,
-        durationMin: form.durationMin,
+        durationMin,
         cleanerId: cleaner.id,
         cleanerName: cleaner.name,
         propertyId: property.id,
@@ -433,35 +461,89 @@ export default function OwnerSchedulerPage() {
             </select>
           </Field>
 
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Hora inicio" icon={<Clock className="h-3.5 w-3.5 text-slate-500" />}>
-              <input
-                type="time"
-                value={form.startTime}
-                onChange={(e) => setForm((f) => ({ ...f, startTime: e.target.value }))}
-                className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
-              />
-            </Field>
-            <Field label="Duración (min)">
-              <input
-                type="number"
-                min={30}
-                step={15}
-                value={form.durationMin}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, durationMin: Math.max(30, Number(e.target.value) || 30) }))
-                }
-                className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
-              />
-            </Field>
+          <Field label="Hora inicio" icon={<Clock className="h-3.5 w-3.5 text-slate-500" />}>
+            <select
+              value={form.startTime}
+              onChange={(e) => setForm((f) => ({ ...f, startTime: e.target.value }))}
+              className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+            >
+              {START_TIME_OPTIONS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </Field>
+
+          <div>
+            <span className="mb-1 inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-500">
+              Duración
+            </span>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="block">
+                <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                  Horas
+                </span>
+                <select
+                  value={form.durationHours}
+                  onChange={(e) =>
+                    setForm((f) => {
+                      const next = { ...f, durationHours: Number(e.target.value) };
+                      // Refresh cleaner pay suggestion when hours change, only if
+                      // the user hasn't overridden it (matches default-for-current).
+                      const defaultPay =
+                        DEFAULT_CLEANER_HOURLY_PAY_PENCE * f.durationHours;
+                      if (f.payPence === defaultPay) {
+                        next.payPence = DEFAULT_CLEANER_HOURLY_PAY_PENCE * next.durationHours;
+                      }
+                      return next;
+                    })
+                  }
+                  className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+                >
+                  {HOUR_OPTIONS.map((h) => (
+                    <option key={h} value={h}>
+                      {h}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                  Minutos
+                </span>
+                <select
+                  value={form.durationMinutes}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, durationMinutes: Number(e.target.value) }))
+                  }
+                  className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+                >
+                  {MINUTE_OPTIONS.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <p className="mt-1 text-[11px] text-slate-500">
+              Total: {formatHours(form.durationHours * 60 + form.durationMinutes)}
+            </p>
           </div>
 
           <Field label="Servicio">
             <select
               value={form.service}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, service: e.target.value as ScheduledTask['service'] }))
-              }
+              onChange={(e) => {
+                const nextService = e.target.value as ScheduledTask['service'];
+                setForm((f) => ({
+                  ...f,
+                  service: nextService,
+                  // Auto-fill the suggested service price; the field stays editable.
+                  chargePence: priceFor(nextService),
+                }));
+              }}
               className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
             >
               {SERVICE_OPTIONS.map((s) => (
@@ -470,6 +552,44 @@ export default function OwnerSchedulerPage() {
                 </option>
               ))}
             </select>
+          </Field>
+
+          <Field label="Precio cobrado al cliente (£)">
+            <input
+              type="number"
+              step="0.50"
+              min="0"
+              value={(form.chargePence / 100).toFixed(2)}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  chargePence: Math.max(0, Math.round(Number(e.target.value) * 100) || 0),
+                }))
+              }
+              className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+            />
+            <p className="mt-1 text-[11px] text-slate-500">
+              Editable — la tarifa del servicio es solo una sugerencia.
+            </p>
+          </Field>
+
+          <Field label="Pago al cleaner (£)">
+            <input
+              type="number"
+              step="0.50"
+              min="0"
+              value={(form.payPence / 100).toFixed(2)}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  payPence: Math.max(0, Math.round(Number(e.target.value) * 100) || 0),
+                }))
+              }
+              className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+            />
+            <p className="mt-1 text-[11px] text-slate-500">
+              Lo que ganará el cleaner por esta tarea. Puedes ajustar.
+            </p>
           </Field>
 
           <div className="mt-4 flex items-center gap-2">
