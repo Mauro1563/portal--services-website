@@ -13,6 +13,174 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    back: 'Back',
+    backToDashboard: 'Back to dashboard',
+    scheduling: 'Scheduling',
+    weeklyCalendar: 'Weekly calendar',
+    thisWeekTitle: 'See this week',
+    thisWeek: '← This week',
+    nextWeekTitle: 'See next week',
+    nextWeek: 'Next →',
+    weekScheduling: 'Week schedule',
+    cleansWord: 'cleans',
+    cleanersWord: 'cleaners',
+    thisWeekSuffix: 'this week',
+    showDay: 'Show this day',
+    hideDay: 'Hide this day',
+    addTask: 'Add task',
+    addTaskTo: (day: string) => `Add a task on ${day}`,
+    noScheduledCleans: 'No scheduled cleans',
+    noCleans: 'No cleans',
+    editTask: 'Edit task',
+    newTask: 'New task',
+    cleanerField: 'Cleaner',
+    propertyField: 'Property',
+    startTime: 'Start time',
+    duration: 'Duration',
+    hours: 'Hours',
+    minutes: 'Minutes',
+    total: 'Total',
+    service: 'Service',
+    chargeField: 'Price charged to client (£)',
+    chargeHint: 'Editable — the service rate is just a suggestion.',
+    payField: 'Cleaner pay (£)',
+    payHint: 'What the cleaner will earn for this task. You can adjust.',
+    deleteTitle: 'Delete this task',
+    delete: 'Delete',
+    cancelTitle: 'Close without saving',
+    cancel: 'Cancel',
+    saveTitle: 'Save changes',
+    save: 'Save',
+    toast: 'Schedule saved · Carmen, Pedro and Ana can see it in their app',
+    serviceStandard: 'Standard',
+    serviceDeep: 'Deep',
+    serviceWindows: 'Windows',
+    serviceMoving: 'Move-out',
+    weekRangeThis: '24 – 30 Jun',
+    weekRangeNext: '1 – 7 Jul',
+    dayMon: 'MON',
+    dayTue: 'TUE',
+    dayWed: 'WED',
+    dayThu: 'THU',
+    dayFri: 'FRI',
+    daySat: 'SAT',
+    daySun: 'SUN',
+  },
+  es: {
+    back: 'Volver',
+    backToDashboard: 'Volver al dashboard',
+    scheduling: 'Programación',
+    weeklyCalendar: 'Calendario semanal',
+    thisWeekTitle: 'Ver esta semana',
+    thisWeek: '← Esta semana',
+    nextWeekTitle: 'Ver la próxima semana',
+    nextWeek: 'Próxima →',
+    weekScheduling: 'Programación de la semana',
+    cleansWord: 'limpiezas',
+    cleanersWord: 'cleaners',
+    thisWeekSuffix: 'esta semana',
+    showDay: 'Mostrar este día',
+    hideDay: 'Ocultar este día',
+    addTask: 'Añadir tarea',
+    addTaskTo: (day: string) => `Añadir una tarea al ${day}`,
+    noScheduledCleans: 'Sin limpiezas programadas',
+    noCleans: 'Sin limpiezas',
+    editTask: 'Editar tarea',
+    newTask: 'Nueva tarea',
+    cleanerField: 'Cleaner',
+    propertyField: 'Propiedad',
+    startTime: 'Hora inicio',
+    duration: 'Duración',
+    hours: 'Horas',
+    minutes: 'Minutos',
+    total: 'Total',
+    service: 'Servicio',
+    chargeField: 'Precio cobrado al cliente (£)',
+    chargeHint: 'Editable — la tarifa del servicio es solo una sugerencia.',
+    payField: 'Pago al cleaner (£)',
+    payHint: 'Lo que ganará el cleaner por esta tarea. Puedes ajustar.',
+    deleteTitle: 'Eliminar esta tarea',
+    delete: 'Eliminar',
+    cancelTitle: 'Cerrar sin guardar',
+    cancel: 'Cancelar',
+    saveTitle: 'Guardar cambios',
+    save: 'Guardar',
+    toast: 'Programación guardada · Carmen, Pedro y Ana ya la ven en su app',
+    serviceStandard: 'Estándar',
+    serviceDeep: 'Profunda',
+    serviceWindows: 'Cristales',
+    serviceMoving: 'Mudanza',
+    weekRangeThis: '24 – 30 Jun',
+    weekRangeNext: '1 – 7 Jul',
+    dayMon: 'LUN',
+    dayTue: 'MAR',
+    dayWed: 'MIÉ',
+    dayThu: 'JUE',
+    dayFri: 'VIE',
+    daySat: 'SÁB',
+    daySun: 'DOM',
+  },
+  pt: {
+    back: 'Voltar',
+    backToDashboard: 'Voltar ao dashboard',
+    scheduling: 'Agendamento',
+    weeklyCalendar: 'Calendário semanal',
+    thisWeekTitle: 'Ver esta semana',
+    thisWeek: '← Esta semana',
+    nextWeekTitle: 'Ver a próxima semana',
+    nextWeek: 'Próxima →',
+    weekScheduling: 'Agendamento da semana',
+    cleansWord: 'limpezas',
+    cleanersWord: 'cleaners',
+    thisWeekSuffix: 'esta semana',
+    showDay: 'Mostrar este dia',
+    hideDay: 'Ocultar este dia',
+    addTask: 'Adicionar tarefa',
+    addTaskTo: (day: string) => `Adicionar uma tarefa em ${day}`,
+    noScheduledCleans: 'Sem limpezas agendadas',
+    noCleans: 'Sem limpezas',
+    editTask: 'Editar tarefa',
+    newTask: 'Nova tarefa',
+    cleanerField: 'Cleaner',
+    propertyField: 'Propriedade',
+    startTime: 'Hora de início',
+    duration: 'Duração',
+    hours: 'Horas',
+    minutes: 'Minutos',
+    total: 'Total',
+    service: 'Serviço',
+    chargeField: 'Preço cobrado ao cliente (£)',
+    chargeHint: 'Editável — a tarifa do serviço é apenas uma sugestão.',
+    payField: 'Pagamento ao cleaner (£)',
+    payHint: 'O que o cleaner irá ganhar nesta tarefa. Podes ajustar.',
+    deleteTitle: 'Eliminar esta tarefa',
+    delete: 'Eliminar',
+    cancelTitle: 'Fechar sem guardar',
+    cancel: 'Cancelar',
+    saveTitle: 'Guardar alterações',
+    save: 'Guardar',
+    toast: 'Agendamento guardado · Carmen, Pedro e Ana já o vêem na app',
+    serviceStandard: 'Padrão',
+    serviceDeep: 'Profunda',
+    serviceWindows: 'Vidros',
+    serviceMoving: 'Mudança',
+    weekRangeThis: '24 – 30 Jun',
+    weekRangeNext: '1 – 7 Jul',
+    dayMon: 'SEG',
+    dayTue: 'TER',
+    dayWed: 'QUA',
+    dayThu: 'QUI',
+    dayFri: 'SEX',
+    daySat: 'SÁB',
+    daySun: 'DOM',
+  },
+} as const;
+
+type SchedulerCopy = (typeof COPY)['en'];
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -38,15 +206,17 @@ import {
   type WeekDay,
 } from '@/lib/preview-schedule';
 
-const SHORT_DAY: Record<WeekDay, string> = {
-  mon: 'LUN',
-  tue: 'MAR',
-  wed: 'MIÉ',
-  thu: 'JUE',
-  fri: 'VIE',
-  sat: 'SÁB',
-  sun: 'DOM',
-};
+function shortDay(t: SchedulerCopy): Record<WeekDay, string> {
+  return {
+    mon: t.dayMon,
+    tue: t.dayTue,
+    wed: t.dayWed,
+    thu: t.dayThu,
+    fri: t.dayFri,
+    sat: t.daySat,
+    sun: t.daySun,
+  };
+}
 
 // Stubbed date numbers — purely cosmetic for the demo.
 const DAY_STUB_DATES_THIS: Record<WeekDay, number> = {
@@ -69,12 +239,23 @@ const DAY_STUB_DATES_NEXT: Record<WeekDay, number> = {
   sun: 7,
 };
 
-const SERVICE_OPTIONS: Array<{ value: ScheduledTask['service']; label: string; pence: number }> = [
-  { value: 'estandar', label: 'Estándar', pence: 4500 },
-  { value: 'profunda', label: 'Profunda', pence: 9500 },
-  { value: 'cristales', label: 'Cristales', pence: 6500 },
-  { value: 'mudanza', label: 'Mudanza', pence: 12500 },
-];
+type ServiceOption = { value: ScheduledTask['service']; label: string; pence: number };
+
+function serviceOptions(t: SchedulerCopy): ServiceOption[] {
+  return [
+    { value: 'estandar', label: t.serviceStandard, pence: 4500 },
+    { value: 'profunda', label: t.serviceDeep, pence: 9500 },
+    { value: 'cristales', label: t.serviceWindows, pence: 6500 },
+    { value: 'mudanza', label: t.serviceMoving, pence: 12500 },
+  ];
+}
+
+const SERVICE_PRICES: Record<ScheduledTask['service'], number> = {
+  estandar: 4500,
+  profunda: 9500,
+  cristales: 6500,
+  mudanza: 12500,
+};
 
 // Native <select> options every 30 min from 06:00 to 21:30.
 const START_TIME_OPTIONS: string[] = (() => {
@@ -150,7 +331,7 @@ function formatMoney(pence: number): string {
 }
 
 function priceFor(service: ScheduledTask['service']): number {
-  return SERVICE_OPTIONS.find((s) => s.value === service)?.pence ?? 4500;
+  return SERVICE_PRICES[service] ?? 4500;
 }
 
 function makeId(): string {
@@ -158,6 +339,10 @@ function makeId(): string {
 }
 
 export default function OwnerSchedulerPage() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const SHORT_DAY = shortDay(t);
+  const SERVICE_OPTIONS = serviceOptions(t);
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [weekOffset, setWeekOffset] = useState<0 | 1>(0);
@@ -282,18 +467,18 @@ export default function OwnerSchedulerPage() {
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-3 sm:px-4">
           <Link
             href="/owner/preview"
-            aria-label="Volver"
-            title="Volver al dashboard"
+            aria-label={t.back}
+            title={t.backToDashboard}
             className="-ml-1 grid h-9 w-9 place-items-center rounded-full text-slate-700 hover:bg-slate-100"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-600">
-              Programación
+              {t.scheduling}
             </p>
             <h1 className="-mt-0.5 truncate font-display text-base font-semibold text-slate-900">
-              Calendario semanal
+              {t.weeklyCalendar}
             </h1>
           </div>
         </div>
@@ -306,45 +491,45 @@ export default function OwnerSchedulerPage() {
             <button
               type="button"
               onClick={() => setWeekOffset(0)}
-              title="Ver esta semana"
+              title={t.thisWeekTitle}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[12px] font-semibold transition ${
                 weekOffset === 0
                   ? 'bg-blue-600 text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              ← Esta semana
+              {t.thisWeek}
             </button>
             <button
               type="button"
               onClick={() => setWeekOffset(1)}
-              title="Ver la próxima semana"
+              title={t.nextWeekTitle}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[12px] font-semibold transition ${
                 weekOffset === 1
                   ? 'bg-blue-600 text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Próxima →
+              {t.nextWeek}
             </button>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-semibold text-blue-700 ring-1 ring-blue-200">
             <CalendarDays className="h-3 w-3" />
-            {weekOffset === 0 ? '24 – 30 Jun' : '1 – 7 Jul'}
+            {weekOffset === 0 ? t.weekRangeThis : t.weekRangeNext}
           </span>
         </div>
 
         {/* Summary header */}
         <section className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <h2 className="inline-flex items-center gap-2 font-display text-lg font-semibold text-slate-900">
-            <Sparkles className="h-4 w-4 text-blue-600" /> Programación de la semana
+            <Sparkles className="h-4 w-4 text-blue-600" /> {t.weekScheduling}
           </h2>
           <p className="mt-1 text-[13px] text-slate-600">
-            <span className="font-semibold text-slate-900">{totalCleanings}</span> limpiezas
+            <span className="font-semibold text-slate-900">{totalCleanings}</span> {t.cleansWord}
             {' · '}
-            <span className="font-semibold text-slate-900">{totalCleaners}</span> cleaners
+            <span className="font-semibold text-slate-900">{totalCleaners}</span> {t.cleanersWord}
             {' · '}
-            <span className="font-semibold text-emerald-700">{formatMoney(totalCharge)}</span> esta semana
+            <span className="font-semibold text-emerald-700">{formatMoney(totalCharge)}</span> {t.thisWeekSuffix}
           </p>
         </section>
 
@@ -358,6 +543,8 @@ export default function OwnerSchedulerPage() {
               tasks={tasksByDay[day]}
               onAdd={() => openCreate(day)}
               onSelect={openEdit}
+              t={t}
+              shortDayLabel={SHORT_DAY}
             />
           ))}
         </section>
@@ -375,7 +562,7 @@ export default function OwnerSchedulerPage() {
                 <button
                   type="button"
                   onClick={() => toggleDay(day)}
-                  title={isCollapsed ? 'Mostrar este día' : 'Ocultar este día'}
+                  title={isCollapsed ? t.showDay : t.hideDay}
                   className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left"
                 >
                   <div className="flex items-center gap-2">
@@ -400,14 +587,14 @@ export default function OwnerSchedulerPage() {
                     <button
                       type="button"
                       onClick={() => openCreate(day)}
-                      title="Añadir una tarea a este día"
+                      title={t.addTaskTo(DAY_LABELS[day])}
                       className="mb-2 inline-flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-blue-200 bg-blue-50/50 px-3 py-1.5 text-[12px] font-semibold text-blue-700 hover:bg-blue-50"
                     >
-                      <Plus className="h-3.5 w-3.5" /> Añadir tarea
+                      <Plus className="h-3.5 w-3.5" /> {t.addTask}
                     </button>
                     {dayTasks.length === 0 ? (
                       <p className="px-1 py-2 text-center text-[11.5px] text-slate-400">
-                        Sin limpiezas programadas
+                        {t.noScheduledCleans}
                       </p>
                     ) : (
                       <ul className="space-y-1.5">
@@ -430,10 +617,10 @@ export default function OwnerSchedulerPage() {
       <DemoSheet
         open={sheet !== null}
         onClose={closeSheet}
-        title={sheet?.kind === 'edit' ? 'Editar tarea' : `Nueva tarea · ${sheet ? DAY_LABELS[sheet.day] : ''}`}
+        title={sheet?.kind === 'edit' ? t.editTask : `${t.newTask} · ${sheet ? DAY_LABELS[sheet.day] : ''}`}
       >
         <div className="space-y-3">
-          <Field label="Cleaner" icon={<Users className="h-3.5 w-3.5 text-slate-500" />}>
+          <Field label={t.cleanerField} icon={<Users className="h-3.5 w-3.5 text-slate-500" />}>
             <select
               value={form.cleanerId}
               onChange={(e) => setForm((f) => ({ ...f, cleanerId: e.target.value }))}
@@ -447,7 +634,7 @@ export default function OwnerSchedulerPage() {
             </select>
           </Field>
 
-          <Field label="Propiedad">
+          <Field label={t.propertyField}>
             <select
               value={form.propertyId}
               onChange={(e) => setForm((f) => ({ ...f, propertyId: e.target.value }))}
@@ -461,7 +648,7 @@ export default function OwnerSchedulerPage() {
             </select>
           </Field>
 
-          <Field label="Hora inicio" icon={<Clock className="h-3.5 w-3.5 text-slate-500" />}>
+          <Field label={t.startTime} icon={<Clock className="h-3.5 w-3.5 text-slate-500" />}>
             <select
               value={form.startTime}
               onChange={(e) => setForm((f) => ({ ...f, startTime: e.target.value }))}
@@ -477,12 +664,12 @@ export default function OwnerSchedulerPage() {
 
           <div>
             <span className="mb-1 inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-500">
-              Duración
+              {t.duration}
             </span>
             <div className="grid grid-cols-2 gap-2">
               <label className="block">
                 <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                  Horas
+                  {t.hours}
                 </span>
                 <select
                   value={form.durationHours}
@@ -510,7 +697,7 @@ export default function OwnerSchedulerPage() {
               </label>
               <label className="block">
                 <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                  Minutos
+                  {t.minutes}
                 </span>
                 <select
                   value={form.durationMinutes}
@@ -528,11 +715,11 @@ export default function OwnerSchedulerPage() {
               </label>
             </div>
             <p className="mt-1 text-[11px] text-slate-500">
-              Total: {formatHours(form.durationHours * 60 + form.durationMinutes)}
+              {t.total}: {formatHours(form.durationHours * 60 + form.durationMinutes)}
             </p>
           </div>
 
-          <Field label="Servicio">
+          <Field label={t.service}>
             <select
               value={form.service}
               onChange={(e) => {
@@ -554,7 +741,7 @@ export default function OwnerSchedulerPage() {
             </select>
           </Field>
 
-          <Field label="Precio cobrado al cliente (£)">
+          <Field label={t.chargeField}>
             <input
               type="number"
               step="0.50"
@@ -569,11 +756,11 @@ export default function OwnerSchedulerPage() {
               className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
             />
             <p className="mt-1 text-[11px] text-slate-500">
-              Editable — la tarifa del servicio es solo una sugerencia.
+              {t.chargeHint}
             </p>
           </Field>
 
-          <Field label="Pago al cleaner (£)">
+          <Field label={t.payField}>
             <input
               type="number"
               step="0.50"
@@ -588,7 +775,7 @@ export default function OwnerSchedulerPage() {
               className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
             />
             <p className="mt-1 text-[11px] text-slate-500">
-              Lo que ganará el cleaner por esta tarea. Puedes ajustar.
+              {t.payHint}
             </p>
           </Field>
 
@@ -597,27 +784,27 @@ export default function OwnerSchedulerPage() {
               <button
                 type="button"
                 onClick={deleteCurrent}
-                title="Eliminar esta tarea"
+                title={t.deleteTitle}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-[12px] font-bold text-rose-700 hover:bg-rose-100"
               >
-                <Trash2 className="h-3.5 w-3.5" /> Eliminar
+                <Trash2 className="h-3.5 w-3.5" /> {t.delete}
               </button>
             ) : null}
             <button
               type="button"
               onClick={closeSheet}
-              title="Cerrar sin guardar"
+              title={t.cancelTitle}
               className="ml-auto rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[12px] font-bold text-slate-700 hover:bg-slate-50"
             >
-              Cancelar
+              {t.cancel}
             </button>
             <button
               type="button"
               onClick={saveForm}
-              title="Guardar cambios"
+              title={t.saveTitle}
               className="rounded-xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold text-white hover:bg-blue-700"
             >
-              Guardar
+              {t.save}
             </button>
           </div>
         </div>
@@ -625,7 +812,7 @@ export default function OwnerSchedulerPage() {
 
       <DemoToast
         show={toast}
-        message="Programación guardada · Carmen, Pedro y Ana ya la ven en su app"
+        message={t.toast}
       />
       <DemoBottomTabBar active="tasks" />
     </main>
@@ -638,18 +825,22 @@ function DayColumn({
   tasks,
   onAdd,
   onSelect,
+  t,
+  shortDayLabel,
 }: {
   day: WeekDay;
   dateStub: number;
   tasks: ScheduledTask[];
   onAdd: () => void;
   onSelect: (task: ScheduledTask) => void;
+  t: SchedulerCopy;
+  shortDayLabel: Record<WeekDay, string>;
 }) {
   return (
     <div className="flex min-h-[280px] flex-col rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="mb-2 px-1">
         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          {SHORT_DAY[day]} {dateStub}
+          {shortDayLabel[day]} {dateStub}
         </p>
         <p className="font-display text-[13px] font-semibold text-slate-900">
           {DAY_LABELS[day]}
@@ -658,19 +849,19 @@ function DayColumn({
       <button
         type="button"
         onClick={onAdd}
-        title={`Añadir una tarea al ${DAY_LABELS[day]}`}
+        title={t.addTaskTo(DAY_LABELS[day])}
         className="mb-2 inline-flex items-center justify-center gap-1 rounded-lg border border-dashed border-blue-200 bg-blue-50/50 px-2 py-1.5 text-[11px] font-semibold text-blue-700 hover:bg-blue-50"
       >
-        <Plus className="h-3 w-3" /> Añadir tarea
+        <Plus className="h-3 w-3" /> {t.addTask}
       </button>
       <div className="flex-1 space-y-1.5">
         {tasks.length === 0 ? (
           <p className="px-1 py-2 text-center text-[10.5px] text-slate-400">
-            Sin limpiezas
+            {t.noCleans}
           </p>
         ) : (
-          tasks.map((t) => (
-            <TaskCard key={t.id} task={t} onClick={() => onSelect(t)} compact />
+          tasks.map((task) => (
+            <TaskCard key={task.id} task={task} onClick={() => onSelect(task)} compact />
           ))
         )}
       </div>

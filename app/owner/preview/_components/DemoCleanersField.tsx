@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { MapPin, Radio } from 'lucide-react';
 import { DemoLiveOpsPulse } from './DemoLiveOpsPulse';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
 
 export type DemoFieldCheckin = {
   taskId: string;
@@ -12,29 +15,56 @@ export type DemoFieldCheckin = {
   lng?: number;
 };
 
+const COPY = {
+  en: {
+    title: 'Field operatives',
+    visitsCount: (n: number) => `${n} visits in the last 8 hours`,
+    seeAll: 'See all →',
+    viewOnMap: (property: string) => `See ${property} on the map`,
+    openInMaps: 'Open location in Google Maps',
+  },
+  es: {
+    title: 'Operarios en campo',
+    visitsCount: (n: number) => `${n} visitas en las últimas 8 horas`,
+    seeAll: 'Ver todos →',
+    viewOnMap: (property: string) => `Ver ${property} en el mapa`,
+    openInMaps: 'Abrir ubicación en Google Maps',
+  },
+  pt: {
+    title: 'Operacionais no terreno',
+    visitsCount: (n: number) => `${n} visitas nas últimas 8 horas`,
+    seeAll: 'Ver todos →',
+    viewOnMap: (property: string) => `Ver ${property} no mapa`,
+    openInMaps: 'Abrir localização no Google Maps',
+  },
+} as const;
+
 /**
  * Preview-only version of CleanersField — same layout/colors as the
  * real component but routes link to /owner/preview/tasks/<id> so the
  * tour stays self-contained.
  */
 export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5">
       <header className="flex items-center justify-between gap-2">
         <div className="min-w-0">
           <h2 className="inline-flex items-center gap-2 font-display text-lg font-semibold text-slate-900">
             <Radio className="h-3.5 w-3.5 text-emerald-500" aria-hidden />
-            Operarios en campo
+            {t.title}
           </h2>
           <p className="mt-0.5 text-[12.5px] text-slate-600">
-            {checkins.length} visitas en las últimas 8 horas
+            {t.visitsCount(checkins.length)}
           </p>
         </div>
         <Link
           href="/owner/preview/tasks"
           className="shrink-0 text-[12px] font-semibold text-blue-700 hover:text-blue-800"
         >
-          Ver todos →
+          {t.seeAll}
         </Link>
       </header>
 
@@ -79,8 +109,8 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
                   href={mapHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Ver ${c.propertyName} en el mapa`}
-                  title="Abrir ubicación en Google Maps"
+                  aria-label={t.viewOnMap(c.propertyName)}
+                  title={t.openInMaps}
                   className="mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                 >
                   <MapPin className="h-3.5 w-3.5" />

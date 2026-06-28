@@ -11,10 +11,55 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { Award, Building2, Send } from 'lucide-react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    bestOfDay: 'Best of the day',
+    seeWeekly: 'See Carmen’s weekly detail',
+    back: '← Back',
+    seeDetail: 'See detail →',
+    cleansOnTime: '3 cleans today · 98% on time',
+    starOfDay: 'Star of the day',
+    last7Days: 'Carmen Ruiz · last 7 days',
+    avgOnTime: 'On-time average: 91%',
+    bonusSent: 'Bonus sent',
+    sendBonus: 'Send £20 bonus',
+    bonusConfirm: '£20 bonus sent to Carmen',
+  },
+  es: {
+    bestOfDay: 'Mejor del día',
+    seeWeekly: 'Ver detalle semanal de Carmen',
+    back: '← Volver',
+    seeDetail: 'Ver detalle →',
+    cleansOnTime: '3 limpiezas hoy · 98% a tiempo',
+    starOfDay: 'Estrella del día',
+    last7Days: 'Carmen Ruiz · últimos 7 días',
+    avgOnTime: 'Media de puntualidad: 91%',
+    bonusSent: 'Bonus enviado',
+    sendBonus: 'Enviar bonus £20',
+    bonusConfirm: 'Bonus de £20 enviado a Carmen',
+  },
+  pt: {
+    bestOfDay: 'Melhor do dia',
+    seeWeekly: 'Ver detalhe semanal da Carmen',
+    back: '← Voltar',
+    seeDetail: 'Ver detalhe →',
+    cleansOnTime: '3 limpezas hoje · 98% a horas',
+    starOfDay: 'Estrela do dia',
+    last7Days: 'Carmen Ruiz · últimos 7 dias',
+    avgOnTime: 'Média de pontualidade: 91%',
+    bonusSent: 'Bónus enviado',
+    sendBonus: 'Enviar bónus £20',
+    bonusConfirm: 'Bónus de £20 enviado à Carmen',
+  },
+} as const;
 
 const SPARK = [82, 88, 91, 87, 95, 93, 98]; // on-time %, last 7 days
 
 export function DemoTodayHero() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [flipped, setFlipped] = useState(false);
   const [bonusSent, setBonusSent] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -75,15 +120,15 @@ export function DemoTodayHero() {
     >
       <header className="mb-3 flex items-center justify-between">
         <h2 className="inline-flex items-center gap-2 font-display text-lg font-semibold text-slate-900">
-          <Award className="h-4 w-4 text-amber-500" /> Mejor del día
+          <Award className="h-4 w-4 text-amber-500" /> {t.bestOfDay}
         </h2>
         <button
           type="button"
           onClick={() => setFlipped((s) => !s)}
-          title="Ver detalle semanal de Carmen"
+          title={t.seeWeekly}
           className="text-[11.5px] font-semibold text-blue-700 hover:text-blue-800"
         >
-          {flipped ? '← Volver' : 'Ver detalle →'}
+          {flipped ? t.back : t.seeDetail}
         </button>
       </header>
 
@@ -125,10 +170,10 @@ export function DemoTodayHero() {
             <div className="min-w-0 flex-1">
               <p className="text-[15px] font-semibold text-slate-900">Carmen Ruiz</p>
               <p className="mt-0.5 text-[12px] text-slate-600">
-                3 limpiezas hoy · 98% a tiempo
+                {t.cleansOnTime}
               </p>
               <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 ring-1 ring-amber-200">
-                <Award className="h-3 w-3" /> Estrella del día
+                <Award className="h-3 w-3" /> {t.starOfDay}
               </div>
             </div>
             <div className="hidden h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-emerald-200 via-emerald-100 to-amber-100 sm:flex sm:items-center sm:justify-center">
@@ -154,10 +199,10 @@ export function DemoTodayHero() {
           <div className="flex h-full flex-col justify-between">
             <div>
               <p className="text-[12.5px] font-semibold text-slate-900">
-                Carmen Ruiz · últimos 7 días
+                {t.last7Days}
               </p>
               <p className="mt-0.5 text-[11px] text-slate-500">
-                Media de puntualidad: 91%
+                {t.avgOnTime}
               </p>
               <svg viewBox="0 0 140 32" className="mt-1.5 h-9 w-full">
                 <polyline
@@ -186,11 +231,11 @@ export function DemoTodayHero() {
                 className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 px-3 text-[12px] font-semibold text-white transition hover:brightness-110 disabled:cursor-default disabled:opacity-60"
               >
                 <Send className="h-3.5 w-3.5" />
-                {bonusSent ? 'Bonus enviado' : 'Enviar bonus £20'}
+                {bonusSent ? t.bonusSent : t.sendBonus}
               </button>
               {bonusSent ? (
                 <span className="text-[11px] font-medium text-emerald-700">
-                  Bonus de £20 enviado a Carmen
+                  {t.bonusConfirm}
                 </span>
               ) : null}
             </div>

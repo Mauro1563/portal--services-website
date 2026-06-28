@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   LayoutGrid,
@@ -6,6 +8,7 @@ import {
   Users,
   UserSquare2,
 } from 'lucide-react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
 
 export type DemoTab =
   | 'home'
@@ -15,18 +18,29 @@ export type DemoTab =
   | 'chat'
   | 'more';
 
-const ITEMS: Array<{
-  key: DemoTab;
-  href: string;
-  label: string;
-  Icon: React.ComponentType<{ className?: string }>;
-}> = [
-  { key: 'home', href: '/owner/preview', label: 'Inicio', Icon: LayoutGrid },
-  { key: 'tasks', href: '/owner/preview/tasks', label: 'Limpiezas', Icon: ListChecks },
-  { key: 'cleaners', href: '/owner/preview/cleaners', label: 'Equipo', Icon: Users },
-  { key: 'chat', href: '/owner/preview/chat-hub', label: 'Chat', Icon: MessageCircle },
-  { key: 'more', href: '/owner/preview/clients', label: 'Clientes', Icon: UserSquare2 },
-];
+const COPY = {
+  en: {
+    home: 'Home',
+    tasks: 'Cleans',
+    cleaners: 'Team',
+    chat: 'Chat',
+    clients: 'Clients',
+  },
+  es: {
+    home: 'Inicio',
+    tasks: 'Limpiezas',
+    cleaners: 'Equipo',
+    chat: 'Chat',
+    clients: 'Clientes',
+  },
+  pt: {
+    home: 'Início',
+    tasks: 'Limpezas',
+    cleaners: 'Equipa',
+    chat: 'Chat',
+    clients: 'Clientes',
+  },
+} as const;
 
 /**
  * Preview-only bottom nav — same Corporate Trust style as the real
@@ -34,6 +48,22 @@ const ITEMS: Array<{
  * clickable tour never leaks into the authed routes.
  */
 export function DemoBottomTabBar({ active }: { active: DemoTab }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+
+  const ITEMS: Array<{
+    key: DemoTab;
+    href: string;
+    label: string;
+    Icon: React.ComponentType<{ className?: string }>;
+  }> = [
+    { key: 'home', href: '/owner/preview', label: t.home, Icon: LayoutGrid },
+    { key: 'tasks', href: '/owner/preview/tasks', label: t.tasks, Icon: ListChecks },
+    { key: 'cleaners', href: '/owner/preview/cleaners', label: t.cleaners, Icon: Users },
+    { key: 'chat', href: '/owner/preview/chat-hub', label: t.chat, Icon: MessageCircle },
+    { key: 'more', href: '/owner/preview/clients', label: t.clients, Icon: UserSquare2 },
+  ];
+
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur"

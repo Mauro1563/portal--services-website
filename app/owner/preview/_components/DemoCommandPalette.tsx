@@ -17,6 +17,73 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { Mic, Sparkles, X } from 'lucide-react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    voice: 'Voice',
+    quickCommandTitle: 'Quick command by voice or text (Cmd/Ctrl-K)',
+    openQuick: 'Open quick command',
+    quickCommand: 'Quick command',
+    placeholder: 'Schedule cleaning at Soho tomorrow 10am…',
+    stopDictation: 'Stop dictation',
+    startDictation: 'Dictate by voice',
+    close: 'Close',
+    preview: 'Preview',
+    tokensHint1: 'Property tokens',
+    tokensProperty: 'property',
+    tokensComma1: ',',
+    tokensDay: 'day',
+    tokensAnd: 'and',
+    tokensTime: 'time',
+    tokensTail: 'will appear as you type.',
+    taskCreated: '✓ Task created',
+    footer: 'Enter to create · Esc to close · ⌘K to open',
+    speechLang: 'en-GB',
+  },
+  es: {
+    voice: 'Voz',
+    quickCommandTitle: 'Comando rápido por voz o texto (Cmd/Ctrl-K)',
+    openQuick: 'Abrir comando rápido',
+    quickCommand: 'Comando rápido',
+    placeholder: 'Programar limpieza de Soho mañana 10am…',
+    stopDictation: 'Detener dictado',
+    startDictation: 'Dictar por voz',
+    close: 'Cerrar',
+    preview: 'Vista previa',
+    tokensHint1: 'Tokens de propiedad',
+    tokensProperty: 'propiedad',
+    tokensComma1: ',',
+    tokensDay: 'día',
+    tokensAnd: 'y',
+    tokensTime: 'hora',
+    tokensTail: 'aparecerán al escribir.',
+    taskCreated: '✓ Tarea creada',
+    footer: 'Enter para crear · Esc para cerrar · ⌘K para abrir',
+    speechLang: 'es-ES',
+  },
+  pt: {
+    voice: 'Voz',
+    quickCommandTitle: 'Comando rápido por voz ou texto (Cmd/Ctrl-K)',
+    openQuick: 'Abrir comando rápido',
+    quickCommand: 'Comando rápido',
+    placeholder: 'Agendar limpeza em Soho amanhã 10h…',
+    stopDictation: 'Parar ditado',
+    startDictation: 'Ditar por voz',
+    close: 'Fechar',
+    preview: 'Pré-visualização',
+    tokensHint1: 'Tokens de propriedade',
+    tokensProperty: 'propriedade',
+    tokensComma1: ',',
+    tokensDay: 'dia',
+    tokensAnd: 'e',
+    tokensTime: 'hora',
+    tokensTail: 'irão aparecer ao escrever.',
+    taskCreated: '✓ Tarefa criada',
+    footer: 'Enter para criar · Esc para fechar · ⌘K para abrir',
+    speechLang: 'pt-PT',
+  },
+} as const;
 
 // Minimal types — Web Speech is non-standard so we declare what we use.
 type SpeechResult = {
@@ -88,6 +155,8 @@ const TOKEN_CLS: Record<Token['kind'], string> = {
 };
 
 export function DemoCommandPalette() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
@@ -193,7 +262,7 @@ export function DemoCommandPalette() {
     if (Ctor) {
       try {
         const rec = new Ctor();
-        rec.lang = 'es-ES';
+        rec.lang = t.speechLang;
         rec.interimResults = true;
         rec.continuous = false;
         rec.onresult = (e) => {
@@ -249,12 +318,12 @@ export function DemoCommandPalette() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        title="Comando rápido por voz o texto (Cmd/Ctrl-K)"
-        aria-label="Abrir comando rápido"
+        title={t.quickCommandTitle}
+        aria-label={t.openQuick}
         className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-gradient-to-br from-slate-900 to-blue-900 px-4 text-[12.5px] font-semibold text-white shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] transition hover:scale-[1.02] active:scale-95"
       >
         <Mic className="h-4 w-4 text-cyan-300" />
-        <span>Voz</span>
+        <span>{t.voice}</span>
         <kbd className="hidden rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-white/80 sm:inline">⌘K</kbd>
       </button>
 
@@ -262,7 +331,7 @@ export function DemoCommandPalette() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Comando rápido"
+          aria-label={t.quickCommand}
           className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/40 px-4 pt-[18vh] backdrop-blur-sm"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
@@ -291,14 +360,14 @@ export function DemoCommandPalette() {
                 type="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="Programar limpieza de Soho mañana 10am…"
+                placeholder={t.placeholder}
                 className="min-w-0 flex-1 bg-transparent text-[15px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                 autoComplete="off"
               />
               <button
                 type="button"
                 onClick={() => (listening ? stopListening() : startListening())}
-                aria-label={listening ? 'Detener dictado' : 'Dictar por voz'}
+                aria-label={listening ? t.stopDictation : t.startDictation}
                 className={`grid h-9 w-9 place-items-center rounded-full transition ${
                   listening ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
@@ -308,7 +377,7 @@ export function DemoCommandPalette() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Cerrar"
+                aria-label={t.close}
                 className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
               >
                 <X className="h-4 w-4" />
@@ -317,14 +386,14 @@ export function DemoCommandPalette() {
             {/* Parsed preview */}
             <div className="px-4 py-3">
               <p className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500">
-                Vista previa
+                {t.preview}
               </p>
               <p className="mt-1.5 min-h-[24px] text-[14px] leading-snug text-slate-700">
                 {tokens.length === 0 ? (
                   <span className="text-slate-400">
-                    Tokens de propiedad <span className="rounded bg-blue-100 px-1 text-blue-800">propiedad</span>,
-                    {' '}<span className="rounded bg-violet-100 px-1 text-violet-800">día</span> y
-                    {' '}<span className="rounded bg-amber-100 px-1 text-amber-800">hora</span> aparecerán al escribir.
+                    {t.tokensHint1} <span className="rounded bg-blue-100 px-1 text-blue-800">{t.tokensProperty}</span>{t.tokensComma1}
+                    {' '}<span className="rounded bg-violet-100 px-1 text-violet-800">{t.tokensDay}</span> {t.tokensAnd}
+                    {' '}<span className="rounded bg-amber-100 px-1 text-amber-800">{t.tokensTime}</span> {t.tokensTail}
                   </span>
                 ) : (
                   tokens.map((t, i) => (
@@ -336,11 +405,11 @@ export function DemoCommandPalette() {
               </p>
               {committed ? (
                 <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1 text-[11.5px] font-semibold text-emerald-700">
-                  ✓ Tarea creada
+                  {t.taskCreated}
                 </p>
               ) : null}
               <p className="mt-3 text-[10.5px] text-slate-400">
-                Enter para crear · Esc para cerrar · ⌘K para abrir
+                {t.footer}
               </p>
             </div>
           </div>

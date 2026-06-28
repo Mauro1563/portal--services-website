@@ -27,6 +27,52 @@ import {
   Users,
 } from 'lucide-react';
 import { useCountUp } from './useCountUp';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    cleanersActive: 'Active cleaners',
+    onYourTeam: 'on your team',
+    cleanersTitle: 'See and manage the active cleaners on your team',
+    newBookings: 'New bookings',
+    vsLastWeek: 'vs. last week',
+    bookingsTitle: 'See cleans scheduled this week',
+    revenue: 'Revenue',
+    vsLastMonth: 'vs. last month',
+    revenueTitle: 'See revenue trends and detailed KPIs',
+    profit: 'Profit',
+    profitHint: 'revenue − paid',
+    profitTitle: 'See breakdown of costs vs. revenue',
+  },
+  es: {
+    cleanersActive: 'Cleaners activos',
+    onYourTeam: 'en tu equipo',
+    cleanersTitle: 'Ver y gestionar los cleaners activos de tu equipo',
+    newBookings: 'Nuevas reservas',
+    vsLastWeek: 'vs. semana pasada',
+    bookingsTitle: 'Ver las limpiezas programadas esta semana',
+    revenue: 'Ingresos',
+    vsLastMonth: 'vs. mes pasado',
+    revenueTitle: 'Ver tendencias de ingresos y KPIs detallados',
+    profit: 'Beneficio',
+    profitHint: 'ingresos − pagado',
+    profitTitle: 'Ver desglose de costes vs. ingresos',
+  },
+  pt: {
+    cleanersActive: 'Cleaners ativos',
+    onYourTeam: 'na tua equipa',
+    cleanersTitle: 'Ver e gerir os cleaners ativos da tua equipa',
+    newBookings: 'Novas reservas',
+    vsLastWeek: 'vs. semana passada',
+    bookingsTitle: 'Ver as limpezas agendadas esta semana',
+    revenue: 'Receitas',
+    vsLastMonth: 'vs. mês passado',
+    revenueTitle: 'Ver tendências de receitas e KPIs detalhados',
+    profit: 'Lucro',
+    profitHint: 'receitas − pago',
+    profitTitle: 'Ver desagregação de custos vs. receitas',
+  },
+} as const;
 
 type AnimatedValue =
   | { kind: 'text'; value: string }
@@ -240,6 +286,8 @@ export function DemoStatCardsRow({
   profitMonthPence?: number;
   profitDelta?: { label: string; positive: boolean };
 }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const showProfit = typeof profitMonthPence === 'number';
 
   return (
@@ -251,45 +299,45 @@ export function DemoStatCardsRow({
       }
     >
       <StatCard
-        label="Cleaners activos"
+        label={t.cleanersActive}
         value={{ kind: 'text', value: String(cleanersActive) }}
-        hint="en tu equipo"
+        hint={t.onYourTeam}
         Icon={Users}
         accent="brand"
         href="/owner/preview/cleaners"
-        title="Ver y gestionar los cleaners activos de tu equipo"
+        title={t.cleanersTitle}
       />
       <StatCard
-        label="Nuevas reservas"
+        label={t.newBookings}
         value={{ kind: 'text', value: String(bookingsWeek) }}
-        hint="vs. semana pasada"
+        hint={t.vsLastWeek}
         delta={bookingsDelta}
         Icon={CalendarPlus}
         accent="amber"
         href="/owner/preview/tasks"
-        title="Ver las limpiezas programadas esta semana"
+        title={t.bookingsTitle}
       />
       <StatCard
-        label="Ingresos"
+        label={t.revenue}
         value={{ kind: 'money', pence: revenueMonthPence }}
-        hint="vs. mes pasado"
+        hint={t.vsLastMonth}
         delta={revenueDelta}
         Icon={PoundSterling}
         accent="emerald"
         href="/owner/preview/analytics"
-        title="Ver tendencias de ingresos y KPIs detallados"
+        title={t.revenueTitle}
         animateMoney
       />
       {showProfit ? (
         <StatCard
-          label="Beneficio"
+          label={t.profit}
           value={{ kind: 'money', pence: profitMonthPence as number }}
-          hint="ingresos − pagado"
+          hint={t.profitHint}
           delta={profitDelta}
           Icon={PiggyBank}
           accent={(profitMonthPence as number) >= 0 ? 'violet' : 'rose'}
           href="/owner/preview/analytics"
-          title="Ver desglose de costes vs. ingresos"
+          title={t.profitTitle}
           animateMoney
         />
       ) : null}

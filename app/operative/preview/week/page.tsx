@@ -26,10 +26,10 @@ import {
   User,
   X,
 } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { Logo } from '@/components/Logo';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 import {
-  DAY_LABELS,
   WEEK_DAYS,
   loadSchedule,
   type ScheduledTask,
@@ -41,6 +41,204 @@ import {
 const CURRENT_CLEANER_ID = 'cl-carmen';
 
 type DemoStatus = ScheduledTask['status'];
+
+const COPY = {
+  en: {
+    backAria: 'Back',
+    backTitle: "Back to today's agenda",
+    refreshAria: 'Refresh',
+    refreshTitle: 'Refresh — pulls in the changes the manager just made',
+    bannerNew: "You've just been given 2 new tasks this week",
+    bannerDismissAria: 'Dismiss notice',
+    bannerDismissTitle: 'Dismiss',
+    weekRoute: 'Your week ahead',
+    assignedBy: 'Assigned by Alan (your manager)',
+    kpiWorked: 'Worked',
+    kpiWorkedTitle: 'See the worked-hours breakdown by day',
+    kpiEarnings: 'Earnings',
+    kpiEarningsTitle: 'See earnings breakdown by task',
+    kpiRating: (n: number) => `Rating (${n})`,
+    kpiRatingTitle: 'See recent client ratings',
+    filter: 'Filter',
+    filterHelpAria: 'Filter help',
+    filterHelp: 'Tap a chip to filter tasks by status. The count updates instantly.',
+    filterAll: 'All',
+    filterAllTitle: 'See every task this week',
+    filterCompleted: 'Completed',
+    filterCompletedTitle: 'Filter to only finished tasks',
+    filterInProgress: 'In progress',
+    filterInProgressTitle: 'Filter to only tasks you have in progress right now',
+    filterScheduled: 'Pending',
+    filterScheduledTitle: 'Filter to only tasks still to do',
+    today: 'TODAY',
+    dayHide: 'Hide tasks for this day',
+    dayShow: 'Show tasks for this day',
+    noCleans: 'No cleans',
+    noMatches: 'No matches',
+    openTaskTitle: 'Open task details',
+    refresh: 'Refresh',
+    refreshFootTitle: 'Reload — fetches the latest changes from the manager',
+    closeTitle: 'Close',
+    closeSheet: 'Close',
+    closeSheetTitle: 'Close the panel',
+    thisWeek: 'This week',
+    kpiSheetWorked: 'Hours worked by day',
+    kpiSheetEarnings: 'Earnings by task',
+    kpiSheetRating: 'Client ratings',
+    weekTotal: 'Week total',
+    totalEarned: 'Total earned',
+    ratingAverage: (avg: string, count: number) => `Average ${avg} ★ across ${count} services`,
+    mockReviews: [
+      { stars: 5, text: 'Spotless — everything sparkled. Will rebook.' },
+      { stars: 5, text: 'Super punctual and very thorough — thank you.' },
+      { stars: 4, text: 'Lovely job, the kitchen was perfect.' },
+      { stars: 5, text: 'Outstanding attention to detail, sheets ironed.' },
+      { stars: 5, text: 'Best clean we have had in months.' },
+    ] as ReadonlyArray<{ stars: number; text: string }>,
+    statusScheduled: 'Pending',
+    statusInProgress: 'In progress',
+    statusCompleted: 'Completed',
+    days: {
+      mon: 'Monday',
+      tue: 'Tuesday',
+      wed: 'Wednesday',
+      thu: 'Thursday',
+      fri: 'Friday',
+      sat: 'Saturday',
+      sun: 'Sunday',
+    } as Record<WeekDay, string>,
+  },
+  es: {
+    backAria: 'Volver',
+    backTitle: 'Volver a la agenda de hoy',
+    refreshAria: 'Refrescar',
+    refreshTitle: 'Refrescar — recarga los cambios que el manager acaba de hacer',
+    bannerNew: 'Acabas de recibir 2 nuevas tareas esta semana',
+    bannerDismissAria: 'Descartar aviso',
+    bannerDismissTitle: 'Descartar',
+    weekRoute: 'Tu ruta de la semana',
+    assignedBy: 'Asignada por Alan (tu manager)',
+    kpiWorked: 'Trabajado',
+    kpiWorkedTitle: 'Ver el desglose de horas trabajadas por día',
+    kpiEarnings: 'Ganancias',
+    kpiEarningsTitle: 'Ver desglose de ganancias por tarea',
+    kpiRating: (n: number) => `Valoración (${n})`,
+    kpiRatingTitle: 'Ver valoraciones recientes del cliente',
+    filter: 'Filtrar',
+    filterHelpAria: 'Ayuda sobre los filtros',
+    filterHelp: 'Toca un chip para filtrar las tareas por estado. El recuento se actualiza al instante.',
+    filterAll: 'Todas',
+    filterAllTitle: 'Ver todas las tareas de la semana',
+    filterCompleted: 'Completadas',
+    filterCompletedTitle: 'Filtrar solo las tareas terminadas',
+    filterInProgress: 'En curso',
+    filterInProgressTitle: 'Filtrar solo las tareas que tienes ahora mismo en curso',
+    filterScheduled: 'Pendientes',
+    filterScheduledTitle: 'Filtrar solo las tareas todavía por hacer',
+    today: 'HOY',
+    dayHide: 'Ocultar tareas de este día',
+    dayShow: 'Mostrar tareas de este día',
+    noCleans: 'Sin limpiezas',
+    noMatches: 'Sin coincidencias',
+    openTaskTitle: 'Abrir detalles de la tarea',
+    refresh: 'Refrescar',
+    refreshFootTitle: 'Recargar — trae los últimos cambios del manager',
+    closeTitle: 'Cerrar',
+    closeSheet: 'Cerrar',
+    closeSheetTitle: 'Cerrar el panel',
+    thisWeek: 'Esta semana',
+    kpiSheetWorked: 'Horas trabajadas por día',
+    kpiSheetEarnings: 'Ganancias por tarea',
+    kpiSheetRating: 'Valoraciones de clientes',
+    weekTotal: 'Total semana',
+    totalEarned: 'Total ganado',
+    ratingAverage: (avg: string, count: number) => `Promedio ${avg} ★ sobre ${count} servicios`,
+    mockReviews: [
+      { stars: 5, text: 'Impecable, todo brillaba. Volveremos a reservar.' },
+      { stars: 5, text: 'Súper puntual y muy detallista — gracias.' },
+      { stars: 4, text: 'Buen trabajo, la cocina quedó perfecta.' },
+      { stars: 5, text: 'Atención al detalle excelente, sábanas planchadas.' },
+      { stars: 5, text: 'Mejor limpieza que hemos tenido en meses.' },
+    ] as ReadonlyArray<{ stars: number; text: string }>,
+    statusScheduled: 'Pendiente',
+    statusInProgress: 'En curso',
+    statusCompleted: 'Completada',
+    days: {
+      mon: 'Lunes',
+      tue: 'Martes',
+      wed: 'Miércoles',
+      thu: 'Jueves',
+      fri: 'Viernes',
+      sat: 'Sábado',
+      sun: 'Domingo',
+    } as Record<WeekDay, string>,
+  },
+  pt: {
+    backAria: 'Voltar',
+    backTitle: 'Voltar à agenda de hoje',
+    refreshAria: 'Atualizar',
+    refreshTitle: 'Atualizar — recarrega as alterações que o gestor acabou de fazer',
+    bannerNew: 'Acabou de receber 2 novas tarefas esta semana',
+    bannerDismissAria: 'Descartar aviso',
+    bannerDismissTitle: 'Descartar',
+    weekRoute: 'A sua rota da semana',
+    assignedBy: 'Atribuída por Alan (o seu gestor)',
+    kpiWorked: 'Trabalhado',
+    kpiWorkedTitle: 'Ver o detalhe de horas trabalhadas por dia',
+    kpiEarnings: 'Ganhos',
+    kpiEarningsTitle: 'Ver detalhe de ganhos por tarefa',
+    kpiRating: (n: number) => `Avaliação (${n})`,
+    kpiRatingTitle: 'Ver avaliações recentes dos clientes',
+    filter: 'Filtrar',
+    filterHelpAria: 'Ajuda sobre os filtros',
+    filterHelp: 'Toque num chip para filtrar as tarefas por estado. A contagem atualiza no momento.',
+    filterAll: 'Todas',
+    filterAllTitle: 'Ver todas as tarefas da semana',
+    filterCompleted: 'Concluídas',
+    filterCompletedTitle: 'Filtrar apenas as tarefas terminadas',
+    filterInProgress: 'Em curso',
+    filterInProgressTitle: 'Filtrar apenas as tarefas que tem em curso neste momento',
+    filterScheduled: 'Pendentes',
+    filterScheduledTitle: 'Filtrar apenas as tarefas ainda por fazer',
+    today: 'HOJE',
+    dayHide: 'Ocultar tarefas deste dia',
+    dayShow: 'Mostrar tarefas deste dia',
+    noCleans: 'Sem limpezas',
+    noMatches: 'Sem correspondências',
+    openTaskTitle: 'Abrir detalhes da tarefa',
+    refresh: 'Atualizar',
+    refreshFootTitle: 'Recarregar — traz as últimas alterações do gestor',
+    closeTitle: 'Fechar',
+    closeSheet: 'Fechar',
+    closeSheetTitle: 'Fechar o painel',
+    thisWeek: 'Esta semana',
+    kpiSheetWorked: 'Horas trabalhadas por dia',
+    kpiSheetEarnings: 'Ganhos por tarefa',
+    kpiSheetRating: 'Avaliações de clientes',
+    weekTotal: 'Total da semana',
+    totalEarned: 'Total ganho',
+    ratingAverage: (avg: string, count: number) => `Média ${avg} ★ em ${count} serviços`,
+    mockReviews: [
+      { stars: 5, text: 'Impecável, tudo a brilhar. Vamos reservar de novo.' },
+      { stars: 5, text: 'Super pontual e muito minuciosa — obrigado.' },
+      { stars: 4, text: 'Bom trabalho, a cozinha ficou perfeita.' },
+      { stars: 5, text: 'Atenção ao detalhe excelente, lençóis engomados.' },
+      { stars: 5, text: 'A melhor limpeza que tivemos em meses.' },
+    ] as ReadonlyArray<{ stars: number; text: string }>,
+    statusScheduled: 'Pendente',
+    statusInProgress: 'Em curso',
+    statusCompleted: 'Concluída',
+    days: {
+      mon: 'Segunda',
+      tue: 'Terça',
+      wed: 'Quarta',
+      thu: 'Quinta',
+      fri: 'Sexta',
+      sat: 'Sábado',
+      sun: 'Domingo',
+    } as Record<WeekDay, string>,
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 type Day = {
   key: WeekDay;
@@ -69,12 +267,16 @@ function expectedPayPence(t: ScheduledTask): number {
 
 type Filter = 'all' | 'completed' | 'in_progress' | 'scheduled';
 
-const FILTERS: Array<{ key: Filter; label: string; title: string }> = [
-  { key: 'all', label: 'Todas', title: 'Ver todas las tareas de la semana' },
-  { key: 'completed', label: 'Completadas', title: 'Filtrar solo las tareas terminadas' },
-  { key: 'in_progress', label: 'En curso', title: 'Filtrar solo las tareas que tienes ahora mismo en curso' },
-  { key: 'scheduled', label: 'Pendientes', title: 'Filtrar solo las tareas todavía por hacer' },
-];
+function buildFilters(
+  t: (typeof COPY)['en'],
+): Array<{ key: Filter; label: string; title: string }> {
+  return [
+    { key: 'all', label: t.filterAll, title: t.filterAllTitle },
+    { key: 'completed', label: t.filterCompleted, title: t.filterCompletedTitle },
+    { key: 'in_progress', label: t.filterInProgress, title: t.filterInProgressTitle },
+    { key: 'scheduled', label: t.filterScheduled, title: t.filterScheduledTitle },
+  ];
+}
 
 /** Today's WeekDay key, so the matching day card gets the "HOY" badge. */
 function todayKey(): WeekDay {
@@ -84,6 +286,10 @@ function todayKey(): WeekDay {
 }
 
 export default function OperativePreviewWeek() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const FILTERS = useMemo(() => buildFilters(t), [t]);
+  const DAY_LABELS_LOCAL = t.days;
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [filter, setFilter] = useState<Filter>('all');
@@ -107,7 +313,7 @@ export default function OperativePreviewWeek() {
     const sorted = [...tasks].sort((a, b) => a.startTime.localeCompare(b.startTime));
     return WEEK_DAYS.map((key) => ({
       key,
-      label: DAY_LABELS[key],
+      label: DAY_LABELS_LOCAL[key],
       isToday: key === today,
       tasks: sorted.filter((t) => t.day === key),
     }));
@@ -161,7 +367,7 @@ export default function OperativePreviewWeek() {
   const selected = selectedTaskId
     ? tasks.find((t) => t.id === selectedTaskId) ?? null
     : null;
-  const selectedDayLabel = selected ? DAY_LABELS[selected.day] : '';
+  const selectedDayLabel = selected ? DAY_LABELS_LOCAL[selected.day] : '';
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
@@ -169,8 +375,8 @@ export default function OperativePreviewWeek() {
         <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-2 px-4">
           <Link
             href="/operative/preview"
-            aria-label="Back"
-            title="Volver a la agenda de hoy"
+            aria-label={t.backAria}
+            title={t.backTitle}
             className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-graphite-1 hover:bg-surface-2"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -179,8 +385,8 @@ export default function OperativePreviewWeek() {
           <button
             type="button"
             onClick={refresh}
-            aria-label="Refrescar"
-            title="Refrescar — recarga los cambios que el manager acaba de hacer"
+            aria-label={t.refreshAria}
+            title={t.refreshTitle}
             className="-mr-2 flex h-9 w-9 items-center justify-center rounded-full text-graphite-1 hover:bg-surface-2"
           >
             <RefreshCw className="h-4 w-4" />
@@ -194,13 +400,13 @@ export default function OperativePreviewWeek() {
           <div className="mx-auto flex max-w-md items-center gap-2 px-4 py-2">
             <Sparkles className="h-3.5 w-3.5 shrink-0 text-amber-600" />
             <p className="flex-1 text-[11.5px] font-semibold text-amber-900">
-              Acabas de recibir 2 nuevas tareas esta semana
+              {t.bannerNew}
             </p>
             <button
               type="button"
               onClick={() => setBannerVisible(false)}
-              aria-label="Descartar aviso"
-              title="Descartar"
+              aria-label={t.bannerDismissAria}
+              title={t.bannerDismissTitle}
               className="grid h-5 w-5 place-items-center rounded-full text-amber-700 hover:bg-amber-200/70"
             >
               <X className="h-3 w-3" />
@@ -211,35 +417,35 @@ export default function OperativePreviewWeek() {
 
       <div className="mx-auto max-w-md px-4 py-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-500">
-          Tu ruta de la semana
+          {t.weekRoute}
         </p>
         <h1 className="mt-1 font-display text-2xl font-semibold text-graphite-1">
           23 Jun – 29 Jun
         </h1>
         <p className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-graphite-3">
-          <User className="h-3 w-3" /> Asignada por Alan (tu manager)
+          <User className="h-3 w-3" /> {t.assignedBy}
         </p>
 
         <div className="mt-4 grid grid-cols-3 gap-2">
           <Kpi
             icon={<Clock className="h-3.5 w-3.5 text-brand-500" />}
-            label="Trabajado"
+            label={t.kpiWorked}
             value={formatHours(totalMinutes)}
-            title="Ver el desglose de horas trabajadas por día"
+            title={t.kpiWorkedTitle}
             onClick={() => setKpiSheet('worked')}
           />
           <Kpi
             icon={<PoundSterling className="h-3.5 w-3.5 text-emerald-600" />}
-            label="Ganancias"
+            label={t.kpiEarnings}
             value={formatMoney(totalEarnings)}
-            title="Ver desglose de ganancias por tarea"
+            title={t.kpiEarningsTitle}
             onClick={() => setKpiSheet('earnings')}
           />
           <Kpi
             icon={<Star className="h-3.5 w-3.5 text-amber-500" />}
-            label={`Valoración (${ratingCount})`}
+            label={t.kpiRating(ratingCount)}
             value={avgStars.toFixed(1)}
-            title="Ver valoraciones recientes del cliente"
+            title={t.kpiRatingTitle}
             onClick={() => setKpiSheet('rating')}
           />
         </div>
@@ -247,11 +453,11 @@ export default function OperativePreviewWeek() {
         <div className="mt-5">
           <div className="flex items-center gap-1.5">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-graphite-3">
-              Filtrar
+              {t.filter}
             </p>
             <button
               type="button"
-              aria-label="Ayuda sobre los filtros"
+              aria-label={t.filterHelpAria}
               aria-expanded={filterHelpOpen}
               aria-controls="filter-help"
               onClick={() => setFilterHelpOpen((o) => !o)}
@@ -265,7 +471,7 @@ export default function OperativePreviewWeek() {
               id="filter-help"
               className="mt-2 rounded-lg border border-dashed border-line bg-surface-1/60 px-3 py-2 text-[11px] leading-relaxed text-graphite-3"
             >
-              Toca un chip para filtrar las tareas por estado. El recuento se actualiza al instante.
+              {t.filterHelp}
             </p>
           ) : null}
           <div className="mt-2 inline-flex rounded-full border border-line bg-paper p-0.5">
@@ -306,7 +512,7 @@ export default function OperativePreviewWeek() {
                 <button
                   type="button"
                   onClick={() => toggleDay(day.key)}
-                  title={isCollapsed ? 'Mostrar tareas de este día' : 'Ocultar tareas de este día'}
+                  title={isCollapsed ? t.dayShow : t.dayHide}
                   className={`flex w-full items-center justify-between gap-2 rounded-lg px-1 py-1 text-left transition hover:bg-surface-2/40 ${
                     day.isToday ? 'text-brand-600' : 'text-graphite-3'
                   }`}
@@ -314,7 +520,7 @@ export default function OperativePreviewWeek() {
                   <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
                     <Calendar className="h-3 w-3" />
                     {day.label}
-                    {day.isToday ? ' · HOY' : ''}
+                    {day.isToday ? ` · ${t.today}` : ''}
                     <span className="rounded-full bg-surface-2 px-1.5 text-[9px] font-bold text-graphite-3">
                       {day.tasks.length}
                     </span>
@@ -327,18 +533,18 @@ export default function OperativePreviewWeek() {
                 </button>
                 {isCollapsed ? null : day.tasks.length === 0 ? (
                   <p className="mt-1 ml-5 text-[11px] text-graphite-3">
-                    {filter === 'all' ? 'Sin limpiezas' : 'Sin coincidencias'}
+                    {filter === 'all' ? t.noCleans : t.noMatches}
                   </p>
                 ) : (
                   <ul className="mt-2 space-y-2">
-                    {day.tasks.map((t, idx) => {
-                      const pay = expectedPayPence(t);
+                    {day.tasks.map((task, idx) => {
+                      const pay = expectedPayPence(task);
                       return (
-                        <li key={t.id}>
+                        <li key={task.id}>
                           <button
                             type="button"
-                            onClick={() => setSelectedTaskId(t.id)}
-                            title="Abrir detalles de la tarea"
+                            onClick={() => setSelectedTaskId(task.id)}
+                            title={t.openTaskTitle}
                             className="flex w-full items-start gap-3 rounded-2xl border border-line bg-paper p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-brand-400 hover:shadow-[0_4px_12px_-4px_rgba(37,99,235,0.18)]"
                           >
                             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
@@ -347,24 +553,24 @@ export default function OperativePreviewWeek() {
                             <div className="min-w-0 flex-1">
                               <div className="flex items-start justify-between gap-3">
                                 <p className="min-w-0 truncate font-display text-sm font-semibold text-graphite-1">
-                                  {t.propertyName}
+                                  {task.propertyName}
                                 </p>
                                 <span className="shrink-0 font-display text-sm font-semibold tabular-nums text-emerald-700">
                                   {formatMoney(pay)}
                                 </span>
                               </div>
                               <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium text-brand-600">
-                                <MapPin className="h-3 w-3" /> {t.propertyAddress}
+                                <MapPin className="h-3 w-3" /> {task.propertyAddress}
                               </span>
                               <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-graphite-3">
-                                <User className="h-3 w-3" /> {t.clientName}
+                                <User className="h-3 w-3" /> {task.clientName}
                               </p>
                               <p className="mt-1 truncate text-[11px] text-graphite-3">
-                                {t.startTime} · {formatHours(t.durationMin)}
+                                {task.startTime} · {formatHours(task.durationMin)}
                               </p>
                               <div className="mt-1.5 flex items-center gap-2">
-                                <StatusBadge status={t.status} />
-                                {t.status === 'completed' ? (
+                                <StatusBadge status={task.status} labels={t} />
+                                {task.status === 'completed' ? (
                                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                                 ) : null}
                               </div>
@@ -384,11 +590,11 @@ export default function OperativePreviewWeek() {
           <button
             type="button"
             onClick={refresh}
-            title="Recargar — trae los últimos cambios del manager"
+            title={t.refreshFootTitle}
             className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-[11px] font-medium text-graphite-3 transition hover:text-graphite-1"
           >
             <RefreshCw className="h-3 w-3" />
-            Refrescar
+            {t.refresh}
           </button>
         </div>
       </div>
@@ -421,7 +627,7 @@ export default function OperativePreviewWeek() {
               <button
                 type="button"
                 onClick={() => setSelectedTaskId(null)}
-                title="Cerrar"
+                title={t.closeTitle}
                 className="grid h-8 w-8 place-items-center rounded-full text-graphite-3 hover:bg-surface-2"
               >
                 <X className="h-4 w-4" />
@@ -437,17 +643,17 @@ export default function OperativePreviewWeek() {
                 <PoundSterling className="h-3 w-3" />
                 {formatMoney(expectedPayPence(selected))}
               </span>
-              <StatusBadge status={selected.status} />
+              <StatusBadge status={selected.status} labels={t} />
             </div>
 
             <div className="mt-4 grid grid-cols-1 gap-2">
               <button
                 type="button"
                 onClick={() => setSelectedTaskId(null)}
-                title="Cerrar el panel"
+                title={t.closeSheetTitle}
                 className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-line bg-paper px-3 py-2.5 text-[12px] font-bold text-graphite-1"
               >
-                Cerrar
+                {t.closeSheet}
               </button>
             </div>
           </div>
@@ -467,20 +673,20 @@ export default function OperativePreviewWeek() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-graphite-3">
-                  Esta semana
+                  {t.thisWeek}
                 </p>
                 <h2 className="mt-1 font-display text-lg font-semibold text-graphite-1">
                   {kpiSheet === 'worked'
-                    ? 'Horas trabajadas por día'
+                    ? t.kpiSheetWorked
                     : kpiSheet === 'earnings'
-                      ? 'Ganancias por tarea'
-                      : 'Valoraciones de clientes'}
+                      ? t.kpiSheetEarnings
+                      : t.kpiSheetRating}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setKpiSheet(null)}
-                title="Cerrar"
+                title={t.closeTitle}
                 className="grid h-8 w-8 place-items-center rounded-full text-graphite-3 hover:bg-surface-2"
               >
                 <X className="h-4 w-4" />
@@ -490,12 +696,12 @@ export default function OperativePreviewWeek() {
             {kpiSheet === 'worked' ? (
               <ul className="mt-4 divide-y divide-line rounded-xl border border-line">
                 {days.map((d) => {
-                  const mins = d.tasks.reduce((s, t) => s + t.durationMin, 0);
+                  const mins = d.tasks.reduce((s, task) => s + task.durationMin, 0);
                   return (
                     <li key={d.key} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
                       <span className={`font-medium ${d.isToday ? 'text-brand-600' : 'text-graphite-1'}`}>
                         {d.label}
-                        {d.isToday ? ' · HOY' : ''}
+                        {d.isToday ? ` · ${t.today}` : ''}
                       </span>
                       <span className="tabular-nums text-graphite-3">
                         {mins === 0 ? '—' : formatHours(mins)}
@@ -504,7 +710,7 @@ export default function OperativePreviewWeek() {
                   );
                 })}
                 <li className="flex items-center justify-between gap-3 bg-surface-1/40 px-3 py-2.5 text-[12px] font-semibold">
-                  <span className="text-graphite-1">Total semana</span>
+                  <span className="text-graphite-1">{t.weekTotal}</span>
                   <span className="tabular-nums text-graphite-1">{formatHours(totalMinutes)}</span>
                 </li>
               </ul>
@@ -513,24 +719,24 @@ export default function OperativePreviewWeek() {
             {kpiSheet === 'earnings' ? (
               <ul className="mt-4 divide-y divide-line rounded-xl border border-line">
                 {allTasks
-                  .filter((t) => t.status === 'completed')
-                  .map((t) => (
-                    <li key={t.id} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
+                  .filter((task) => task.status === 'completed')
+                  .map((task) => (
+                    <li key={task.id} className="flex items-center justify-between gap-3 px-3 py-2.5 text-[12px]">
                       <div className="min-w-0">
                         <p className="truncate font-medium text-graphite-1">
-                          {t.propertyName}
+                          {task.propertyName}
                         </p>
                         <p className="truncate text-[10px] text-graphite-3">
-                          {DAY_LABELS[t.day]} · {formatHours(t.durationMin)}
+                          {DAY_LABELS_LOCAL[task.day]} · {formatHours(task.durationMin)}
                         </p>
                       </div>
                       <span className="shrink-0 font-semibold tabular-nums text-emerald-700">
-                        {formatMoney(expectedPayPence(t))}
+                        {formatMoney(expectedPayPence(task))}
                       </span>
                     </li>
                   ))}
                 <li className="flex items-center justify-between gap-3 bg-surface-1/40 px-3 py-2.5 text-[12px] font-semibold">
-                  <span className="text-graphite-1">Total ganado</span>
+                  <span className="text-graphite-1">{t.totalEarned}</span>
                   <span className="tabular-nums text-graphite-1">{formatMoney(totalEarnings)}</span>
                 </li>
               </ul>
@@ -539,21 +745,15 @@ export default function OperativePreviewWeek() {
             {kpiSheet === 'rating' ? (
               <ul className="mt-4 space-y-2">
                 {(() => {
-                  const completed = allTasks.filter((t) => t.status === 'completed');
-                  const MOCK_REVIEWS = [
-                    { stars: 5, text: 'Impecable, todo brillaba. Volveremos a reservar.' },
-                    { stars: 5, text: 'Súper puntual y muy detallista — gracias.' },
-                    { stars: 4, text: 'Buen trabajo, la cocina quedó perfecta.' },
-                    { stars: 5, text: 'Atención al detalle excelente, sábanas planchadas.' },
-                    { stars: 5, text: 'Mejor limpieza que hemos tenido en meses.' },
-                  ];
-                  return completed.slice(0, MOCK_REVIEWS.length).map((t, i) => {
+                  const completed = allTasks.filter((task) => task.status === 'completed');
+                  const MOCK_REVIEWS = t.mockReviews;
+                  return completed.slice(0, MOCK_REVIEWS.length).map((task, i) => {
                     const r = MOCK_REVIEWS[i];
                     return (
-                      <li key={t.id} className="rounded-xl border border-line bg-paper p-3">
+                      <li key={task.id} className="rounded-xl border border-line bg-paper p-3">
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-[12px] font-semibold text-graphite-1">
-                            {t.propertyName}
+                            {task.propertyName}
                           </p>
                           <span className="inline-flex items-center gap-0.5 text-[11px] font-bold text-amber-600">
                             {Array.from({ length: r.stars }).map((_, k) => (
@@ -569,7 +769,7 @@ export default function OperativePreviewWeek() {
                   });
                 })()}
                 <li className="rounded-xl bg-surface-1/40 px-3 py-2.5 text-center text-[11px] font-semibold text-graphite-1">
-                  Promedio {avgStars.toFixed(1)} ★ sobre {ratingCount} servicios
+                  {t.ratingAverage(avgStars.toFixed(1), ratingCount)}
                 </li>
               </ul>
             ) : null}
@@ -582,17 +782,32 @@ export default function OperativePreviewWeek() {
   );
 }
 
-const STATUS_LABEL: Record<DemoStatus, { label: string; cls: string }> = {
-  scheduled: { label: 'Pendiente', cls: 'bg-slate-100 text-slate-700' },
-  in_progress: { label: 'En curso', cls: 'bg-amber-100 text-amber-800' },
-  completed: { label: 'Completada', cls: 'bg-emerald-100 text-emerald-800' },
+const STATUS_CLS: Record<DemoStatus, string> = {
+  scheduled: 'bg-slate-100 text-slate-700',
+  in_progress: 'bg-amber-100 text-amber-800',
+  completed: 'bg-emerald-100 text-emerald-800',
 };
 
-function StatusBadge({ status }: { status: DemoStatus }) {
-  const s = STATUS_LABEL[status];
+function StatusBadge({
+  status,
+  labels,
+}: {
+  status: DemoStatus;
+  labels: Pick<
+    (typeof COPY)['en'],
+    'statusScheduled' | 'statusInProgress' | 'statusCompleted'
+  >;
+}) {
+  const cls = STATUS_CLS[status];
+  const label =
+    status === 'scheduled'
+      ? labels.statusScheduled
+      : status === 'in_progress'
+        ? labels.statusInProgress
+        : labels.statusCompleted;
   return (
-    <span className={`rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold ${s.cls}`}>
-      {s.label}
+    <span className={`rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold ${cls}`}>
+      {label}
     </span>
   );
 }

@@ -2,6 +2,109 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    schedule: 'Schedule',
+    weeklyCalendar: 'Weekly calendar',
+    scheduleTitle: 'Assign cleaners to properties each day of the week',
+    cleans: 'Cleans',
+    cleansHint: '4 scheduled today',
+    cleansTitle: 'See all cleans (scheduled, in progress and completed)',
+    team: 'Team',
+    teamHint: '4 operatives active',
+    teamTitle: 'See the cleaner team and reassign tasks',
+    properties: 'Properties',
+    propertiesHint: '6 sites',
+    propertiesTitle: 'Manage your clients’ properties',
+    clients: 'Clients',
+    clientsHint: '6 active',
+    clientsTitle: 'List of clients and access to their portals',
+    branding: 'Branding',
+    brandingHint: 'Logo and colours',
+    brandingTitle: 'Customise the name, logo and colours of your clients’ portal',
+    marketing: 'Marketing',
+    marketingHint: 'QR, promos, social',
+    marketingTitle: 'Share your link, create promo codes and download materials',
+    quickAccess: 'Quick access',
+    newTaskBtn: 'New task',
+    newTaskTitle: 'Create a new cleaning from the dashboard',
+    schedulingTitle: 'Schedule cleaning',
+    close: 'Close',
+    propertyLabel: 'Property',
+    selectProperty: 'Select property…',
+    timeLabel: 'Time',
+    addToPlan: 'Add to plan',
+    demoOnly: 'Data only stays in the demo.',
+  },
+  es: {
+    schedule: 'Programar',
+    weeklyCalendar: 'Calendario semanal',
+    scheduleTitle: 'Asigna cleaners a propiedades cada día de la semana',
+    cleans: 'Limpiezas',
+    cleansHint: '4 programadas hoy',
+    cleansTitle: 'Ver todas las limpiezas (programadas, en curso y completadas)',
+    team: 'Equipo',
+    teamHint: '4 operarios activos',
+    teamTitle: 'Ver el equipo de cleaners y reasignar tareas',
+    properties: 'Propiedades',
+    propertiesHint: '6 sitios',
+    propertiesTitle: 'Gestionar las propiedades de tus clientes',
+    clients: 'Clientes',
+    clientsHint: '6 activos',
+    clientsTitle: 'Lista de clientes y acceso a sus portales',
+    branding: 'Branding',
+    brandingHint: 'Logo y colores',
+    brandingTitle: 'Personaliza el nombre, logo y colores del portal de tus clientes',
+    marketing: 'Marketing',
+    marketingHint: 'QR, promos, redes',
+    marketingTitle: 'Comparte tu enlace, crea códigos promocionales y descarga material',
+    quickAccess: 'Accesos rápidos',
+    newTaskBtn: 'Nueva tarea',
+    newTaskTitle: 'Crear una nueva limpieza desde el dashboard',
+    schedulingTitle: 'Programar limpieza',
+    close: 'Cerrar',
+    propertyLabel: 'Propiedad',
+    selectProperty: 'Selecciona propiedad…',
+    timeLabel: 'Hora',
+    addToPlan: 'Añadir al planning',
+    demoOnly: 'Los datos se quedan sólo en la demo.',
+  },
+  pt: {
+    schedule: 'Programar',
+    weeklyCalendar: 'Calendário semanal',
+    scheduleTitle: 'Atribui cleaners a propriedades em cada dia da semana',
+    cleans: 'Limpezas',
+    cleansHint: '4 agendadas hoje',
+    cleansTitle: 'Ver todas as limpezas (agendadas, em curso e concluídas)',
+    team: 'Equipa',
+    teamHint: '4 operacionais ativos',
+    teamTitle: 'Ver a equipa de cleaners e reatribuir tarefas',
+    properties: 'Propriedades',
+    propertiesHint: '6 locais',
+    propertiesTitle: 'Gerir as propriedades dos teus clientes',
+    clients: 'Clientes',
+    clientsHint: '6 ativos',
+    clientsTitle: 'Lista de clientes e acesso aos portais deles',
+    branding: 'Branding',
+    brandingHint: 'Logótipo e cores',
+    brandingTitle: 'Personaliza o nome, logótipo e cores do portal dos teus clientes',
+    marketing: 'Marketing',
+    marketingHint: 'QR, promos, redes',
+    marketingTitle: 'Partilha o teu link, cria códigos promocionais e descarrega material',
+    quickAccess: 'Acessos rápidos',
+    newTaskBtn: 'Nova tarefa',
+    newTaskTitle: 'Criar uma nova limpeza a partir do dashboard',
+    schedulingTitle: 'Agendar limpeza',
+    close: 'Fechar',
+    propertyLabel: 'Propriedade',
+    selectProperty: 'Seleciona propriedade…',
+    timeLabel: 'Hora',
+    addToPlan: 'Adicionar ao planeamento',
+    demoOnly: 'Os dados ficam só na demo.',
+  },
+} as const;
 import {
   BarChart3,
   Building2,
@@ -28,74 +131,80 @@ type Tile = {
   title: string;
 };
 
-const PRIMARY: Tile[] = [
-  {
-    href: '/owner/preview/scheduler',
-    label: 'Programar',
-    hint: 'Calendario semanal',
-    Icon: CalendarDays,
-    iconBg: 'bg-indigo-50',
-    iconText: 'text-indigo-700',
-    title: 'Asigna cleaners a propiedades cada día de la semana',
-  },
-  {
-    href: '/owner/preview/tasks',
-    label: 'Limpiezas',
-    hint: '4 programadas hoy',
-    Icon: ListChecks,
-    iconBg: 'bg-blue-50',
-    iconText: 'text-blue-700',
-    title: 'Ver todas las limpiezas (programadas, en curso y completadas)',
-  },
-  {
-    href: '/owner/preview/cleaners',
-    label: 'Equipo',
-    hint: '4 operarios activos',
-    Icon: Users,
-    iconBg: 'bg-amber-50',
-    iconText: 'text-amber-700',
-    title: 'Ver el equipo de cleaners y reasignar tareas',
-  },
-];
+type CopyT = (typeof COPY)['en'];
 
-const SECONDARY: Tile[] = [
-  {
-    href: '/owner/preview/properties',
-    label: 'Propiedades',
-    hint: '6 sitios',
-    Icon: Building2,
-    iconBg: 'bg-emerald-50',
-    iconText: 'text-emerald-700',
-    title: 'Gestionar las propiedades de tus clientes',
-  },
-  {
-    href: '/owner/preview/clients',
-    label: 'Clientes',
-    hint: '6 activos',
-    Icon: BarChart3,
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
-    title: 'Lista de clientes y acceso a sus portales',
-  },
-  {
-    href: '/owner/preview/branding',
-    label: 'Branding',
-    hint: 'Logo y colores',
-    Icon: Palette,
-    iconBg: 'bg-fuchsia-50',
-    iconText: 'text-fuchsia-700',
-    title: 'Personaliza el nombre, logo y colores del portal de tus clientes',
-  },
-  {
-    href: '/owner/preview/marketing',
-    label: 'Marketing',
-    hint: 'QR, promos, redes',
-    Icon: Megaphone,
-    iconBg: 'bg-rose-50',
-    iconText: 'text-rose-700',
-    title: 'Comparte tu enlace, crea códigos promocionales y descarga material',
-  },
-];
+function buildPrimary(t: CopyT): Tile[] {
+  return [
+    {
+      href: '/owner/preview/scheduler',
+      label: t.schedule,
+      hint: t.weeklyCalendar,
+      Icon: CalendarDays,
+      iconBg: 'bg-indigo-50',
+      iconText: 'text-indigo-700',
+      title: t.scheduleTitle,
+    },
+    {
+      href: '/owner/preview/tasks',
+      label: t.cleans,
+      hint: t.cleansHint,
+      Icon: ListChecks,
+      iconBg: 'bg-blue-50',
+      iconText: 'text-blue-700',
+      title: t.cleansTitle,
+    },
+    {
+      href: '/owner/preview/cleaners',
+      label: t.team,
+      hint: t.teamHint,
+      Icon: Users,
+      iconBg: 'bg-amber-50',
+      iconText: 'text-amber-700',
+      title: t.teamTitle,
+    },
+  ];
+}
+
+function buildSecondary(t: CopyT): Tile[] {
+  return [
+    {
+      href: '/owner/preview/properties',
+      label: t.properties,
+      hint: t.propertiesHint,
+      Icon: Building2,
+      iconBg: 'bg-emerald-50',
+      iconText: 'text-emerald-700',
+      title: t.propertiesTitle,
+    },
+    {
+      href: '/owner/preview/clients',
+      label: t.clients,
+      hint: t.clientsHint,
+      Icon: BarChart3,
+      iconBg: 'bg-slate-100',
+      iconText: 'text-slate-700',
+      title: t.clientsTitle,
+    },
+    {
+      href: '/owner/preview/branding',
+      label: t.branding,
+      hint: t.brandingHint,
+      Icon: Palette,
+      iconBg: 'bg-fuchsia-50',
+      iconText: 'text-fuchsia-700',
+      title: t.brandingTitle,
+    },
+    {
+      href: '/owner/preview/marketing',
+      label: t.marketing,
+      hint: t.marketingHint,
+      Icon: Megaphone,
+      iconBg: 'bg-rose-50',
+      iconText: 'text-rose-700',
+      title: t.marketingTitle,
+    },
+  ];
+}
 
 const PROPERTY_OPTIONS = [
   'Soho Loft',
@@ -113,6 +222,10 @@ type DraftTask = {
 };
 
 export function DemoQuickActions() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const PRIMARY = buildPrimary(t);
+  const SECONDARY = buildSecondary(t);
   const [showNew, setShowNew] = useState(false);
   const [property, setProperty] = useState('');
   const [time, setTime] = useState('');
@@ -132,15 +245,15 @@ export function DemoQuickActions() {
     <section>
       <div className="mb-3 flex items-center justify-between px-1">
         <h2 className="font-display text-base font-semibold text-slate-900">
-          Accesos rápidos
+          {t.quickAccess}
         </h2>
         <button
           type="button"
           onClick={() => setShowNew((s) => !s)}
-          title="Crear una nueva limpieza desde el dashboard"
+          title={t.newTaskTitle}
           className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
-          <Plus className="h-3.5 w-3.5" /> Nueva tarea
+          <Plus className="h-3.5 w-3.5" /> {t.newTaskBtn}
         </button>
       </div>
 
@@ -148,12 +261,12 @@ export function DemoQuickActions() {
         <div className="mb-3 rounded-2xl border border-blue-200 bg-blue-50/40 p-3">
           <div className="flex items-center justify-between">
             <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-900">
-              <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Programar limpieza
+              <Sparkles className="h-3.5 w-3.5 text-blue-600" /> {t.schedulingTitle}
             </p>
             <button
               type="button"
               onClick={() => setShowNew(false)}
-              aria-label="Cerrar"
+              aria-label={t.close}
               className="rounded-full p-1 text-slate-500 hover:bg-white"
             >
               <X className="h-3.5 w-3.5" />
@@ -161,7 +274,7 @@ export function DemoQuickActions() {
           </div>
           <div className="mt-2 grid gap-2 sm:grid-cols-[2fr_1fr]">
             <label className="sr-only" htmlFor="quick-property">
-              Propiedad
+              {t.propertyLabel}
             </label>
             <select
               id="quick-property"
@@ -169,7 +282,7 @@ export function DemoQuickActions() {
               onChange={(e) => setProperty(e.target.value)}
               className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
             >
-              <option value="">Selecciona propiedad…</option>
+              <option value="">{t.selectProperty}</option>
               {PROPERTY_OPTIONS.map((p) => (
                 <option key={p} value={p}>
                   {p}
@@ -177,7 +290,7 @@ export function DemoQuickActions() {
               ))}
             </select>
             <label className="sr-only" htmlFor="quick-time">
-              Hora
+              {t.timeLabel}
             </label>
             <input
               id="quick-time"
@@ -193,7 +306,7 @@ export function DemoQuickActions() {
             disabled={!property || !time}
             className="mt-2 h-9 rounded-lg bg-blue-600 px-3 text-[12px] font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
-            Añadir al planning
+            {t.addToPlan}
           </button>
           {added.length > 0 ? (
             <ul className="mt-3 space-y-1.5">
@@ -211,7 +324,7 @@ export function DemoQuickActions() {
             </ul>
           ) : (
             <p className="mt-2 inline-flex items-center gap-1 text-[11.5px] text-slate-600">
-              <Info className="h-3 w-3" /> Los datos se quedan sólo en la demo.
+              <Info className="h-3 w-3" /> {t.demoOnly}
             </p>
           )}
         </div>

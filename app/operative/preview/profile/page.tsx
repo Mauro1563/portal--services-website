@@ -26,6 +26,7 @@ import {
   RotateCcw,
   User,
 } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 
 type Profile = {
@@ -54,16 +55,175 @@ const AVATAR_POOL = [
 
 type FieldErrors = Partial<Record<keyof Profile, string>>;
 
-function validate(p: Profile): FieldErrors {
+const COPY = {
+  en: {
+    errNameRequired: 'Name is required.',
+    errPhoneRequired: 'Phone is required.',
+    errEmailRequired: 'Email is required.',
+    errEmailInvalid: 'Invalid email.',
+    errAddressRequired: 'Address is required.',
+    photoAlt: (name: string) => `Profile photo of ${name}`,
+    avatarTitle: 'Change profile photo — cycles through the available options',
+    myProfile: 'My profile',
+    editTitle: 'Edit your personal details — name, phone, email and address',
+    edit: 'Edit',
+    changesSaved: 'Changes saved.',
+    accessPin: 'Access PIN',
+    pinHelpTitle: 'Your PIN identifies you when you log in. Only HQ can change it.',
+    pinInfo: 'Your PIN is set by HQ. Ask your manager to change it if needed.',
+    fieldName: 'Full name',
+    fieldNameTitle: 'Your name as it appears to clients and on receipts',
+    fieldPhone: 'Phone',
+    fieldPhoneTitle: 'UK number so clients and managers can call you',
+    fieldEmail: 'Email',
+    fieldEmailTitle: 'Email for assignments and notifications',
+    fieldAddress: 'Address',
+    fieldAddressTitle: 'Home base for calculating distances and journey times to properties',
+    cancel: 'Cancel',
+    cancelTitle: 'Discard changes and return to the current values',
+    save: 'Save',
+    saveTitle: 'Save the changes to your profile',
+    preferences: 'Preferences',
+    pushNotifications: 'Push notifications',
+    pushDescription: 'Get alerts when a new task is assigned to you',
+    pushToggleTitle: 'Turn mobile push notifications on or off',
+    darkMode: 'Dark mode',
+    darkDescription: 'Dark theme for evening use',
+    darkToggleTitle: 'Switch between light and dark theme',
+    language: 'Language',
+    languageDescription: 'App interface language',
+    languageToggleTitle: (target: string) => `Change the app language to ${target}`,
+    notifOn: 'Notifications enabled',
+    notifOff: 'Notifications disabled',
+    darkOn: 'Dark mode enabled',
+    darkOff: 'Dark mode disabled',
+    languageSet: (label: string) => `Language: ${label}`,
+    resetDemo: 'Reset demo',
+    resetDemoTitle: 'Reset the demo — returns the profile to its initial state',
+    signOut: 'Sign out',
+    signOutTitle: 'Sign out — in the real app this takes you to the login screen',
+    avatarUpdated: 'Profile photo updated',
+    signOutDemo: 'Demo · this would sign you out in the real app',
+    sampleName: 'Carmen López',
+    sampleEmail: 'carmen.lopez@example.com',
+    sampleAddress: '14 Queens Gate Mews, London SW7 5QN',
+  },
+  es: {
+    errNameRequired: 'El nombre es obligatorio.',
+    errPhoneRequired: 'El teléfono es obligatorio.',
+    errEmailRequired: 'El email es obligatorio.',
+    errEmailInvalid: 'Email no válido.',
+    errAddressRequired: 'La dirección es obligatoria.',
+    photoAlt: (name: string) => `Foto de perfil de ${name}`,
+    avatarTitle: 'Cambiar foto de perfil — cicla por las opciones disponibles',
+    myProfile: 'Mi perfil',
+    editTitle: 'Editar tus datos personales — nombre, teléfono, email y dirección',
+    edit: 'Editar',
+    changesSaved: 'Cambios guardados.',
+    accessPin: 'PIN de acceso',
+    pinHelpTitle: 'Tu PIN te identifica al hacer login en la app. Solo HQ puede cambiarlo.',
+    pinInfo: 'Tu PIN lo configura HQ. Pídele a tu manager que lo cambie si es necesario.',
+    fieldName: 'Nombre completo',
+    fieldNameTitle: 'Tu nombre como aparece para los clientes y en los recibos',
+    fieldPhone: 'Teléfono',
+    fieldPhoneTitle: 'Número UK para que clientes y manager te llamen',
+    fieldEmail: 'Email',
+    fieldEmailTitle: 'Email donde recibir asignaciones y notificaciones',
+    fieldAddress: 'Dirección',
+    fieldAddressTitle: 'Dirección base para calcular distancias y tiempos a las propiedades',
+    cancel: 'Cancelar',
+    cancelTitle: 'Descartar los cambios y volver a los valores actuales',
+    save: 'Guardar',
+    saveTitle: 'Guardar los cambios en tu perfil',
+    preferences: 'Preferencias',
+    pushNotifications: 'Notificaciones push',
+    pushDescription: 'Recibe avisos cuando te asignen una nueva tarea',
+    pushToggleTitle: 'Activar o desactivar las notificaciones push del móvil',
+    darkMode: 'Modo oscuro',
+    darkDescription: 'Tema oscuro para usar la app de noche',
+    darkToggleTitle: 'Cambiar entre tema claro y oscuro',
+    language: 'Idioma',
+    languageDescription: 'Idioma de la interfaz de la app',
+    languageToggleTitle: (target: string) => `Cambiar el idioma de la app a ${target}`,
+    notifOn: 'Notificaciones activadas',
+    notifOff: 'Notificaciones desactivadas',
+    darkOn: 'Modo oscuro activado',
+    darkOff: 'Modo oscuro desactivado',
+    languageSet: (label: string) => `Idioma: ${label}`,
+    resetDemo: 'Reiniciar demo',
+    resetDemoTitle: 'Reiniciar la demo — devuelve el perfil al estado inicial',
+    signOut: 'Cerrar sesión',
+    signOutTitle: 'Cerrar sesión — en la app real te lleva a la pantalla de login',
+    avatarUpdated: 'Foto de perfil actualizada',
+    signOutDemo: 'Demo · esto cerraría sesión en la app real',
+    sampleName: 'Carmen López',
+    sampleEmail: 'carmen.lopez@ejemplo.com',
+    sampleAddress: '14 Queens Gate Mews, London SW7 5QN',
+  },
+  pt: {
+    errNameRequired: 'O nome é obrigatório.',
+    errPhoneRequired: 'O telefone é obrigatório.',
+    errEmailRequired: 'O email é obrigatório.',
+    errEmailInvalid: 'Email inválido.',
+    errAddressRequired: 'A morada é obrigatória.',
+    photoAlt: (name: string) => `Foto de perfil de ${name}`,
+    avatarTitle: 'Mudar foto de perfil — alterna pelas opções disponíveis',
+    myProfile: 'O meu perfil',
+    editTitle: 'Editar os seus dados pessoais — nome, telefone, email e morada',
+    edit: 'Editar',
+    changesSaved: 'Alterações guardadas.',
+    accessPin: 'PIN de acesso',
+    pinHelpTitle: 'O seu PIN identifica-o ao iniciar sessão na app. Apenas a sede pode alterá-lo.',
+    pinInfo: 'O seu PIN é configurado pela sede. Peça ao seu gestor para o alterar, se necessário.',
+    fieldName: 'Nome completo',
+    fieldNameTitle: 'O seu nome tal como aparece aos clientes e nos recibos',
+    fieldPhone: 'Telefone',
+    fieldPhoneTitle: 'Número do Reino Unido para clientes e gestor o contactarem',
+    fieldEmail: 'Email',
+    fieldEmailTitle: 'Email onde recebe atribuições e notificações',
+    fieldAddress: 'Morada',
+    fieldAddressTitle: 'Morada base para calcular distâncias e tempos até às propriedades',
+    cancel: 'Cancelar',
+    cancelTitle: 'Descartar as alterações e voltar aos valores atuais',
+    save: 'Guardar',
+    saveTitle: 'Guardar as alterações ao seu perfil',
+    preferences: 'Preferências',
+    pushNotifications: 'Notificações push',
+    pushDescription: 'Receba avisos quando lhe atribuírem uma nova tarefa',
+    pushToggleTitle: 'Ativar ou desativar as notificações push do telemóvel',
+    darkMode: 'Modo escuro',
+    darkDescription: 'Tema escuro para usar a app à noite',
+    darkToggleTitle: 'Alternar entre tema claro e escuro',
+    language: 'Idioma',
+    languageDescription: 'Idioma da interface da app',
+    languageToggleTitle: (target: string) => `Mudar o idioma da app para ${target}`,
+    notifOn: 'Notificações ativadas',
+    notifOff: 'Notificações desativadas',
+    darkOn: 'Modo escuro ativado',
+    darkOff: 'Modo escuro desativado',
+    languageSet: (label: string) => `Idioma: ${label}`,
+    resetDemo: 'Reiniciar demo',
+    resetDemoTitle: 'Reiniciar a demo — devolve o perfil ao estado inicial',
+    signOut: 'Terminar sessão',
+    signOutTitle: 'Terminar sessão — na app real leva-o ao ecrã de início de sessão',
+    avatarUpdated: 'Foto de perfil atualizada',
+    signOutDemo: 'Demo · isto terminaria sessão na app real',
+    sampleName: 'Carmen López',
+    sampleEmail: 'carmen.lopez@exemplo.com',
+    sampleAddress: '14 Queens Gate Mews, London SW7 5QN',
+  },
+} as const satisfies Record<ClientLocale, unknown>;
+
+function validate(p: Profile, t: (typeof COPY)['en']): FieldErrors {
   const errors: FieldErrors = {};
-  if (!p.name.trim()) errors.name = 'El nombre es obligatorio.';
-  if (!p.phone.trim()) errors.phone = 'El teléfono es obligatorio.';
+  if (!p.name.trim()) errors.name = t.errNameRequired;
+  if (!p.phone.trim()) errors.phone = t.errPhoneRequired;
   if (!p.email.trim()) {
-    errors.email = 'El email es obligatorio.';
+    errors.email = t.errEmailRequired;
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email.trim())) {
-    errors.email = 'Email no válido.';
+    errors.email = t.errEmailInvalid;
   }
-  if (!p.address.trim()) errors.address = 'La dirección es obligatoria.';
+  if (!p.address.trim()) errors.address = t.errAddressRequired;
   return errors;
 }
 
@@ -73,15 +233,23 @@ export default function OperativePreviewProfile() {
 }
 
 function ProfileBody({ onReset }: { onReset: () => void }) {
-  const [profile, setProfile] = useState<Profile>(INITIAL_PROFILE);
-  const [draft, setDraft] = useState<Profile>(INITIAL_PROFILE);
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const initial: Profile = {
+    ...INITIAL_PROFILE,
+    name: t.sampleName,
+    email: t.sampleEmail,
+    address: t.sampleAddress,
+  };
+  const [profile, setProfile] = useState<Profile>(initial);
+  const [draft, setDraft] = useState<Profile>(initial);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isEditing, setIsEditing] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
   const [avatarIdx, setAvatarIdx] = useState(0);
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  const [language, setLanguage] = useState<'es' | 'en'>('es');
+  const [language, setLanguage] = useState<'es' | 'en'>(locale === 'es' ? 'es' : 'en');
   const [toast, setToast] = useState<string | null>(null);
 
   function showToast(msg: string) {
@@ -102,7 +270,7 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
   }
 
   function saveChanges() {
-    const e = validate(draft);
+    const e = validate(draft, t);
     setErrors(e);
     if (Object.keys(e).length > 0) return;
     setProfile(draft);
@@ -113,11 +281,11 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
 
   function cycleAvatar() {
     setAvatarIdx((i) => (i + 1) % AVATAR_POOL.length);
-    showToast('Foto de perfil actualizada');
+    showToast(t.avatarUpdated);
   }
 
   function fakeSignOut() {
-    showToast('Demo · esto cerraría sesión en la app real');
+    showToast(t.signOutDemo);
   }
 
   return (
@@ -129,13 +297,13 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={AVATAR_POOL[avatarIdx]}
-                alt={`Foto de perfil de ${profile.name}`}
+                alt={t.photoAlt(profile.name)}
                 className="h-14 w-14 rounded-full object-cover ring-2 ring-brand-500/30"
               />
               <button
                 type="button"
                 onClick={cycleAvatar}
-                title="Cambiar foto de perfil — cicla por las opciones disponibles"
+                title={t.avatarTitle}
                 className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-brand-600 text-white shadow ring-2 ring-canvas hover:bg-brand-700"
               >
                 <Camera className="h-3 w-3" />

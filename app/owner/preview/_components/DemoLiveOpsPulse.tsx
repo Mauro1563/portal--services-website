@@ -10,6 +10,40 @@
  * becomes a static "última actividad" caption.
  */
 import { useEffect, useReducer, useState } from 'react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    last8h: 'Last 8h',
+    lastActivity: 'last activity: 2 min ago',
+    initial: 'Carmen arrived at Soho · 2 min ago',
+    carmenSoho: 'Carmen arrived at Soho · now',
+    luciaCamden: 'Lucía marked Camden ✓ · now',
+    pedroRoute: 'Pedro en route to Notting Hill',
+    carmenPhotos: 'Carmen uploaded 4 photos · Soho',
+    luciaMayfair: 'Lucía starts Mayfair',
+  },
+  es: {
+    last8h: 'Últimas 8h',
+    lastActivity: 'última actividad: hace 2 min',
+    initial: 'Carmen llegó a Soho · hace 2 min',
+    carmenSoho: 'Carmen llegó a Soho · ahora',
+    luciaCamden: 'Lucía marcó Camden ✓ · ahora',
+    pedroRoute: 'Pedro en ruta a Notting Hill',
+    carmenPhotos: 'Carmen subió 4 fotos · Soho',
+    luciaMayfair: 'Lucía empieza Mayfair',
+  },
+  pt: {
+    last8h: 'Últimas 8h',
+    lastActivity: 'última atividade: há 2 min',
+    initial: 'Carmen chegou a Soho · há 2 min',
+    carmenSoho: 'Carmen chegou a Soho · agora',
+    luciaCamden: 'Lucía marcou Camden ✓ · agora',
+    pedroRoute: 'Pedro a caminho de Notting Hill',
+    carmenPhotos: 'Carmen enviou 4 fotos · Soho',
+    luciaMayfair: 'Lucía começa Mayfair',
+  },
+} as const;
 
 type Cleaner = {
   id: string;
@@ -25,7 +59,7 @@ type Cleaner = {
 type Event = {
   id: number;
   cleanerId: string;
-  label: string;
+  labelKey: TimelineSlot['labelKey'] | 'initial';
 };
 
 type State = {
@@ -44,12 +78,18 @@ const INITIAL_CLEANERS: Cleaner[] = [
   { id: 'pedro', name: 'Pedro', short: 'PK', color: 'bg-amber-500', p: 0.66, v: 0.04 },
 ];
 
-const TIMELINE: Array<Omit<Event, 'id'> & { afterTicks: number }> = [
-  { afterTicks: 1, cleanerId: 'carmen', label: 'Carmen llegó a Soho · ahora' },
-  { afterTicks: 3, cleanerId: 'lucia', label: 'Lucía marcó Camden ✓ · ahora' },
-  { afterTicks: 5, cleanerId: 'pedro', label: 'Pedro en ruta a Notting Hill' },
-  { afterTicks: 7, cleanerId: 'carmen', label: 'Carmen subió 4 fotos · Soho' },
-  { afterTicks: 9, cleanerId: 'lucia', label: 'Lucía empieza Mayfair' },
+type TimelineSlot = {
+  afterTicks: number;
+  cleanerId: string;
+  labelKey: 'carmenSoho' | 'luciaCamden' | 'pedroRoute' | 'carmenPhotos' | 'luciaMayfair';
+};
+
+const TIMELINE: TimelineSlot[] = [
+  { afterTicks: 1, cleanerId: 'carmen', labelKey: 'carmenSoho' },
+  { afterTicks: 3, cleanerId: 'lucia', labelKey: 'luciaCamden' },
+  { afterTicks: 5, cleanerId: 'pedro', labelKey: 'pedroRoute' },
+  { afterTicks: 7, cleanerId: 'carmen', labelKey: 'carmenPhotos' },
+  { afterTicks: 9, cleanerId: 'lucia', labelKey: 'luciaMayfair' },
 ];
 
 function reducer(state: State, action: { type: 'tick' }): State {
@@ -67,7 +107,7 @@ function reducer(state: State, action: { type: 'tick' }): State {
   if (slot) {
     return {
       cleaners,
-      event: { id: nextTick, cleanerId: slot.cleanerId, label: slot.label },
+      event: { id: nextTick, cleanerId: slot.cleanerId, labelKey: slot.labelKey },
       haloFor: slot.cleanerId,
       haloKey: state.haloKey + 1,
       tick: nextTick,
@@ -77,9 +117,11 @@ function reducer(state: State, action: { type: 'tick' }): State {
 }
 
 export function DemoLiveOpsPulse() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [state, dispatch] = useReducer(reducer, {
     cleaners: INITIAL_CLEANERS,
-    event: { id: 0, cleanerId: 'carmen', label: 'Carmen llegó a Soho · hace 2 min' },
+    event: { id: 0, cleanerId: 'carmen', labelKey: 'initial' },
     haloFor: null,
     haloKey: 0,
     tick: 0,
@@ -162,14 +204,14 @@ export function DemoLiveOpsPulse() {
       </div>
       <p className="mt-1.5 flex items-center justify-between gap-2 text-[11px] leading-tight text-slate-600">
         <span className="font-semibold uppercase tracking-wider text-slate-500">
-          Últimas 8h
+          {t.last8h}
         </span>
         {state.event ? (
           <span
             key={reduced ? 'static' : state.event.id}
             className={`min-w-0 truncate text-right text-slate-700 ${reduced ? '' : 'demo-whisper'}`}
           >
-            {reduced ? 'última actividad: hace 2 min' : state.event.label}
+            {reduced ? t.lastActivity : t[state.event.labelKey]}
           </span>
         ) : null}
       </p>

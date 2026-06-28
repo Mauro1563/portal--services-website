@@ -8,8 +8,9 @@
  * the cleaner sends, a canned "owner" reply lands ~700ms later so the
  * demo feels like a live conversation.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { HelpCircle, RotateCcw, Send } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 
 type Msg = {
@@ -19,39 +20,137 @@ type Msg = {
   time: string;
 };
 
-const INITIAL_MESSAGES: Msg[] = [
-  {
-    id: 'm1',
-    sender: 'owner',
-    body: 'Hola Carmen, mañana hay una limpieza extra a las 16:00 en el apto de Shoreditch. ¿Puedes?',
-    time: '09:12',
+const COPY = {
+  en: {
+    initialMessages: [
+      {
+        id: 'm1',
+        sender: 'owner' as const,
+        body: "Hi Carmen, there's an extra clean tomorrow at 16:00 at the Shoreditch flat. Can you do it?",
+        time: '09:12',
+      },
+      {
+        id: 'm2',
+        sender: 'cleaner' as const,
+        body: "Hi Alan! Yes, no problem. I'll take the lockbox keys.",
+        time: '09:18',
+      },
+      {
+        id: 'm3',
+        sender: 'owner' as const,
+        body: 'Perfect, thanks. The guests check out at 11:00, so you have plenty of time.',
+        time: '09:21',
+      },
+      {
+        id: 'm4',
+        sender: 'cleaner' as const,
+        body: "Got it. I'll let you know when I'm done and upload the photos to the portal.",
+        time: '09:23',
+      },
+    ] as ReadonlyArray<Msg>,
+    cannedReplies: [
+      'Perfect, thanks!',
+      'Noted, tomorrow without fail.',
+      "I'll confirm in a bit.",
+      'Brilliant, everything is in order here.',
+    ] as ReadonlyArray<string>,
+    chatWith: 'Chat with',
+    chatHelpTitle: 'Direct messaging between cleaner and manager — no email, no WhatsApp.',
+    chatHeader: 'Alan (manager)',
+    resetThreadTitle: 'Reset the conversation to its initial state (demo only)',
+    reset: 'Reset',
+    composerPlaceholder: 'Write a message…',
+    composerTitle: 'Type a message and tap Send (or Enter) — Alan will get a notification',
+    sendAria: 'Send',
+    sendTitle: 'Send the message to Alan',
   },
-  {
-    id: 'm2',
-    sender: 'cleaner',
-    body: 'Hola Alan! Sí, sin problema. Llevo las llaves del lockbox.',
-    time: '09:18',
+  es: {
+    initialMessages: [
+      {
+        id: 'm1',
+        sender: 'owner' as const,
+        body: 'Hola Carmen, mañana hay una limpieza extra a las 16:00 en el apto de Shoreditch. ¿Puedes?',
+        time: '09:12',
+      },
+      {
+        id: 'm2',
+        sender: 'cleaner' as const,
+        body: 'Hola Alan! Sí, sin problema. Llevo las llaves del lockbox.',
+        time: '09:18',
+      },
+      {
+        id: 'm3',
+        sender: 'owner' as const,
+        body: 'Perfecto, gracias. Los huéspedes salen a las 11:00, tienes margen de sobra.',
+        time: '09:21',
+      },
+      {
+        id: 'm4',
+        sender: 'cleaner' as const,
+        body: 'Recibido. Te aviso cuando termine y subo las fotos al portal.',
+        time: '09:23',
+      },
+    ] as ReadonlyArray<Msg>,
+    cannedReplies: [
+      'Perfecto, gracias!',
+      'Anotado, mañana sin falta.',
+      'Te confirmo en un rato.',
+      'Genial, todo en orden por aquí.',
+    ] as ReadonlyArray<string>,
+    chatWith: 'Chat con',
+    chatHelpTitle: 'Mensajería directa entre el cleaner y el manager — sin email, sin WhatsApp.',
+    chatHeader: 'Alan (manager)',
+    resetThreadTitle: 'Reiniciar la conversación a su estado inicial (solo demo)',
+    reset: 'Reiniciar',
+    composerPlaceholder: 'Escribe un mensaje…',
+    composerTitle: 'Escribe un mensaje y pulsa Enviar (o Enter) — Alan recibirá una notificación',
+    sendAria: 'Enviar',
+    sendTitle: 'Enviar el mensaje a Alan',
   },
-  {
-    id: 'm3',
-    sender: 'owner',
-    body: 'Perfecto, gracias. Los huéspedes salen a las 11:00, tienes margen de sobra.',
-    time: '09:21',
+  pt: {
+    initialMessages: [
+      {
+        id: 'm1',
+        sender: 'owner' as const,
+        body: 'Olá Carmen, amanhã há uma limpeza extra às 16:00 no apartamento de Shoreditch. Pode fazer?',
+        time: '09:12',
+      },
+      {
+        id: 'm2',
+        sender: 'cleaner' as const,
+        body: 'Olá Alan! Sim, sem problema. Levo as chaves do cofre.',
+        time: '09:18',
+      },
+      {
+        id: 'm3',
+        sender: 'owner' as const,
+        body: 'Perfeito, obrigado. Os hóspedes saem às 11:00, tem tempo de sobra.',
+        time: '09:21',
+      },
+      {
+        id: 'm4',
+        sender: 'cleaner' as const,
+        body: 'Recebido. Aviso quando terminar e envio as fotos para o portal.',
+        time: '09:23',
+      },
+    ] as ReadonlyArray<Msg>,
+    cannedReplies: [
+      'Perfeito, obrigada!',
+      'Anotado, amanhã sem falta.',
+      'Confirmo daqui a pouco.',
+      'Ótimo, está tudo em ordem por aqui.',
+    ] as ReadonlyArray<string>,
+    chatWith: 'Conversa com',
+    chatHelpTitle: 'Mensagens diretas entre o cleaner e o gestor — sem email, sem WhatsApp.',
+    chatHeader: 'Alan (gestor)',
+    resetThreadTitle: 'Reiniciar a conversa para o estado inicial (apenas demo)',
+    reset: 'Reiniciar',
+    composerPlaceholder: 'Escreva uma mensagem…',
+    composerTitle: 'Escreva uma mensagem e toque em Enviar (ou Enter) — o Alan recebe uma notificação',
+    sendAria: 'Enviar',
+    sendTitle: 'Enviar a mensagem ao Alan',
   },
-  {
-    id: 'm4',
-    sender: 'cleaner',
-    body: 'Recibido. Te aviso cuando termine y subo las fotos al portal.',
-    time: '09:23',
-  },
-];
-
-const CANNED_REPLIES = [
-  'Perfecto, gracias!',
-  'Anotado, mañana sin falta.',
-  'Te confirmo en un rato.',
-  'Genial, todo en orden por aquí.',
-];
+} as const satisfies Record<ClientLocale, unknown>;
 
 function nowHHMM(): string {
   const d = new Date();
@@ -59,7 +158,10 @@ function nowHHMM(): string {
 }
 
 export default function OperativePreviewChat() {
-  const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const initialMessages = useMemo(() => [...t.initialMessages] as Msg[], [t]);
+  const [messages, setMessages] = useState<Msg[]>(initialMessages);
   const [draft, setDraft] = useState('');
   const [typing, setTyping] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -86,7 +188,7 @@ export default function OperativePreviewChat() {
       const reply: Msg = {
         id: `m-${Date.now()}-r`,
         sender: 'owner',
-        body: CANNED_REPLIES[Math.floor(Math.random() * CANNED_REPLIES.length)],
+        body: t.cannedReplies[Math.floor(Math.random() * t.cannedReplies.length)] ?? '',
         time: nowHHMM(),
       };
       setTyping(false);
@@ -103,7 +205,7 @@ export default function OperativePreviewChat() {
   }
 
   function handleResetThread() {
-    setMessages(INITIAL_MESSAGES);
+    setMessages([...t.initialMessages] as Msg[]);
     setDraft('');
     setTyping(false);
   }
@@ -113,26 +215,26 @@ export default function OperativePreviewChat() {
       <header className="sticky top-0 z-20 flex items-start justify-between gap-2 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur">
         <div>
           <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-            Chat con
+            {t.chatWith}
             <span
-              title="Mensajería directa entre el cleaner y el manager — sin email, sin WhatsApp."
+              title={t.chatHelpTitle}
               className="grid h-3.5 w-3.5 cursor-help place-items-center text-text-3"
             >
               <HelpCircle className="h-3 w-3" />
             </span>
           </p>
           <h1 className="mt-0.5 font-display text-base font-semibold text-text-1">
-            Alan (manager)
+            {t.chatHeader}
           </h1>
         </div>
         <button
           type="button"
           onClick={handleResetThread}
-          title="Reiniciar la conversación a su estado inicial (solo demo)"
+          title={t.resetThreadTitle}
           className="inline-flex items-center gap-1 rounded-full border border-line bg-paper px-2.5 py-1 text-[10px] font-semibold text-text-3 hover:text-text-1"
         >
           <RotateCcw className="h-3 w-3" />
-          Reiniciar
+          {t.reset}
         </button>
       </header>
 
@@ -190,16 +292,16 @@ export default function OperativePreviewChat() {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Escribe un mensaje…"
-            title="Escribe un mensaje y pulsa Enviar (o Enter) — Alan recibirá una notificación"
+            placeholder={t.composerPlaceholder}
+            title={t.composerTitle}
             className="block max-h-32 min-h-[44px] w-full resize-none rounded-2xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 placeholder:text-text-3 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
           <button
             type="button"
             onClick={handleSend}
             disabled={!draft.trim()}
-            aria-label="Enviar"
-            title="Enviar el mensaje a Alan"
+            aria-label={t.sendAria}
+            title={t.sendTitle}
             className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.55)] transition active:scale-95 disabled:opacity-40"
           >
             <Send className="h-4 w-4" />

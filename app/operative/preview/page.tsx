@@ -29,6 +29,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { AgendaHeader } from '@/components/operative/AgendaHeader';
 import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
@@ -48,6 +49,189 @@ import {
 } from '@/components/tasks/TaskChecklist';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
+
+const COPY = {
+  en: {
+    statusScheduled: 'Pending',
+    statusInProgress: 'In progress',
+    statusCompleted: 'Completed',
+    note1: 'Keys in the lockbox (code 4421). Hoover the living room rug.',
+    note2: 'Leave the mop clean in the bathroom cupboard. Receipt on the worktop.',
+    note3: 'Airbnb check-out. Fresh sheets in the hallway cupboard.',
+    checklistPlants: 'Water the balcony plants',
+    checklistRecycling: 'Take out the recycling (Tuesday)',
+    cleanerName: 'Carmen López',
+    nextStop: 'Next stop',
+    goToAddress: 'Go to address',
+    callClientAria: 'Call client',
+    callClientTitle: 'Call the client or manager from your phone',
+    todayAgenda: "Today's agenda",
+    agendaHelpAria: 'Agenda help',
+    agendaHelp: 'Tap any task to view client notes, check in or upload photos.',
+    seeWeek: 'See week',
+    seeWeekTitle: 'View the full week summary',
+    weekHrefTitle: 'View the full week summary',
+    checkInLoggedAt: (time: string) => `Checked in at ${time}`,
+    completedAt: (time: string) => `Completed at ${time}`,
+    tipLabel: (amount: string) => `Tip £${amount}`,
+    tipTitle: 'Client tip — 100% yours, already added to today\'s earnings',
+    hoursWorked: 'Hours worked',
+    minus15Aria: 'Subtract 15 minutes',
+    minus15Title: 'Subtract 15 minutes',
+    plus15Aria: 'Add 15 minutes',
+    plus15Title: 'Add 15 minutes',
+    hoursInputAria: 'Hours worked',
+    hoursInputTitle: 'Report how long you took — updates your earnings instantly',
+    navigateAria: 'Navigate with Google Maps',
+    navigateTitle: 'Navigate to this address with Google Maps',
+    checkInTitle: 'Mark that you have arrived at the client — logs the start time',
+    checkIn: 'Check-in',
+    uploadPhotoAria: 'Upload a job photo',
+    uploadPhotoTitle: 'Upload a photo of the finished job — the client sees it in their portal',
+    markCompleted: 'Mark completed',
+    markCompletedTitle: 'Mark the task done so you are free of this stop',
+    expandTitle: 'Tap to view client details and notes',
+    clientLabel: 'Client',
+    ownerNotes: 'Owner notes',
+    photosUploaded: (n: number) => `Photos uploaded (${n})`,
+    photoZoomTitle: 'Enlarge photo — from the lightbox you can delete it',
+    photoAlt: (i: number) => `Job photo ${i}`,
+    photoLightboxAlt: (prop: string) => `Job photo at ${prop}`,
+    photoCounter: (i: number, total: number) => `photo ${i} of ${total}`,
+    deletePhotoTitle: 'Remove this photo from the task record',
+    deletePhoto: 'Delete photo',
+    closeTitle: 'Close',
+    checkInRegistered: 'Check-in registered',
+    taskCompleted: 'Task completed',
+    callingClient: (name: string) => `Calling ${name}…`,
+    photoUploaded: 'Photo uploaded',
+    photoDeleted: 'Photo deleted',
+    photoStripTitle: 'Your latest cleans',
+    photoStripCaption: 'The photos you upload after each service are saved — and the client sees them.',
+    resetDemo: 'Reset demo',
+    resetDemoTitle: 'Reset the demo — back to the initial state without reloading',
+  },
+  es: {
+    statusScheduled: 'Pendiente',
+    statusInProgress: 'En curso',
+    statusCompleted: 'Completada',
+    note1: 'Llaves en el lockbox (código 4421). Aspirar la alfombra del salón.',
+    note2: 'Dejar la fregona limpia en el armario del baño. Recibo en la encimera.',
+    note3: 'Check-out de Airbnb. Sábanas limpias en el armario del pasillo.',
+    checklistPlants: 'Regar las plantas del balcón',
+    checklistRecycling: 'Bajar el reciclaje (martes)',
+    cleanerName: 'Carmen López',
+    nextStop: 'Siguiente parada',
+    goToAddress: 'Ir a la dirección',
+    callClientAria: 'Llamar al cliente',
+    callClientTitle: 'Llamar al cliente o manager desde el teléfono',
+    todayAgenda: 'Agenda de hoy',
+    agendaHelpAria: 'Ayuda sobre la agenda',
+    agendaHelp: 'Toca cualquier tarea para ver notas del cliente, hacer check-in o subir fotos.',
+    seeWeek: 'Ver semana',
+    seeWeekTitle: 'Ver el resumen de toda la semana',
+    weekHrefTitle: 'Ver el resumen de toda la semana',
+    checkInLoggedAt: (time: string) => `Check-in registrado a las ${time}`,
+    completedAt: (time: string) => `Completada a las ${time}`,
+    tipLabel: (amount: string) => `Propina £${amount}`,
+    tipTitle: 'Propina del cliente — 100% para ti, ya sumada a tus ganancias del día',
+    hoursWorked: 'Horas trabajadas',
+    minus15Aria: 'Restar 15 minutos',
+    minus15Title: 'Restar 15 minutos',
+    plus15Aria: 'Sumar 15 minutos',
+    plus15Title: 'Sumar 15 minutos',
+    hoursInputAria: 'Horas trabajadas',
+    hoursInputTitle: 'Reporta cuántas horas tardaste — actualiza tus ganancias al instante',
+    navigateAria: 'Navegar con Google Maps',
+    navigateTitle: 'Navegar a esta dirección con Google Maps',
+    checkInTitle: 'Marcar que has llegado al cliente — registra la hora de inicio',
+    checkIn: 'Check-in',
+    uploadPhotoAria: 'Subir foto del trabajo',
+    uploadPhotoTitle: 'Subir foto del trabajo terminado — el cliente la verá en su portal',
+    markCompleted: 'Marcar completada',
+    markCompletedTitle: 'Marcar la tarea como terminada para liberarte de esta parada',
+    expandTitle: 'Toca para ver detalles del cliente y notas',
+    clientLabel: 'Cliente',
+    ownerNotes: 'Notas del propietario',
+    photosUploaded: (n: number) => `Fotos subidas (${n})`,
+    photoZoomTitle: 'Ampliar foto — desde el lightbox puedes eliminarla',
+    photoAlt: (i: number) => `Foto del trabajo ${i}`,
+    photoLightboxAlt: (prop: string) => `Foto del trabajo en ${prop}`,
+    photoCounter: (i: number, total: number) => `foto ${i} de ${total}`,
+    deletePhotoTitle: 'Eliminar esta foto del registro de la tarea',
+    deletePhoto: 'Eliminar foto',
+    closeTitle: 'Cerrar',
+    checkInRegistered: 'Check-in registrado',
+    taskCompleted: 'Tarea completada',
+    callingClient: (name: string) => `Llamando a ${name}…`,
+    photoUploaded: 'Foto subida',
+    photoDeleted: 'Foto eliminada',
+    photoStripTitle: 'Tus últimas limpiezas',
+    photoStripCaption: 'Las fotos que subes después de cada servicio quedan guardadas — y el cliente las ve.',
+    resetDemo: 'Reiniciar demo',
+    resetDemoTitle: 'Reiniciar la demo — vuelve al estado inicial sin recargar',
+  },
+  pt: {
+    statusScheduled: 'Pendente',
+    statusInProgress: 'Em curso',
+    statusCompleted: 'Concluída',
+    note1: 'Chaves no cofre (código 4421). Aspirar o tapete da sala.',
+    note2: 'Deixar a esfregona limpa no armário da casa de banho. Recibo na bancada.',
+    note3: 'Check-out de Airbnb. Lençóis limpos no armário do corredor.',
+    checklistPlants: 'Regar as plantas da varanda',
+    checklistRecycling: 'Descer a reciclagem (terça-feira)',
+    cleanerName: 'Carmen López',
+    nextStop: 'Próxima paragem',
+    goToAddress: 'Ir para a morada',
+    callClientAria: 'Ligar ao cliente',
+    callClientTitle: 'Ligar ao cliente ou ao gestor a partir do telefone',
+    todayAgenda: 'Agenda de hoje',
+    agendaHelpAria: 'Ajuda sobre a agenda',
+    agendaHelp: 'Toque em qualquer tarefa para ver notas do cliente, fazer check-in ou enviar fotos.',
+    seeWeek: 'Ver semana',
+    seeWeekTitle: 'Ver o resumo de toda a semana',
+    weekHrefTitle: 'Ver o resumo de toda a semana',
+    checkInLoggedAt: (time: string) => `Check-in registado às ${time}`,
+    completedAt: (time: string) => `Concluída às ${time}`,
+    tipLabel: (amount: string) => `Gorjeta £${amount}`,
+    tipTitle: 'Gorjeta do cliente — 100% para si, já somada aos ganhos do dia',
+    hoursWorked: 'Horas trabalhadas',
+    minus15Aria: 'Subtrair 15 minutos',
+    minus15Title: 'Subtrair 15 minutos',
+    plus15Aria: 'Somar 15 minutos',
+    plus15Title: 'Somar 15 minutos',
+    hoursInputAria: 'Horas trabalhadas',
+    hoursInputTitle: 'Indique quantas horas demorou — atualiza os seus ganhos no momento',
+    navigateAria: 'Navegar com o Google Maps',
+    navigateTitle: 'Navegar até esta morada com o Google Maps',
+    checkInTitle: 'Marcar que chegou ao cliente — regista a hora de início',
+    checkIn: 'Check-in',
+    uploadPhotoAria: 'Enviar foto do trabalho',
+    uploadPhotoTitle: 'Enviar foto do trabalho terminado — o cliente vê-a no portal',
+    markCompleted: 'Marcar concluída',
+    markCompletedTitle: 'Marcar a tarefa como terminada para se libertar desta paragem',
+    expandTitle: 'Toque para ver detalhes do cliente e notas',
+    clientLabel: 'Cliente',
+    ownerNotes: 'Notas do proprietário',
+    photosUploaded: (n: number) => `Fotos enviadas (${n})`,
+    photoZoomTitle: 'Ampliar foto — a partir do lightbox pode apagá-la',
+    photoAlt: (i: number) => `Foto do trabalho ${i}`,
+    photoLightboxAlt: (prop: string) => `Foto do trabalho em ${prop}`,
+    photoCounter: (i: number, total: number) => `foto ${i} de ${total}`,
+    deletePhotoTitle: 'Eliminar esta foto do registo da tarefa',
+    deletePhoto: 'Eliminar foto',
+    closeTitle: 'Fechar',
+    checkInRegistered: 'Check-in registado',
+    taskCompleted: 'Tarefa concluída',
+    callingClient: (name: string) => `A ligar para ${name}…`,
+    photoUploaded: 'Foto enviada',
+    photoDeleted: 'Foto eliminada',
+    photoStripTitle: 'As suas últimas limpezas',
+    photoStripCaption: 'As fotos que envia após cada serviço ficam guardadas — e o cliente vê-as.',
+    resetDemo: 'Reiniciar demo',
+    resetDemoTitle: 'Reiniciar a demo — volta ao estado inicial sem recarregar',
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 type DemoTask = {
   id: string;
@@ -82,84 +266,90 @@ type DemoTask = {
   checklist?: TaskChecklistItem[];
 };
 
-const INITIAL_TASKS: DemoTask[] = [
-  {
-    id: 'demo-1',
-    start_time: '10:00',
-    status: 'completed',
-    estimated_duration_min: 90,
-    property_name: 'Soho Loft',
-    client_name: 'Mr. Thompson',
-    address: '22 Old Compton St, Soho',
-    postcode: 'London W1D 4TR',
-    notes: 'Llaves en el lockbox (código 4421). Aspirar la alfombra del salón.',
-    mapsUrl: 'https://maps.google.com/?q=22+Old+Compton+St+London+W1D+4TR',
-    phone: '+447700900111',
-    completedAt: '11:32',
-    photos: [],
-    actualHours: 1.5,
-    cleanerPayRatePence: 1400,
-    tipPence: 500,
-  },
-  {
-    id: 'demo-2',
-    start_time: '12:30',
-    status: 'in_progress',
-    estimated_duration_min: 60,
-    property_name: 'Hackney Studio',
-    client_name: 'Ms. Patel',
-    address: '78 Mare St, Hackney',
-    postcode: 'London E8 4RT',
-    notes: 'Dejar la fregona limpia en el armario del baño. Recibo en la encimera.',
-    mapsUrl: 'https://maps.google.com/?q=78+Mare+St+Hackney+London+E8+4RT',
-    phone: '+447700900222',
-    photos: [],
-    actualHours: null,
-    cleanerPayRatePence: 1400,
-    tipPence: 0,
-  },
-  {
-    id: 'demo-3',
-    start_time: '14:30',
-    status: 'scheduled',
-    estimated_duration_min: 120,
-    property_name: 'Shoreditch Penthouse',
-    client_name: 'Ms. Walker',
-    address: '31 Curtain Rd, Shoreditch',
-    postcode: 'London EC2A 3LT',
-    notes: 'Check-out de Airbnb. Sábanas limpias en el armario del pasillo.',
-    mapsUrl: 'https://maps.google.com/?q=31+Curtain+Rd+Shoreditch+London+EC2A+3LT',
-    phone: '+447700900333',
-    photos: [],
-    actualHours: null,
-    cleanerPayRatePence: 1400,
-    tipPence: 0,
-    // Short, host-pinned checklist — shows how the same component degrades
-    // gracefully from full Airbnb gating to a quick reminder list here.
-    checklist: [
-      { key: 'plants', label: 'Regar las plantas del balcón', done: false },
-      { key: 'recycling', label: 'Bajar el reciclaje (martes)', done: false },
-    ],
-  },
-];
+type CopyShape = (typeof COPY)['en'];
 
-const STATUS_META: Record<DemoStatus, { label: string; cls: string; dot: string }> = {
-  scheduled: {
-    label: 'Pendiente',
-    cls: 'bg-slate-100 text-slate-700',
-    dot: 'bg-slate-400',
-  },
-  in_progress: {
-    label: 'En curso',
-    cls: 'bg-amber-100 text-amber-800',
-    dot: 'bg-amber-500 animate-pulse',
-  },
-  completed: {
-    label: 'Completada',
-    cls: 'bg-emerald-100 text-emerald-800',
-    dot: 'bg-emerald-500',
-  },
-};
+function buildInitialTasks(t: CopyShape): DemoTask[] {
+  return [
+    {
+      id: 'demo-1',
+      start_time: '10:00',
+      status: 'completed',
+      estimated_duration_min: 90,
+      property_name: 'Soho Loft',
+      client_name: 'Mr. Thompson',
+      address: '22 Old Compton St, Soho',
+      postcode: 'London W1D 4TR',
+      notes: t.note1,
+      mapsUrl: 'https://maps.google.com/?q=22+Old+Compton+St+London+W1D+4TR',
+      phone: '+447700900111',
+      completedAt: '11:32',
+      photos: [],
+      actualHours: 1.5,
+      cleanerPayRatePence: 1400,
+      tipPence: 500,
+    },
+    {
+      id: 'demo-2',
+      start_time: '12:30',
+      status: 'in_progress',
+      estimated_duration_min: 60,
+      property_name: 'Hackney Studio',
+      client_name: 'Ms. Patel',
+      address: '78 Mare St, Hackney',
+      postcode: 'London E8 4RT',
+      notes: t.note2,
+      mapsUrl: 'https://maps.google.com/?q=78+Mare+St+Hackney+London+E8+4RT',
+      phone: '+447700900222',
+      photos: [],
+      actualHours: null,
+      cleanerPayRatePence: 1400,
+      tipPence: 0,
+    },
+    {
+      id: 'demo-3',
+      start_time: '14:30',
+      status: 'scheduled',
+      estimated_duration_min: 120,
+      property_name: 'Shoreditch Penthouse',
+      client_name: 'Ms. Walker',
+      address: '31 Curtain Rd, Shoreditch',
+      postcode: 'London EC2A 3LT',
+      notes: t.note3,
+      mapsUrl: 'https://maps.google.com/?q=31+Curtain+Rd+Shoreditch+London+EC2A+3LT',
+      phone: '+447700900333',
+      photos: [],
+      actualHours: null,
+      cleanerPayRatePence: 1400,
+      tipPence: 0,
+      // Short, host-pinned checklist — shows how the same component degrades
+      // gracefully from full Airbnb gating to a quick reminder list here.
+      checklist: [
+        { key: 'plants', label: t.checklistPlants, done: false },
+        { key: 'recycling', label: t.checklistRecycling, done: false },
+      ],
+    },
+  ];
+}
+
+function buildStatusMeta(t: CopyShape): Record<DemoStatus, { label: string; cls: string; dot: string }> {
+  return {
+    scheduled: {
+      label: t.statusScheduled,
+      cls: 'bg-slate-100 text-slate-700',
+      dot: 'bg-slate-400',
+    },
+    in_progress: {
+      label: t.statusInProgress,
+      cls: 'bg-amber-100 text-amber-800',
+      dot: 'bg-amber-500 animate-pulse',
+    },
+    completed: {
+      label: t.statusCompleted,
+      cls: 'bg-emerald-100 text-emerald-800',
+      dot: 'bg-emerald-500',
+    },
+  };
+}
 
 const SAMPLE_PHOTO_URLS = [
   'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&auto=format&fit=crop&q=70',
@@ -201,7 +391,10 @@ function OperativePreviewHomeBody({
   now: Date;
   onReset: () => void;
 }) {
-  const [tasks, setTasks] = useState<DemoTask[]>(INITIAL_TASKS);
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const STATUS_META = useMemo(() => buildStatusMeta(t), [t]);
+  const [tasks, setTasks] = useState<DemoTask[]>(() => buildInitialTasks(t));
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<{ taskId: string; idx: number } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -297,7 +490,7 @@ function OperativePreviewHomeBody({
           : t,
       ),
     );
-    showToast('Check-in registrado');
+    showToast(t.checkInRegistered);
   }
 
   function handleComplete(taskId: string) {
@@ -328,15 +521,15 @@ function OperativePreviewHomeBody({
       window.setTimeout(() => rollTo(prevPence, nextTodayPence), 380);
       return next;
     });
-    showToast('Tarea completada');
+    showToast(t.taskCompleted);
   }
 
   function handleCallClient(taskId: string) {
-    const t = tasks.find((x) => x.id === taskId);
-    if (!t) return;
+    const task = tasks.find((x) => x.id === taskId);
+    if (!task) return;
     // In a real app this would open tel: — for the demo we surface a
     // toast so the visitor sees the action was recognised by the swipe.
-    showToast(`Llamando a ${t.client_name}…`);
+    showToast(t.callingClient(task.client_name));
   }
 
   function handleUploadPhoto(taskId: string) {
@@ -350,7 +543,7 @@ function OperativePreviewHomeBody({
     );
     // Make sure user can see the new photo
     setExpandedId(taskId);
-    showToast('Foto subida');
+    showToast(t.photoUploaded);
   }
 
   function handleDeletePhoto(taskId: string, idx: number) {
@@ -360,7 +553,7 @@ function OperativePreviewHomeBody({
       ),
     );
     setLightbox(null);
-    showToast('Foto eliminada');
+    showToast(t.photoDeleted);
   }
 
   function toggleExpand(taskId: string) {
@@ -385,7 +578,7 @@ function OperativePreviewHomeBody({
       />
       <div className="relative z-10 mx-auto max-w-md px-4 py-5">
         <AgendaHeader
-          cleanerName="Carmen López"
+          cleanerName={t.cleanerName}
           now={now}
           doneCount={doneCount}
           totalCount={tasks.length}
@@ -423,7 +616,7 @@ function OperativePreviewHomeBody({
           <section className="rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
             <div className="flex items-center justify-between gap-2">
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">
-                Siguiente parada
+                {t.nextStop}
               </p>
               <span className="text-[11px] font-semibold tabular-nums text-text-3">
                 {heroTask.start_time}
@@ -442,15 +635,15 @@ function OperativePreviewHomeBody({
                 href={heroTask.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Abrir esta dirección en Google Maps para navegar paso a paso"
+                title={t.navigateTitle}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.5)] transition active:scale-[0.99]"
               >
-                <Navigation2 className="h-4 w-4" /> Ir a la dirección
+                <Navigation2 className="h-4 w-4" /> {t.goToAddress}
               </a>
               <a
                 href={`tel:${heroTask.phone}`}
-                aria-label="Llamar al cliente"
-                title="Llamar al cliente o manager desde el teléfono"
+                aria-label={t.callClientAria}
+                title={t.callClientTitle}
                 className="inline-flex h-auto min-h-[44px] w-12 shrink-0 items-center justify-center rounded-xl border border-surface-2 bg-surface-0 text-text-1 transition hover:border-brand-300 hover:text-brand-700"
               >
                 <Phone className="h-4 w-4" />
@@ -465,10 +658,10 @@ function OperativePreviewHomeBody({
         <section className="mt-6">
           <div className="flex items-center justify-between">
             <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-text-3">
-              Agenda de hoy
+              {t.todayAgenda}
               <button
                 type="button"
-                aria-label="Ayuda sobre la agenda"
+                aria-label={t.agendaHelpAria}
                 aria-expanded={agendaHelpOpen}
                 aria-controls="agenda-help"
                 onClick={() => setAgendaHelpOpen((o) => !o)}
@@ -479,10 +672,10 @@ function OperativePreviewHomeBody({
             </h2>
             <Link
               href="/operative/preview/week"
-              title="Ver el resumen de toda la semana"
+              title={t.seeWeekTitle}
               className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-brand-700 hover:text-brand-800"
             >
-              <Navigation2 className="h-3 w-3" /> Ver semana
+              <Navigation2 className="h-3 w-3" /> {t.seeWeek}
             </Link>
           </div>
           {agendaHelpOpen ? (
@@ -490,7 +683,7 @@ function OperativePreviewHomeBody({
               id="agenda-help"
               className="mt-2 rounded-lg border border-dashed border-surface-2 bg-surface-1/60 px-3 py-2 text-[11px] leading-relaxed text-text-2"
             >
-              Toca cualquier tarea para ver notas del cliente, hacer check-in o subir fotos.
+              {t.agendaHelp}
             </p>
           ) : null}
 
@@ -555,7 +748,7 @@ function OperativePreviewHomeBody({
                       <button
                         type="button"
                         onClick={() => toggleExpand(task.id)}
-                        title="Toca para ver detalles del cliente y notas"
+                        title={t.expandTitle}
                         className="flex w-full items-start justify-between gap-2 text-left"
                       >
                         <div className="min-w-0 flex-1">
@@ -588,21 +781,21 @@ function OperativePreviewHomeBody({
                       {task.checkInAt ? (
                         <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700">
                           <Play className="h-2.5 w-2.5" />
-                          Check-in registrado a las {task.checkInAt}
+                          {t.checkInLoggedAt(task.checkInAt)}
                         </p>
                       ) : null}
                       {task.completedAt ? (
                         <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
                           <CheckCircle2 className="h-2.5 w-2.5" />
-                          Completada a las {task.completedAt}
+                          {t.completedAt(task.completedAt)}
                         </p>
                       ) : null}
                       {task.status === 'completed' && task.tipPence > 0 ? (
                         <span
-                          title="Propina del cliente — 100% para ti, ya sumada a tus ganancias del día"
+                          title={t.tipTitle}
                           className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800"
                         >
-                          Propina £{(task.tipPence / 100).toFixed(2)}
+                          {t.tipLabel((task.tipPence / 100).toFixed(2))}
                         </span>
                       ) : null}
                       {task.status === 'in_progress' ? (
@@ -610,14 +803,14 @@ function OperativePreviewHomeBody({
                           <div className="flex items-center justify-between gap-2">
                             <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800">
                               <Clock className="h-3 w-3" />
-                              Horas trabajadas
+                              {t.hoursWorked}
                             </span>
                             <div className="flex items-center gap-1.5">
                               <button
                                 type="button"
                                 onClick={() => handleAdjustHours(task.id, -0.25)}
-                                aria-label="Restar 15 minutos"
-                                title="Restar 15 minutos"
+                                aria-label={t.minus15Aria}
+                                title={t.minus15Title}
                                 disabled={(task.actualHours ?? 0) <= 0}
                                 className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-40"
                               >
@@ -630,15 +823,15 @@ function OperativePreviewHomeBody({
                                 value={task.actualHours ?? ''}
                                 onChange={(e) => handleSetHours(task.id, Number(e.target.value))}
                                 placeholder="0.0"
-                                aria-label="Horas trabajadas"
-                                title="Reporta cuántas horas tardaste — actualiza tus ganancias al instante"
+                                aria-label={t.hoursInputAria}
+                                title={t.hoursInputTitle}
                                 className="h-11 w-16 rounded-lg border border-amber-200 bg-white text-center text-[15px] font-semibold tabular-nums text-text-1"
                               />
                               <button
                                 type="button"
                                 onClick={() => handleAdjustHours(task.id, 0.25)}
-                                aria-label="Sumar 15 minutos"
-                                title="Sumar 15 minutos"
+                                aria-label={t.plus15Aria}
+                                title={t.plus15Title}
                                 className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100"
                               >
                                 <Plus className="h-4 w-4" />
@@ -657,8 +850,8 @@ function OperativePreviewHomeBody({
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          aria-label="Navegar con Google Maps"
-                          title="Navegar a esta dirección con Google Maps"
+                          aria-label={t.navigateAria}
+                          title={t.navigateTitle}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition hover:bg-brand-100"
                         >
                           <Navigation2 className="h-3.5 w-3.5" />
@@ -667,19 +860,19 @@ function OperativePreviewHomeBody({
                           <button
                             type="button"
                             onClick={() => handleCheckIn(task.id)}
-                            title="Marcar que has llegado al cliente — registra la hora de inicio"
+                            title={t.checkInTitle}
                             className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700 transition hover:bg-amber-100"
                           >
                             <Play className="h-3 w-3" />
-                            Check-in
+                            {t.checkIn}
                           </button>
                         ) : null}
                         {task.status === 'in_progress' ? (
                           <button
                             type="button"
                             onClick={() => handleUploadPhoto(task.id)}
-                            aria-label="Subir foto del trabajo"
-                            title="Subir foto del trabajo terminado — el cliente la verá en su portal"
+                            aria-label={t.uploadPhotoAria}
+                            title={t.uploadPhotoTitle}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-50 text-cyan-700 transition hover:bg-cyan-100"
                           >
                             <Camera className="h-3.5 w-3.5" />
@@ -694,11 +887,11 @@ function OperativePreviewHomeBody({
                         <button
                           type="button"
                           onClick={() => handleComplete(task.id)}
-                          title="Marcar la tarea como terminada para liberarte de esta parada"
+                          title={t.markCompletedTitle}
                           className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.55)] transition active:scale-[0.99]"
                         >
                           <CheckCircle2 className="h-4 w-4" />
-                          Marcar completada
+                          {t.markCompleted}
                         </button>
                       ) : null}
 
@@ -706,13 +899,13 @@ function OperativePreviewHomeBody({
                       {isExpanded ? (
                         <div className="mt-3 rounded-xl border border-dashed border-surface-2 bg-surface-1/40 p-3">
                           <p className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-                            Cliente
+                            {t.clientLabel}
                           </p>
                           <p className="mt-0.5 text-[12px] font-semibold text-text-1">
                             {task.client_name}
                           </p>
                           <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-text-3">
-                            Notas del propietario
+                            {t.ownerNotes}
                           </p>
                           <p className="mt-0.5 text-[11.5px] leading-relaxed text-text-2">
                             {task.notes}
@@ -738,7 +931,7 @@ function OperativePreviewHomeBody({
                           {task.photos.length > 0 ? (
                             <>
                               <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-text-3">
-                                Fotos subidas ({task.photos.length})
+                                {t.photosUploaded(task.photos.length)}
                               </p>
                               <div className="mt-1.5 grid grid-cols-3 gap-1.5">
                                 {task.photos.map((src, i) => (
@@ -747,12 +940,12 @@ function OperativePreviewHomeBody({
                                     type="button"
                                     key={`${src}-${i}`}
                                     onClick={() => setLightbox({ taskId: task.id, idx: i })}
-                                    title="Ampliar foto — desde el lightbox puedes eliminarla"
+                                    title={t.photoZoomTitle}
                                     className="overflow-hidden rounded-lg ring-1 ring-surface-2"
                                   >
                                     <img
                                       src={src}
-                                      alt={`Foto del trabajo ${i + 1}`}
+                                      alt={t.photoAlt(i + 1)}
                                       loading="lazy"
                                       className="aspect-square w-full object-cover"
                                     />
@@ -775,8 +968,8 @@ function OperativePreviewHomeBody({
         </section>
 
         <DemoPhotoStrip
-          title="Tus últimas limpiezas"
-          caption="Las fotos que subes después de cada servicio quedan guardadas — y el cliente las ve."
+          title={t.photoStripTitle}
+          caption={t.photoStripCaption}
         />
 
         {/* Demo-only reset — kept as a quiet inline link, well clear of the
@@ -785,11 +978,11 @@ function OperativePreviewHomeBody({
           <button
             type="button"
             onClick={onReset}
-            title="Reiniciar la demo — vuelve al estado inicial sin recargar"
+            title={t.resetDemoTitle}
             className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-text-3 transition hover:text-text-1"
           >
             <RotateCcw className="h-3 w-3" />
-            Reiniciar demo
+            {t.resetDemo}
           </button>
         </div>
       </div>
@@ -807,7 +1000,7 @@ function OperativePreviewHomeBody({
             <button
               type="button"
               onClick={() => setLightbox(null)}
-              title="Cerrar"
+              title={t.closeTitle}
               className="absolute -top-10 right-0 grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white backdrop-blur"
             >
               <X className="h-4 w-4" />
@@ -815,21 +1008,21 @@ function OperativePreviewHomeBody({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={lightboxSrc}
-              alt={`Foto del trabajo en ${lightboxTask.property_name}`}
+              alt={t.photoLightboxAlt(lightboxTask.property_name)}
               className="w-full rounded-2xl"
             />
             <div className="mt-3 flex items-center justify-between gap-2">
               <p className="text-[11px] text-white/80">
-                {lightboxTask.property_name} · foto {lightbox.idx + 1} de {lightboxTask.photos.length}
+                {lightboxTask.property_name} · {t.photoCounter(lightbox.idx + 1, lightboxTask.photos.length)}
               </p>
               <button
                 type="button"
                 onClick={() => handleDeletePhoto(lightbox.taskId, lightbox.idx)}
-                title="Eliminar esta foto del registro de la tarea"
+                title={t.deletePhotoTitle}
                 className="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-red-500"
               >
                 <Trash2 className="h-3 w-3" />
-                Eliminar foto
+                {t.deletePhoto}
               </button>
             </div>
           </div>

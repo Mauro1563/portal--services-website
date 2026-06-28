@@ -18,6 +18,99 @@ import {
   Upload,
 } from 'lucide-react';
 import { DemoBottomTabBar } from '../_components/DemoBottomTabBar';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    dashboard: 'Dashboard',
+    demoLabel: 'Demo · Branding',
+    demoBanner: 'Demo · Changes are not saved on reload',
+    branding: 'Branding',
+    brandingSubtitle: 'Customise the name, logo and colours of the portal your clients see.',
+    businessName: 'Business name',
+    businessNameHint: 'Appears in the header of each client’s portal.',
+    logo: 'Logo',
+    logoHint: 'PNG or SVG · max 1 MB · square recommended.',
+    chooseImage: 'Choose image',
+    removeLogo: 'Remove logo',
+    brandColours: 'Brand colours',
+    brandColoursHint: 'Applied to the portal your clients see.',
+    primary: 'Primary colour',
+    secondary: 'Secondary colour',
+    save: 'Save',
+    restoreDefault: 'Restore default',
+    portalPreview: 'Client portal preview',
+    saved: 'Saved',
+    invalidHex: 'Invalid hex. Use #RGB or #RRGGBB.',
+    nextClean: 'Next clean',
+    fridayTime: 'Friday · 10:00',
+    centreApartment: 'Centre apartment',
+    regular: 'Regular',
+    deep: 'Deep',
+    book: 'Book',
+    seeHistory: 'See history',
+  },
+  es: {
+    dashboard: 'Dashboard',
+    demoLabel: 'Demo · Branding',
+    demoBanner: 'Demo · Los cambios no se guardan al recargar',
+    branding: 'Branding',
+    brandingSubtitle: 'Personaliza nombre, logo y colores del portal que ven tus clientes.',
+    businessName: 'Nombre del negocio',
+    businessNameHint: 'Aparece en la cabecera del portal de cada cliente.',
+    logo: 'Logo',
+    logoHint: 'PNG o SVG · máx. 1 MB · cuadrado recomendado.',
+    chooseImage: 'Elegir imagen',
+    removeLogo: 'Quitar logo',
+    brandColours: 'Colores de marca',
+    brandColoursHint: 'Se aplican al portal que ven tus clientes.',
+    primary: 'Color primario',
+    secondary: 'Color secundario',
+    save: 'Guardar',
+    restoreDefault: 'Restaurar default',
+    portalPreview: 'Vista previa del portal del cliente',
+    saved: 'Guardado',
+    invalidHex: 'Hex no válido. Usa #RGB o #RRGGBB.',
+    nextClean: 'Próxima limpieza',
+    fridayTime: 'Viernes · 10:00',
+    centreApartment: 'Apartamento centro',
+    regular: 'Regular',
+    deep: 'Profunda',
+    book: 'Reservar',
+    seeHistory: 'Ver historial',
+  },
+  pt: {
+    dashboard: 'Dashboard',
+    demoLabel: 'Demo · Branding',
+    demoBanner: 'Demo · As alterações não são guardadas ao recarregar',
+    branding: 'Branding',
+    brandingSubtitle: 'Personaliza nome, logótipo e cores do portal que os teus clientes vêem.',
+    businessName: 'Nome do negócio',
+    businessNameHint: 'Aparece no cabeçalho do portal de cada cliente.',
+    logo: 'Logótipo',
+    logoHint: 'PNG ou SVG · máx. 1 MB · quadrado recomendado.',
+    chooseImage: 'Escolher imagem',
+    removeLogo: 'Remover logótipo',
+    brandColours: 'Cores da marca',
+    brandColoursHint: 'Aplicam-se ao portal que os teus clientes vêem.',
+    primary: 'Cor primária',
+    secondary: 'Cor secundária',
+    save: 'Guardar',
+    restoreDefault: 'Repor predefinição',
+    portalPreview: 'Pré-visualização do portal do cliente',
+    saved: 'Guardado',
+    invalidHex: 'Hex inválido. Usa #RGB ou #RRGGBB.',
+    nextClean: 'Próxima limpeza',
+    fridayTime: 'Sexta-feira · 10:00',
+    centreApartment: 'Apartamento centro',
+    regular: 'Regular',
+    deep: 'Profunda',
+    book: 'Reservar',
+    seeHistory: 'Ver histórico',
+  },
+} as const;
+
+type BrandingCopy = (typeof COPY)['en'];
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 const DEFAULT_BUSINESS_NAME = 'Alan Cleaners';
@@ -25,6 +118,8 @@ const DEFAULT_PRIMARY = '#22d3ee';
 const DEFAULT_SECONDARY = '#2563eb';
 
 export default function BrandingPreviewPage() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [businessName, setBusinessName] = useState<string>(DEFAULT_BUSINESS_NAME);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [primary, setPrimary] = useState<string>(DEFAULT_PRIMARY);
@@ -67,10 +162,10 @@ export default function BrandingPreviewPage() {
             href="/owner/preview"
             className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900"
           >
-            <ArrowLeft className="h-4 w-4" /> Dashboard
+            <ArrowLeft className="h-4 w-4" /> {t.dashboard}
           </Link>
           <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-            Demo · Branding
+            {t.demoLabel}
           </span>
         </div>
       </header>
@@ -84,17 +179,17 @@ export default function BrandingPreviewPage() {
           <Info className="h-3.5 w-3.5 shrink-0" />
           <span>
             <span aria-hidden>🎨 </span>
-            Demo · Los cambios no se guardan al recargar
+            {t.demoBanner}
           </span>
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-              Branding
+              {t.branding}
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              Personaliza nombre, logo y colores del portal que ven tus clientes.
+              {t.brandingSubtitle}
             </p>
           </div>
         </div>
@@ -110,10 +205,10 @@ export default function BrandingPreviewPage() {
                 </span>
                 <div>
                   <h2 className="text-base font-semibold text-slate-900">
-                    Nombre del negocio
+                    {t.businessName}
                   </h2>
                   <p className="text-[11px] text-slate-500">
-                    Aparece en la cabecera del portal de cada cliente.
+                    {t.businessNameHint}
                   </p>
                 </div>
               </header>
@@ -134,10 +229,10 @@ export default function BrandingPreviewPage() {
                 </span>
                 <div>
                   <h2 className="text-base font-semibold text-slate-900">
-                    Logo
+                    {t.logo}
                   </h2>
                   <p className="text-[11px] text-slate-500">
-                    PNG o SVG · máx. 1 MB · cuadrado recomendado.
+                    {t.logoHint}
                   </p>
                 </div>
               </header>
@@ -158,7 +253,7 @@ export default function BrandingPreviewPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-900 hover:bg-slate-50">
                     <Upload className="h-4 w-4" />
-                    Elegir imagen
+                    {t.chooseImage}
                     <input
                       ref={fileRef}
                       type="file"
@@ -176,7 +271,7 @@ export default function BrandingPreviewPage() {
                       }}
                       className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-600 hover:bg-slate-50"
                     >
-                      Quitar logo
+                      {t.removeLogo}
                     </button>
                   ) : null}
                 </div>
@@ -191,22 +286,24 @@ export default function BrandingPreviewPage() {
                 </span>
                 <div>
                   <h2 className="text-base font-semibold text-slate-900">
-                    Colores de marca
+                    {t.brandColours}
                   </h2>
                   <p className="text-[11px] text-slate-500">
-                    Se aplican al portal que ven tus clientes.
+                    {t.brandColoursHint}
                   </p>
                 </div>
               </header>
 
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <ColorField
-                  label="Color primario"
+                  label={t.primary}
+                  invalidHex={t.invalidHex}
                   value={primary}
                   onChange={setPrimary}
                 />
                 <ColorField
-                  label="Color secundario"
+                  label={t.secondary}
+                  invalidHex={t.invalidHex}
                   value={secondary}
                   onChange={setSecondary}
                 />
@@ -219,7 +316,7 @@ export default function BrandingPreviewPage() {
                   className="inline-flex h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
                 >
                   <Save className="h-4 w-4" />
-                  Guardar
+                  {t.save}
                 </button>
                 <button
                   type="button"
@@ -227,7 +324,7 @@ export default function BrandingPreviewPage() {
                   className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 hover:bg-slate-50"
                 >
                   <RotateCcw className="h-4 w-4" />
-                  Restaurar default
+                  {t.restoreDefault}
                 </button>
               </div>
             </section>

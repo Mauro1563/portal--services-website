@@ -2,6 +2,8 @@
  * Public preview of the Owner dashboard — clickable tour with mock data.
  * No auth, no Supabase. Every link routes inside /owner/preview/*.
  */
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, BarChart3, Sparkles } from 'lucide-react';
 import { DemoStatCardsRow } from './_components/DemoStatCardsRow';
@@ -16,11 +18,52 @@ import { DemoCommandPalette } from './_components/DemoCommandPalette';
 import { DemoPullSummary } from './_components/DemoPullSummary';
 import { OwnerConciergeSheet } from './_components/OwnerConciergeSheet';
 import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
 
-export const metadata = {
-  title: 'Demo · Owner',
-  robots: { index: false, follow: false },
-};
+const COPY = {
+  en: {
+    headerSubtitle: 'Alan Cleaners · 4 cleans today',
+    minAgo12: '12 min ago',
+    minAgo45: '45 min ago',
+    hoursAgo2: '2h ago',
+    schedulerTitle: 'Plan the week — assign cleaners to properties',
+    schedulerLabel: 'Plan the week',
+    schedulerHint: 'Assign cleaners to properties. Your team and your clients see it instantly.',
+    analyticsTitle: 'See weekly trends and detailed KPIs',
+    analyticsLabel: 'See full analytics',
+    analyticsHint: 'Weekly trends, revenue and detailed KPIs',
+    photoTitle: 'Recent team cleans',
+    photoCaption: 'Every cleaner uploads photos when they finish. You and your clients see them instantly.',
+  },
+  es: {
+    headerSubtitle: 'Alan Cleaners · 4 limpiezas hoy',
+    minAgo12: 'hace 12 min',
+    minAgo45: 'hace 45 min',
+    hoursAgo2: 'hace 2h',
+    schedulerTitle: 'Programa la semana — asigna cleaners a propiedades',
+    schedulerLabel: 'Programar semana',
+    schedulerHint: 'Asigna cleaners a propiedades. Tu equipo y tus clientes lo ven al instante.',
+    analyticsTitle: 'Ver tendencias semanales y KPIs detallados',
+    analyticsLabel: 'Ver analítica completa',
+    analyticsHint: 'Tendencias semanales, ingresos y KPIs detallados',
+    photoTitle: 'Limpiezas recientes del equipo',
+    photoCaption: 'Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante.',
+  },
+  pt: {
+    headerSubtitle: 'Alan Cleaners · 4 limpezas hoje',
+    minAgo12: 'há 12 min',
+    minAgo45: 'há 45 min',
+    hoursAgo2: 'há 2h',
+    schedulerTitle: 'Programa a semana — atribui cleaners a propriedades',
+    schedulerLabel: 'Programar semana',
+    schedulerHint: 'Atribui cleaners a propriedades. A tua equipa e os teus clientes vêem ao instante.',
+    analyticsTitle: 'Vê tendências semanais e KPIs detalhados',
+    analyticsLabel: 'Ver análise completa',
+    analyticsHint: 'Tendências semanais, receitas e KPIs detalhados',
+    photoTitle: 'Limpezas recentes da equipa',
+    photoCaption: 'Cada cleaner envia fotos ao terminar. Tu e os teus clientes vêem ao instante.',
+  },
+} as const;
 
 const revenueData: RevenuePoint[] = [
   { label: 'L', pence: 18000 },
@@ -32,38 +75,41 @@ const revenueData: RevenuePoint[] = [
   { label: 'D', pence: 17500 },
 ];
 
-// London coordinates roughly matching the property locations.
-const checkins: DemoFieldCheckin[] = [
-  {
-    taskId: 'demo-1',
-    cleanerName: 'Carmen Ruiz',
-    propertyName: 'Soho Loft',
-    clientName: 'María García',
-    relative: 'hace 12 min',
-    lat: 51.5132,
-    lng: -0.1311,
-  },
-  {
-    taskId: 'demo-3',
-    cleanerName: 'Pedro Kovac',
-    propertyName: 'Notting Hill Flat',
-    clientName: 'Ana Romero',
-    relative: 'hace 45 min',
-    lat: 51.5152,
-    lng: -0.2057,
-  },
-  {
-    taskId: 'demo-2',
-    cleanerName: 'Lucía Vega',
-    propertyName: 'Camden House',
-    clientName: 'Direct',
-    relative: 'hace 2h',
-    lat: 51.5390,
-    lng: -0.1426,
-  },
-];
-
 export default function OwnerPreviewHome() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+
+  // London coordinates roughly matching the property locations.
+  const checkins: DemoFieldCheckin[] = [
+    {
+      taskId: 'demo-1',
+      cleanerName: 'Carmen Ruiz',
+      propertyName: 'Soho Loft',
+      clientName: 'María García',
+      relative: t.minAgo12,
+      lat: 51.5132,
+      lng: -0.1311,
+    },
+    {
+      taskId: 'demo-3',
+      cleanerName: 'Pedro Kovac',
+      propertyName: 'Notting Hill Flat',
+      clientName: 'Ana Romero',
+      relative: t.minAgo45,
+      lat: 51.5152,
+      lng: -0.2057,
+    },
+    {
+      taskId: 'demo-2',
+      cleanerName: 'Lucía Vega',
+      propertyName: 'Camden House',
+      clientName: 'Direct',
+      relative: t.hoursAgo2,
+      lat: 51.5390,
+      lng: -0.1426,
+    },
+  ];
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-50 pb-20">
       <PreviewFlavorToggle
@@ -79,7 +125,7 @@ export default function OwnerPreviewHome() {
       <div className="relative z-10 mx-auto max-w-5xl px-3 pt-4 sm:px-4 sm:pt-5 lg:px-8 lg:pt-7">
         <DemoCorporateHeader
           firstName="Alan"
-          subtitle="Alan Cleaners · 4 limpiezas hoy"
+          subtitle={t.headerSubtitle}
         />
 
         <div className="mb-4 flex justify-end">
@@ -119,7 +165,7 @@ export default function OwnerPreviewHome() {
 
           <Link
             href="/owner/preview/scheduler"
-            title="Programa la semana — asigna cleaners a propiedades"
+            title={t.schedulerTitle}
             className="group mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(37,99,235,0.25)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
             <div className="flex min-w-0 items-center gap-3">
@@ -128,10 +174,10 @@ export default function OwnerPreviewHome() {
               </span>
               <div className="min-w-0">
                 <p className="text-[15px] font-semibold text-slate-900">
-                  Programar semana
+                  {t.schedulerLabel}
                 </p>
                 <p className="mt-0.5 text-[12px] text-slate-600">
-                  Asigna cleaners a propiedades. Tu equipo y tus clientes lo ven al instante.
+                  {t.schedulerHint}
                 </p>
               </div>
             </div>
@@ -144,7 +190,7 @@ export default function OwnerPreviewHome() {
 
           <Link
             href="/owner/preview/analytics"
-            title="Ver tendencias semanales y KPIs detallados"
+            title={t.analyticsTitle}
             className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
             <div className="flex min-w-0 items-center gap-3">
@@ -153,10 +199,10 @@ export default function OwnerPreviewHome() {
               </span>
               <div className="min-w-0">
                 <p className="text-[15px] font-semibold text-slate-900">
-                  Ver analítica completa
+                  {t.analyticsLabel}
                 </p>
                 <p className="mt-0.5 text-[12px] text-slate-600">
-                  Tendencias semanales, ingresos y KPIs detallados
+                  {t.analyticsHint}
                 </p>
               </div>
             </div>
@@ -165,8 +211,8 @@ export default function OwnerPreviewHome() {
         </div>
         <div className="mt-10">
           <DemoPhotoStrip
-            title="Limpiezas recientes del equipo"
-            caption="Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante."
+            title={t.photoTitle}
+            caption={t.photoCaption}
           />
         </div>
       </div>

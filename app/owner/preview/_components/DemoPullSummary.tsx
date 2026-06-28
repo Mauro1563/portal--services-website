@@ -13,6 +13,55 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Sparkles } from 'lucide-react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    insightToday: 'Insight of the day',
+    insightTitle: 'See today’s insight (heatmap of the last 28 days)',
+    releaseToSee: 'Release to see insight',
+    pullToSee: 'Pull to see insight',
+    hide: 'Hide',
+    bookingsLabel: (n: number) => `${n} bookings`,
+    aiPrefix: 'AI · ',
+    yesAdjust: 'Yes, adjust',
+    later: 'Later',
+    insight1: 'Your Tuesdays are 38% above average. Raise Tuesday prices to £85?',
+    insight2: 'Soho Loft generated more bookings this month. Consider expanding availability.',
+    insight3: 'Carmen has held 98% on-time 7 days running — good moment for a bonus.',
+    insight4: 'Thursday afternoons are underused. Run a promo to fill them.',
+  },
+  es: {
+    insightToday: 'Insight del día',
+    insightTitle: 'Ver el insight del día (heatmap de los últimos 28 días)',
+    releaseToSee: 'Soltar para ver insight',
+    pullToSee: 'Tirar para ver insight',
+    hide: 'Ocultar',
+    bookingsLabel: (n: number) => `${n} reservas`,
+    aiPrefix: 'IA · ',
+    yesAdjust: 'Sí, ajustar',
+    later: 'Más tarde',
+    insight1: 'Tus martes están un 38% por encima de la media. ¿Subir precios martes a £85?',
+    insight2: 'Soho Loft generó más reservas este mes. Considera ampliar disponibilidad.',
+    insight3: 'Carmen ha mantenido 98% puntualidad 7 días seguidos — buen momento para un bonus.',
+    insight4: 'Las tardes del jueves están infrautilizadas. Promoción para llenarlas.',
+  },
+  pt: {
+    insightToday: 'Insight do dia',
+    insightTitle: 'Ver o insight do dia (heatmap dos últimos 28 dias)',
+    releaseToSee: 'Soltar para ver insight',
+    pullToSee: 'Puxa para ver insight',
+    hide: 'Ocultar',
+    bookingsLabel: (n: number) => `${n} reservas`,
+    aiPrefix: 'IA · ',
+    yesAdjust: 'Sim, ajustar',
+    later: 'Mais tarde',
+    insight1: 'As tuas terças estão 38% acima da média. Subir os preços de terça para £85?',
+    insight2: 'Soho Loft gerou mais reservas este mês. Considera ampliar a disponibilidade.',
+    insight3: 'A Carmen manteve 98% de pontualidade 7 dias seguidos — bom momento para um bónus.',
+    insight4: 'As tardes de quinta estão subaproveitadas. Promoção para as encher.',
+  },
+} as const;
 
 const HEATMAP = [
   2, 3, 5, 4, 7, 6, 5,
@@ -21,12 +70,8 @@ const HEATMAP = [
   5, 6, 10, 7, 8, 6, 3,
 ];
 
-const INSIGHTS = [
-  'Tus martes están un 38% por encima de la media. ¿Subir precios martes a £85?',
-  'Soho Loft generó más reservas este mes. Considera ampliar disponibilidad.',
-  'Carmen ha mantenido 98% puntualidad 7 días seguidos — buen momento para un bonus.',
-  'Las tardes del jueves están infrautilizadas. Promoción para llenarlas.',
-];
+const INSIGHT_KEYS = ['insight1', 'insight2', 'insight3', 'insight4'] as const;
+type InsightKey = (typeof INSIGHT_KEYS)[number];
 
 function heatColor(count: number) {
   const max = Math.max(...HEATMAP);
@@ -36,9 +81,14 @@ function heatColor(count: number) {
 }
 
 export function DemoPullSummary() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [open, setOpen] = useState(false);
   const [revealed, setRevealed] = useState('');
-  const [insight] = useState(() => INSIGHTS[Math.floor(Math.random() * INSIGHTS.length)]);
+  const [insightKey] = useState<InsightKey>(
+    () => INSIGHT_KEYS[Math.floor(Math.random() * INSIGHT_KEYS.length)],
+  );
+  const insight = t[insightKey];
   const [dy, setDy] = useState(0);
   const startYRef = useRef<number | null>(null);
   const draggingRef = useRef(false);
@@ -123,7 +173,7 @@ export function DemoPullSummary() {
               className="h-3.5 w-3.5 transition-transform"
               style={{ transform: `rotate(${ratio * 180}deg)` }}
             />
-            {ratio >= 1 ? 'Soltar para ver insight' : 'Tirar para ver insight'}
+            {ratio >= 1 ? t.releaseToSee : t.pullToSee}
           </div>
         </div>
       ) : null}
@@ -132,10 +182,10 @@ export function DemoPullSummary() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        title="Ver el insight del día (heatmap de los últimos 28 días)"
+        title={t.insightTitle}
         className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-full bg-gradient-to-br from-violet-600 to-blue-700 px-3 text-[12px] font-semibold text-white shadow-sm transition hover:brightness-110"
       >
-        <Sparkles className="h-3.5 w-3.5" /> Insight del día
+        <Sparkles className="h-3.5 w-3.5" /> {t.insightToday}
       </button>
 
       {open ? (
@@ -143,14 +193,14 @@ export function DemoPullSummary() {
           <header className="flex items-center justify-between gap-3">
             <h3 className="inline-flex items-center gap-2 font-display text-base font-semibold text-slate-900">
               <Sparkles className="h-4 w-4 text-violet-600" />
-              Insight del día
+              {t.insightToday}
             </h3>
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="text-[11px] font-semibold text-slate-500 hover:text-slate-900"
             >
-              Ocultar
+              {t.hide}
             </button>
           </header>
           {/* 7×4 heatmap (28 cells) */}
@@ -158,14 +208,14 @@ export function DemoPullSummary() {
             {HEATMAP.map((c, i) => (
               <div
                 key={i}
-                title={`${c} reservas`}
+                title={t.bookingsLabel(c)}
                 className="h-7 rounded-md ring-1 ring-slate-200/60"
                 style={{ backgroundColor: heatColor(c) }}
               />
             ))}
           </div>
           <p className="mt-3 min-h-[40px] text-[13px] leading-snug text-slate-700">
-            <span className="font-semibold">IA · </span>
+            <span className="font-semibold">{t.aiPrefix}</span>
             {revealed}
             {revealed.length < insight.length ? (
               <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-slate-400 align-middle" />
@@ -177,14 +227,14 @@ export function DemoPullSummary() {
               onClick={() => setOpen(false)}
               className="rounded-full bg-blue-600 px-3 py-1.5 text-[11.5px] font-semibold text-white hover:bg-blue-700"
             >
-              Sí, ajustar
+              {t.yesAdjust}
             </button>
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="rounded-full bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
             >
-              Más tarde
+              {t.later}
             </button>
           </div>
         </section>
