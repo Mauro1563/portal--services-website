@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { getLocale, type Locale } from '@/lib/i18n';
 
 type FooterLink = {
@@ -234,7 +234,7 @@ export default async function FooterSection() {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
-            <Logo size="sm" />
+            <ZapliLogo size="sm" />
             <p className="mt-4 max-w-xs text-sm text-slate-600">
               {t.tagline}
             </p>
