@@ -7,8 +7,12 @@
  * otherwise sit. Pure inline SVG — no network fetches, no external assets.
  *
  * `tone`:
- *   - "onDark"  (default): white wordmark on a midnight background
- *   - "onLight": slate-900 wordmark on a light background
+ *   - "onLight" (default): slate-900 wordmark on a light background. Most
+ *     surfaces in the product are light (paper, white cards, surface-0), so
+ *     defaulting here keeps the wordmark visible when the prop is omitted.
+ *   - "onDark":  white wordmark on a midnight background — pass this
+ *     explicitly when placing the mark on bg-ink-0, bg-navy-900, bg-zapli-bg
+ *     or any other dark surface.
  *
  * `mono` collapses the lightning to currentColor so the mark can sit on an
  * unknown background (e.g. inside a colored chip). When `mono` is set the
@@ -76,7 +80,7 @@ const BOLT_LEFT_PX: Record<Size, number> = {
 export function ZapliLogo({
   size = 'md',
   mono = false,
-  tone = 'onDark',
+  tone = 'onLight',
   className = '',
 }: ZapliLogoProps) {
   const px = SIZE_PX[size];

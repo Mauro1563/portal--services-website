@@ -116,7 +116,7 @@ export default async function ReferralLanding({
               />
             ) : (
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-cyan-300">
-                <ZapliLogo size="sm" />
+                <ZapliLogo size="sm" tone="onDark" />
               </span>
             )}
             <div className="min-w-0">
