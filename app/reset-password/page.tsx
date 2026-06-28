@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { createClient } from '@/lib/supabase/server';
 import { getLocale, getT } from '@/lib/i18n';
@@ -32,7 +32,7 @@ export default async function ResetPasswordPage({ searchParams }: Props) {
           <LocaleSwitcher current={locale} variant="dark" />
         </div>
         <div className="flex flex-1 flex-col items-center justify-center">
-          <Logo />
+          <ZapliLogo mono className="text-white" />
 
           <div className="mt-10 w-full rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">

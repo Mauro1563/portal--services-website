@@ -42,6 +42,8 @@ import {
 } from 'lucide-react';
 import { DemoTopBar } from '@/components/preview/DemoTopBar';
 import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
+import { TaskChecklist, type ChecklistItem as TaskChecklistItem } from '@/components/tasks/TaskChecklist';
+import { CompletionGate } from '@/components/tasks/CompletionGate';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
 
@@ -735,13 +737,16 @@ function TurnoverCard({
   const st = STATUS_META[task.status];
   const countdown = useCountdown(task.nextCheckInAt);
 
-  const checkedCount = CHECKLIST.reduce(
-    (acc, item) => acc + (task.checklist[item.id] ? 1 : 0),
-    0,
-  );
-  const allChecked = checkedCount === CHECKLIST.length;
   const enoughPhotos = task.photos.length >= MIN_PHOTOS_REQUIRED;
-  const canComplete = allChecked && enoughPhotos;
+
+  // Project the demo's typed-id-keyed checklist dict into the JSONB
+  // {key,label,done} array shape that TaskChecklist + CompletionGate
+  // share with the live route — keeps a single component contract.
+  const checklistItems: TaskChecklistItem[] = CHECKLIST.map((item) => ({
+    key: item.id,
+    label: item.label,
+    done: task.checklist[item.id],
+  }));
 
   // Earnings preview for the in-progress row — durationMin * payRate + tips,
   // matching lib/cleaner-earnings.ts so payroll never disagrees with the app.
@@ -919,56 +924,28 @@ function TurnoverCard({
         {/* Expanded section: checklist + photos + notes */}
         {expanded ? (
           <div className="mt-3 space-y-3">
-            {/* Checklist */}
-            <section className="rounded-xl border border-dashed border-orange-200 bg-orange-50/40 p-3">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-800">
-                  Checklist obligatoria
-                </p>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
-                    allChecked
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-white text-orange-800 ring-1 ring-orange-200'
-                  }`}
-                >
-                  {checkedCount}/{CHECKLIST.length}
-                </span>
-              </div>
-              <ul className="mt-2 space-y-1.5">
-                {CHECKLIST.map((item) => {
-                  const checked = task.checklist[item.id];
-                  return (
-                    <li key={item.id}>
-                      <label className="flex cursor-pointer items-start gap-2 rounded-lg px-1 py-1 transition hover:bg-white/70">
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() => onToggleChecklist(item.id)}
-                          className="mt-[3px] h-4 w-4 shrink-0 cursor-pointer accent-orange-600"
-                        />
-                        <div className="min-w-0">
-                          <p
-                            className={`text-[12px] font-semibold ${
-                              checked
-                                ? 'text-text-3 line-through'
-                                : 'text-text-1'
-                            }`}
-                          >
-                            {item.label}
-                          </p>
-                          {item.hint ? (
-                            <p className="text-[10.5px] text-text-3">
-                              {item.hint}
-                            </p>
-                          ) : null}
-                        </div>
-                      </label>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
+            {/* Checklist — consolidated through the shared TaskChecklist
+                component so the live task page, the Airbnb demo and the
+                Hogar demo all render and gate completion identically. We
+                project the demo's typed-id-keyed dict into the JSONB
+                {key,label,done} shape the component expects. */}
+            <TaskChecklist
+              items={checklistItems}
+              onToggle={(key) => onToggleChecklist(key as ChecklistItemId)}
+            />
+
+            {/* The CHECKLIST hint copy doesn't live in the JSONB shape, so
+                surface it just below the gated rows — preserves the
+                "Airbnb standard behind this item" explainer without
+                bloating the shared component. */}
+            <ul className="-mt-2 space-y-0.5 pl-7 text-[10.5px] text-text-3">
+              {CHECKLIST.filter((c) => c.hint).map((c) => (
+                <li key={`${c.id}-hint`}>
+                  <span className="font-semibold text-text-2">{c.label}:</span>{' '}
+                  {c.hint}
+                </li>
+              ))}
+            </ul>
 
             {/* Photos */}
             <section className="rounded-xl border border-dashed border-surface-2 bg-surface-1/40 p-3">
@@ -1043,41 +1020,16 @@ function TurnoverCard({
               </p>
             </section>
 
-            {/* Complete CTA — gated on checklist + photos */}
+            {/* Complete CTA — gated on checklist + photos via the shared
+                CompletionGate so the disable rules stay identical between
+                the demo, the live page and the Hogar variant. */}
             {task.status === 'in_progress' ? (
-              <div>
-                <button
-                  type="button"
-                  onClick={onComplete}
-                  disabled={!canComplete}
-                  title={
-                    canComplete
-                      ? 'Marcar el turnover como completado y notificar al anfitrión'
-                      : 'Termina la checklist y sube al menos 4 fotos para completar'
-                  }
-                  className={`inline-flex w-full items-center justify-center gap-1.5 rounded-xl px-3 py-3 text-[14px] font-semibold transition active:scale-[0.99] ${
-                    canComplete
-                      ? 'bg-emerald-600 text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.55)]'
-                      : 'cursor-not-allowed bg-slate-200 text-slate-500'
-                  }`}
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                  Marcar completada
-                </button>
-                {!canComplete ? (
-                  <p className="mt-1.5 text-center text-[10.5px] text-text-3">
-                    Faltan{' '}
-                    {!allChecked
-                      ? `${CHECKLIST.length - checkedCount} ítem(s) de la checklist`
-                      : ''}
-                    {!allChecked && !enoughPhotos ? ' y ' : ''}
-                    {!enoughPhotos
-                      ? `${MIN_PHOTOS_REQUIRED - task.photos.length} foto(s)`
-                      : ''}
-                    .
-                  </p>
-                ) : null}
-              </div>
+              <CompletionGate
+                checklist={checklistItems}
+                photosCount={task.photos.length}
+                requiredPhotos={MIN_PHOTOS_REQUIRED}
+                onComplete={onComplete}
+              />
             ) : null}
 
             {task.status === 'scheduled' ? (

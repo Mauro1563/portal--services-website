@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { requireOwner } from '@/lib/auth';
 import { parseIcsCheckoutDates } from '@/lib/ical';
 
-export async function syncProperty(formData: FormData) {
+export async function syncNow(formData: FormData) {
   const { supabase, user } = await requireOwner();
 
   const propertyId = (formData.get('property_id') as string)?.trim();
@@ -13,17 +13,54 @@ export async function syncProperty(formData: FormData) {
     redirect('/owner/properties?error=' + encodeURIComponent('Missing property id'));
   }
 
-  const { data: property } = await supabase
+  // Read the property using the new ical_url column (migration 0037). If the
+  // column doesn't exist yet, fall back to the legacy airbnb_ical_url column
+  // so the action still works in environments where the migration hasn't run.
+  const { data: property, error: selectErr } = await supabase
     .from('properties')
-    .select('id, owner_id, airbnb_ical_url')
+    .select('id, owner_id, ical_url')
     .eq('id', propertyId)
     .maybeSingle();
 
-  if (!property) {
-    redirect('/owner/properties?error=' + encodeURIComponent('Property not found'));
+  let icalUrl: string | null = null;
+  let migrationApplied = true;
+
+  if (selectErr) {
+    if (/ical_url/i.test(selectErr.message)) {
+      console.warn(
+        '[syncNow] properties.ical_url column missing — falling back to airbnb_ical_url. Apply migration 0037.',
+      );
+      migrationApplied = false;
+      const { data: legacy } = await supabase
+        .from('properties')
+        .select('id, owner_id, airbnb_ical_url')
+        .eq('id', propertyId)
+        .maybeSingle();
+      if (!legacy) {
+        redirect(
+          '/owner/properties?error=' + encodeURIComponent('Property not found'),
+        );
+      }
+      icalUrl =
+        (legacy as { airbnb_ical_url: string | null } | null)
+          ?.airbnb_ical_url ?? null;
+    } else {
+      redirect(
+        `/owner/properties/${propertyId}?error=` +
+          encodeURIComponent(selectErr.message),
+      );
+    }
+  } else {
+    if (!property) {
+      redirect(
+        '/owner/properties?error=' + encodeURIComponent('Property not found'),
+      );
+    }
+    icalUrl =
+      (property as { ical_url: string | null } | null)?.ical_url ?? null;
   }
 
-  if (!property.airbnb_ical_url) {
+  if (!icalUrl) {
     redirect(
       `/owner/properties/${propertyId}?error=` +
         encodeURIComponent('No iCal URL on this property'),
@@ -32,7 +69,7 @@ export async function syncProperty(formData: FormData) {
 
   let icsText: string;
   try {
-    const res = await fetch(property.airbnb_ical_url, {
+    const res = await fetch(icalUrl, {
       cache: 'no-store',
       headers: { 'User-Agent': 'PortalServicesDigital/1.0' },
     });
@@ -46,7 +83,9 @@ export async function syncProperty(formData: FormData) {
   } catch (e) {
     redirect(
       `/owner/properties/${propertyId}?error=` +
-        encodeURIComponent('Could not download calendar: ' + (e as Error).message),
+        encodeURIComponent(
+          'Could not download calendar: ' + (e as Error).message,
+        ),
     );
   }
 
@@ -54,46 +93,61 @@ export async function syncProperty(formData: FormData) {
   const today = new Date().toISOString().split('T')[0];
   const futureDates = dates.filter((d) => d >= today);
 
-  if (futureDates.length === 0) {
-    redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent('Calendario ya estaba sincronizado · 0 limpiezas nuevas')}`);
+  let added = 0;
+  if (futureDates.length > 0) {
+    const { data: existing } = await supabase
+      .from('tasks')
+      .select('scheduled_for')
+      .eq('property_id', propertyId)
+      .in('scheduled_for', futureDates);
+
+    const existingSet = new Set((existing ?? []).map((t) => t.scheduled_for));
+    const toCreate = futureDates.filter((d) => !existingSet.has(d));
+
+    if (toCreate.length > 0) {
+      const rows = toCreate.map((d) => ({
+        owner_id: user.id,
+        property_id: propertyId,
+        scheduled_for: d,
+        required_photos: 4,
+        notes: 'Auto-created from iCal sync',
+      }));
+
+      const { error } = await supabase.from('tasks').insert(rows);
+      if (error) {
+        redirect(
+          `/owner/properties/${propertyId}?error=` +
+            encodeURIComponent(error.message),
+        );
+      }
+      added = toCreate.length;
+    }
   }
 
-  const { data: existing } = await supabase
-    .from('tasks')
-    .select('scheduled_for')
-    .eq('property_id', propertyId)
-    .in('scheduled_for', futureDates);
-
-  const existingSet = new Set((existing ?? []).map((t) => t.scheduled_for));
-  const toCreate = futureDates.filter((d) => !existingSet.has(d));
-
-  if (toCreate.length === 0) {
-    redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent('Calendario ya estaba sincronizado · 0 limpiezas nuevas')}`);
-  }
-
-  const rows = toCreate.map((d) => ({
-    owner_id: user.id,
-    property_id: propertyId,
-    scheduled_for: d,
-    notes: 'Auto-created from Airbnb iCal sync',
-  }));
-
-  const { error } = await supabase.from('tasks').insert(rows);
-  if (error) {
-    redirect(
-      `/owner/properties/${propertyId}?error=` + encodeURIComponent(error.message),
-    );
+  // Stamp last-sync timestamp (best-effort; only if the column exists).
+  if (migrationApplied) {
+    await supabase
+      .from('properties')
+      .update({ ical_last_sync_at: new Date().toISOString() })
+      .eq('id', propertyId)
+      .eq('owner_id', user.id);
   }
 
   revalidatePath('/owner');
   revalidatePath('/owner/tasks');
   revalidatePath(`/owner/properties/${propertyId}`);
-  const n = toCreate.length;
-  const msg = n === 0
-    ? 'Calendario ya estaba sincronizado · 0 limpiezas nuevas'
-    : `Sincronizadas ${n} limpieza${n === 1 ? '' : 's'} del calendario`;
-  redirect(`/owner/properties/${propertyId}?flash=${encodeURIComponent(msg)}`);
+
+  const msg =
+    added === 0
+      ? 'Calendario ya estaba sincronizado · 0 limpiezas nuevas'
+      : `Sincronizadas ${added} limpieza${added === 1 ? '' : 's'} del calendario`;
+  redirect(
+    `/owner/properties/${propertyId}?flash=${encodeURIComponent(msg)}`,
+  );
 }
+
+// Backwards-compatible alias for forms that still reference syncProperty.
+export const syncProperty = syncNow;
 
 export async function updateProperty(formData: FormData) {
   const { supabase, user } = await requireOwner();

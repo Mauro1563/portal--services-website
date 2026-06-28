@@ -7,7 +7,7 @@ import {
   UserRound,
   Users,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { PasswordInput } from './PasswordInput';
 import { SubmitButton } from './SubmitButton';
@@ -118,7 +118,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
         {/* Logo top-left */}
         <div className="relative z-10 px-12 pt-10">
-          <Logo size="md" className="!h-12" />
+          <ZapliLogo size="md" className="!h-12" mono />
         </div>
 
         {/* Hero copy, anchored bottom-left so it doesn't fight the phone */}
@@ -196,7 +196,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="w-full max-w-sm">
           {/* Mobile-only logo since the left panel hides */}
           <div className="mb-8 flex justify-center lg:hidden">
-            <Logo size="md" className="!h-12" />
+            <ZapliLogo size="md" className="!h-12" />
           </div>
 
           <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-950">

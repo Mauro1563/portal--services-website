@@ -42,6 +42,10 @@ import { PullToCheckInHero } from '@/components/preview/PullToCheckInHero';
 import { KintsugiThread } from '@/components/preview/KintsugiThread';
 import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
 import { CleanerConciergeSheet } from './_components/CleanerConciergeSheet';
+import {
+  TaskChecklist,
+  type ChecklistItem as TaskChecklistItem,
+} from '@/components/tasks/TaskChecklist';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
 
@@ -69,6 +73,13 @@ type DemoTask = {
   cleanerPayRatePence: number;
   /** Tip from the client, in pence. */
   tipPence: number;
+  /**
+   * Optional checklist — mirrors tasks.checklist JSONB so the same shared
+   * <TaskChecklist /> component can render here. Residential tasks usually
+   * have none (the empty state copy handles that gracefully) but a host may
+   * pin a short list when there's something idiosyncratic worth ticking.
+   */
+  checklist?: TaskChecklistItem[];
 };
 
 const INITIAL_TASKS: DemoTask[] = [
@@ -123,6 +134,12 @@ const INITIAL_TASKS: DemoTask[] = [
     actualHours: null,
     cleanerPayRatePence: 1400,
     tipPence: 0,
+    // Short, host-pinned checklist — shows how the same component degrades
+    // gracefully from full Airbnb gating to a quick reminder list here.
+    checklist: [
+      { key: 'plants', label: 'Regar las plantas del balcón', done: false },
+      { key: 'recycling', label: 'Bajar el reciclaje (martes)', done: false },
+    ],
   },
 ];
 
@@ -248,6 +265,26 @@ function OperativePreviewHomeBody({
         if (t.id !== taskId) return t;
         const next = Math.max(0, Math.round(((t.actualHours ?? 0) + delta) * 4) / 4);
         return { ...t, actualHours: next };
+      }),
+    );
+  }
+
+  function handleToggleChecklist(taskId: string, key: string, done: boolean) {
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id !== taskId || !t.checklist) return t;
+        return {
+          ...t,
+          checklist: t.checklist.map((it) =>
+            it.key === key
+              ? {
+                  ...it,
+                  done,
+                  doneAt: done ? new Date().toISOString() : undefined,
+                }
+              : it,
+          ),
+        };
       }),
     );
   }
@@ -680,6 +717,23 @@ function OperativePreviewHomeBody({
                           <p className="mt-0.5 text-[11.5px] leading-relaxed text-text-2">
                             {task.notes}
                           </p>
+
+                          {/* Optional checklist — the same shared component
+                              the Airbnb route uses. For residential demos the
+                              checklist is usually undefined/empty; we still
+                              mount the component on the rare host-pinned list
+                              (task 3) so the empty-state copy is reachable
+                              when a host removes the items mid-day. */}
+                          {task.checklist ? (
+                            <div className="mt-3">
+                              <TaskChecklist
+                                items={task.checklist}
+                                onToggle={(key, done) =>
+                                  handleToggleChecklist(task.id, key, done)
+                                }
+                              />
+                            </div>
+                          ) : null}
 
                           {task.photos.length > 0 ? (
                             <>

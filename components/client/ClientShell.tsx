@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import type { ClientContext } from '@/lib/client-auth';
 import { ClientTabBar, type Tab } from './ClientTabBar';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
@@ -65,7 +65,7 @@ export function ClientShell({
                 className="h-6 w-auto max-w-[140px] object-contain"
               />
             ) : (
-              <Logo size="sm" />
+              <ZapliLogo size="sm" />
             )}
 
             {/* Locale switcher pinned to the top-right of the client header.

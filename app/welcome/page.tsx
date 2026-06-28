@@ -7,7 +7,7 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { ScrollLock } from '@/components/ScrollLock';
 import { getLocale, getT } from '@/lib/i18n';
@@ -77,7 +77,7 @@ export default async function WelcomePage() {
         >
           {/* Logo + tagline */}
           <div className="flex flex-col items-center text-center">
-            <Logo size="md" className="!h-20 sm:!h-24" />
+            <ZapliLogo size="md" className="!h-20 sm:!h-24" />
             <h1 className="mt-5 text-[1.625rem] font-bold tracking-[-0.02em] text-[#0b1d3a]">
               {t('welcome.title')}
             </h1>

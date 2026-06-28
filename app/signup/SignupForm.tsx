@@ -14,7 +14,7 @@ import {
   User,
   Users2,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { signupOwner, type SignupResult } from './actions';
 
 export type SignupDict = {
@@ -93,7 +93,7 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
           <div className="w-full overflow-hidden rounded-[1.75rem] bg-white shadow-[0_30px_80px_-30px_rgba(15,23,42,0.35),0_8px_24px_-12px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70">
           <section className="relative flex flex-col px-6 py-7 sm:px-9 sm:py-9">
             <div className="mb-5 flex justify-center">
-              <Logo size="md" />
+              <ZapliLogo size="md" />
             </div>
 
             {result?.ok ? (

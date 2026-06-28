@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Globe, MapPin, Users } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { ScrollLock } from '@/components/ScrollLock';
 import { getT } from '@/lib/i18n';
 
@@ -72,7 +72,7 @@ export async function PortalLoginCard({
         <div className="w-full overflow-hidden rounded-[1.25rem] bg-white shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25),0_6px_16px_-10px_rgba(15,23,42,0.08)] ring-1 ring-slate-200/70">
           <div className="px-5 pb-5 pt-5 sm:px-6">
             <div className="flex justify-center">
-              <Logo size="md" className="!h-12 sm:!h-14" />
+              <ZapliLogo size="md" className="!h-12 sm:!h-14" />
             </div>
 
             {badges && badges.length === 1 ? (

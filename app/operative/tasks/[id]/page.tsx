@@ -21,6 +21,9 @@ import { CheckInButton } from '../../CheckInButton';
 import { PhotoUploadButton } from '../../PhotoUploadButton';
 import { CleanerNoteForm } from './CleanerNoteForm';
 import { ActualHoursForm } from './ActualHoursForm';
+import { TaskChecklistSection } from './TaskChecklistSection';
+import { CompletionGateForm } from './CompletionGateForm';
+import type { ChecklistItem } from '@/components/tasks/TaskChecklist';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -46,6 +49,10 @@ type DetailTask = {
   actual_hours: number | string | null;
   cleaner_pay_rate_pence: number | null;
   tip_pence: number | null;
+  /** JSONB array — {key,label,done,doneAt?,doneByUserId?}. Empty for residential. */
+  checklist: ChecklistItem[] | null;
+  /** Minimum task_photos required before this task can be marked completed. */
+  required_photos: number | null;
   property: {
     name: string | null;
     address: string | null;
@@ -106,7 +113,7 @@ export default async function OperativeTaskDetail({ params }: Props) {
       admin
         .from('tasks')
         .select(
-          'id, scheduled_for, start_time, status, notes, cleaner_note, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, actual_hours, cleaner_pay_rate_pence, tip_pence, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
+          'id, scheduled_for, start_time, status, notes, cleaner_note, checked_in_at, completed_at, service_name, price_pence, estimated_duration_min, actual_hours, cleaner_pay_rate_pence, tip_pence, checklist, required_photos, property:properties (name, address, notes), client:clients (name, address, postcode, phone, key_info, wifi_info)',
         )
         .eq('id', id)
         .eq('cleaner_id', cleanerId)
@@ -148,6 +155,31 @@ export default async function OperativeTaskDetail({ params }: Props) {
   const status = STATUS_META[task.status] ?? STATUS_META.scheduled;
   const scheduledDate = new Date(task.scheduled_for + 'T00:00:00Z');
   const isToday = task.scheduled_for === new Date().toISOString().slice(0, 10);
+
+  // Normalise the JSONB array — Supabase returns `null`/`unknown` until the
+  // column is populated, so coerce to a typed array we can hand to the
+  // shared TaskChecklist / CompletionGate components.
+  const checklistItems: ChecklistItem[] = Array.isArray(task.checklist)
+    ? task.checklist
+        .filter(
+          (it): it is ChecklistItem =>
+            !!it && typeof it.key === 'string' && typeof it.label === 'string',
+        )
+        .map((it) => ({
+          key: it.key,
+          label: it.label,
+          done: !!it.done,
+          doneAt: it.doneAt,
+          doneByUserId: it.doneByUserId,
+        }))
+    : [];
+  const requiredPhotos = task.required_photos ?? 0;
+  const photosCount = photos.length;
+  // An "Airbnb-style" task is anything that gates completion behind either a
+  // checklist or a photo minimum. Residential tasks usually have neither, so
+  // we keep the existing "tap PhotoUpload to complete" flow there and switch
+  // to the gated CompletionGate only when there's actually something to gate.
+  const isGatedTask = checklistItems.length > 0 || requiredPhotos > 0;
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-canvas pb-16">
@@ -314,6 +346,19 @@ export default async function OperativeTaskDetail({ params }: Props) {
           </section>
         ) : null}
 
+        {/* Airbnb-style checklist — only rendered when there's something to
+            tick off. Residential tasks get an empty array and the section is
+            skipped entirely (we don't want a hollow "0 de 0" card on every
+            house-cleaning job). Read-only once the task is completed so the
+            historical state stays visible without inviting further edits. */}
+        {checklistItems.length > 0 ? (
+          <TaskChecklistSection
+            taskId={task.id}
+            items={checklistItems}
+            readOnly={task.status === 'completed' || task.status === 'cancelled'}
+          />
+        ) : null}
+
         {/* Cleaner → owner note (always editable while task is assigned) */}
         <CleanerNoteForm taskId={task.id} initial={task.cleaner_note ?? ''} />
 
@@ -388,12 +433,27 @@ export default async function OperativeTaskDetail({ params }: Props) {
               In progress · checked in {formatTime(task.checked_in_at)}
             </p>
             <p className="mt-2 text-xs text-graphite-2">
-              Take photos when you're done. Uploading them marks the job as
-              completed and notifies the manager.
+              {isGatedTask
+                ? 'Tick every checklist item and upload the required photos before you can mark the job as completed.'
+                : "Take photos when you're done. Uploading them marks the job as completed and notifies the manager."}
             </p>
             <div className="mt-4">
               <PhotoUploadButton taskId={task.id} />
             </div>
+            {/* Gated completion: only shown on Airbnb-style tasks. Residential
+                tasks (no checklist + required_photos=0) keep the photo-upload
+                auto-completion flow they've always had — no behaviour change
+                for the existing cleaner muscle memory there. */}
+            {isGatedTask ? (
+              <div className="mt-4">
+                <CompletionGateForm
+                  taskId={task.id}
+                  checklist={checklistItems}
+                  photosCount={photosCount}
+                  requiredPhotos={requiredPhotos}
+                />
+              </div>
+            ) : null}
           </section>
         ) : task.status === 'cancelled' ? (
           <section className="rounded-2xl border border-rose-200 bg-rose-50/60 p-4 text-center">

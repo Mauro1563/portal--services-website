@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { LogOut, ExternalLink } from 'lucide-react';
 import { signOut } from '@/app/hq/actions';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { navGroups, type Active } from './nav-items';
 
 export function Sidebar({ active, email }: { active: Active; email: string }) {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-paper lg:flex">
       <div className="flex h-16 items-center border-b border-line px-5">
-        <Logo size="sm" />
+        <ZapliLogo size="sm" />
       </div>
 
       <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-5">

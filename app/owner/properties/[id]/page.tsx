@@ -12,7 +12,7 @@ import {
 import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { SubmitButton } from '@/components/forms/SubmitButton';
-import { deleteProperty, syncProperty } from './actions';
+import { deleteProperty, syncNow } from './actions';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -46,6 +46,11 @@ type PropertyRow = {
   address: string | null;
   notes: string | null;
   airbnb_ical_url: string | null;
+  // Migration 0037 columns — may be undefined on databases where the
+  // migration hasn't been applied yet.
+  ical_url?: string | null;
+  ical_last_sync_at?: string | null;
+  property_type?: string | null;
   platform: string | null;
   guests: number | null;
   floor_area_sqm: number | null;
@@ -86,13 +91,30 @@ export default async function PropertyDetail({ params, searchParams }: Props) {
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
 
-  const { data } = await supabase
+  // Try the post-migration-0037 schema first (new columns: ical_url,
+  // ical_last_sync_at, property_type). If those columns don't exist yet,
+  // fall back to the legacy select so the page still renders.
+  let { data, error } = await supabase
     .from('properties')
     .select(
-      'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, contact_name, contact_phone, contact_email, client_id, created_at, client:clients (id, name, phone, email, postcode, key_info, wifi_info)',
+      'id, name, address, notes, airbnb_ical_url, ical_url, ical_last_sync_at, property_type, platform, guests, floor_area_sqm, contact_name, contact_phone, contact_email, client_id, created_at, client:clients (id, name, phone, email, postcode, key_info, wifi_info)',
     )
     .eq('id', id)
     .maybeSingle();
+
+  if (error && /ical_url|ical_last_sync_at|property_type/i.test(error.message)) {
+    console.warn(
+      '[properties/[id]] migration 0037 columns missing — falling back to legacy select.',
+    );
+    const fallback = await supabase
+      .from('properties')
+      .select(
+        'id, name, address, notes, airbnb_ical_url, platform, guests, floor_area_sqm, contact_name, contact_phone, contact_email, client_id, created_at, client:clients (id, name, phone, email, postcode, key_info, wifi_info)',
+      )
+      .eq('id', id)
+      .maybeSingle();
+    data = fallback.data as typeof data;
+  }
 
   const property = data as unknown as PropertyRow | null;
   if (!property) notFound();
@@ -443,37 +465,60 @@ function DetallesTab({ property }: { property: PropertyRow }) {
         </ul>
       </section>
 
-      {/* iCal sync */}
-      <section>
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-text-3">
-          Sincronización iCal
-        </h2>
-        {property.airbnb_ical_url ? (
-          <form
-            action={syncProperty}
-            className="mt-2 flex items-center justify-between gap-3 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card"
-          >
-            <div>
-              <p className="text-sm font-medium text-text-1">Sincronizar ahora</p>
-              <p className="mt-0.5 text-[11px] text-text-3">
-                El cron diario corre a las 06:00 UTC.
-              </p>
-            </div>
-            <input type="hidden" name="property_id" value={property.id} />
-            <SubmitButton
-              pendingLabel="Sincronizando…"
-              className="inline-flex h-9 items-center gap-2 rounded-xl bg-brand-gradient px-3 text-xs font-medium text-white shadow-brand-glow disabled:opacity-70"
-            >
-              <RefreshCw className="h-3.5 w-3.5" /> Sync
-            </SubmitButton>
-          </form>
-        ) : (
-          <div className="mt-2 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-4 text-sm text-text-2">
-            Sin URL iCal. Toca <em>Editar</em> arriba y pega la URL desde Airbnb →
-            Calendario.
-          </div>
-        )}
-      </section>
+      {/* iCal sync — only surfaced for Airbnb-rental properties that have a
+          feed URL configured (per migration 0037). For residential homes we
+          hide the section entirely. */}
+      {(() => {
+        // Effective iCal URL: prefer the new column, fall back to the legacy
+        // one if migration 0037 hasn't been applied yet.
+        const effectiveIcalUrl =
+          property.ical_url ?? property.airbnb_ical_url ?? null;
+        // property_type defaults to 'residential_home' post-migration. Pre-
+        // migration the column is undefined — treat any property with an
+        // iCal URL as an Airbnb rental for backwards compatibility.
+        const isAirbnbRental =
+          property.property_type === 'airbnb_rental' ||
+          (property.property_type == null && !!effectiveIcalUrl);
+
+        if (!isAirbnbRental) return null;
+
+        return (
+          <section>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-text-3">
+              Sincronización iCal
+            </h2>
+            {effectiveIcalUrl ? (
+              <form
+                action={syncNow}
+                className="mt-2 flex items-center justify-between gap-3 rounded-2xl border border-surface-2 bg-surface-0 p-4 shadow-card"
+              >
+                <div>
+                  <p className="text-sm font-medium text-text-1">
+                    Sincronizar ahora
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-text-3">
+                    {property.ical_last_sync_at
+                      ? `Última sincronización: ${relativeTime(property.ical_last_sync_at)}`
+                      : 'Aún sin sincronizar. El cron diario corre a las 06:00 UTC.'}
+                  </p>
+                </div>
+                <input type="hidden" name="property_id" value={property.id} />
+                <SubmitButton
+                  pendingLabel="Sincronizando…"
+                  className="inline-flex h-9 items-center gap-2 rounded-xl bg-brand-gradient px-3 text-xs font-medium text-white shadow-brand-glow disabled:opacity-70"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" /> Sync
+                </SubmitButton>
+              </form>
+            ) : (
+              <div className="mt-2 rounded-2xl border border-dashed border-surface-2 bg-surface-0 p-4 text-sm text-text-2">
+                Sin URL iCal. Toca <em>Editar</em> arriba y pega la URL desde
+                Airbnb → Calendario.
+              </div>
+            )}
+          </section>
+        );
+      })()}
     </div>
   );
 }
@@ -593,6 +638,24 @@ function shortUrl(url: string): string {
   } catch {
     return url.length > 28 ? url.slice(0, 28) + '…' : url;
   }
+}
+
+function relativeTime(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return iso;
+  const diffMs = Date.now() - then;
+  if (diffMs < 0) return 'hace un momento';
+  const mins = Math.floor(diffMs / 60_000);
+  if (mins < 1) return 'hace unos segundos';
+  if (mins < 60) return `hace ${mins} min`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `hace ${hours} h`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `hace ${days} d`;
+  return new Date(iso).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'short',
+  });
 }
 
 function formatDuration(min: number): string {

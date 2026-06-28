@@ -9,7 +9,7 @@ import {
   Phone,
   Star,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 export const revalidate = 60; // ISR — refresh public pages every minute
@@ -166,7 +166,7 @@ export default async function PublicBusinessPage({
               />
             ) : (
               <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-cyan-300">
-                <Logo size="sm" />
+                <ZapliLogo size="sm" mono />
               </span>
             )}
             <div className="min-w-0 flex-1">

@@ -205,6 +205,68 @@ export async function saveActualHours(formData: FormData) {
   redirect(`/operative/tasks/${taskId}?hours_saved=1`);
 }
 
+/**
+ * Toggle a single checklist item on a task. The checklist is stored as a
+ * JSONB array of {key,label,done,doneAt?,doneByUserId?} — we read-modify-write
+ * so this stays a single round-trip (no triggers, no functions). Concurrent
+ * toggles from two devices can race, but the worst case is the loser's tick
+ * gets stamped a moment later — acceptable for a per-task UI.
+ *
+ * Always responds with revalidate (no redirect) — the page re-renders with
+ * the freshly persisted state and the CompletionGate updates accordingly.
+ */
+export async function toggleChecklistItem(formData: FormData) {
+  const cleanerId = await requireCleaner();
+  const taskId = ((formData.get('task_id') as string) ?? '').trim();
+  const key = ((formData.get('item_key') as string) ?? '').trim();
+  const done = formData.get('done') === '1';
+  if (!taskId || !key) return;
+
+  const admin = createAdminClient();
+  const { data: task } = await admin
+    .from('tasks')
+    .select('id, cleaner_id, checklist')
+    .eq('id', taskId)
+    .maybeSingle();
+  if (!task || task.cleaner_id !== cleanerId) return;
+
+  type ChecklistRow = {
+    key: string;
+    label: string;
+    done: boolean;
+    doneAt?: string | null;
+    doneByUserId?: string | null;
+  };
+  const checklist = Array.isArray(task.checklist)
+    ? (task.checklist as ChecklistRow[])
+    : [];
+  const nowIso = new Date().toISOString();
+  const next = checklist.map((row) =>
+    row.key === key
+      ? {
+          ...row,
+          done,
+          doneAt: done ? nowIso : null,
+          doneByUserId: done ? cleanerId : null,
+        }
+      : row,
+  );
+
+  const { error } = await admin
+    .from('tasks')
+    .update({ checklist: next })
+    .eq('id', taskId);
+
+  if (error) {
+    console.error('[toggleChecklistItem] update failed', error);
+    redirect(
+      `/operative/tasks/${taskId}?error=` + encodeURIComponent(error.message),
+    );
+  }
+
+  revalidatePath(`/operative/tasks/${taskId}`);
+}
+
 export async function signOutOperative() {
   const cookieStore = await cookies();
   cookieStore.delete('cleaner_session');
