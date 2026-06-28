@@ -19,9 +19,10 @@ const MONTH = [
 ];
 
 /**
- * "Tu Agenda Hoy" header — large display date in the Efficient Work
- * style. Three lines: portal label, agenda title, big date string
- * (MARTES 28 MAR). Sign-out + theme toggle on the right.
+ * "Tu Agenda Hoy" header — compact light card on the Zapli palette
+ * (white surface + teal accents) so it sits in the same family as the
+ * earnings card and "Next stop" card beneath it instead of crashing in
+ * as a dark slab.
  */
 export async function AgendaHeader({
   cleanerName,
@@ -55,13 +56,18 @@ export async function AgendaHeader({
   const dayNum = now.getDate();
 
   return (
-    <header className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 px-5 pb-5 pt-6 text-white shadow-card-lg">
-      <div className="flex items-start justify-between gap-3">
+    <header className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-[#F2FFFC] to-white px-4 pb-4 pt-4 text-slate-900 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.06),_0_12px_28px_-12px_rgba(0,216,199,0.18)] sm:px-5 sm:pt-5">
+      {/* Subtle teal corner glow to add depth without weight */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-12 -right-10 h-32 w-32 rounded-full bg-[#00D8C7]/15 blur-2xl"
+      />
+      <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300/90">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00B8A8]">
             Cleaner · {firstName}
           </p>
-          <h1 className="mt-1 font-display text-[15px] font-medium text-white/85">
+          <h1 className="mt-1 font-display text-[14px] font-medium text-slate-700">
             Tu agenda hoy
           </h1>
           {decorationSlot ? <div className="mt-1">{decorationSlot}</div> : null}
@@ -72,7 +78,7 @@ export async function AgendaHeader({
           <form action={signOutOperative}>
             <button
               type="submit"
-              className="rounded-full border border-white/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85 transition hover:border-white/50 hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-slate-200 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600 transition hover:border-[#00D8C7] hover:bg-[#00D8C7]/10 hover:text-[#0A0D18]"
             >
               Salir
             </button>
@@ -80,30 +86,30 @@ export async function AgendaHeader({
         </div>
       </div>
 
-      <div className="mt-4 flex items-end justify-between gap-3">
+      <div className="relative mt-3 flex items-end justify-between gap-3">
         <div className="flex items-baseline gap-2">
-          <span className="font-display text-5xl font-bold leading-none tracking-tight text-white tabular-nums">
+          <span className="font-display text-4xl font-bold leading-none tracking-tight text-[#0A0D18] tabular-nums">
             {dayNum}
           </span>
           <div className="flex flex-col leading-tight">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85">
+            <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-slate-700">
               {dayFull}
             </span>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+            <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-slate-400">
               {monthShort}
             </span>
           </div>
         </div>
-        <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-white/55 sm:inline">
+        <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-slate-400 sm:inline">
           {dayShort} · {String(dayNum).padStart(2, '0')}/{String(now.getMonth() + 1).padStart(2, '0')}
         </span>
       </div>
 
-      <div className="mt-3 flex items-center gap-2">
+      <div className="relative mt-3 flex items-center gap-2">
         <Link
           href={weekHref}
           title="Ver el resumen semanal de tareas"
-          className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85 transition hover:bg-white/20"
+          className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-700 transition hover:bg-slate-200"
         >
           {totalCount === 0
             ? 'Sin tareas hoy'
@@ -113,7 +119,7 @@ export async function AgendaHeader({
           <a
             href={`#task-${inProgressTaskId}`}
             title="Saltar a la tarea que tienes en curso ahora mismo"
-            className="inline-flex items-center gap-1 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-200 transition hover:bg-emerald-400/25"
+            className="inline-flex items-center gap-1 rounded-full bg-[#00D8C7]/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#00B8A8] ring-1 ring-inset ring-[#00D8C7]/40 transition hover:bg-[#00D8C7]/25"
           >
             En curso
           </a>
