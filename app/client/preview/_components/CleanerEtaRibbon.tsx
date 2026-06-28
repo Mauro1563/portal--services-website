@@ -16,12 +16,52 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, MapPin } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 
 type ScriptStep = {
   km: number;
   /** Minutes ETA shown alongside the km value. */
   min: number;
 };
+
+const COPY = {
+  en: {
+    arrivedTitle: (name: string) => `${name} has arrived`,
+    enRouteTitle: (name: string, km: string) =>
+      `${name} is ${km} km away — tap to see the route`,
+    atDoor: 'At your door',
+    onTheWay: 'On the way',
+    arrivedLine: (firstName: string) => `${firstName} has arrived`,
+    distanceLine: (km: string, min: number) => `${km} km · ${min} min`,
+    routeLabel: 'Approximate route',
+    arrived: 'Arrived',
+    minutesShort: (min: number) => `${min} min`,
+  },
+  es: {
+    arrivedTitle: (name: string) => `${name} ha llegado`,
+    enRouteTitle: (name: string, km: string) =>
+      `${name} está a ${km} km — toca para ver la ruta`,
+    atDoor: 'En tu puerta',
+    onTheWay: 'En camino',
+    arrivedLine: (firstName: string) => `${firstName} ha llegado`,
+    distanceLine: (km: string, min: number) => `${km} km · ${min} min`,
+    routeLabel: 'Ruta aproximada',
+    arrived: 'Llegada',
+    minutesShort: (min: number) => `${min} min`,
+  },
+  pt: {
+    arrivedTitle: (name: string) => `${name} chegou`,
+    enRouteTitle: (name: string, km: string) =>
+      `${name} está a ${km} km — toque para ver a rota`,
+    atDoor: 'À sua porta',
+    onTheWay: 'A caminho',
+    arrivedLine: (firstName: string) => `${firstName} chegou`,
+    distanceLine: (km: string, min: number) => `${km} km · ${min} min`,
+    routeLabel: 'Rota aproximada',
+    arrived: 'Chegada',
+    minutesShort: (min: number) => `${min} min`,
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 // Deterministic mocked ETA script — each tick decrements ~0.1km and
 // drops a minute. Lands at "Llega ahora" so the user sees closure.
@@ -46,6 +86,8 @@ export function CleanerEtaRibbon({
   cleanerInitials: string;
   cleanerName: string;
 }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [idx, setIdx] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [flashing, setFlashing] = useState(false);
@@ -87,8 +129,8 @@ export function CleanerEtaRibbon({
         aria-expanded={expanded}
         title={
           arrived
-            ? `${cleanerName} ha llegado`
-            : `${cleanerName} está a ${step.km.toFixed(1)} km — toca para ver la ruta`
+            ? t.arrivedTitle(cleanerName)
+            : t.enRouteTitle(cleanerName, step.km.toFixed(1))
         }
         className="flex w-full items-center gap-3 rounded-full bg-white/90 px-3 py-2 text-left shadow-[0_6px_18px_-12px_rgba(15,23,42,0.4)] ring-1 ring-inset ring-slate-200 transition hover:bg-white"
       >
@@ -108,7 +150,7 @@ export function CleanerEtaRibbon({
 
         <div className="min-w-0 flex-1">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700">
-            {arrived ? 'En tu puerta' : 'En camino'}
+            {arrived ? t.atDoor : t.onTheWay}
           </p>
           <p
             className="mt-0.5 font-display text-[13px] font-bold tabular-nums text-slate-900 transition"
@@ -119,8 +161,8 @@ export function CleanerEtaRibbon({
             }}
           >
             {arrived
-              ? `${cleanerName.split(' ')[0]} ha llegado`
-              : `${step.km.toFixed(1)} km · ${step.min} min`}
+              ? t.arrivedLine(cleanerName.split(' ')[0])
+              : t.distanceLine(step.km.toFixed(1), step.min)}
           </p>
         </div>
 
@@ -175,10 +217,10 @@ export function CleanerEtaRibbon({
           </svg>
           <p className="mt-1 flex items-center justify-between gap-2 text-[11px] text-slate-500">
             <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3" /> Ruta aproximada
+              <MapPin className="h-3 w-3" /> {t.routeLabel}
             </span>
             <span className="font-semibold text-slate-700">
-              {arrived ? 'Llegada' : `${step.min} min`}
+              {arrived ? t.arrived : t.minutesShort(step.min)}
             </span>
           </p>
         </div>

@@ -15,6 +15,46 @@
 
 import { Bath, Bed, ChefHat, Sparkles } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    backTitle: (firstName: string) => `Back to ${firstName}'s details`,
+    meetTitle: (firstName: string) => `Meet ${firstName} — how she works`,
+    backLabel: 'Details',
+    meetLabel: 'Meet her',
+    howWorks: (firstName: string) => `How ${firstName} works`,
+    description:
+      'Starts with the kitchen, uses eco products, and loves leaving the pillows hotel-style.',
+    kitchen: 'Kitchen',
+    bathroom: 'Bathroom',
+    bedroom: 'Bedroom',
+  },
+  es: {
+    backTitle: (firstName: string) => `Volver a los datos de ${firstName}`,
+    meetTitle: (firstName: string) => `Conocer a ${firstName} — cómo trabaja`,
+    backLabel: 'Datos',
+    meetLabel: 'Conócela',
+    howWorks: (firstName: string) => `Cómo trabaja ${firstName}`,
+    description:
+      'Empieza por la cocina, usa productos eco, y le encanta dejar las almohadas como en hotel.',
+    kitchen: 'Cocina',
+    bathroom: 'Baño',
+    bedroom: 'Dormitorio',
+  },
+  pt: {
+    backTitle: (firstName: string) => `Voltar aos dados de ${firstName}`,
+    meetTitle: (firstName: string) => `Conhecer ${firstName} — como trabalha`,
+    backLabel: 'Dados',
+    meetLabel: 'Conhecê-la',
+    howWorks: (firstName: string) => `Como trabalha ${firstName}`,
+    description:
+      'Começa pela cozinha, usa produtos eco e adora deixar as almofadas como num hotel.',
+    kitchen: 'Cozinha',
+    bathroom: 'Casa de banho',
+    bedroom: 'Quarto',
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
@@ -29,6 +69,8 @@ export function FlippableCleanerCard({
   front: React.ReactNode;
   cleanerName: string;
 }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [flipped, setFlipped] = useState(false);
   const [reduced, setReduced] = useState(false);
   // We need the back panel's natural height so the wrapper sizes
@@ -57,14 +99,14 @@ export function FlippableCleanerCard({
         onClick={() => setFlipped((v) => !v)}
         title={
           flipped
-            ? `Volver a los datos de ${firstName}`
-            : `Conocer a ${firstName} — cómo trabaja`
+            ? t.backTitle(firstName)
+            : t.meetTitle(firstName)
         }
         aria-pressed={flipped}
         className="absolute -top-1 right-0 z-20 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-700 ring-1 ring-inset ring-slate-200 backdrop-blur transition hover:bg-white"
       >
         <Sparkles className="h-3 w-3 text-amber-500" />
-        {flipped ? 'Datos' : 'Conócela'}
+        {flipped ? t.backLabel : t.meetLabel}
       </button>
 
       {reduced ? (
@@ -82,7 +124,7 @@ export function FlippableCleanerCard({
             className="transition-opacity duration-200"
             style={{ opacity: flipped ? 1 : 0, position: flipped ? 'static' : 'absolute', inset: 0 }}
           >
-            <CleanerBack cleanerName={firstName} />
+            <CleanerBack cleanerName={firstName} t={t} />
           </div>
         </div>
       ) : (
@@ -97,7 +139,7 @@ export function FlippableCleanerCard({
             ref={backRef}
             className="client-card-face client-card-back absolute inset-0"
           >
-            <CleanerBack cleanerName={firstName} />
+            <CleanerBack cleanerName={firstName} t={t} />
           </div>
         </div>
       )}
@@ -105,21 +147,26 @@ export function FlippableCleanerCard({
   );
 }
 
-function CleanerBack({ cleanerName }: { cleanerName: string }) {
+function CleanerBack({
+  cleanerName,
+  t,
+}: {
+  cleanerName: string;
+  t: (typeof COPY)['en'];
+}) {
   return (
     <div className="relative h-full rounded-2xl bg-gradient-to-br from-amber-50 to-white p-4 ring-1 ring-inset ring-amber-100">
       <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
-        Cómo trabaja {cleanerName}
+        {t.howWorks(cleanerName)}
       </p>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-700">
-        Empieza por la cocina, usa productos eco, y le encanta dejar las
-        almohadas como en hotel.
+        {t.description}
       </p>
 
       <div className="mt-3 flex items-center gap-3">
-        <RoomIcon icon={ChefHat} label="Cocina" />
-        <RoomIcon icon={Bath} label="Baño" />
-        <RoomIcon icon={Bed} label="Dormitorio" />
+        <RoomIcon icon={ChefHat} label={t.kitchen} />
+        <RoomIcon icon={Bath} label={t.bathroom} />
+        <RoomIcon icon={Bed} label={t.bedroom} />
       </div>
 
       {/* Kintsugi-style gold accent — a single hairline gold stroke

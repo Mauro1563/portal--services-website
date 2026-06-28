@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from 'react';
 import { Save, Upload, Loader2 } from 'lucide-react';
 import { saveMarketingSection } from '@/app/hq/actions';
 import { uploadLogo } from '@/app/hq/branding/upload';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 
 type Branding = {
   accent: string;
@@ -146,8 +147,7 @@ export function BrandingEditor({ initial }: { initial: Branding }) {
         <section className="rounded-2xl p-6 ring-1 ring-line" style={{ background: data.bg }}>
           <p className="mb-4 text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#94A3B8' }}>Vista previa</p>
           <div className="rounded-2xl bg-white p-5 ring-1 ring-line">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={data.logoUrl} alt="logo" style={{ height: 40, width: 'auto' }} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+            <ZapliLogo size="md" tone="onLight" />
             <h3 className="mt-4 text-2xl font-semibold tracking-tight" style={{ color: data.ink }}>
               Una plataforma. Un lugar.
             </h3>

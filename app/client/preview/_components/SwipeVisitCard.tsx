@@ -19,6 +19,22 @@
 
 import { Check, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    hint: 'Swipe →  accept     ← reject',
+    a11y: 'Swipe right to accept, left to reject.',
+  },
+  es: {
+    hint: 'Desliza →  aceptar     ← rechazar',
+    a11y: 'Desliza a la derecha para aceptar, a la izquierda para rechazar.',
+  },
+  pt: {
+    hint: 'Deslize →  aceitar     ← recusar',
+    a11y: 'Deslize para a direita para aceitar, para a esquerda para recusar.',
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 const COMMIT_RATIO = 0.35;
 const COMMIT_MIN_PX = 90;
@@ -44,6 +60,8 @@ export function SwipeVisitCard({
   /** The classic two-button row — always rendered for keyboard/reduced-motion. */
   fallback: React.ReactNode;
 }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [dx, setDx] = useState(0);
   const [snapping, setSnapping] = useState(false);
@@ -226,11 +244,11 @@ export function SwipeVisitCard({
         className="pointer-events-none mt-2 text-center text-[10.5px] font-semibold uppercase tracking-[0.18em] text-slate-400 transition"
         style={{ opacity: Math.abs(dx) > 4 ? 0 : 1 }}
       >
-        Desliza →  aceptar     ← rechazar
+        {t.hint}
       </p>
       {/* a11y-only explanation. */}
       <p className="sr-only">
-        Desliza a la derecha para aceptar, a la izquierda para rechazar.
+        {t.a11y}
       </p>
     </div>
   );

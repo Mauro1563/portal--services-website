@@ -22,6 +22,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Sparkles, X } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 
 type Prompt = {
   id: string;
@@ -30,29 +31,119 @@ type Prompt = {
   action: { label: string; href?: string };
 };
 
-const PROMPTS: Prompt[] = [
-  {
-    id: 'book-fast',
-    text: 'Reservar limpieza para mañana 10am',
-    reply:
-      'Reservado: mañana 10:00 en tu piso de Soho con Ana Ruiz (limpieza estándar, 2h, £45). Ana confirmará en menos de 5 min. ¿Quieres agregar limpieza de cristales por £15 más?',
-    action: { label: 'Confirmar sin cristales', href: '/client/preview/cleanings' },
+const PROMPTS_BY_LOCALE: Record<ClientLocale, Prompt[]> = {
+  en: [
+    {
+      id: 'book-fast',
+      text: 'Book a cleaning for tomorrow 10am',
+      reply:
+        'Booked: tomorrow 10:00 at your Soho flat with Ana Ruiz (standard clean, 2h, £45). Ana will confirm in under 5 min. Would you like to add window cleaning for £15 more?',
+      action: { label: 'Confirm without windows', href: '/client/preview/cleanings' },
+    },
+    {
+      id: 'subscribe-weekly',
+      text: 'Sign me up for a weekly clean with a discount',
+      reply:
+        'Standard weekly clean with Ana every Tuesday 10:00 — £38.25/visit (15% off vs £45 one-off). You save £27/month. Cancel anytime.',
+      action: { label: 'Activate weekly plan', href: '/client/preview/book?plan=weekly' },
+    },
+    {
+      id: 'incident-lookup',
+      text: 'Why was my last cleaning cancelled?',
+      reply:
+        'Your 12 Jun visit was cancelled by Luis (off sick). We auto-assigned Ana for 14 Jun at no extra cost. You received a £10 credit for the inconvenience — available to use.',
+      action: { label: 'Use £10 credit', href: '/client/preview/book?credit=10' },
+    },
+  ],
+  es: [
+    {
+      id: 'book-fast',
+      text: 'Reservar limpieza para mañana 10am',
+      reply:
+        'Reservado: mañana 10:00 en tu piso de Soho con Ana Ruiz (limpieza estándar, 2h, £45). Ana confirmará en menos de 5 min. ¿Quieres agregar limpieza de cristales por £15 más?',
+      action: { label: 'Confirmar sin cristales', href: '/client/preview/cleanings' },
+    },
+    {
+      id: 'subscribe-weekly',
+      text: 'Suscríbeme a limpieza semanal con descuento',
+      reply:
+        'Limpieza semanal estándar con Ana cada martes 10:00 — £38.25/visita (15% off vs £45 puntual). Te ahorras £27/mes. Cancelas cuando quieras.',
+      action: { label: 'Activar plan semanal', href: '/client/preview/book?plan=weekly' },
+    },
+    {
+      id: 'incident-lookup',
+      text: '¿Por qué se canceló mi última limpieza?',
+      reply:
+        'Tu visita del 12 jun fue cancelada por Luis (enfermo). Te asignamos a Ana automáticamente para el 14 jun sin coste extra. Recibiste £10 de crédito por la molestia — disponible para usar.',
+      action: { label: 'Usar £10 de crédito', href: '/client/preview/book?credit=10' },
+    },
+  ],
+  pt: [
+    {
+      id: 'book-fast',
+      text: 'Reservar limpeza para amanhã às 10h',
+      reply:
+        'Reservado: amanhã às 10:00 no seu apartamento do Soho com Ana Ruiz (limpeza padrão, 2h, £45). A Ana confirma em menos de 5 min. Quer adicionar limpeza de vidros por mais £15?',
+      action: { label: 'Confirmar sem vidros', href: '/client/preview/cleanings' },
+    },
+    {
+      id: 'subscribe-weekly',
+      text: 'Subscreva-me a limpeza semanal com desconto',
+      reply:
+        'Limpeza semanal padrão com a Ana todas as terças às 10:00 — £38,25/visita (15% off vs £45 pontual). Poupa £27/mês. Cancela quando quiser.',
+      action: { label: 'Ativar plano semanal', href: '/client/preview/book?plan=weekly' },
+    },
+    {
+      id: 'incident-lookup',
+      text: 'Porque foi cancelada a minha última limpeza?',
+      reply:
+        'A sua visita de 12 jun foi cancelada pelo Luis (doente). Atribuímos automaticamente a Ana para 14 jun sem custo adicional. Recebeu £10 de crédito pela inconveniência — disponíveis para usar.',
+      action: { label: 'Usar £10 de crédito', href: '/client/preview/book?credit=10' },
+    },
+  ],
+};
+
+const COPY = {
+  en: {
+    openTitle: 'Talk to Sofía, your assistant',
+    openAria: 'Open Sofía assistant',
+    pillLabel: 'Ask me anything',
+    dialogAria: 'Sofía assistant',
+    closeTitle: 'Close',
+    nameTitle: 'Sofía',
+    subtitle: 'Your portal assistant — try her out',
+    youLabel: 'You',
+    sofiaLabel: 'Sofía',
+    backTitle: 'Back to suggestions',
+    backLabel: 'Back',
   },
-  {
-    id: 'subscribe-weekly',
-    text: 'Suscríbeme a limpieza semanal con descuento',
-    reply:
-      'Limpieza semanal estándar con Ana cada martes 10:00 — £38.25/visita (15% off vs £45 puntual). Te ahorras £27/mes. Cancelas cuando quieras.',
-    action: { label: 'Activar plan semanal', href: '/client/preview/book?plan=weekly' },
+  es: {
+    openTitle: 'Habla con Sofía, tu asistente',
+    openAria: 'Abrir asistente Sofía',
+    pillLabel: 'Pregúntame algo',
+    dialogAria: 'Asistente Sofía',
+    closeTitle: 'Cerrar',
+    nameTitle: 'Sofía',
+    subtitle: 'Tu asistente del portal — pruébala',
+    youLabel: 'Tú',
+    sofiaLabel: 'Sofía',
+    backTitle: 'Volver a las sugerencias',
+    backLabel: 'Atrás',
   },
-  {
-    id: 'incident-lookup',
-    text: '¿Por qué se canceló mi última limpieza?',
-    reply:
-      'Tu visita del 12 jun fue cancelada por Luis (enfermo). Te asignamos a Ana automáticamente para el 14 jun sin coste extra. Recibiste £10 de crédito por la molestia — disponible para usar.',
-    action: { label: 'Usar £10 de crédito', href: '/client/preview/book?credit=10' },
+  pt: {
+    openTitle: 'Fala com a Sofía, a tua assistente',
+    openAria: 'Abrir assistente Sofía',
+    pillLabel: 'Pergunta-me algo',
+    dialogAria: 'Assistente Sofía',
+    closeTitle: 'Fechar',
+    nameTitle: 'Sofía',
+    subtitle: 'A tua assistente do portal — experimenta',
+    youLabel: 'Tu',
+    sofiaLabel: 'Sofía',
+    backTitle: 'Voltar às sugestões',
+    backLabel: 'Atrás',
   },
-];
+} as const satisfies Record<ClientLocale, unknown>;
 
 // Sparkle glyph used both on the pill and the sheet header — the
 // rotating conic mask is the visual anchor that ties them together.
@@ -81,6 +172,9 @@ function SparkleGlyph({ size = 18 }: { size?: number }) {
 }
 
 export function ConciergeSheet() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const PROMPTS = PROMPTS_BY_LOCALE[locale] ?? PROMPTS_BY_LOCALE.en;
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<Prompt | null>(null);
   const [streamed, setStreamed] = useState('');
@@ -139,15 +233,15 @@ export function ConciergeSheet() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        title="Habla con Sofía, tu asistente"
-        aria-label="Abrir asistente Sofía"
+        title={t.openTitle}
+        aria-label={t.openAria}
         className={`fixed bottom-20 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(99,102,241,0.65)] transition will-change-transform hover:scale-[1.03] ${
           open ? 'pointer-events-none scale-90 opacity-0' : 'opacity-100'
         }`}
         style={{ transitionDuration: '260ms', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
       >
         <SparkleGlyph size={16} />
-        Pregúntame algo
+        {t.pillLabel}
       </button>
 
       {/* The sheet — bottom-anchored, scrim, focus-trap-light. */}
@@ -157,7 +251,7 @@ export function ConciergeSheet() {
           onClick={close}
           role="dialog"
           aria-modal="true"
-          aria-label="Asistente Sofía"
+          aria-label={t.dialogAria}
         >
           <div
             className="relative w-full max-w-md rounded-t-3xl bg-white p-5 pb-[calc(env(safe-area-inset-bottom)+5rem)] shadow-xl client-fade-up"
@@ -167,7 +261,7 @@ export function ConciergeSheet() {
             <button
               type="button"
               onClick={close}
-              title="Cerrar"
+              title={t.closeTitle}
               className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-slate-500 hover:bg-slate-100"
             >
               <X className="h-4 w-4" />
@@ -181,10 +275,10 @@ export function ConciergeSheet() {
               </span>
               <div>
                 <p className="font-display text-base font-bold text-slate-900">
-                  Sofía
+                  {t.nameTitle}
                 </p>
                 <p className="text-[11px] text-slate-500">
-                  Tu asistente del portal — pruébala
+                  {t.subtitle}
                 </p>
               </div>
             </div>
@@ -216,12 +310,12 @@ export function ConciergeSheet() {
             {picked && (
               <div className="mt-4">
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                  Tú
+                  {t.youLabel}
                 </p>
                 <p className="mt-1 text-[13px] text-slate-700">{picked.text}</p>
 
                 <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
-                  Sofía
+                  {t.sofiaLabel}
                 </p>
                 <p className="mt-1 min-h-[5.5rem] text-[13.5px] leading-relaxed text-slate-800">
                   {streamed}
@@ -237,10 +331,10 @@ export function ConciergeSheet() {
                   <button
                     type="button"
                     onClick={() => setPicked(null)}
-                    title="Volver a las sugerencias"
+                    title={t.backTitle}
                     className="rounded-2xl bg-slate-100 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
                   >
-                    Atrás
+                    {t.backLabel}
                   </button>
                   <button
                     type="button"

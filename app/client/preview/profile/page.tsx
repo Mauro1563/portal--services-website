@@ -25,7 +25,188 @@ import {
 } from 'lucide-react';
 import { ClientShell } from '@/components/client/ClientShell';
 import { DemoToast } from '@/components/preview/DemoSheet';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { LONDON_PROPERTIES, MOCK_CTX, PREVIEW_TOKEN } from '../_mock';
+
+const COPY = {
+  en: {
+    title: 'My profile',
+    clientSince: 'Client since 2024',
+    edit: 'Edit',
+    editTitle: 'Edit your personal details',
+    changePhoto: 'Change photo',
+    changePhotoTitle: 'Change profile photo (cycles a demo avatar)',
+    avatarToggleTitle: 'Change profile photo (cycles a demo avatar)',
+    avatarToggleTry: 'Try another demo avatar',
+    data: 'Details',
+    saved: 'Saved',
+    name: 'Name',
+    email: 'Email',
+    phone: 'Phone',
+    address: 'Address',
+    nameRequired: 'Name is required',
+    emailRequired: 'Email is required',
+    emailInvalid: 'Invalid email',
+    phoneRequired: 'Phone is required',
+    addressRequired: 'Address is required',
+    saveTitle: 'Save the new details',
+    cancelTitle: 'Cancel changes and go back',
+    cancel: 'Cancel',
+    save: 'Save',
+    referralCode: 'Referral code',
+    copyTitle: 'Copy referral code to clipboard',
+    copied: 'Copied',
+    copy: 'Copy',
+    preferences: 'Preferences',
+    emailNotif: 'Email notifications',
+    emailNotifDesc: 'Receive confirmations and summaries in your inbox',
+    smsNotif: 'SMS notifications',
+    smsNotifDesc: 'A short text before each visit',
+    reminders: 'Reminders',
+    remindersDesc: 'We ping you 1 day and 1 hour before',
+    darkMode: 'Dark mode',
+    darkModeDesc: 'Dark theme on the next visit (demo)',
+    language: 'Language',
+    languageDesc: 'How you see the app and messages',
+    switchToEs: 'Switch to Spanish',
+    switchToEn: 'Switch to English',
+    helpLine1: 'Need help? Message ',
+    helpLine2: ' from chat and we sort it instantly.',
+    openChatTitle: 'Open the chat with London Sparkle Cleaning Co.',
+    savedToast: 'Details saved',
+    avatarUpdated: 'Avatar updated',
+    emailOn: 'Email on',
+    emailOff: 'Email off',
+    smsOn: 'SMS on',
+    smsOff: 'SMS off',
+    remindersOn: 'Reminders on',
+    remindersOff: 'Reminders off',
+    darkModeOn: 'Dark mode on',
+    darkModeOff: 'Dark mode off',
+    spanishToast: 'Spanish',
+    englishToast: 'English',
+    toggleEnable: 'Enable',
+    toggleDisable: 'Disable',
+  },
+  es: {
+    title: 'Mi perfil',
+    clientSince: 'Cliente desde 2024',
+    edit: 'Editar',
+    editTitle: 'Editar tus datos personales',
+    changePhoto: 'Cambiar foto',
+    changePhotoTitle: 'Cambiar foto de perfil (cicla un avatar de demo)',
+    avatarToggleTitle: 'Cambiar foto de perfil (cicla un avatar de demo)',
+    avatarToggleTry: 'Probar otro avatar de demo',
+    data: 'Datos',
+    saved: 'Guardado',
+    name: 'Nombre',
+    email: 'Email',
+    phone: 'Teléfono',
+    address: 'Dirección',
+    nameRequired: 'El nombre es obligatorio',
+    emailRequired: 'El email es obligatorio',
+    emailInvalid: 'Email inválido',
+    phoneRequired: 'El teléfono es obligatorio',
+    addressRequired: 'La dirección es obligatoria',
+    saveTitle: 'Guardar los nuevos datos',
+    cancelTitle: 'Cancelar los cambios y volver',
+    cancel: 'Cancelar',
+    save: 'Guardar',
+    referralCode: 'Código de referido',
+    copyTitle: 'Copiar código de referido al portapapeles',
+    copied: 'Copiado',
+    copy: 'Copiar',
+    preferences: 'Preferencias',
+    emailNotif: 'Notificaciones por email',
+    emailNotifDesc: 'Recibe confirmaciones y resúmenes en tu inbox',
+    smsNotif: 'Notificaciones SMS',
+    smsNotifDesc: 'Un mensaje breve antes de cada visita',
+    reminders: 'Recordatorios',
+    remindersDesc: 'Te avisamos 1 día y 1 hora antes',
+    darkMode: 'Modo oscuro',
+    darkModeDesc: 'Tema oscuro en la próxima visita (demo)',
+    language: 'Idioma',
+    languageDesc: 'Cómo ves la app y los mensajes',
+    switchToEs: 'Cambiar a Español',
+    switchToEn: 'Switch to English',
+    helpLine1: '¿Necesitas ayuda? Escríbele a ',
+    helpLine2: ' desde el chat y lo resolvemos al instante.',
+    openChatTitle: 'Abrir el chat con London Sparkle Cleaning Co.',
+    savedToast: 'Datos guardados',
+    avatarUpdated: 'Avatar actualizado',
+    emailOn: 'Email activado',
+    emailOff: 'Email desactivado',
+    smsOn: 'SMS activado',
+    smsOff: 'SMS desactivado',
+    remindersOn: 'Recordatorios activados',
+    remindersOff: 'Recordatorios desactivados',
+    darkModeOn: 'Modo oscuro activado',
+    darkModeOff: 'Modo oscuro desactivado',
+    spanishToast: 'Español',
+    englishToast: 'English',
+    toggleEnable: 'Activar',
+    toggleDisable: 'Desactivar',
+  },
+  pt: {
+    title: 'O meu perfil',
+    clientSince: 'Cliente desde 2024',
+    edit: 'Editar',
+    editTitle: 'Editar os seus dados pessoais',
+    changePhoto: 'Mudar foto',
+    changePhotoTitle: 'Mudar foto de perfil (cicla um avatar demo)',
+    avatarToggleTitle: 'Mudar foto de perfil (cicla um avatar demo)',
+    avatarToggleTry: 'Experimentar outro avatar demo',
+    data: 'Dados',
+    saved: 'Guardado',
+    name: 'Nome',
+    email: 'Email',
+    phone: 'Telefone',
+    address: 'Morada',
+    nameRequired: 'O nome é obrigatório',
+    emailRequired: 'O email é obrigatório',
+    emailInvalid: 'Email inválido',
+    phoneRequired: 'O telefone é obrigatório',
+    addressRequired: 'A morada é obrigatória',
+    saveTitle: 'Guardar os novos dados',
+    cancelTitle: 'Cancelar as alterações e voltar',
+    cancel: 'Cancelar',
+    save: 'Guardar',
+    referralCode: 'Código de referência',
+    copyTitle: 'Copiar código de referência para a área de transferência',
+    copied: 'Copiado',
+    copy: 'Copiar',
+    preferences: 'Preferências',
+    emailNotif: 'Notificações por email',
+    emailNotifDesc: 'Receba confirmações e resumos na sua caixa de entrada',
+    smsNotif: 'Notificações SMS',
+    smsNotifDesc: 'Uma mensagem breve antes de cada visita',
+    reminders: 'Lembretes',
+    remindersDesc: 'Avisamos 1 dia e 1 hora antes',
+    darkMode: 'Modo escuro',
+    darkModeDesc: 'Tema escuro na próxima visita (demo)',
+    language: 'Idioma',
+    languageDesc: 'Como vê a app e as mensagens',
+    switchToEs: 'Mudar para Espanhol',
+    switchToEn: 'Switch to English',
+    helpLine1: 'Precisa de ajuda? Escreva a ',
+    helpLine2: ' a partir do chat e resolvemos no momento.',
+    openChatTitle: 'Abrir o chat com a London Sparkle Cleaning Co.',
+    savedToast: 'Dados guardados',
+    avatarUpdated: 'Avatar atualizado',
+    emailOn: 'Email ativado',
+    emailOff: 'Email desativado',
+    smsOn: 'SMS ativado',
+    smsOff: 'SMS desativado',
+    remindersOn: 'Lembretes ativados',
+    remindersOff: 'Lembretes desativados',
+    darkModeOn: 'Modo escuro ativado',
+    darkModeOff: 'Modo escuro desativado',
+    spanishToast: 'Espanhol',
+    englishToast: 'English',
+    toggleEnable: 'Ativar',
+    toggleDisable: 'Desativar',
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 type Profile = {
   name: string;
@@ -156,12 +337,16 @@ function PrefRow({
   description,
   on,
   onChange,
+  toggleEnable,
+  toggleDisable,
 }: {
   icon: typeof Bell;
   label: string;
   description: string;
   on: boolean;
   onChange: (v: boolean) => void;
+  toggleEnable: string;
+  toggleDisable: string;
 }) {
   return (
     <div className="flex items-start gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-inset ring-slate-100">
@@ -175,13 +360,15 @@ function PrefRow({
       <Toggle
         on={on}
         onChange={onChange}
-        title={`${on ? 'Desactivar' : 'Activar'} ${label.toLowerCase()}`}
+        title={`${on ? toggleDisable : toggleEnable} ${label.toLowerCase()}`}
       />
     </div>
   );
 }
 
 export default function ClientProfilePreview() {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   const [profile, setProfile] = useState<Profile>(INITIAL);
   const [draft, setDraft] = useState<Profile>(INITIAL);
   const [editing, setEditing] = useState(false);
@@ -211,11 +398,11 @@ export default function ClientProfilePreview() {
 
   function save() {
     const next: Partial<Record<keyof Profile, string>> = {};
-    if (!draft.name.trim()) next.name = 'El nombre es obligatorio';
-    if (!draft.email.trim()) next.email = 'El email es obligatorio';
-    else if (!/.+@.+\..+/.test(draft.email)) next.email = 'Email inválido';
-    if (!draft.phone.trim()) next.phone = 'El teléfono es obligatorio';
-    if (!draft.address.trim()) next.address = 'La dirección es obligatoria';
+    if (!draft.name.trim()) next.name = t.nameRequired;
+    if (!draft.email.trim()) next.email = t.emailRequired;
+    else if (!/.+@.+\..+/.test(draft.email)) next.email = t.emailInvalid;
+    if (!draft.phone.trim()) next.phone = t.phoneRequired;
+    if (!draft.address.trim()) next.address = t.addressRequired;
     if (Object.keys(next).length > 0) {
       setErrors(next);
       return;
@@ -224,12 +411,12 @@ export default function ClientProfilePreview() {
     setEditing(false);
     setSavedFlash(true);
     setTimeout(() => setSavedFlash(false), 1500);
-    showToast('Datos guardados');
+    showToast(t.savedToast);
   }
 
   function cycleAvatar() {
     setAvatarIdx((i) => (i + 1) % AVATAR_GRADIENTS.length);
-    showToast('Avatar actualizado');
+    showToast(t.avatarUpdated);
   }
 
   function copyCode() {
@@ -247,7 +434,7 @@ export default function ClientProfilePreview() {
       ctx={MOCK_CTX}
       token={PREVIEW_TOKEN}
       activeTab="profile"
-      title="Mi perfil"
+      title={t.title}
     >
       <section
         className={`rounded-3xl bg-gradient-to-br ${AVATAR_GRADIENTS[avatarIdx]} p-5 text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] transition`}
@@ -256,42 +443,42 @@ export default function ClientProfilePreview() {
           <button
             type="button"
             onClick={cycleAvatar}
-            title="Cambiar foto de perfil (cicla un avatar de demo)"
+            title={t.avatarToggleTitle}
             className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-white/15 text-xl font-bold backdrop-blur hover:bg-white/25"
           >
             {initial}
           </button>
           <div className="min-w-0 flex-1">
             <p className="font-display text-base font-bold">{profile.name}</p>
-            <p className="mt-0.5 text-[12px] text-white/80">Cliente desde 2024</p>
+            <p className="mt-0.5 text-[12px] text-white/80">{t.clientSince}</p>
           </div>
           {!editing && (
             <button
               type="button"
               onClick={startEditing}
-              title="Editar tus datos personales"
+              title={t.editTitle}
               className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white backdrop-blur hover:bg-white/25"
             >
-              <Edit3 className="h-3 w-3" /> Editar
+              <Edit3 className="h-3 w-3" /> {t.edit}
             </button>
           )}
         </div>
         <button
           type="button"
           onClick={cycleAvatar}
-          title="Probar otro avatar de demo"
+          title={t.avatarToggleTry}
           className="mt-3 inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur hover:bg-white/25"
         >
-          Cambiar foto
+          {t.changePhoto}
         </button>
       </section>
 
       <section className="mt-5">
         <div className="flex items-center justify-between">
-          <h2 className="text-[13px] font-bold text-slate-900">Datos</h2>
+          <h2 className="text-[13px] font-bold text-slate-900">{t.data}</h2>
           {savedFlash && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-emerald-100">
-              <Check className="h-3 w-3" /> Guardado
+              <Check className="h-3 w-3" /> {t.saved}
             </span>
           )}
         </div>
@@ -301,14 +488,14 @@ export default function ClientProfilePreview() {
             <div className="mt-3 flex flex-col gap-2.5">
               <EditField
                 icon={User}
-                label="Nombre"
+                label={t.name}
                 value={draft.name}
                 error={errors.name}
                 onChange={(v) => setDraft({ ...draft, name: v })}
               />
               <EditField
                 icon={Mail}
-                label="Email"
+                label={t.email}
                 type="email"
                 value={draft.email}
                 error={errors.email}
@@ -316,7 +503,7 @@ export default function ClientProfilePreview() {
               />
               <EditField
                 icon={Phone}
-                label="Teléfono"
+                label={t.phone}
                 type="tel"
                 value={draft.phone}
                 error={errors.phone}
@@ -324,7 +511,7 @@ export default function ClientProfilePreview() {
               />
               <EditField
                 icon={MapPin}
-                label="Dirección"
+                label={t.address}
                 value={draft.address}
                 error={errors.address}
                 onChange={(v) => setDraft({ ...draft, address: v })}
@@ -337,33 +524,33 @@ export default function ClientProfilePreview() {
                   setEditing(false);
                   setErrors({});
                 }}
-                title="Cancelar los cambios y volver"
+                title={t.cancelTitle}
                 className="inline-flex flex-1 items-center justify-center gap-1 rounded-2xl bg-slate-100 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
               >
-                <X className="h-3.5 w-3.5" /> Cancelar
+                <X className="h-3.5 w-3.5" /> {t.cancel}
               </button>
               <button
                 type="button"
                 onClick={save}
-                title="Guardar los nuevos datos"
+                title={t.saveTitle}
                 className="inline-flex flex-1 items-center justify-center gap-1 rounded-2xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_8px_18px_-8px_rgba(37,99,235,0.6)] hover:bg-blue-700"
               >
-                <Check className="h-3.5 w-3.5" /> Guardar
+                <Check className="h-3.5 w-3.5" /> {t.save}
               </button>
             </div>
           </>
         ) : (
           <div className="mt-3 flex flex-col gap-2.5">
-            <ReadField icon={Mail} label="Email" value={profile.email} />
-            <ReadField icon={Phone} label="Teléfono" value={profile.phone} />
-            <ReadField icon={MapPin} label="Dirección" value={profile.address} />
+            <ReadField icon={Mail} label={t.email} value={profile.email} />
+            <ReadField icon={Phone} label={t.phone} value={profile.phone} />
+            <ReadField icon={MapPin} label={t.address} value={profile.address} />
             <div className="flex items-start gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-inset ring-slate-100">
               <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-700">
                 <Gift className="h-4 w-4" />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-                  Código de referido
+                  {t.referralCode}
                 </p>
                 <p className="mt-0.5 text-[13.5px] font-semibold text-slate-900">
                   PREVIEW
@@ -372,16 +559,16 @@ export default function ClientProfilePreview() {
               <button
                 type="button"
                 onClick={copyCode}
-                title="Copiar código de referido al portapapeles"
+                title={t.copyTitle}
                 className="inline-flex shrink-0 items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
               >
                 {copied ? (
                   <>
-                    <Check className="h-3 w-3" /> Copiado
+                    <Check className="h-3 w-3" /> {t.copied}
                   </>
                 ) : (
                   <>
-                    <Copy className="h-3 w-3" /> Copiar
+                    <Copy className="h-3 w-3" /> {t.copy}
                   </>
                 )}
               </button>
@@ -392,47 +579,55 @@ export default function ClientProfilePreview() {
 
       {/* Preferences */}
       <section className="mt-6">
-        <h2 className="text-[13px] font-bold text-slate-900">Preferencias</h2>
+        <h2 className="text-[13px] font-bold text-slate-900">{t.preferences}</h2>
         <div className="mt-3 flex flex-col gap-2.5">
           <PrefRow
             icon={Mail}
-            label="Notificaciones por email"
-            description="Recibe confirmaciones y resúmenes en tu inbox"
+            label={t.emailNotif}
+            description={t.emailNotifDesc}
             on={prefEmail}
             onChange={(v) => {
               setPrefEmail(v);
-              showToast(v ? 'Email activado' : 'Email desactivado');
+              showToast(v ? t.emailOn : t.emailOff);
             }}
+            toggleEnable={t.toggleEnable}
+            toggleDisable={t.toggleDisable}
           />
           <PrefRow
             icon={Smartphone}
-            label="Notificaciones SMS"
-            description="Un mensaje breve antes de cada visita"
+            label={t.smsNotif}
+            description={t.smsNotifDesc}
             on={prefSMS}
             onChange={(v) => {
               setPrefSMS(v);
-              showToast(v ? 'SMS activado' : 'SMS desactivado');
+              showToast(v ? t.smsOn : t.smsOff);
             }}
+            toggleEnable={t.toggleEnable}
+            toggleDisable={t.toggleDisable}
           />
           <PrefRow
             icon={Bell}
-            label="Recordatorios"
-            description="Te avisamos 1 día y 1 hora antes"
+            label={t.reminders}
+            description={t.remindersDesc}
             on={prefReminders}
             onChange={(v) => {
               setPrefReminders(v);
-              showToast(v ? 'Recordatorios activados' : 'Recordatorios desactivados');
+              showToast(v ? t.remindersOn : t.remindersOff);
             }}
+            toggleEnable={t.toggleEnable}
+            toggleDisable={t.toggleDisable}
           />
           <PrefRow
             icon={Moon}
-            label="Modo oscuro"
-            description="Tema oscuro en la próxima visita (demo)"
+            label={t.darkMode}
+            description={t.darkModeDesc}
             on={prefDark}
             onChange={(v) => {
               setPrefDark(v);
-              showToast(v ? 'Modo oscuro activado' : 'Modo oscuro desactivado');
+              showToast(v ? t.darkModeOn : t.darkModeOff);
             }}
+            toggleEnable={t.toggleEnable}
+            toggleDisable={t.toggleDisable}
           />
 
           <div className="flex items-start gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-inset ring-slate-100">
@@ -440,9 +635,9 @@ export default function ClientProfilePreview() {
               <Globe className="h-4 w-4" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-semibold text-slate-900">Idioma</p>
+              <p className="text-[13px] font-semibold text-slate-900">{t.language}</p>
               <p className="mt-0.5 text-[11px] text-slate-500">
-                Cómo ves la app y los mensajes
+                {t.languageDesc}
               </p>
             </div>
             <div className="flex shrink-0 gap-1 rounded-full bg-slate-100 p-0.5">
@@ -452,9 +647,9 @@ export default function ClientProfilePreview() {
                   type="button"
                   onClick={() => {
                     setLanguage(l);
-                    showToast(l === 'es' ? 'Español' : 'English');
+                    showToast(l === 'es' ? t.spanishToast : t.englishToast);
                   }}
-                  title={l === 'es' ? 'Cambiar a Español' : 'Switch to English'}
+                  title={l === 'es' ? t.switchToEs : t.switchToEn}
                   className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider transition ${
                     language === l
                       ? 'bg-white text-slate-900 shadow-sm'
@@ -471,15 +666,15 @@ export default function ClientProfilePreview() {
 
       <section className="mt-6 rounded-2xl bg-white p-4 ring-1 ring-inset ring-slate-100">
         <p className="text-[11px] text-slate-500">
-          ¿Necesitas ayuda? Escríbele a{' '}
+          {t.helpLine1}
           <Link
             href="/client/preview/messages"
-            title="Abrir el chat con London Sparkle Cleaning Co."
+            title={t.openChatTitle}
             className="font-semibold text-blue-700 underline-offset-2 hover:underline"
           >
             London Sparkle Cleaning Co.
-          </Link>{' '}
-          desde el chat y lo resolvemos al instante.
+          </Link>
+          {t.helpLine2}
         </p>
       </section>
 

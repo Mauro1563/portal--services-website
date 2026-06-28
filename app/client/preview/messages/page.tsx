@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import { MapPin, Send } from 'lucide-react';
 import { ClientShell } from '@/components/client/ClientShell';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { LONDON_PROPERTIES, MOCK_CTX, PREVIEW_TOKEN } from '../_mock';
 
 type Msg = {
@@ -18,42 +19,91 @@ type Msg = {
   at: string;
 };
 
-const INITIAL_MESSAGES: Msg[] = [
-  {
-    id: 'm1',
-    from: 'owner',
-    body: `¡Hola Sofía! Ana llega mañana a las 10:00 a ${LONDON_PROPERTIES.soho.address}. ¿Necesitas algo especial?`,
-    at: 'Ayer 18:42',
+const COPY = {
+  en: {
+    title: 'Chat with London Sparkle Cleaning Co.',
+    nextVisit: 'Next visit:',
+    nextVisitTitle: 'Address for the next visit',
+    composerPlaceholder: 'Write a message…',
+    composerTitle: 'Write your message to the team and tap send',
+    sendAria: 'Send message',
+    sendTitle: 'Send the message to the cleaning team',
+    nowPrefix: (t: string) => `Now ${t}`,
+    msg1: (addr: string) =>
+      `Hi Sofía! Ana arrives tomorrow at 10:00 at ${addr}. Do you need anything in particular?`,
+    msg1At: 'Yesterday 18:42',
+    msg2: 'Hi! Yes, could she give the kitchen a proper going-over please. Thanks!',
+    msg2At: 'Yesterday 19:01',
+    msg3: 'Done, noted. We will also do the bathroom with anti-limescale treatment.',
+    msg3At: 'Yesterday 19:03',
+    msg4: 'Perfect, thanks so much 🙌',
+    msg4At: 'Yesterday 19:04',
+    autoReply: 'Got it! We will confirm in a few minutes.',
   },
-  {
-    id: 'm2',
-    from: 'client',
-    body: 'Hola! Sí, por favor que revise bien la cocina. ¡Gracias!',
-    at: 'Ayer 19:01',
+  es: {
+    title: 'Chat con London Sparkle Cleaning Co.',
+    nextVisit: 'Próxima visita:',
+    nextVisitTitle: 'Dirección de la propiedad de la próxima visita',
+    composerPlaceholder: 'Escribe un mensaje…',
+    composerTitle: 'Escribe tu mensaje al equipo y pulsa enviar',
+    sendAria: 'Enviar mensaje',
+    sendTitle: 'Enviar mensaje al equipo de limpieza',
+    nowPrefix: (t: string) => `Ahora ${t}`,
+    msg1: (addr: string) =>
+      `¡Hola Sofía! Ana llega mañana a las 10:00 a ${addr}. ¿Necesitas algo especial?`,
+    msg1At: 'Ayer 18:42',
+    msg2: 'Hola! Sí, por favor que revise bien la cocina. ¡Gracias!',
+    msg2At: 'Ayer 19:01',
+    msg3: 'Hecho, anotado. También dejamos el baño con tratamiento anticalcáreo.',
+    msg3At: 'Ayer 19:03',
+    msg4: 'Perfecto, mil gracias 🙌',
+    msg4At: 'Ayer 19:04',
+    autoReply: '¡Recibido! Te confirmamos en unos minutos.',
   },
-  {
-    id: 'm3',
-    from: 'owner',
-    body: 'Hecho, anotado. También dejamos el baño con tratamiento anticalcáreo.',
-    at: 'Ayer 19:03',
+  pt: {
+    title: 'Chat com a London Sparkle Cleaning Co.',
+    nextVisit: 'Próxima visita:',
+    nextVisitTitle: 'Morada da próxima visita',
+    composerPlaceholder: 'Escreva uma mensagem…',
+    composerTitle: 'Escreva a sua mensagem à equipa e toque em enviar',
+    sendAria: 'Enviar mensagem',
+    sendTitle: 'Enviar a mensagem à equipa de limpeza',
+    nowPrefix: (t: string) => `Agora ${t}`,
+    msg1: (addr: string) =>
+      `Olá Sofía! A Ana chega amanhã às 10:00 a ${addr}. Precisa de algo especial?`,
+    msg1At: 'Ontem 18:42',
+    msg2: 'Olá! Sim, por favor que reveja bem a cozinha. Obrigada!',
+    msg2At: 'Ontem 19:01',
+    msg3: 'Feito, anotado. Também deixamos a casa de banho com tratamento anticalcário.',
+    msg3At: 'Ontem 19:03',
+    msg4: 'Perfeito, muito obrigada 🙌',
+    msg4At: 'Ontem 19:04',
+    autoReply: 'Recebido! Confirmamos dentro de minutos.',
   },
-  {
-    id: 'm4',
-    from: 'client',
-    body: 'Perfecto, mil gracias 🙌',
-    at: 'Ayer 19:04',
-  },
-];
+} as const satisfies Record<ClientLocale, unknown>;
 
-function nowLabel() {
+type CopyShape = (typeof COPY)['en'];
+
+function buildInitialMessages(t: CopyShape): Msg[] {
+  return [
+    { id: 'm1', from: 'owner',  body: t.msg1(LONDON_PROPERTIES.soho.address), at: t.msg1At },
+    { id: 'm2', from: 'client', body: t.msg2, at: t.msg2At },
+    { id: 'm3', from: 'owner',  body: t.msg3, at: t.msg3At },
+    { id: 'm4', from: 'client', body: t.msg4, at: t.msg4At },
+  ];
+}
+
+function nowLabel(t: CopyShape) {
   const d = new Date();
   const hh = String(d.getHours()).padStart(2, '0');
   const mm = String(d.getMinutes()).padStart(2, '0');
-  return `Ahora ${hh}:${mm}`;
+  return t.nowPrefix(`${hh}:${mm}`);
 }
 
 export default function ClientMessagesPreview() {
-  const [messages, setMessages] = useState<Msg[]>(INITIAL_MESSAGES);
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const [messages, setMessages] = useState<Msg[]>(() => buildInitialMessages(t));
   const [body, setBody] = useState('');
 
   function handleSend(e: React.FormEvent) {
@@ -66,7 +116,7 @@ export default function ClientMessagesPreview() {
         id: `local-${prev.length + 1}`,
         from: 'client',
         body: trimmed,
-        at: nowLabel(),
+        at: nowLabel(t),
       },
     ]);
     setBody('');
@@ -77,8 +127,8 @@ export default function ClientMessagesPreview() {
         {
           id: `local-reply-${prev.length + 1}`,
           from: 'owner',
-          body: '¡Recibido! Te confirmamos en unos minutos.',
-          at: nowLabel(),
+          body: t.autoReply,
+          at: nowLabel(t),
         },
       ]);
     }, 900);
@@ -89,15 +139,15 @@ export default function ClientMessagesPreview() {
       ctx={MOCK_CTX}
       token={PREVIEW_TOKEN}
       activeTab="messages"
-      title="Chat con London Sparkle Cleaning Co."
+      title={t.title}
     >
       <div
         className="mb-3 flex items-center gap-2 rounded-2xl bg-blue-50 p-3 ring-1 ring-inset ring-blue-100"
-        title="Dirección de la propiedad de la próxima visita"
+        title={t.nextVisitTitle}
       >
         <MapPin className="h-3.5 w-3.5 shrink-0 text-blue-700" />
         <p className="text-[11px] text-blue-900">
-          Próxima visita: <span className="font-semibold">{LONDON_PROPERTIES.soho.address}</span>
+          {t.nextVisit} <span className="font-semibold">{LONDON_PROPERTIES.soho.address}</span>
         </p>
       </div>
 
@@ -141,14 +191,14 @@ export default function ClientMessagesPreview() {
           name="body"
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder="Escribe un mensaje…"
-          title="Escribe tu mensaje al equipo y pulsa enviar"
+          placeholder={t.composerPlaceholder}
+          title={t.composerTitle}
           className="block h-10 flex-1 rounded-2xl border-0 bg-slate-50 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
         />
         <button
           type="submit"
-          aria-label="Enviar mensaje"
-          title="Enviar mensaje al equipo de limpieza"
+          aria-label={t.sendAria}
+          title={t.sendTitle}
           disabled={!body.trim()}
           className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-40"
         >

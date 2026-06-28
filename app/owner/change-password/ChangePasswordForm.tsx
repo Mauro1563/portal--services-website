@@ -53,7 +53,7 @@ export function ChangePasswordForm() {
       <div className="relative mx-auto flex min-h-screen max-w-md items-center justify-center px-4 py-10">
         <div className="w-full rounded-[2rem] bg-white p-8 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.35),0_8px_24px_-12px_rgba(15,23,42,0.15)] ring-1 ring-slate-200/70 sm:p-10">
           <div className="flex justify-center">
-            <Logo size="md" />
+            <ZapliLogo size="md" />
           </div>
 
           <div className="mt-6 flex justify-center">

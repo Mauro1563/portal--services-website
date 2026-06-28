@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { LucideIcon } from 'lucide-react';
 import { Bell, ChevronRight, Settings } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { getLocale } from '@/lib/i18n';
 
@@ -51,7 +51,7 @@ export async function PortalShell({
       >
         <div className="mx-auto flex h-14 w-full max-w-md items-center justify-between gap-2 px-4">
           <div className="flex min-w-0 shrink items-center gap-2">
-            <Logo size="sm" className="max-h-10" />
+            <ZapliLogo size="sm" className="max-h-10" />
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
             {backHref ? (
