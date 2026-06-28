@@ -7,7 +7,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
  */
 const config: CapacitorConfig = {
   appId: 'com.portalservices.digital',
-  appName: 'Portal Services',
+  appName: 'Zapli',
   webDir: 'public',
   server: {
     url: 'https://portalservices.digital',

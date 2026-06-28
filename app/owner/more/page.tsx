@@ -164,7 +164,7 @@ export default async function MorePage() {
               HQ super-admin
             </p>
             <p className="mt-0.5 text-[11px] text-text-2">
-              Manage every company that uses Portal Home.
+              Manage every company that uses Zapli.
             </p>
           </div>
         </Link>

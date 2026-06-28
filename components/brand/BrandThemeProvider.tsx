@@ -14,9 +14,9 @@ import { useEffect } from 'react';
  * `from-brand-primary`, …) or arbitrary Tailwind values like
  * `bg-[var(--brand-primary)]` picks them up automatically.
  *
- * The defaults declared in `globals.css` (`:root`) are the Portal
- * Home palette — blue-600 / cyan-400 — so:
- *  - Owner dashboard never mounts this provider → stays Portal Home.
+ * The defaults declared in `globals.css` (`:root`) are the Zapli
+ * palette — blue-600 / cyan-400 — so:
+ *  - Owner dashboard never mounts this provider → stays Zapli.
  *  - Client portal mounts it with the owner's chosen colors →
  *    everything brand-aware flips.
  *

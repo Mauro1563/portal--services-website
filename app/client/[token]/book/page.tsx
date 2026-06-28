@@ -230,7 +230,7 @@ export default async function BookingPage({
 
             {/* Submit picks up the owner's brand colors via the CSS vars
                 set by <BrandThemeProvider> in the portal layout. Falls
-                back to Portal Home blue when colors aren't configured. */}
+                back to Zapli blue when colors aren't configured. */}
             <SubmitButton
               pendingLabel="Enviando…"
               className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-sm font-bold uppercase tracking-wider text-on-brand shadow-[0_14px_30px_-12px_rgba(15,23,42,0.45)] transition hover:brightness-110 active:scale-[0.99] disabled:opacity-80"

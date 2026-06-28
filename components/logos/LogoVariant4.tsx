@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 /**
  * LogoVariant4 — Orbit / sparkle mark.
  * A gradient-filled dot sits inside a hairline orbital ring with a tiny bead
- * riding the orbit, evoking an "all-in-one" hub. Wordmark "Portal Home" in
+ * riding the orbit, evoking an "all-in-one" hub. Wordmark "Zapli" in
  * Poppins semibold; "Home" carries the cyan→blue accent gradient.
  */
 
@@ -54,7 +54,7 @@ export default function LogoVariant4({
   return (
     <span
       role="img"
-      aria-label="Portal Home"
+      aria-label="Zapli"
       className={`inline-flex items-center ${className}`}
       style={wrapperStyle}
     >
@@ -115,7 +115,7 @@ export default function LogoVariant4({
             lineHeight: 1,
           }}
         >
-          <span style={{ color: wordColor }}>Portal </span>
+          <span style={{ color: wordColor }}>Zap</span>
           <span
             style={{
               backgroundImage: mono
@@ -126,7 +126,7 @@ export default function LogoVariant4({
               color: mono ? (monoColor as string) : 'transparent',
             }}
           >
-            Home
+            li
           </span>
         </span>
       </span>

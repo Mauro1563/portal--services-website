@@ -37,7 +37,7 @@ export async function generateMetadata({
     .select('owner_id')
     .eq('referral_code', code)
     .maybeSingle();
-  if (!data) return { title: 'Invitación · Portal Home' };
+  if (!data) return { title: 'Invitación · Zapli' };
   const { data: profile } = await admin
     .from('owner_profiles')
     .select('business_name')
@@ -264,7 +264,7 @@ export default async function ReferralLanding({
             ))}
           </ul>
           <p className="mt-5 inline-flex w-full items-center justify-center gap-1 text-center text-[10px] text-text-3">
-            <Star className="h-3 w-3 text-amber-500" /> Con tecnología de Portal Home
+            <Star className="h-3 w-3 text-amber-500" /> Con tecnología de Zapli
           </p>
         </section>
       </div>

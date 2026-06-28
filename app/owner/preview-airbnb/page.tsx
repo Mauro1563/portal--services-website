@@ -55,7 +55,7 @@ import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
 
 const COPY = {
   en: {
-    portalHomeAria: 'Portal Home',
+    portalHomeAria: 'Zapli',
     demoLabel: 'Demo · Owner (Airbnb)',
     backToSite: 'Back to site',
     back: 'Back',
@@ -115,7 +115,7 @@ const COPY = {
     statusDone: 'Done',
   },
   es: {
-    portalHomeAria: 'Portal Home',
+    portalHomeAria: 'Zapli',
     demoLabel: 'Demo · Owner (Airbnb)',
     backToSite: 'Volver al sitio',
     back: 'Volver',
@@ -175,7 +175,7 @@ const COPY = {
     statusDone: 'Hecho',
   },
   pt: {
-    portalHomeAria: 'Portal Home',
+    portalHomeAria: 'Zapli',
     demoLabel: 'Demo · Owner (Airbnb)',
     backToSite: 'Voltar ao site',
     back: 'Voltar',
@@ -260,7 +260,7 @@ function AirbnbDemoTopBar({ t }: { t: AirbnbCopy }) {
             P
           </span>
           <span className="font-display text-[12px] font-semibold leading-none">
-            Portal Home
+            Zapli
           </span>
         </Link>
         <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-orange-300">

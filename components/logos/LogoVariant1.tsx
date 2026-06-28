@@ -59,7 +59,7 @@ export default function LogoVariant1({
   return (
     <span
       role="img"
-      aria-label="Portal Home"
+      aria-label="Zapli"
       className={`inline-flex items-center ${className}`}
       style={wrapperStyle}
     >
@@ -140,7 +140,7 @@ export default function LogoVariant1({
             lineHeight: 1,
           }}
         >
-          Portal Home
+          Zapli
         </span>
       </span>
     </span>

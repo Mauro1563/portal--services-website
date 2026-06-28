@@ -148,7 +148,7 @@ export function PinShareActions({
   const [copied, setCopied] = useState<'link' | 'pin' | null>(null);
 
   const t = COPY[lang];
-  const team = businessName?.trim() || 'Portal Home';
+  const team = businessName?.trim() || 'Zapli';
   const firstName = cleanerName.split(/\s+/)[0] ?? cleanerName;
 
   const { message, subject, waUrl, mailUrl } = useMemo(() => {

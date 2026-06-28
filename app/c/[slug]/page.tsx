@@ -79,9 +79,9 @@ export async function generateMetadata({
     .eq('is_public_profile', true)
     .maybeSingle();
 
-  if (!data) return { title: 'Cleaning service · Portal Home' };
+  if (!data) return { title: 'Cleaning service · Zapli' };
   return {
-    title: `${data.business_name ?? 'Cleaning service'} · Portal Home`,
+    title: `${data.business_name ?? 'Cleaning service'} · Zapli`,
     description: data.tagline ?? undefined,
   };
 }
@@ -424,7 +424,7 @@ export default async function PublicBusinessPage({
       </section>
 
       <footer className="mx-auto max-w-3xl px-6 pb-6 text-center text-[10px] text-text-3">
-        Powered by Portal Home
+        Powered by Zapli
       </footer>
     </main>
   );

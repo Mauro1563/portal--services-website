@@ -5,7 +5,7 @@ import LogoVariant3 from '@/components/logos/LogoVariant3';
 import LogoVariant4 from '@/components/logos/LogoVariant4';
 
 export const metadata = {
-  title: 'Elegir logo · Portal Home',
+  title: 'Elegir logo · Zapli',
   robots: { index: false, follow: false },
 };
 
@@ -22,7 +22,7 @@ export default function LogoPickerPage() {
       <header className="mx-auto flex max-w-7xl items-start justify-between gap-4 px-4 pt-8 pb-2 sm:px-6 lg:px-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Elige el nuevo logo de Portal Home
+            Elige el nuevo logo de Zapli
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
             Tócalas en tu móvil para ver cómo se ven al tamaño real. Dime qué

@@ -365,7 +365,7 @@ function StepDone({ pin, t }: { pin: string; t: T }) {
           <div className="mt-4 flex justify-center">
             <a
               href={`https://wa.me/?text=${encodeURIComponent(
-                `Hi! Your Portal Home login PIN is:\n\n${pin}\n\nTap to sign in (PIN pre-filled): ${cleanerLoginUrl(pin)}`,
+                `Hi! Your Zapli login PIN is:\n\n${pin}\n\nTap to sign in (PIN pre-filled): ${cleanerLoginUrl(pin)}`,
               )}`}
               target="_blank"
               rel="noopener noreferrer"

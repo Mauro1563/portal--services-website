@@ -15,7 +15,7 @@ export const DEFAULT_PRICING: PricingContent = {
   footnote:
     'Todos los precios en GBP, sin IVA. Descuentos por volumen disponibles. Cambia de plan en cualquier momento.',
   popular: 'Más popular',
-  corporate_eyebrow: 'Portal Services · Corporativo',
+  corporate_eyebrow: 'Zapli · Corporativo',
   corporate: [
     {
       name: 'Starter',

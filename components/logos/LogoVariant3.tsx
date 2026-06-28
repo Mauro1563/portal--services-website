@@ -1,5 +1,5 @@
 /**
- * LogoVariant3 — Typography-only wordmark. "Portal" in slate ink, "Home" in a
+ * LogoVariant3 — Typography-only wordmark. "Zap" in slate ink, "li" in a
  * cyan→blue gradient, separated by a small cyan accent dot. Sits under a tight
  * uppercase eyebrow ("Cleaning & Facilities") at md and up.
  */
@@ -118,7 +118,7 @@ export default function LogoVariant3({
     transform: `translateY(-${dotShiftPx}px)`,
   };
 
-  // "Home" — gradient text-clip in color mode, solid ink in mono.
+  // "li" — gradient text-clip in color mode, solid ink in mono.
   const homeClassName = mono
     ? ''
     : 'bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent';
@@ -127,7 +127,7 @@ export default function LogoVariant3({
   return (
     <span
       role="img"
-      aria-label="Portal Home"
+      aria-label="Zapli"
       className={`inline-flex flex-col leading-none ${className}`}
       style={wrapperStyle}
     >
@@ -140,14 +140,14 @@ export default function LogoVariant3({
         className="inline-flex items-baseline font-display font-semibold"
         style={wordmarkStyle}
       >
-        <span style={portalStyle}>Portal</span>
+        <span style={portalStyle}>Zap</span>
         <span
           aria-hidden="true"
           className="inline-block rounded-full"
           style={dotStyle}
         />
         <span className={homeClassName} style={homeStyle}>
-          Home
+          li
         </span>
       </span>
     </span>

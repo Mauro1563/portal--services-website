@@ -159,7 +159,7 @@ export default async function ClientHome({
   const ownerTel = telUrl(ownerPhone);
   const ownerWa = waUrl(
     ownerPhone,
-    `Hola, soy ${firstName}, cliente de ${ctx.owner.business_name ?? 'Portal Home'}.`,
+    `Hola, soy ${firstName}, cliente de ${ctx.owner.business_name ?? 'Zapli'}.`,
   );
 
   return (

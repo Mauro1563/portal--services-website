@@ -1,7 +1,7 @@
 import { ChangePasswordForm } from './ChangePasswordForm';
 
 export const metadata = {
-  title: 'Cambia tu contraseña · Portal Home Digital',
+  title: 'Cambia tu contraseña · Zapli Digital',
   robots: { index: false, follow: false },
 };
 

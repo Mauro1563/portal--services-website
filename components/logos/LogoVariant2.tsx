@@ -69,7 +69,7 @@ export default function LogoVariant2({
   return (
     <span
       role="img"
-      aria-label="Portal Home"
+      aria-label="Zapli"
       className={`inline-flex items-center gap-3 ${className}`}
     >
       <svg
@@ -124,7 +124,7 @@ export default function LogoVariant2({
             marginTop: showEyebrow ? eyebrowPx * 0.45 : 0,
           }}
         >
-          Portal Home
+          Zapli
         </span>
       </span>
     </span>

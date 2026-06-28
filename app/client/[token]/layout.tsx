@@ -11,7 +11,7 @@ import { getOwnerProfile } from '@/lib/owner-profile';
  *
  * Falling back to null when the token is invalid is fine — the
  * matching `page.tsx` files already call `notFound()` and the
- * provider with no colors just keeps the Portal Home defaults.
+ * provider with no colors just keeps the Zapli defaults.
  */
 export default async function ClientPortalLayout({
   children,

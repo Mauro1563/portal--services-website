@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Portal Services</string>
+        <string>Zapli</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -50,15 +50,15 @@
 	<!-- ============ Apple-required permission descriptions ============ -->
 	<!-- Camera: cleaners take before/after photos of each cleaning. -->
 	<key>NSCameraUsageDescription</key>
-	<string>Portal Services usa la cámara para subir fotos antes y después de cada limpieza. Sin permiso de cámara las limpiadoras no pueden documentar su trabajo.</string>
+	<string>Zapli usa la cámara para subir fotos antes y después de cada limpieza. Sin permiso de cámara las limpiadoras no pueden documentar su trabajo.</string>
 	<!-- Photo library: owner may pick a logo / cleaners may attach a saved photo. -->
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Portal Services accede a tus fotos para que puedas subir el logo de tu empresa o adjuntar imágenes a una tarea.</string>
+	<string>Zapli accede a tus fotos para que puedas subir el logo de tu empresa o adjuntar imágenes a una tarea.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Portal Services puede guardar fotos de limpieza en tu carrete para tu propio archivo.</string>
+	<string>Zapli puede guardar fotos de limpieza en tu carrete para tu propio archivo.</string>
 	<!-- GPS: cleaners check-in on arrival at the property to confirm location. -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Portal Services usa tu ubicación solo durante el check-in en la propiedad para confirmar que estás en el sitio asignado.</string>
+	<string>Zapli usa tu ubicación solo durante el check-in en la propiedad para confirmar que estás en el sitio asignado.</string>
 	<!-- Encryption export compliance — set to false so the App Store upload
 	     doesn't ask the operator to fill the encryption questionnaire every
 	     time. Standard for apps that only use HTTPS + native crypto. -->

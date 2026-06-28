@@ -1,10 +1,10 @@
-/* Portal Home — mockup design system, scoped under .psd */
+/* Zapli — mockup design system, scoped under .psd */
 /* ============================================================
-   Portal Home — design system
+   Zapli — design system
    ============================================================ */
 
 .psd {
-  /* Palette — Portal Home brand */
+  /* Palette — Zapli brand */
   --brand-navy:  #0F172A;  /* Azul Oscuro · Confianza */
   --brand-blue:  #2563EB;  /* Azul Eléctrico · Innovación */
   --brand-cyan:  #06B6D4;  /* Cian Brillante · Tiempo real */
@@ -1312,7 +1312,7 @@
 }
 
 /* ============================================================
-   Portal Home upgrade — new sections (Ticker / Demo / Stats / Tech)
+   Zapli upgrade — new sections (Ticker / Demo / Stats / Tech)
    ============================================================ */
 
 /* ---------- Brand accent gradient (electric blue → cyan) ---------- */
