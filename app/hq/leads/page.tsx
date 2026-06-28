@@ -165,13 +165,13 @@ function ContactRow({ lead }: { lead: Lead }) {
   // Build a WhatsApp link with a sensible default opener message.
   const wa = waUrl(
     lead.phone,
-    `Hola ${lead.name?.split(' ')[0] ?? ''}, soy Mauricio de Portal Home. Vi tu registro de ${lead.company ?? 'tu empresa'} — ¿podemos charlar 10 min sobre cómo te puede ayudar la plataforma?`,
+    `Hola ${lead.name?.split(' ')[0] ?? ''}, soy Mauricio de Zapli. Vi tu registro de ${lead.company ?? 'tu empresa'} — ¿podemos charlar 10 min sobre cómo te puede ayudar la plataforma?`,
   );
   const subj = encodeURIComponent(
-    `Sobre tu registro en Portal Home${lead.company ? ` — ${lead.company}` : ''}`,
+    `Sobre tu registro en Zapli${lead.company ? ` — ${lead.company}` : ''}`,
   );
   const body = encodeURIComponent(
-    `Hola ${lead.name?.split(' ')[0] ?? ''},\n\nGracias por registrarte en Portal Home. Quería presentarme y ver cómo te podemos ayudar a sacar el máximo provecho de la plataforma.\n\n¿Tendrías 10 min esta semana para una llamada corta?\n\nUn saludo,\nMauricio`,
+    `Hola ${lead.name?.split(' ')[0] ?? ''},\n\nGracias por registrarte en Zapli. Quería presentarme y ver cómo te podemos ayudar a sacar el máximo provecho de la plataforma.\n\n¿Tendrías 10 min esta semana para una llamada corta?\n\nUn saludo,\nMauricio`,
   );
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">

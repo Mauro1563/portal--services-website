@@ -40,6 +40,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
 import { DemoTopBar } from '@/components/preview/DemoTopBar';
 import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
 import { TaskChecklist, type ChecklistItem as TaskChecklistItem } from '@/components/tasks/TaskChecklist';
@@ -47,9 +48,258 @@ import { CompletionGate } from '@/components/tasks/CompletionGate';
 
 type DemoStatus = 'scheduled' | 'in_progress' | 'completed';
 
-/** Photo zones an Airbnb cleaner has to capture before marking done. */
-const REQUIRED_PHOTO_ZONES = ['salón', 'cocina', 'baño', 'dormitorio'] as const;
-const MIN_PHOTOS_REQUIRED = REQUIRED_PHOTO_ZONES.length; // 4
+const COPY = {
+  en: {
+    statusScheduled: 'Pending',
+    statusInProgress: 'In progress',
+    statusCompleted: 'Completed',
+    dayToday: 'Today',
+    dayTomorrow: 'Tomorrow',
+    requiredPhotoZones: ['living room', 'kitchen', 'bathroom', 'bedroom'] as ReadonlyArray<string>,
+    checklist: {
+      sheets: 'Change sheets',
+      sheetsHint: '4 sheets per king bed (fitted, flat, 2 pillowcases).',
+      towels: 'Restock towels',
+      towelsHint: '2 bath + 2 face towels per guest.',
+      paper: 'Restock toilet paper (x2)',
+      soap: 'Restock soap',
+      coffee: 'Restock coffee / tea',
+      water: 'Restock water',
+      vacuum: 'Hoover every room',
+      bathroom: 'Full bathroom clean (floor, fixtures, mirror)',
+    },
+    headerPortal: 'DEMO · CLEANER (AIRBNB)',
+    overline: 'Airbnb · Turnovers',
+    greeting: 'Hi, Carmen',
+    summary: (done: number, total: number) => `${done} of ${total} turnovers done · London`,
+    todayEarnings: 'Today',
+    nextTurnover: 'Next turnover',
+    countdownTitle: 'Time remaining until the next check-in',
+    countdownLate: 'check-in overdue',
+    countdownRemaining: (label: string) => `${label} until check-in`,
+    previousGuest: 'Previous guest',
+    nextGuest: 'Next guest',
+    checkOutAt: (time: string) => `Out ${time}`,
+    cleaningStartsAt: (time: string) => `cleaning starts ${time}`,
+    arrivalAt: (time: string) => `Arrives ${time}`,
+    mustFinishBefore: 'finish before then',
+    goToAddress: 'Go to address',
+    goToAddressTitle: 'Open this address in Google Maps for step-by-step directions',
+    copyLockboxAria: 'Copy lockbox code',
+    copyLockboxTitle: (code: string) => `Lockbox ${code} · tap to copy`,
+    checkInOnArrival: 'Check-in on arrival',
+    agendaOfTurnovers: 'Turnover agenda',
+    turnoverNotes: 'Toggle for checklist, lockbox and notes',
+    colSalida: 'Out',
+    colLimpieza: 'Clean',
+    colLlegada: 'In',
+    checkInLoggedAt: (time: string) => `Checked in at ${time}`,
+    completedAt: (time: string) => `Completed at ${time}`,
+    navigateAria: 'Navigate with Google Maps',
+    navigateTitle: 'Navigate to this address with Google Maps',
+    mapsLabel: 'Maps',
+    checkInScheduled: 'Mark that you have arrived at the flat',
+    checkIn: 'Check-in',
+    uploadPhotoAria: 'Upload a turnover photo',
+    uploadPhotoTitle: 'Upload a turnover photo — you need 4 minimum',
+    photoLabel: 'Photo',
+    estimatedPay: (amount: string) => `Est. £${amount}`,
+    estimatedPayTitle: 'Estimated pay: duration × hourly rate + tips',
+    paidLabel: (amount: string) => `Paid £${amount}`,
+    requiredPhotos: 'Required photos',
+    requiredPhotosHint: (zones: string) => `We need one of each zone: ${zones}.`,
+    photoZoomTitle: 'Enlarge photo — from the lightbox you can delete it',
+    addPhotoAria: 'Add photo',
+    photoAlt: (i: number) => `Turnover photo ${i}`,
+    lockboxLabel: 'Lockbox',
+    hostNotes: 'Host notes',
+    note1: 'Host: Olivia Hart. Fresh sheets in the hallway cupboard. Coffee beans in the pantry.',
+    note2: 'Host: Marco Lin. Restock Nespresso pods (yellow box, top drawer).',
+    note3: 'Host: Priya Shah. There is a small dog — use the HEPA-filter hoover from the cupboard.',
+    checkInAndStart: 'Check-in and start',
+    photoLightboxAlt: (prop: string) => `Turnover photo at ${prop}`,
+    photoCounter: (i: number, total: number) => `photo ${i} of ${total}`,
+    deletePhotoTitle: 'Remove this photo from the turnover record',
+    deletePhoto: 'Delete photo',
+    closeTitle: 'Close',
+    resetDemo: 'Reset demo',
+    resetDemoTitle: 'Reset the demo — back to the initial state without reloading',
+    toastCheckIn: 'Check-in registered',
+    toastTurnover: 'Turnover completed',
+    toastPhoto: 'Photo uploaded',
+    toastPhotoDeleted: 'Photo deleted',
+    toastCopied: (code: string) => `Code ${code} copied`,
+  },
+  es: {
+    statusScheduled: 'Pendiente',
+    statusInProgress: 'En curso',
+    statusCompleted: 'Completada',
+    dayToday: 'Hoy',
+    dayTomorrow: 'Mañana',
+    requiredPhotoZones: ['salón', 'cocina', 'baño', 'dormitorio'] as ReadonlyArray<string>,
+    checklist: {
+      sheets: 'Cambiar sábanas',
+      sheetsHint: '4 sábanas por cama king (bajera, encimera, 2 fundas).',
+      towels: 'Reponer toallas',
+      towelsHint: '2 de baño + 2 de cara por huésped.',
+      paper: 'Restock papel higiénico (x2)',
+      soap: 'Restock jabón',
+      coffee: 'Restock café / té',
+      water: 'Restock agua',
+      vacuum: 'Aspirar todas las habitaciones',
+      bathroom: 'Lavar baño completo (suelo, sanitarios, espejo)',
+    },
+    headerPortal: 'DEMO · CLEANER (AIRBNB)',
+    overline: 'Airbnb · Turnovers',
+    greeting: 'Hola, Carmen',
+    summary: (done: number, total: number) => `${done} de ${total} turnovers completados · Londres`,
+    todayEarnings: 'Hoy',
+    nextTurnover: 'Próximo turnover',
+    countdownTitle: 'Tiempo restante hasta el siguiente check-in',
+    countdownLate: 'check-in vencido',
+    countdownRemaining: (label: string) => `quedan ${label} hasta el check-in`,
+    previousGuest: 'Huésped anterior',
+    nextGuest: 'Próximo huésped',
+    checkOutAt: (time: string) => `Salida ${time}`,
+    cleaningStartsAt: (time: string) => `limpieza inicia ${time}`,
+    arrivalAt: (time: string) => `Llegada ${time}`,
+    mustFinishBefore: 'debes terminar antes',
+    goToAddress: 'Ir a la dirección',
+    goToAddressTitle: 'Abrir esta dirección en Google Maps para navegar paso a paso',
+    copyLockboxAria: 'Copiar código del lockbox',
+    copyLockboxTitle: (code: string) => `Lockbox ${code} · toca para copiar`,
+    checkInOnArrival: 'Check-in al llegar',
+    agendaOfTurnovers: 'Agenda de turnovers',
+    turnoverNotes: 'Toca para ver checklist, lockbox y notas',
+    colSalida: 'Salida',
+    colLimpieza: 'Limpieza',
+    colLlegada: 'Llegada',
+    checkInLoggedAt: (time: string) => `Check-in registrado a las ${time}`,
+    completedAt: (time: string) => `Completada a las ${time}`,
+    navigateAria: 'Navegar con Google Maps',
+    navigateTitle: 'Navegar a esta dirección con Google Maps',
+    mapsLabel: 'Maps',
+    checkInScheduled: 'Marcar que has llegado al apartamento',
+    checkIn: 'Check-in',
+    uploadPhotoAria: 'Subir foto del turnover',
+    uploadPhotoTitle: 'Subir foto del turnover — necesitas 4 mínimo',
+    photoLabel: 'Foto',
+    estimatedPay: (amount: string) => `Estim. £${amount}`,
+    estimatedPayTitle: 'Pago estimado: duración × tarifa horaria + propinas',
+    paidLabel: (amount: string) => `Pagado £${amount}`,
+    requiredPhotos: 'Fotos obligatorias',
+    requiredPhotosHint: (zones: string) => `Necesitamos una de cada zona: ${zones}.`,
+    photoZoomTitle: 'Ampliar foto — desde el lightbox puedes eliminarla',
+    addPhotoAria: 'Añadir foto',
+    photoAlt: (i: number) => `Foto del turnover ${i}`,
+    lockboxLabel: 'Lockbox',
+    hostNotes: 'Notas del anfitrión',
+    note1: 'Anfitrión: Olivia Hart. Sábanas limpias en el armario del pasillo. Café en grano en la despensa.',
+    note2: 'Anfitrión: Marco Lin. Reponer cápsulas Nespresso (caja amarilla en cajón superior).',
+    note3: 'Anfitrión: Priya Shah. Hay un perro pequeño — usar aspiradora con filtro HEPA del armario.',
+    checkInAndStart: 'Check-in y empezar',
+    photoLightboxAlt: (prop: string) => `Foto del turnover en ${prop}`,
+    photoCounter: (i: number, total: number) => `foto ${i} de ${total}`,
+    deletePhotoTitle: 'Eliminar esta foto del registro del turnover',
+    deletePhoto: 'Eliminar foto',
+    closeTitle: 'Cerrar',
+    resetDemo: 'Reiniciar demo',
+    resetDemoTitle: 'Reiniciar la demo — vuelve al estado inicial sin recargar',
+    toastCheckIn: 'Check-in registrado',
+    toastTurnover: 'Turnover completado',
+    toastPhoto: 'Foto subida',
+    toastPhotoDeleted: 'Foto eliminada',
+    toastCopied: (code: string) => `Código ${code} copiado`,
+  },
+  pt: {
+    statusScheduled: 'Pendente',
+    statusInProgress: 'Em curso',
+    statusCompleted: 'Concluída',
+    dayToday: 'Hoje',
+    dayTomorrow: 'Amanhã',
+    requiredPhotoZones: ['sala', 'cozinha', 'casa de banho', 'quarto'] as ReadonlyArray<string>,
+    checklist: {
+      sheets: 'Mudar lençóis',
+      sheetsHint: '4 lençóis por cama king (ajustável, lençol, 2 fronhas).',
+      towels: 'Repor toalhas',
+      towelsHint: '2 de banho + 2 de rosto por hóspede.',
+      paper: 'Repor papel higiénico (x2)',
+      soap: 'Repor sabonete',
+      coffee: 'Repor café / chá',
+      water: 'Repor água',
+      vacuum: 'Aspirar todas as divisões',
+      bathroom: 'Lavar casa de banho por completo (chão, sanitários, espelho)',
+    },
+    headerPortal: 'DEMO · CLEANER (AIRBNB)',
+    overline: 'Airbnb · Turnovers',
+    greeting: 'Olá, Carmen',
+    summary: (done: number, total: number) => `${done} de ${total} turnovers concluídos · Londres`,
+    todayEarnings: 'Hoje',
+    nextTurnover: 'Próximo turnover',
+    countdownTitle: 'Tempo restante até ao próximo check-in',
+    countdownLate: 'check-in expirado',
+    countdownRemaining: (label: string) => `faltam ${label} até ao check-in`,
+    previousGuest: 'Hóspede anterior',
+    nextGuest: 'Próximo hóspede',
+    checkOutAt: (time: string) => `Saída ${time}`,
+    cleaningStartsAt: (time: string) => `limpeza inicia ${time}`,
+    arrivalAt: (time: string) => `Chegada ${time}`,
+    mustFinishBefore: 'deve terminar antes',
+    goToAddress: 'Ir para a morada',
+    goToAddressTitle: 'Abrir esta morada no Google Maps para navegar passo a passo',
+    copyLockboxAria: 'Copiar código do cofre',
+    copyLockboxTitle: (code: string) => `Cofre ${code} · toque para copiar`,
+    checkInOnArrival: 'Check-in ao chegar',
+    agendaOfTurnovers: 'Agenda de turnovers',
+    turnoverNotes: 'Toque para ver checklist, cofre e notas',
+    colSalida: 'Saída',
+    colLimpieza: 'Limpeza',
+    colLlegada: 'Chegada',
+    checkInLoggedAt: (time: string) => `Check-in registado às ${time}`,
+    completedAt: (time: string) => `Concluída às ${time}`,
+    navigateAria: 'Navegar com o Google Maps',
+    navigateTitle: 'Navegar até esta morada com o Google Maps',
+    mapsLabel: 'Maps',
+    checkInScheduled: 'Marcar que chegou ao apartamento',
+    checkIn: 'Check-in',
+    uploadPhotoAria: 'Enviar foto do turnover',
+    uploadPhotoTitle: 'Enviar foto do turnover — precisa de 4 no mínimo',
+    photoLabel: 'Foto',
+    estimatedPay: (amount: string) => `Estim. £${amount}`,
+    estimatedPayTitle: 'Pagamento estimado: duração × tarifa horária + gorjetas',
+    paidLabel: (amount: string) => `Pago £${amount}`,
+    requiredPhotos: 'Fotos obrigatórias',
+    requiredPhotosHint: (zones: string) => `É preciso uma de cada zona: ${zones}.`,
+    photoZoomTitle: 'Ampliar foto — a partir do lightbox pode apagá-la',
+    addPhotoAria: 'Adicionar foto',
+    photoAlt: (i: number) => `Foto do turnover ${i}`,
+    lockboxLabel: 'Cofre',
+    hostNotes: 'Notas do anfitrião',
+    note1: 'Anfitrião: Olivia Hart. Lençóis limpos no armário do corredor. Café em grão na despensa.',
+    note2: 'Anfitrião: Marco Lin. Repor cápsulas Nespresso (caixa amarela na gaveta de cima).',
+    note3: 'Anfitrião: Priya Shah. Há um cão pequeno — usar aspirador com filtro HEPA do armário.',
+    checkInAndStart: 'Check-in e começar',
+    photoLightboxAlt: (prop: string) => `Foto do turnover em ${prop}`,
+    photoCounter: (i: number, total: number) => `foto ${i} de ${total}`,
+    deletePhotoTitle: 'Eliminar esta foto do registo do turnover',
+    deletePhoto: 'Eliminar foto',
+    closeTitle: 'Fechar',
+    resetDemo: 'Reiniciar demo',
+    resetDemoTitle: 'Reiniciar a demo — volta ao estado inicial sem recarregar',
+    toastCheckIn: 'Check-in registado',
+    toastTurnover: 'Turnover concluído',
+    toastPhoto: 'Foto enviada',
+    toastPhotoDeleted: 'Foto eliminada',
+    toastCopied: (code: string) => `Código ${code} copiado`,
+  },
+} as const satisfies Record<ClientLocale, unknown>;
+
+type AirbnbCopy = (typeof COPY)['en'];
+
+/** Photo zones an Airbnb cleaner has to capture before marking done.
+ *  Kept as a fixed-length tuple at module scope for MIN_PHOTOS_REQUIRED. */
+const REQUIRED_PHOTO_ZONES_LEN = 4;
+const MIN_PHOTOS_REQUIRED = REQUIRED_PHOTO_ZONES_LEN;
 
 /** Master checklist — every item must be ticked before completing. */
 type ChecklistItemId =
@@ -69,23 +319,28 @@ type ChecklistItem = {
   hint?: string;
 };
 
-const CHECKLIST: ChecklistItem[] = [
-  {
-    id: 'sheets',
-    label: 'Cambiar sábanas',
-    hint: '4 sábanas por cama king (bajera, encimera, 2 fundas).',
-  },
-  {
-    id: 'towels',
-    label: 'Reponer toallas',
-    hint: '2 de baño + 2 de cara por huésped.',
-  },
-  { id: 'paper', label: 'Restock papel higiénico (x2)' },
-  { id: 'soap', label: 'Restock jabón' },
-  { id: 'coffee', label: 'Restock café / té' },
-  { id: 'water', label: 'Restock agua' },
-  { id: 'vacuum', label: 'Aspirar todas las habitaciones' },
-  { id: 'bathroom', label: 'Lavar baño completo (suelo, sanitarios, espejo)' },
+function buildChecklist(t: AirbnbCopy): ChecklistItem[] {
+  return [
+    { id: 'sheets', label: t.checklist.sheets, hint: t.checklist.sheetsHint },
+    { id: 'towels', label: t.checklist.towels, hint: t.checklist.towelsHint },
+    { id: 'paper', label: t.checklist.paper },
+    { id: 'soap', label: t.checklist.soap },
+    { id: 'coffee', label: t.checklist.coffee },
+    { id: 'water', label: t.checklist.water },
+    { id: 'vacuum', label: t.checklist.vacuum },
+    { id: 'bathroom', label: t.checklist.bathroom },
+  ];
+}
+
+const CHECKLIST_IDS: ChecklistItemId[] = [
+  'sheets',
+  'towels',
+  'paper',
+  'soap',
+  'coffee',
+  'water',
+  'vacuum',
+  'bathroom',
 ];
 
 type DemoTask = {
@@ -136,20 +391,20 @@ function todayAt(hhmm: string, dayOffset = 0): Date {
 }
 
 function emptyChecklist(): Record<ChecklistItemId, boolean> {
-  return CHECKLIST.reduce(
-    (acc, item) => {
-      acc[item.id] = false;
+  return CHECKLIST_IDS.reduce(
+    (acc, id) => {
+      acc[id] = false;
       return acc;
     },
     {} as Record<ChecklistItemId, boolean>,
   );
 }
 
-function buildInitialTasks(): DemoTask[] {
+function buildInitialTasks(t: AirbnbCopy): DemoTask[] {
   return [
     {
       id: 'air-1',
-      dayLabel: 'Hoy',
+      dayLabel: t.dayToday,
       daySortKey: 0,
       property_name: 'Shoreditch Loft · 2BR',
       address: '12 Curtain Rd, Shoreditch',
@@ -160,8 +415,7 @@ function buildInitialTasks(): DemoTask[] {
       nextCheckInAt: todayAt('15:00'),
       estimated_duration_min: 150,
       lockboxCode: '4421',
-      notes:
-        'Anfitrión: Olivia Hart. Sábanas limpias en el armario del pasillo. Café en grano en la despensa.',
+      notes: t.note1,
       mapsUrl:
         'https://maps.google.com/?q=12+Curtain+Rd+Shoreditch+London+EC2A+3LT',
       status: 'in_progress',
@@ -174,7 +428,7 @@ function buildInitialTasks(): DemoTask[] {
     },
     {
       id: 'air-2',
-      dayLabel: 'Hoy',
+      dayLabel: t.dayToday,
       daySortKey: 0,
       property_name: 'Soho Studio · 1BR',
       address: '46 Old Compton St, Soho',
@@ -185,8 +439,7 @@ function buildInitialTasks(): DemoTask[] {
       nextCheckInAt: todayAt('16:00'),
       estimated_duration_min: 75,
       lockboxCode: '0317',
-      notes:
-        'Anfitrión: Marco Lin. Reponer cápsulas Nespresso (caja amarilla en cajón superior).',
+      notes: t.note2,
       mapsUrl:
         'https://maps.google.com/?q=46+Old+Compton+St+Soho+London+W1D+4UH',
       status: 'scheduled',
@@ -198,7 +451,7 @@ function buildInitialTasks(): DemoTask[] {
     },
     {
       id: 'air-3',
-      dayLabel: 'Mañana',
+      dayLabel: t.dayTomorrow,
       daySortKey: 1,
       property_name: 'Hackney Townhouse · 3BR',
       address: '88 Mare St, Hackney',
@@ -209,8 +462,7 @@ function buildInitialTasks(): DemoTask[] {
       nextCheckInAt: todayAt('15:00', 1),
       estimated_duration_min: 180,
       lockboxCode: '7782',
-      notes:
-        'Anfitrión: Priya Shah. Hay un perro pequeño — usar aspiradora con filtro HEPA del armario.',
+      notes: t.note3,
       mapsUrl: 'https://maps.google.com/?q=88+Mare+St+Hackney+London+E8+4RT',
       status: 'scheduled',
       checklist: emptyChecklist(),
@@ -222,26 +474,27 @@ function buildInitialTasks(): DemoTask[] {
   ];
 }
 
-const STATUS_META: Record<
-  DemoStatus,
-  { label: string; cls: string; dot: string }
-> = {
-  scheduled: {
-    label: 'Pendiente',
-    cls: 'bg-slate-100 text-slate-700',
-    dot: 'bg-slate-400',
-  },
-  in_progress: {
-    label: 'En curso',
-    cls: 'bg-orange-100 text-orange-800',
-    dot: 'bg-orange-500 animate-pulse',
-  },
-  completed: {
-    label: 'Completada',
-    cls: 'bg-emerald-100 text-emerald-800',
-    dot: 'bg-emerald-500',
-  },
-};
+function buildStatusMeta(
+  t: AirbnbCopy,
+): Record<DemoStatus, { label: string; cls: string; dot: string }> {
+  return {
+    scheduled: {
+      label: t.statusScheduled,
+      cls: 'bg-slate-100 text-slate-700',
+      dot: 'bg-slate-400',
+    },
+    in_progress: {
+      label: t.statusInProgress,
+      cls: 'bg-orange-100 text-orange-800',
+      dot: 'bg-orange-500 animate-pulse',
+    },
+    completed: {
+      label: t.statusCompleted,
+      cls: 'bg-emerald-100 text-emerald-800',
+      dot: 'bg-emerald-500',
+    },
+  };
+}
 
 const SAMPLE_PHOTO_URLS = [
   'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&auto=format&fit=crop&q=70',
@@ -271,7 +524,10 @@ function nowHHMM(): string {
  * compact "Xh Ym" string and a tone hint so the caller can colour-code
  * the urgency (green > 2h, orange 30m–2h, red < 30m, slate when expired).
  */
-function useCountdown(target: Date): { label: string; tone: 'safe' | 'warn' | 'urgent' | 'late' } {
+function useCountdown(
+  target: Date,
+  lateLabel: string,
+): { label: string; tone: 'safe' | 'warn' | 'urgent' | 'late' } {
   const [now, setNow] = useState<Date>(() => new Date());
   useEffect(() => {
     // 30s tick is plenty — we only render down to the minute, and a
@@ -282,7 +538,7 @@ function useCountdown(target: Date): { label: string; tone: 'safe' | 'warn' | 'u
 
   const diffMs = target.getTime() - now.getTime();
   if (diffMs <= 0) {
-    return { label: 'check-in vencido', tone: 'late' };
+    return { label: lateLabel, tone: 'late' };
   }
   const totalMin = Math.floor(diffMs / 60_000);
   const h = Math.floor(totalMin / 60);
@@ -305,7 +561,10 @@ export default function OperativePreviewAirbnbHome() {
 }
 
 function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
-  const initialTasks = useMemo(() => buildInitialTasks(), []);
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  const STATUS_META = useMemo(() => buildStatusMeta(t), [t]);
+  const initialTasks = useMemo(() => buildInitialTasks(t), [t]);
   const [tasks, setTasks] = useState<DemoTask[]>(initialTasks);
   const [expandedId, setExpandedId] = useState<string | null>('air-1');
   const [lightbox, setLightbox] = useState<
@@ -371,7 +630,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
       ),
     );
     setExpandedId(taskId);
-    showToast('Check-in registrado');
+    showToast(t.toastCheckIn);
   }
 
   function handleComplete(taskId: string) {
@@ -391,7 +650,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
         };
       }),
     );
-    showToast('Turnover completado');
+    showToast(t.toastTurnover);
   }
 
   function handleUploadPhoto(taskId: string) {
@@ -403,7 +662,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
       }),
     );
     setExpandedId(taskId);
-    showToast('Foto subida');
+    showToast(t.toastPhoto);
   }
 
   function handleDeletePhoto(taskId: string, idx: number) {
@@ -415,7 +674,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
       ),
     );
     setLightbox(null);
-    showToast('Foto eliminada');
+    showToast(t.toastPhotoDeleted);
   }
 
   function handleCopyLockbox(code: string) {
@@ -427,7 +686,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
         /* swallowed — toast still fires */
       });
     }
-    showToast(`Código ${code} copiado`);
+    showToast(t.toastCopied(code));
   }
 
   function toggleExpand(taskId: string) {
@@ -442,7 +701,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
 
   return (
     <>
-      <DemoTopBar portal="cleaner" title="DEMO · CLEANER (AIRBNB)" />
+      <DemoTopBar portal="cleaner" title={t.headerPortal} />
       <PreviewFlavorToggle
         active="airbnb"
         hogarHref="/operative/preview"
@@ -460,18 +719,18 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
           <header className="flex items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-orange-700">
-                Airbnb · Turnovers
+                {t.overline}
               </p>
               <h1 className="mt-1 font-display text-2xl font-semibold text-text-1">
-                Hola, Carmen
+                {t.greeting}
               </h1>
               <p className="mt-0.5 text-[12px] text-text-3">
-                {doneCount} de {tasks.length} turnovers completados · Londres
+                {t.summary(doneCount, tasks.length)}
               </p>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-                Hoy
+                {t.todayEarnings}
               </p>
               <p className="mt-0.5 font-display text-xl font-bold tabular-nums text-text-1">
                 £{(todayPence / 100).toFixed(2)}
@@ -485,6 +744,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
             <div className="mt-5">
               <TurnoverHero
                 task={heroTask}
+                copy={t}
                 onCheckIn={() => handleCheckIn(heroTask.id)}
                 onCopyLockbox={() => handleCopyLockbox(heroTask.lockboxCode)}
               />
@@ -495,7 +755,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
           <section className="mt-6">
             <div className="flex items-center justify-between">
               <h2 className="text-[11px] font-bold uppercase tracking-[0.14em] text-text-3">
-                Agenda de turnovers
+                {t.agendaOfTurnovers}
               </h2>
             </div>
 
@@ -512,6 +772,8 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                     ) : null}
                     <TurnoverCard
                       task={task}
+                      copy={t}
+                      statusMeta={STATUS_META}
                       expanded={expandedId === task.id}
                       onToggleExpand={() => toggleExpand(task.id)}
                       onCheckIn={() => handleCheckIn(task.id)}
@@ -536,11 +798,11 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
             <button
               type="button"
               onClick={onReset}
-              title="Reiniciar la demo — vuelve al estado inicial sin recargar"
+              title={t.resetDemoTitle}
               className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-text-3 transition hover:text-text-1"
             >
               <RotateCcw className="h-3 w-3" />
-              Reiniciar demo
+              {t.resetDemo}
             </button>
           </div>
         </div>
@@ -558,7 +820,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               <button
                 type="button"
                 onClick={() => setLightbox(null)}
-                title="Cerrar"
+                title={t.closeTitle}
                 className="absolute -top-10 right-0 grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white backdrop-blur"
               >
                 <X className="h-4 w-4" />
@@ -566,22 +828,21 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={lightboxSrc}
-                alt={`Foto del turnover en ${lightboxTask.property_name}`}
+                alt={t.photoLightboxAlt(lightboxTask.property_name)}
                 className="w-full rounded-2xl"
               />
               <div className="mt-3 flex items-center justify-between gap-2">
                 <p className="text-[11px] text-white/80">
-                  {lightboxTask.property_name} · foto {lightbox.idx + 1} de{' '}
-                  {lightboxTask.photos.length}
+                  {lightboxTask.property_name} · {t.photoCounter(lightbox.idx + 1, lightboxTask.photos.length)}
                 </p>
                 <button
                   type="button"
                   onClick={() => handleDeletePhoto(lightbox.taskId, lightbox.idx)}
-                  title="Eliminar esta foto del registro del turnover"
+                  title={t.deletePhotoTitle}
                   className="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-red-500"
                 >
                   <Trash2 className="h-3 w-3" />
-                  Eliminar foto
+                  {t.deletePhoto}
                 </button>
               </div>
             </div>
@@ -613,14 +874,16 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
 
 function TurnoverHero({
   task,
+  copy,
   onCheckIn,
   onCopyLockbox,
 }: {
   task: DemoTask;
+  copy: AirbnbCopy;
   onCheckIn: () => void;
   onCopyLockbox: () => void;
 }) {
-  const countdown = useCountdown(task.nextCheckInAt);
+  const countdown = useCountdown(task.nextCheckInAt, copy.countdownLate);
   const toneCls = {
     safe: 'bg-emerald-100 text-emerald-800',
     warn: 'bg-amber-100 text-amber-800',
@@ -632,11 +895,11 @@ function TurnoverHero({
     <section className="rounded-2xl border border-orange-500/30 bg-orange-50/50 p-4 shadow-card">
       <div className="flex items-center justify-between gap-2">
         <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-orange-700">
-          Próximo turnover
+          {copy.nextTurnover}
         </p>
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${toneCls}`}
-          title="Tiempo restante hasta el siguiente check-in"
+          title={copy.countdownTitle}
         >
           <Timer className="h-3 w-3" />
           {countdown.label}
@@ -653,23 +916,23 @@ function TurnoverHero({
       <dl className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-white/70 px-3 py-2 ring-1 ring-orange-100">
         <div>
           <dt className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-            Huésped anterior
+            {copy.previousGuest}
           </dt>
           <dd className="mt-0.5 text-[12px] font-semibold text-text-1">
-            Salida {task.previousCheckOut}
+            {copy.checkOutAt(task.previousCheckOut)}
           </dd>
           <dd className="text-[10.5px] text-text-3">
-            limpieza inicia {task.cleaningStart}
+            {copy.cleaningStartsAt(task.cleaningStart)}
           </dd>
         </div>
         <div>
           <dt className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-            Próximo huésped
+            {copy.nextGuest}
           </dt>
           <dd className="mt-0.5 text-[12px] font-semibold text-text-1">
-            Llegada {task.nextCheckIn}
+            {copy.arrivalAt(task.nextCheckIn)}
           </dd>
-          <dd className="text-[10.5px] text-text-3">debes terminar antes</dd>
+          <dd className="text-[10.5px] text-text-3">{copy.mustFinishBefore}</dd>
         </div>
       </dl>
 
@@ -678,16 +941,16 @@ function TurnoverHero({
           href={task.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          title="Abrir esta dirección en Google Maps para navegar paso a paso"
+          title={copy.goToAddressTitle}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-orange-600 px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(234,88,12,0.55)] transition active:scale-[0.99]"
         >
-          <Navigation2 className="h-4 w-4" /> Ir a la dirección
+          <Navigation2 className="h-4 w-4" /> {copy.goToAddress}
         </a>
         <button
           type="button"
           onClick={onCopyLockbox}
-          aria-label="Copiar código del lockbox"
-          title={`Lockbox ${task.lockboxCode} · toca para copiar`}
+          aria-label={copy.copyLockboxAria}
+          title={copy.copyLockboxTitle(task.lockboxCode)}
           className="inline-flex h-auto min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl border border-orange-200 bg-white px-3 text-orange-800 transition hover:border-orange-300 hover:bg-orange-50"
         >
           <KeyRound className="h-4 w-4" />
@@ -704,7 +967,7 @@ function TurnoverHero({
           onClick={onCheckIn}
           className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-orange-300 bg-white px-3 py-2.5 text-[13px] font-semibold text-orange-800 transition hover:bg-orange-50"
         >
-          Check-in al llegar
+          {copy.checkInOnArrival}
         </button>
       ) : null}
     </section>
@@ -715,6 +978,8 @@ function TurnoverHero({
 
 function TurnoverCard({
   task,
+  copy,
+  statusMeta,
   expanded,
   onToggleExpand,
   onCheckIn,
@@ -725,6 +990,8 @@ function TurnoverCard({
   onCopyLockbox,
 }: {
   task: DemoTask;
+  copy: AirbnbCopy;
+  statusMeta: Record<DemoStatus, { label: string; cls: string; dot: string }>;
   expanded: boolean;
   onToggleExpand: () => void;
   onCheckIn: () => void;
@@ -734,8 +1001,9 @@ function TurnoverCard({
   onOpenPhoto: (idx: number) => void;
   onCopyLockbox: () => void;
 }) {
-  const st = STATUS_META[task.status];
-  const countdown = useCountdown(task.nextCheckInAt);
+  const st = statusMeta[task.status];
+  const countdown = useCountdown(task.nextCheckInAt, copy.countdownLate);
+  const CHECKLIST = useMemo(() => buildChecklist(copy), [copy]);
 
   const enoughPhotos = task.photos.length >= MIN_PHOTOS_REQUIRED;
 
@@ -766,7 +1034,7 @@ function TurnoverCard({
         <button
           type="button"
           onClick={onToggleExpand}
-          title="Toca para ver checklist, lockbox y notas"
+          title={copy.turnoverNotes}
           className="flex w-full items-start justify-between gap-2 text-left"
         >
           <div className="min-w-0 flex-1">
@@ -796,19 +1064,19 @@ function TurnoverCard({
         {/* Turn window — compact 2-line summary, always visible. */}
         <div className="mt-2 grid grid-cols-3 gap-2 rounded-lg bg-surface-1/60 px-2.5 py-1.5 text-[10.5px]">
           <div>
-            <p className="font-bold uppercase tracking-wider text-text-3">Salida</p>
+            <p className="font-bold uppercase tracking-wider text-text-3">{copy.colSalida}</p>
             <p className="mt-0.5 font-semibold tabular-nums text-text-1">
               {task.previousCheckOut}
             </p>
           </div>
           <div>
-            <p className="font-bold uppercase tracking-wider text-text-3">Limpieza</p>
+            <p className="font-bold uppercase tracking-wider text-text-3">{copy.colLimpieza}</p>
             <p className="mt-0.5 font-semibold tabular-nums text-text-1">
               {task.cleaningStart} · {formatDuration(task.estimated_duration_min)}
             </p>
           </div>
           <div>
-            <p className="font-bold uppercase tracking-wider text-text-3">Llegada</p>
+            <p className="font-bold uppercase tracking-wider text-text-3">{copy.colLlegada}</p>
             <p className="mt-0.5 font-semibold tabular-nums text-text-1">
               {task.nextCheckIn}
             </p>
@@ -829,21 +1097,21 @@ function TurnoverCard({
           >
             <Timer className="h-3 w-3" />
             {countdown.tone === 'late'
-              ? 'check-in vencido'
-              : `quedan ${countdown.label} hasta el check-in`}
+              ? copy.countdownLate
+              : copy.countdownRemaining(countdown.label)}
           </p>
         ) : null}
 
         {task.checkInAt ? (
           <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-orange-700">
             <Clock className="h-2.5 w-2.5" />
-            Check-in registrado a las {task.checkInAt}
+            {copy.checkInLoggedAt(task.checkInAt)}
           </p>
         ) : null}
         {task.completedAt ? (
           <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
             <CheckCircle2 className="h-2.5 w-2.5" />
-            Completada a las {task.completedAt}
+            {copy.completedAt(task.completedAt)}
           </p>
         ) : null}
 
@@ -854,12 +1122,12 @@ function TurnoverCard({
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            aria-label="Navegar con Google Maps"
-            title="Navegar a esta dirección con Google Maps"
+            aria-label={copy.navigateAria}
+            title={copy.navigateTitle}
             className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-[10.5px] font-semibold text-orange-700 transition hover:bg-orange-100"
           >
             <Navigation2 className="h-3 w-3" />
-            Maps
+            {copy.mapsLabel}
           </a>
           <button
             type="button"
@@ -867,8 +1135,8 @@ function TurnoverCard({
               e.stopPropagation();
               onCopyLockbox();
             }}
-            aria-label="Copiar código del lockbox"
-            title={`Lockbox ${task.lockboxCode} · toca para copiar`}
+            aria-label={copy.copyLockboxAria}
+            title={copy.copyLockboxTitle(task.lockboxCode)}
             className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10.5px] font-semibold text-slate-800 transition hover:bg-slate-200"
           >
             <KeyRound className="h-3 w-3" />
@@ -881,10 +1149,10 @@ function TurnoverCard({
                 e.stopPropagation();
                 onCheckIn();
               }}
-              title="Marcar que has llegado al apartamento"
+              title={copy.checkInScheduled}
               className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10.5px] font-semibold text-orange-800 transition hover:bg-orange-200"
             >
-              Check-in
+              {copy.checkIn}
             </button>
           ) : null}
           {task.status === 'in_progress' ? (
@@ -894,29 +1162,30 @@ function TurnoverCard({
                 e.stopPropagation();
                 onUploadPhoto();
               }}
-              aria-label="Subir foto del turnover"
-              title="Subir foto del turnover — necesitas 4 mínimo"
+              aria-label={copy.uploadPhotoAria}
+              title={copy.uploadPhotoTitle}
               className="inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-[10.5px] font-semibold text-cyan-800 transition hover:bg-cyan-100"
             >
               <Camera className="h-3 w-3" />
-              Foto
+              {copy.photoLabel}
             </button>
           ) : null}
           {task.status !== 'completed' ? (
             <span
               className="ml-auto inline-flex items-center gap-1 text-[10.5px] font-semibold text-text-3"
-              title="Pago estimado: duración × tarifa horaria + propinas"
+              title={copy.estimatedPayTitle}
             >
-              Estim. £{(projectedPence / 100).toFixed(2)}
+              {copy.estimatedPay((projectedPence / 100).toFixed(2))}
             </span>
           ) : (
             <span className="ml-auto inline-flex items-center gap-1 text-[10.5px] font-semibold text-emerald-700">
-              Pagado £
-              {(
-                (Math.round((task.actualHours ?? 0) * task.cleanerPayRatePence) +
-                  (task.tipPence ?? 0)) /
-                100
-              ).toFixed(2)}
+              {copy.paidLabel(
+                (
+                  (Math.round((task.actualHours ?? 0) * task.cleanerPayRatePence) +
+                    (task.tipPence ?? 0)) /
+                  100
+                ).toFixed(2),
+              )}
             </span>
           )}
         </div>
@@ -951,7 +1220,7 @@ function TurnoverCard({
             <section className="rounded-xl border border-dashed border-surface-2 bg-surface-1/40 p-3">
               <div className="flex items-center justify-between">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-                  Fotos obligatorias
+                  {copy.requiredPhotos}
                 </p>
                 <span
                   className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
@@ -964,7 +1233,7 @@ function TurnoverCard({
                 </span>
               </div>
               <p className="mt-1 text-[10.5px] text-text-3">
-                Necesitamos una de cada zona: {REQUIRED_PHOTO_ZONES.join(', ')}.
+                {copy.requiredPhotosHint(copy.requiredPhotoZones.join(', '))}
               </p>
 
               <div className="mt-2 grid grid-cols-3 gap-1.5">
@@ -974,12 +1243,12 @@ function TurnoverCard({
                     type="button"
                     key={`${src}-${i}`}
                     onClick={() => onOpenPhoto(i)}
-                    title="Ampliar foto — desde el lightbox puedes eliminarla"
+                    title={copy.photoZoomTitle}
                     className="overflow-hidden rounded-lg ring-1 ring-surface-2"
                   >
                     <img
                       src={src}
-                      alt={`Foto del turnover ${i + 1}`}
+                      alt={copy.photoAlt(i + 1)}
                       loading="lazy"
                       className="aspect-square w-full object-cover"
                     />
@@ -989,7 +1258,7 @@ function TurnoverCard({
                   <button
                     type="button"
                     onClick={onUploadPhoto}
-                    aria-label="Añadir foto"
+                    aria-label={copy.addPhotoAria}
                     className="grid aspect-square w-full place-items-center rounded-lg border border-dashed border-orange-300 bg-white text-orange-700 transition hover:bg-orange-50"
                   >
                     <Camera className="h-5 w-5" />
@@ -1001,7 +1270,7 @@ function TurnoverCard({
             {/* Lockbox + notes */}
             <section className="rounded-xl border border-dashed border-surface-2 bg-surface-1/40 p-3">
               <p className="text-[10px] font-bold uppercase tracking-wider text-text-3">
-                Lockbox
+                {copy.lockboxLabel}
               </p>
               <button
                 type="button"
@@ -1013,7 +1282,7 @@ function TurnoverCard({
                 <Copy className="h-3 w-3 opacity-60" />
               </button>
               <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-text-3">
-                Notas del anfitrión
+                {copy.hostNotes}
               </p>
               <p className="mt-0.5 text-[11.5px] leading-relaxed text-text-2">
                 {task.notes}
@@ -1038,7 +1307,7 @@ function TurnoverCard({
                 onClick={onCheckIn}
                 className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-orange-600 px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(234,88,12,0.55)] transition active:scale-[0.99]"
               >
-                Check-in y empezar
+                {copy.checkInAndStart}
               </button>
             ) : null}
           </div>

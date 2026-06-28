@@ -10,7 +10,7 @@ import {
   SprayCan,
   Shuffle,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { requireOwner } from '@/lib/auth';
 import { cleanerLoginUrl } from '@/lib/cleaner-link';
 import { getT } from '@/lib/i18n';
@@ -62,7 +62,7 @@ export default async function OnboardingPage({
     <main className="relative min-h-screen overflow-hidden bg-surface-1">
       <header className="border-b border-surface-2 bg-surface-0/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Logo size="sm" />
+          <ZapliLogo size="sm" />
           <Link href="/owner" className="text-xs text-text-2 hover:text-text-1">
             {t('onboarding.skipForNow')} →
           </Link>

@@ -9,6 +9,11 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 /**
  * Top global navbar for the rebranded Zapli admin shell.
  *
+ * The navbar IS the dark midnight band (#0D0D11) — no border underneath, the
+ * bar itself provides the contrast against the page body. White+cyan
+ * wordmark sits left; the primary nav lives in the center on md+ with an
+ * electric-cyan underline on the active link; locale + sign-in sit right.
+ *
  * NOT used by the marketing site or the legacy demo previews
  * (/owner/preview, /operative/preview, /client/preview). Drop this into the
  * top of any admin page (Dashboard / Clients / Staff / Scheduling / Reports)
@@ -59,21 +64,22 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
   }, [mobileOpen]);
 
   return (
-    <header className="w-full border-b border-slate-200 bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="w-full bg-[#0D0D11]">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         {/* LEFT — brand mark. Link home so users always have an escape hatch. */}
         <Link
           href="/"
-          className="flex items-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+          className="flex items-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60"
         >
-          <ZapliLogo size="sm" />
+          <ZapliLogo size="sm" tone="onDark" />
         </Link>
 
         {/* CENTER — primary nav. Hidden on mobile; the hamburger sheet covers
-            the same set of links. */}
+            the same set of links. The active underline is a 2px absolutely
+            positioned bar at the bottom of the link in electric cyan. */}
         <nav
           aria-label="Primary"
-          className="hidden md:flex md:h-16 md:items-stretch md:gap-1"
+          className="hidden md:flex md:items-center md:gap-7"
         >
           {NAV_ITEMS.map((item) => {
             const isActive = item.key === active;
@@ -83,28 +89,32 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={[
-                  // Full-height link so the active underline sits flush with
-                  // the navbar's bottom border.
-                  'inline-flex items-center px-3 text-sm font-medium transition-colors',
+                  'relative inline-flex items-center text-[13.5px] transition-colors',
                   isActive
-                    ? 'border-b-2 border-cyan-400 text-cyan-600'
-                    : 'border-b-2 border-transparent text-slate-700 hover:text-slate-900',
+                    ? 'font-semibold text-[#00F5D4]'
+                    : 'font-medium text-[#F8F9FA]/85 hover:text-white',
                 ].join(' ')}
               >
                 {item.label}
+                {isActive ? (
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 -bottom-1 h-[2px] bg-[#00F5D4]"
+                  />
+                ) : null}
               </Link>
             );
           })}
         </nav>
 
         {/* RIGHT — locale + sign in (+ hamburger on mobile). */}
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:block">
+        <div className="flex items-center gap-3">
+          <div className="hidden md:block">
             <LocaleSwitcher variant="premium" />
           </div>
           <Link
             href={signedIn ? '/dashboard' : '/login'}
-            className="hidden sm:inline-flex h-9 items-center rounded-full bg-slate-900 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+            className="hidden h-9 items-center rounded-full bg-[#00F5D4] px-4 text-[13px] font-semibold text-[#0D0D11] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60 md:inline-flex"
           >
             {signedIn ? 'Account' : 'Sign in'}
           </Link>
@@ -114,14 +124,14 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
             aria-label="Open menu"
             aria-expanded={mobileOpen}
             aria-controls="zapli-mobile-sheet"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100 md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60"
           >
             <Menu className="h-5 w-5" aria-hidden />
           </button>
         </div>
       </div>
 
-      {/* MOBILE SHEET — full-viewport drawer. We render unconditionally and
+      {/* MOBILE SHEET — top sheet on midnight. We render unconditionally and
           gate the visible state on `mobileOpen` so the close animation could
           be added later without restructuring. */}
       {mobileOpen ? (
@@ -134,21 +144,21 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
         >
           {/* Scrim — tap to dismiss. */}
           <div
-            className="absolute inset-0 bg-slate-900/40"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setMobileOpen(false)}
             aria-hidden
           />
-          {/* Sheet content — slides from the right on larger phones, full
-              width on small ones. */}
-          <div className="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col bg-white shadow-2xl">
-            {/* Sheet header: locale switcher at top + close button. */}
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
-              <LocaleSwitcher variant="premium" />
+          {/* Sheet content — drops from the top, full width. */}
+          <div className="absolute inset-x-0 top-0 flex max-h-full flex-col bg-[#0D0D11] shadow-2xl">
+            {/* Sheet header: logo on the left, close button on the right so
+                the affordance matches the navbar above. */}
+            <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+              <ZapliLogo size="sm" tone="onDark" />
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close menu"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60"
               >
                 <X className="h-5 w-5" aria-hidden />
               </button>
@@ -156,7 +166,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
 
             <nav
               aria-label="Primary mobile"
-              className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4"
+              className="flex flex-col gap-1 overflow-y-auto px-3 pb-4"
             >
               {NAV_ITEMS.map((item) => {
                 const isActive = item.key === active;
@@ -167,10 +177,10 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
                     aria-current={isActive ? 'page' : undefined}
                     onClick={() => setMobileOpen(false)}
                     className={[
-                      'rounded-lg px-4 py-3 text-base font-medium transition-colors',
+                      'rounded-lg px-4 py-3 text-base transition-colors',
                       isActive
-                        ? 'bg-cyan-50 text-cyan-700'
-                        : 'text-slate-800 hover:bg-slate-50',
+                        ? 'bg-white/5 font-semibold text-[#00F5D4]'
+                        : 'font-medium text-[#F8F9FA]/85 hover:bg-white/5 hover:text-white',
                     ].join(' ')}
                   >
                     {item.label}
@@ -179,12 +189,13 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
               })}
             </nav>
 
-            {/* Sheet footer — sign-in CTA pinned to the bottom. */}
-            <div className="border-t border-slate-200 p-4">
+            {/* Sheet footer — locale switcher + sign-in CTA stacked. */}
+            <div className="flex flex-col gap-3 border-t border-white/10 p-4">
+              <LocaleSwitcher variant="premium" />
               <Link
                 href={signedIn ? '/dashboard' : '/login'}
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-slate-900 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#00F5D4] px-4 text-sm font-semibold text-[#0D0D11] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60"
               >
                 {signedIn ? 'Account' : 'Sign in'}
               </Link>

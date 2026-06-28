@@ -333,13 +333,14 @@ export default function BrandingPreviewPage() {
           {/* Preview column */}
           <aside className="lg:sticky lg:top-20 lg:self-start">
             <p className="px-1 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-              Vista previa del portal del cliente
+              {t.portalPreview}
             </p>
             <ClientPortalPreview
               logoUrl={logoUrl}
               primary={HEX.test(primary) ? primary : DEFAULT_PRIMARY}
               secondary={HEX.test(secondary) ? secondary : DEFAULT_SECONDARY}
               businessName={businessName || DEFAULT_BUSINESS_NAME}
+              t={t}
             />
           </aside>
         </div>
@@ -354,7 +355,7 @@ export default function BrandingPreviewPage() {
         >
           <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg">
             <CheckCircle2 className="h-4 w-4" />
-            Guardado
+            {t.saved}
           </div>
         </div>
       ) : null}
@@ -368,10 +369,12 @@ function ColorField({
   label,
   value,
   onChange,
+  invalidHex,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  invalidHex: string;
 }) {
   const valid = HEX.test(value);
   return (
@@ -398,7 +401,7 @@ function ColorField({
       </div>
       {!valid ? (
         <p className="mt-1 text-[11px] text-rose-600">
-          Hex no válido. Usa #RGB o #RRGGBB.
+          {invalidHex}
         </p>
       ) : null}
     </label>
@@ -410,11 +413,13 @@ function ClientPortalPreview({
   primary,
   secondary,
   businessName,
+  t,
 }: {
   logoUrl: string | null;
   primary: string;
   secondary: string;
   businessName: string;
+  t: BrandingCopy;
 }) {
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_4px_16px_rgba(15,23,42,0.06)]">
@@ -453,10 +458,10 @@ function ClientPortalPreview({
               }}
             >
               <p className="text-[11px] uppercase tracking-wider opacity-80">
-                Próxima limpieza
+                {t.nextClean}
               </p>
-              <p className="mt-1 text-lg font-semibold">Viernes · 10:00</p>
-              <p className="text-xs opacity-90">Apartamento centro</p>
+              <p className="mt-1 text-lg font-semibold">{t.fridayTime}</p>
+              <p className="text-xs opacity-90">{t.centreApartment}</p>
             </div>
 
             {/* Service tiles */}
@@ -467,7 +472,7 @@ function ClientPortalPreview({
                   style={{ background: primary }}
                 />
                 <p className="mt-2 text-[11px] font-medium text-slate-900">
-                  Regular
+                  {t.regular}
                 </p>
                 <p className="text-[10px] text-slate-500">$45</p>
               </div>
@@ -477,7 +482,7 @@ function ClientPortalPreview({
                   style={{ background: secondary }}
                 />
                 <p className="mt-2 text-[11px] font-medium text-slate-900">
-                  Profunda
+                  {t.deep}
                 </p>
                 <p className="text-[10px] text-slate-500">$95</p>
               </div>
@@ -490,7 +495,7 @@ function ClientPortalPreview({
               style={{ background: primary }}
               tabIndex={-1}
             >
-              Reservar
+              {t.book}
             </button>
             <button
               type="button"
@@ -498,7 +503,7 @@ function ClientPortalPreview({
               style={{ color: secondary, borderColor: secondary }}
               tabIndex={-1}
             >
-              Ver historial
+              {t.seeHistory}
             </button>
           </div>
         </div>

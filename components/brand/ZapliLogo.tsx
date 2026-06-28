@@ -1,26 +1,36 @@
 /**
  * Zapli brand mark.
  *
- * Pure inline SVG so the logo renders without network fetches and can pick up
- * gradient + currentColor styling without flashing. The mark pairs a neon
- * cyan/turquoise lightning bolt with a lowercase "zapli" wordmark (Poppins
- * via the `font-display` Tailwind family so it inherits the project's loaded
- * Poppins variable).
+ * The visual hook: the dot of the "i" in "zapli" IS a lightning glyph in
+ * electric cyan (#00F5D4). The wordmark is rendered as `zapl` + dotless `ı`
+ * (U+0131) so we can position a crisp inline-SVG bolt where the tittle would
+ * otherwise sit. Pure inline SVG — no network fetches, no external assets.
  *
- * `mono` collapses the gradient to a single currentColor fill — used inside
- * dark navy headers or anywhere we need the mark to read against an unknown
- * background without an exotic palette.
+ * `tone`:
+ *   - "onDark"  (default): white wordmark on a midnight background
+ *   - "onLight": slate-900 wordmark on a light background
+ *
+ * `mono` collapses the lightning to currentColor so the mark can sit on an
+ * unknown background (e.g. inside a colored chip). When `mono` is set the
+ * wordmark inherits `currentColor` too.
  */
 
 type Size = 'sm' | 'md' | 'lg' | 'xl';
+type Tone = 'onDark' | 'onLight';
 
 export type ZapliLogoProps = {
   size?: Size;
   mono?: boolean;
+  tone?: Tone;
   className?: string;
 };
 
-// Per spec: heights in px for the overall mark (icon + wordmark).
+// Brand palette — keep these in sync with the design tokens.
+const CYAN = '#00F5D4'; // electric cyan / turquoise neon
+const WHITE = '#F8F9FA'; // platinum white
+const DARK = '#0F172A'; // slate-900 for onLight wordmark
+
+// Overall mark height in px (drives both wordmark + lightning).
 const SIZE_PX: Record<Size, number> = {
   sm: 24,
   md: 32,
@@ -28,70 +38,96 @@ const SIZE_PX: Record<Size, number> = {
   xl: 64,
 };
 
-// Wordmark sizing scales with the icon. Values chosen so the "zapli" cap
-// height matches the bolt cap and the optical balance feels right.
+// Wordmark sizing. Cap height is tuned so the bolt-as-tittle sits cleanly
+// above the "ı" stem at every size.
 const TEXT_CLASS: Record<Size, string> = {
-  sm: 'text-[15px] leading-none',
-  md: 'text-[20px] leading-none',
-  lg: 'text-[28px] leading-none',
-  xl: 'text-[40px] leading-none',
+  sm: 'text-[18px] leading-none',
+  md: 'text-[24px] leading-none',
+  lg: 'text-[34px] leading-none',
+  xl: 'text-[48px] leading-none',
 };
 
-// Wordmark left padding (gap between bolt and "zapli"). Scales with size.
-const GAP_CLASS: Record<Size, string> = {
-  sm: 'ml-1.5',
-  md: 'ml-2',
-  lg: 'ml-2.5',
-  xl: 'ml-3',
+// Bolt glyph height (replaces the tittle of "ı"). Scales with overall size.
+const BOLT_PX: Record<Size, number> = {
+  sm: 8,
+  md: 11,
+  lg: 15,
+  xl: 22,
+};
+
+// Vertical offset of the bolt above the "ı" baseline-stem. Negative values
+// lift the bolt into the tittle slot. Tuned per-size to keep optical balance.
+const BOLT_TOP_PX: Record<Size, number> = {
+  sm: -3,
+  md: -4,
+  lg: -6,
+  xl: -9,
+};
+
+// Horizontal nudge so the bolt centers over the stem of the "ı". Poppins
+// renders the dotless i slightly narrow, so a small left offset reads true.
+const BOLT_LEFT_PX: Record<Size, number> = {
+  sm: -0.5,
+  md: -0.5,
+  lg: -1,
+  xl: -1,
 };
 
 export function ZapliLogo({
   size = 'md',
   mono = false,
+  tone = 'onDark',
   className = '',
 }: ZapliLogoProps) {
   const px = SIZE_PX[size];
-  // Stable gradient id per-instance so multiple logos on a page don't collide
-  // when the browser dedupes by id. Cheap enough to do at module scope since
-  // each invocation creates a fresh closure.
-  const gradId = `zapli-bolt-${size}-${mono ? 'm' : 'c'}`;
+  const boltSize = BOLT_PX[size];
+
+  // Wordmark color: mono inherits, otherwise tone decides.
+  const wordmarkColor = mono
+    ? 'currentColor'
+    : tone === 'onDark'
+      ? WHITE
+      : DARK;
+
+  // Lightning fill: mono inherits, otherwise always electric cyan.
+  const boltFill = mono ? 'currentColor' : CYAN;
 
   return (
     <span
       role="img"
       aria-label="Zapli"
-      className={`inline-flex items-center ${className}`}
-      style={{ height: px }}
+      className={`inline-flex items-center font-display font-semibold tracking-tight ${TEXT_CLASS[size]} ${className}`}
+      style={{ height: px, color: wordmarkColor }}
     >
-      {/* Lightning bolt — square viewBox so we can size by height alone. */}
-      <svg
-        viewBox="0 0 24 24"
-        height={px}
-        width={px}
-        aria-hidden="true"
-        focusable="false"
-        className="block shrink-0"
-      >
-        {!mono ? (
-          <defs>
-            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#22D3EE" />
-              <stop offset="100%" stopColor="#06B6D4" />
-            </linearGradient>
-          </defs>
-        ) : null}
-        {/* Classic bolt — sharp diagonal with a chevron notch. */}
-        <path
-          d="M13.5 2 4 13.6h6.1L9.2 22 20 9.4h-6.6L13.5 2Z"
-          fill={mono ? 'currentColor' : `url(#${gradId})`}
-        />
-      </svg>
+      {/* zapl + dotless ı; the bolt below provides the tittle. */}
+      <span aria-hidden="true">zapl</span>
       <span
-        className={`font-display font-semibold tracking-tight ${TEXT_CLASS[size]} ${GAP_CLASS[size]} ${
-          mono ? 'text-current' : 'text-slate-900'
-        }`}
+        aria-hidden="true"
+        className="relative inline-block"
+        // The dotless i character (U+0131) renders without a tittle so the
+        // lightning bolt can stand in as the dot without overlap artifacts.
       >
-        zapli
+        {'ı'}
+        <svg
+          viewBox="0 0 24 32"
+          height={boltSize}
+          aria-hidden="true"
+          focusable="false"
+          className="absolute block"
+          style={{
+            top: BOLT_TOP_PX[size],
+            left: `calc(50% + ${BOLT_LEFT_PX[size]}px)`,
+            transform: 'translateX(-50%)',
+          }}
+        >
+          {/* Minimalist bolt — sharp chevron with the classic notch. The
+              viewBox is taller than wide so the glyph reads as a bolt at
+              very small sizes without clipping the points. */}
+          <path
+            d="M14 0 2 18h8l-4 14L22 12h-8l4-12H14Z"
+            fill={boltFill}
+          />
+        </svg>
       </span>
     </span>
   );

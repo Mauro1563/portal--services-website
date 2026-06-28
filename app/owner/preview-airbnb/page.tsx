@@ -51,6 +51,192 @@ import {
   formatPence,
 } from '@/lib/preview-airbnb';
 import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    portalHomeAria: 'Portal Home',
+    demoLabel: 'Demo · Owner (Airbnb)',
+    backToSite: 'Back to site',
+    back: 'Back',
+    minAgo2: '2 min ago',
+    aFewSecondsAgo: 'a few seconds ago',
+    home: 'Home',
+    turnovers: 'Turnovers',
+    team: 'Team',
+    chat: 'Chat',
+    listings: 'Listings',
+    ownerPanel: 'Owner panel',
+    hello: 'Hello, Alan',
+    turnoversToday: 'Alan Cleaners · 4 turnovers scheduled today',
+    airbnbSyncAria: 'Airbnb sync status',
+    calendarSynced: 'Airbnb calendar synced',
+    lastUpdate: (label: string) => `Last updated ${label} · 6 active iCal feeds`,
+    syncing: 'Syncing…',
+    syncBtn: 'Sync iCal',
+    activeListings: 'Active listings',
+    syncedWithAirbnb: 'synced with Airbnb',
+    turnoversThisWeek: 'Turnovers this week',
+    vsLastWeek: 'vs. last week',
+    avgTurnaround: 'Avg turnaround time',
+    checkoutToCheckin: 'checkout → check-in',
+    monthRevenue: 'Monthly revenue',
+    vsLastMonth: 'vs. last month',
+    todaysTurnovers: 'Today’s turnovers',
+    seeAll: 'See all',
+    windowH: (h: number) => `${h}h window`,
+    checkout: 'Checkout',
+    cleaner: 'Cleaner',
+    checkIn: 'Check-in',
+    restockAlerts: 'Restock alerts',
+    pending: 'pending',
+    resolve: 'Resolve',
+    markedToRestock: (name: string) => `Marked for restock: ${name}`,
+    quickActions: 'Quick actions',
+    syncIcal: 'Sync iCal',
+    syncIcalHint: 'Refresh 6 Airbnb feeds',
+    notifyHost: 'Notify host',
+    notifyHostHint: 'Quick message to the owner',
+    notifyHostFlash: 'Host message draft opened',
+    reportDamage: 'Report damage to host',
+    reportDamageHint: 'Attach cleaner photos',
+    reportDamageFlash: 'Incident form opened',
+    yourListings: 'Your listings',
+    manage: 'Manage',
+    syncedWithAirbnbBadge: 'Synced with Airbnb',
+    perNight: '/night',
+    manageTeam: 'Manage cleaner team',
+    manageTeamHint: 'Assign turnovers, adjust availability and review performance.',
+    fullAnalytics: 'See full analytics',
+    analyticsHint: 'Occupancy, average rating and trends by listing.',
+    syncedToast: 'Airbnb calendar synced · 6 listings up to date',
+    statusPending: 'Pending',
+    statusInProgress: 'In progress',
+    statusDone: 'Done',
+  },
+  es: {
+    portalHomeAria: 'Portal Home',
+    demoLabel: 'Demo · Owner (Airbnb)',
+    backToSite: 'Volver al sitio',
+    back: 'Volver',
+    minAgo2: 'hace 2 min',
+    aFewSecondsAgo: 'hace unos segundos',
+    home: 'Inicio',
+    turnovers: 'Turnovers',
+    team: 'Equipo',
+    chat: 'Chat',
+    listings: 'Listings',
+    ownerPanel: 'Panel del propietario',
+    hello: 'Hola, Alan',
+    turnoversToday: 'Alan Cleaners · 4 turnovers programados hoy',
+    airbnbSyncAria: 'Estado de sincronización con Airbnb',
+    calendarSynced: 'Calendario Airbnb sincronizado',
+    lastUpdate: (label: string) => `Última actualización ${label} · 6 feeds iCal activos`,
+    syncing: 'Sincronizando…',
+    syncBtn: 'Sincronizar iCal',
+    activeListings: 'Listings activos',
+    syncedWithAirbnb: 'sincronizados con Airbnb',
+    turnoversThisWeek: 'Turnovers esta semana',
+    vsLastWeek: 'vs. semana pasada',
+    avgTurnaround: 'Tiempo medio turnaround',
+    checkoutToCheckin: 'checkout → check-in',
+    monthRevenue: 'Revenue mes',
+    vsLastMonth: 'vs. mes pasado',
+    todaysTurnovers: 'Turnovers de hoy',
+    seeAll: 'Ver todos',
+    windowH: (h: number) => `ventana ${h}h`,
+    checkout: 'Checkout',
+    cleaner: 'Cleaner',
+    checkIn: 'Check-in',
+    restockAlerts: 'Restock alerts',
+    pending: 'pendientes',
+    resolve: 'Resolver',
+    markedToRestock: (name: string) => `Marcado para reponer: ${name}`,
+    quickActions: 'Acciones rápidas',
+    syncIcal: 'Sincronizar iCal',
+    syncIcalHint: 'Refrescar 6 feeds Airbnb',
+    notifyHost: 'Notificar host',
+    notifyHostHint: 'Mensaje rápido al propietario',
+    notifyHostFlash: 'Borrador de mensaje al host abierto',
+    reportDamage: 'Reportar daño al host',
+    reportDamageHint: 'Adjunta fotos del cleaner',
+    reportDamageFlash: 'Formulario de incidencia abierto',
+    yourListings: 'Tus listings',
+    manage: 'Gestionar',
+    syncedWithAirbnbBadge: 'Sincronizado con Airbnb',
+    perNight: '/noche',
+    manageTeam: 'Gestionar equipo de cleaners',
+    manageTeamHint: 'Asigna turnovers, ajusta disponibilidad y revisa rendimiento.',
+    fullAnalytics: 'Ver analítica completa',
+    analyticsHint: 'Ocupación, rating medio y tendencias por listing.',
+    syncedToast: 'Calendario Airbnb sincronizado · 6 listings al día',
+    statusPending: 'Pendiente',
+    statusInProgress: 'En curso',
+    statusDone: 'Hecho',
+  },
+  pt: {
+    portalHomeAria: 'Portal Home',
+    demoLabel: 'Demo · Owner (Airbnb)',
+    backToSite: 'Voltar ao site',
+    back: 'Voltar',
+    minAgo2: 'há 2 min',
+    aFewSecondsAgo: 'há uns segundos',
+    home: 'Início',
+    turnovers: 'Turnovers',
+    team: 'Equipa',
+    chat: 'Chat',
+    listings: 'Listings',
+    ownerPanel: 'Painel do proprietário',
+    hello: 'Olá, Alan',
+    turnoversToday: 'Alan Cleaners · 4 turnovers agendados hoje',
+    airbnbSyncAria: 'Estado de sincronização com Airbnb',
+    calendarSynced: 'Calendário Airbnb sincronizado',
+    lastUpdate: (label: string) => `Última atualização ${label} · 6 feeds iCal ativos`,
+    syncing: 'A sincronizar…',
+    syncBtn: 'Sincronizar iCal',
+    activeListings: 'Listings ativos',
+    syncedWithAirbnb: 'sincronizados com Airbnb',
+    turnoversThisWeek: 'Turnovers esta semana',
+    vsLastWeek: 'vs. semana passada',
+    avgTurnaround: 'Tempo médio de turnaround',
+    checkoutToCheckin: 'checkout → check-in',
+    monthRevenue: 'Receita do mês',
+    vsLastMonth: 'vs. mês passado',
+    todaysTurnovers: 'Turnovers de hoje',
+    seeAll: 'Ver todos',
+    windowH: (h: number) => `janela ${h}h`,
+    checkout: 'Checkout',
+    cleaner: 'Cleaner',
+    checkIn: 'Check-in',
+    restockAlerts: 'Alertas de reposição',
+    pending: 'pendentes',
+    resolve: 'Resolver',
+    markedToRestock: (name: string) => `Marcado para repor: ${name}`,
+    quickActions: 'Ações rápidas',
+    syncIcal: 'Sincronizar iCal',
+    syncIcalHint: 'Atualizar 6 feeds Airbnb',
+    notifyHost: 'Notificar host',
+    notifyHostHint: 'Mensagem rápida ao proprietário',
+    notifyHostFlash: 'Rascunho de mensagem ao host aberto',
+    reportDamage: 'Reportar dano ao host',
+    reportDamageHint: 'Anexa fotos do cleaner',
+    reportDamageFlash: 'Formulário de incidente aberto',
+    yourListings: 'Os teus listings',
+    manage: 'Gerir',
+    syncedWithAirbnbBadge: 'Sincronizado com Airbnb',
+    perNight: '/noite',
+    manageTeam: 'Gerir equipa de cleaners',
+    manageTeamHint: 'Atribui turnovers, ajusta disponibilidade e revê desempenho.',
+    fullAnalytics: 'Ver análise completa',
+    analyticsHint: 'Ocupação, rating médio e tendências por listing.',
+    syncedToast: 'Calendário Airbnb sincronizado · 6 listings em dia',
+    statusPending: 'Pendente',
+    statusInProgress: 'Em curso',
+    statusDone: 'Feito',
+  },
+} as const;
+
+type AirbnbCopy = (typeof COPY)['en'];
 
 // --- Local UI helpers (kept inline so the page is self-contained) ----------
 
@@ -61,14 +247,14 @@ import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
  * tone & label per portal, so we render our own variant here rather than
  * extend the shared API for a one-off.
  */
-function AirbnbDemoTopBar() {
+function AirbnbDemoTopBar({ t }: { t: AirbnbCopy }) {
   return (
     <div className="sticky top-0 z-50 border-b border-orange-100 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-12 max-w-md items-center justify-between gap-2 px-3 sm:max-w-2xl">
         <Link
           href="/"
           className="-ml-1 inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-slate-900 transition hover:bg-orange-50"
-          aria-label="Portal Home"
+          aria-label={t.portalHomeAria}
         >
           <span className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-orange-400 to-rose-500 text-[10px] font-bold text-white">
             P
@@ -79,15 +265,15 @@ function AirbnbDemoTopBar() {
         </Link>
         <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-slate-900 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-orange-300">
           <Sparkles className="h-2.5 w-2.5" />
-          Demo · Owner (Airbnb)
+          {t.demoLabel}
         </span>
         <Link
           href="/"
           className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-700 transition hover:border-orange-300 hover:bg-orange-50/40"
         >
           <ArrowLeft className="h-3 w-3" />
-          <span className="hidden sm:inline">Volver al sitio</span>
-          <span className="sm:hidden">Volver</span>
+          <span className="hidden sm:inline">{t.backToSite}</span>
+          <span className="sm:hidden">{t.back}</span>
         </Link>
       </div>
     </div>
@@ -103,18 +289,18 @@ type TabKey = 'home' | 'tasks' | 'cleaners' | 'chat' | 'listings';
  * into authed routes. None of the sub-routes exist yet, but Next will
  * 404 gracefully and the visible affordance still communicates the IA.
  */
-function AirbnbBottomTabBar({ active }: { active: TabKey }) {
+function AirbnbBottomTabBar({ active, t }: { active: TabKey; t: AirbnbCopy }) {
   const items: Array<{
     key: TabKey;
     href: string;
     label: string;
     Icon: React.ComponentType<{ className?: string }>;
   }> = [
-    { key: 'home', href: '/owner/preview-airbnb', label: 'Inicio', Icon: LayoutGrid },
-    { key: 'tasks', href: '/owner/preview-airbnb/tasks', label: 'Turnovers', Icon: ListChecks },
-    { key: 'cleaners', href: '/owner/preview-airbnb/cleaners', label: 'Equipo', Icon: Users },
-    { key: 'chat', href: '/owner/preview-airbnb/chat-hub', label: 'Chat', Icon: MessageCircle },
-    { key: 'listings', href: '/owner/preview-airbnb/listings', label: 'Listings', Icon: Building2 },
+    { key: 'home', href: '/owner/preview-airbnb', label: t.home, Icon: LayoutGrid },
+    { key: 'tasks', href: '/owner/preview-airbnb/tasks', label: t.turnovers, Icon: ListChecks },
+    { key: 'cleaners', href: '/owner/preview-airbnb/cleaners', label: t.team, Icon: Users },
+    { key: 'chat', href: '/owner/preview-airbnb/chat-hub', label: t.chat, Icon: MessageCircle },
+    { key: 'listings', href: '/owner/preview-airbnb/listings', label: t.listings, Icon: Building2 },
   ];
 
   return (
@@ -152,15 +338,17 @@ function AirbnbBottomTabBar({ active }: { active: TabKey }) {
   );
 }
 
-/** "x min ago" helper for the iCal sync banner. Static for the demo. */
-function relativeSync() {
-  return 'hace 2 min';
-}
+// "x min ago" string is sourced from locale copy now.
 
 // --- Page ------------------------------------------------------------------
 
 export default function OwnerPreviewAirbnbHome() {
-  const [syncedLabel, setSyncedLabel] = useState(relativeSync());
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+  // `null` means "use the localized default label" (last 2 min). Once the
+  // user triggers a sync we lock in the recent label.
+  const [syncedOverride, setSyncedOverride] = useState<'recent' | null>(null);
+  const syncedLabel = syncedOverride === 'recent' ? t.aFewSecondsAgo : t.minAgo2;
   const [syncing, setSyncing] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -174,14 +362,14 @@ export default function OwnerPreviewAirbnbHome() {
     setSyncing(true);
     window.setTimeout(() => {
       setSyncing(false);
-      setSyncedLabel('hace unos segundos');
-      flash('Calendario Airbnb sincronizado · 6 listings al día');
+      setSyncedOverride('recent');
+      flash(t.syncedToast);
     }, 900);
   }
 
   return (
     <>
-      <AirbnbDemoTopBar />
+      <AirbnbDemoTopBar t={t} />
       <PreviewFlavorToggle
         active="airbnb"
         hogarHref="/owner/preview"
@@ -199,13 +387,13 @@ export default function OwnerPreviewAirbnbHome() {
           {/* Greeting */}
           <header className="mb-4">
             <p className="text-[12px] font-semibold uppercase tracking-wider text-orange-700">
-              Panel del propietario
+              {t.ownerPanel}
             </p>
             <h1 className="mt-1 font-display text-2xl font-bold text-slate-900 sm:text-3xl">
-              Hola, Alan
+              {t.hello}
             </h1>
             <p className="mt-1 text-[13px] text-slate-600">
-              Alan Cleaners · 4 turnovers programados hoy
+              {t.turnoversToday}
             </p>
           </header>
 
@@ -213,7 +401,7 @@ export default function OwnerPreviewAirbnbHome() {
               prospects need to immediately understand that bookings come
               from Airbnb via iCal, not from manual scheduling. */}
           <section
-            aria-label="Estado de sincronización con Airbnb"
+            aria-label={t.airbnbSyncAria}
             className="mb-5 overflow-hidden rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 via-white to-rose-50 p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(249,115,22,0.25)]"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -223,11 +411,11 @@ export default function OwnerPreviewAirbnbHome() {
                 </span>
                 <div className="min-w-0">
                   <p className="text-[14px] font-semibold text-slate-900">
-                    Calendario Airbnb sincronizado
+                    {t.calendarSynced}
                   </p>
                   <p className="mt-0.5 inline-flex items-center gap-1.5 text-[12px] text-slate-600">
                     <Wifi className="h-3 w-3 text-emerald-600" />
-                    Última actualización {syncedLabel} · 6 feeds iCal activos
+                    {t.lastUpdate(syncedLabel)}
                   </p>
                 </div>
               </div>
@@ -240,7 +428,7 @@ export default function OwnerPreviewAirbnbHome() {
                 <RefreshCw
                   className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`}
                 />
-                {syncing ? 'Sincronizando…' : 'Sincronizar iCal'}
+                {syncing ? t.syncing : t.syncBtn}
               </button>
             </div>
             {/* Mock iCal feed peek — gives credibility without showing real
@@ -263,31 +451,31 @@ export default function OwnerPreviewAirbnbHome() {
           {/* Stat tiles — the four headline metrics for an Airbnb cleaner. */}
           <section className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
             <StatTile
-              label="Listings activos"
+              label={t.activeListings}
               value={String(AIRBNB_STATS.activeListings)}
-              hint="sincronizados con Airbnb"
+              hint={t.syncedWithAirbnb}
               Icon={Building2}
               accent="orange"
             />
             <StatTile
-              label="Turnovers esta semana"
+              label={t.turnoversThisWeek}
               value={String(AIRBNB_STATS.turnoversThisWeek)}
-              hint="vs. semana pasada"
+              hint={t.vsLastWeek}
               delta={{ label: '+27%', positive: true }}
               Icon={CalendarDays}
               accent="amber"
             />
             <StatTile
-              label="Tiempo medio turnaround"
+              label={t.avgTurnaround}
               value={AIRBNB_STATS.avgTurnaroundLabel}
-              hint="checkout → check-in"
+              hint={t.checkoutToCheckin}
               Icon={Flame}
               accent="rose"
             />
             <StatTile
-              label="Revenue mes"
+              label={t.monthRevenue}
               value={formatPence(AIRBNB_STATS.monthlyRevenuePence)}
-              hint="vs. mes pasado"
+              hint={t.vsLastMonth}
               delta={{ label: '+18%', positive: true }}
               Icon={PoundSterling}
               accent="emerald"
@@ -308,47 +496,47 @@ export default function OwnerPreviewAirbnbHome() {
           <section className="mt-6">
             <div className="mb-3 flex items-center justify-between px-1">
               <h2 className="font-display text-base font-semibold text-slate-900">
-                Turnovers de hoy
+                {t.todaysTurnovers}
               </h2>
               <Link
                 href="/owner/preview-airbnb/tasks"
                 className="text-[12px] font-semibold text-orange-700 hover:underline"
               >
-                Ver todos
+                {t.seeAll}
               </Link>
             </div>
             <ul className="space-y-3">
-              {TURNAROUND_TASKS.map((t) => (
+              {TURNAROUND_TASKS.map((task) => (
                 <li
-                  key={t.id}
+                  key={task.id}
                   className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
                 >
                   <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
                     <div className="min-w-0">
                       <p className="truncate text-[14px] font-semibold text-slate-900">
-                        {t.listingName}
+                        {task.listingName}
                       </p>
                       <p className="mt-0.5 truncate text-[11.5px] text-slate-600">
-                        {t.cleanerName} · ventana {Math.round(t.windowMinutes / 60)}h
+                        {task.cleanerName} · {t.windowH(Math.round(task.windowMinutes / 60))}
                       </p>
                     </div>
-                    <TurnaroundBadge status={t.status} />
+                    <TurnaroundBadge status={task.status} t={t} />
                   </div>
                   {/* Three-stop timeline: checkout → cleaner → check-in. */}
                   <div className="grid grid-cols-3 divide-x divide-slate-100">
                     <TimelineCell
-                      label="Checkout"
-                      time={t.checkoutAt}
+                      label={t.checkout}
+                      time={task.checkoutAt}
                       tone="slate"
                     />
                     <TimelineCell
-                      label="Cleaner"
-                      time={t.cleanerArrivesAt}
+                      label={t.cleaner}
+                      time={task.cleanerArrivesAt}
                       tone="orange"
                     />
                     <TimelineCell
-                      label="Check-in"
-                      time={t.nextCheckInAt}
+                      label={t.checkIn}
+                      time={task.nextCheckInAt}
                       tone="emerald"
                     />
                   </div>
@@ -366,10 +554,10 @@ export default function OwnerPreviewAirbnbHome() {
                 <Bell className="h-4 w-4" />
               </span>
               <h2 className="font-display text-base font-semibold text-slate-900">
-                Restock alerts
+                {t.restockAlerts}
               </h2>
               <span className="ml-auto rounded-full bg-amber-200/60 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wider text-amber-900">
-                {RESTOCK_ALERTS.length} pendientes
+                {RESTOCK_ALERTS.length} {t.pending}
               </span>
             </div>
             <ul className="space-y-2">
@@ -397,10 +585,10 @@ export default function OwnerPreviewAirbnbHome() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => flash(`Marcado para reponer: ${alert.listingName}`)}
+                    onClick={() => flash(t.markedToRestock(alert.listingName))}
                     className="rounded-full border border-amber-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-amber-800 hover:bg-amber-50"
                   >
-                    Resolver
+                    {t.resolve}
                   </button>
                 </li>
               ))}
@@ -412,26 +600,26 @@ export default function OwnerPreviewAirbnbHome() {
               the booking flow). */}
           <section className="mt-6">
             <h2 className="mb-3 px-1 font-display text-base font-semibold text-slate-900">
-              Acciones rápidas
+              {t.quickActions}
             </h2>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               <QuickAction
-                label="Sincronizar iCal"
-                hint="Refrescar 6 feeds Airbnb"
+                label={t.syncIcal}
+                hint={t.syncIcalHint}
                 Icon={RefreshCw}
                 onClick={handleSync}
               />
               <QuickAction
-                label="Notificar host"
-                hint="Mensaje rápido al propietario"
+                label={t.notifyHost}
+                hint={t.notifyHostHint}
                 Icon={Send}
-                onClick={() => flash('Borrador de mensaje al host abierto')}
+                onClick={() => flash(t.notifyHostFlash)}
               />
               <QuickAction
-                label="Reportar daño al host"
-                hint="Adjunta fotos del cleaner"
+                label={t.reportDamage}
+                hint={t.reportDamageHint}
                 Icon={ShieldAlert}
-                onClick={() => flash('Formulario de incidencia abierto')}
+                onClick={() => flash(t.reportDamageFlash)}
               />
             </div>
           </section>
@@ -443,13 +631,13 @@ export default function OwnerPreviewAirbnbHome() {
           <section className="mt-8">
             <div className="mb-3 flex items-center justify-between px-1">
               <h2 className="font-display text-base font-semibold text-slate-900">
-                Tus listings
+                {t.yourListings}
               </h2>
               <Link
                 href="/owner/preview-airbnb/listings"
                 className="text-[12px] font-semibold text-orange-700 hover:underline"
               >
-                Gestionar
+                {t.manage}
               </Link>
             </div>
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -468,14 +656,14 @@ export default function OwnerPreviewAirbnbHome() {
                       </p>
                       <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-orange-700 ring-1 ring-orange-200">
                         <RefreshCw className="h-2.5 w-2.5" />
-                        Sincronizado con Airbnb
+                        {t.syncedWithAirbnbBadge}
                       </span>
                     </div>
                     <p className="mt-0.5 truncate text-[11.5px] text-slate-600">
                       {l.neighbourhood} · #{l.airbnbId}
                     </p>
                     <p className="mt-1 flex items-center gap-2 text-[12px] text-slate-700">
-                      <span className="font-semibold">{formatPence(l.pricePence)}/noche</span>
+                      <span className="font-semibold">{formatPence(l.pricePence)}{t.perNight}</span>
                       <span aria-hidden className="text-slate-300">
                         ·
                       </span>
@@ -504,10 +692,10 @@ export default function OwnerPreviewAirbnbHome() {
               </span>
               <div className="min-w-0">
                 <p className="text-[15px] font-semibold text-slate-900">
-                  Gestionar equipo de cleaners
+                  {t.manageTeam}
                 </p>
                 <p className="mt-0.5 text-[12px] text-slate-600">
-                  Asigna turnovers, ajusta disponibilidad y revisa rendimiento.
+                  {t.manageTeamHint}
                 </p>
               </div>
             </div>
@@ -524,10 +712,10 @@ export default function OwnerPreviewAirbnbHome() {
               </span>
               <div className="min-w-0">
                 <p className="text-[15px] font-semibold text-slate-900">
-                  Ver analítica completa
+                  {t.fullAnalytics}
                 </p>
                 <p className="mt-0.5 text-[12px] text-slate-600">
-                  Ocupación, rating medio y tendencias por listing.
+                  {t.analyticsHint}
                 </p>
               </div>
             </div>
@@ -548,7 +736,7 @@ export default function OwnerPreviewAirbnbHome() {
           </div>
         ) : null}
 
-        <AirbnbBottomTabBar active="home" />
+        <AirbnbBottomTabBar active="home" t={t} />
       </main>
     </>
   );
@@ -631,11 +819,17 @@ function StatTile({
   );
 }
 
-function TurnaroundBadge({ status }: { status: 'pending' | 'in-progress' | 'done' }) {
+function TurnaroundBadge({
+  status,
+  t,
+}: {
+  status: 'pending' | 'in-progress' | 'done';
+  t: AirbnbCopy;
+}) {
   const map = {
-    pending: { label: 'Pendiente', cls: 'bg-slate-100 text-slate-700' },
-    'in-progress': { label: 'En curso', cls: 'bg-orange-100 text-orange-800' },
-    done: { label: 'Hecho', cls: 'bg-emerald-100 text-emerald-800' },
+    pending: { label: t.statusPending, cls: 'bg-slate-100 text-slate-700' },
+    'in-progress': { label: t.statusInProgress, cls: 'bg-orange-100 text-orange-800' },
+    done: { label: t.statusDone, cls: 'bg-emerald-100 text-emerald-800' },
   } as const;
   const { label, cls } = map[status];
   return (

@@ -47,10 +47,13 @@ export function useClientLocale(): ClientLocale {
   return locale;
 }
 
-export function pickCopy<T>(
-  byLocale: Record<ClientLocale, T> | { en: T } & Partial<Record<ClientLocale, T>>,
-  locale: ClientLocale,
-): T {
-  const map = byLocale as Partial<Record<ClientLocale, T>> & { en: T };
-  return map[locale] ?? map.en;
+export function pickCopy<
+  M extends { en: unknown; es?: unknown; pt?: unknown },
+>(byLocale: M, locale: ClientLocale): M['en'] {
+  // Each locale's literal types differ when COPY is `as const` (e.g.
+  // en.statusScheduled is "Pending" while es.statusScheduled is "Pendiente"),
+  // so we widen the return type to M['en'] and treat all locale slots as
+  // structurally compatible. Falls back to en when locale slot is absent.
+  const map = byLocale as { en: M['en']; es?: M['en']; pt?: M['en'] };
+  return (map[locale] ?? map.en) as M['en'];
 }

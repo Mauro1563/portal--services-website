@@ -23,12 +23,12 @@ const area = 'mt-1 w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-inse
 
 function buildBody(c: Omit<Contract, 'id' | 'body' | 'createdAt'>): string {
   return `CONTRATO DE PRESTACIÓN DE SERVICIOS
-PORTAL HOME
+ZAPLI
 
-Entre Portal Home ("el Proveedor") y ${c.client || '[Cliente]'} ("el Cliente"), con fecha de inicio ${c.startDate || '[fecha]'}, se acuerda lo siguiente:
+Entre Zapli ("el Proveedor") y ${c.client || '[Cliente]'} ("el Cliente"), con fecha de inicio ${c.startDate || '[fecha]'}, se acuerda lo siguiente:
 
 1. OBJETO
-El Proveedor concede al Cliente acceso a la plataforma Portal Home bajo el plan ${c.plan || '[plan]'}, incluyendo los portales y funciones correspondientes a dicho plan.
+El Proveedor concede al Cliente acceso a la plataforma Zapli bajo el plan ${c.plan || '[plan]'}, incluyendo los portales y funciones correspondientes a dicho plan.
 
 2. PRECIO Y FACTURACIÓN
 El Cliente abonará ${c.value || '[importe]'} con periodicidad mensual. La facturación se emitirá de forma digital tras cada periodo.
@@ -49,7 +49,7 @@ Y en prueba de conformidad, ambas partes firman el presente contrato.
 
 
 _____________________________            _____________________________
-Portal Home                  ${c.client || '[Cliente]'}
+Zapli                        ${c.client || '[Cliente]'}
 `;
 }
 
@@ -72,11 +72,11 @@ async function downloadContractPdf(c: Contract) {
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
-  doc.text('PORTAL HOME', margin, 32);
+  doc.text('ZAPLI', margin, 32);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(180, 200, 230);
-  doc.text('Cleaning & Facilities · portalservices.digital', margin, 50);
+  doc.text('Smart Turnover & Home Management · portalservices.digital', margin, 50);
   // Right side: doc ref
   doc.setFontSize(8);
   const ref = `Ref: ${c.id.slice(0, 8).toUpperCase()}`;
@@ -120,7 +120,7 @@ async function downloadContractPdf(c: Contract) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '') || 'cliente';
   const stamp = new Date(c.createdAt).toISOString().slice(0, 10);
-  doc.save(`contrato-${slug}-${stamp}.pdf`);
+  doc.save(`contrato-zapli-${slug}-${stamp}.pdf`);
 }
 
 function drawFooter(
@@ -135,7 +135,7 @@ function drawFooter(
   doc.line(margin, pageHeight - 56, pageWidth - margin, pageHeight - 56);
   doc.setFontSize(8);
   doc.setTextColor(100, 116, 139);
-  doc.text('Portal Home · portalservices.digital', margin, pageHeight - 36);
+  doc.text('Zapli · portalservices.digital', margin, pageHeight - 36);
   doc.text(
     `Página ${current} de ${pageCount}`,
     pageWidth - margin,

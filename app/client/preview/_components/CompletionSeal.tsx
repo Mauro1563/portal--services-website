@@ -12,6 +12,25 @@
 'use client';
 
 import { useEffect } from 'react';
+import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: {
+    workLabel: 'Work',
+    completed: 'COMPLETED',
+    year: '· 2026 ·',
+  },
+  es: {
+    workLabel: 'Trabajo',
+    completed: 'COMPLETADA',
+    year: '· 2026 ·',
+  },
+  pt: {
+    workLabel: 'Trabalho',
+    completed: 'CONCLUÍDA',
+    year: '· 2026 ·',
+  },
+} as const satisfies Record<ClientLocale, unknown>;
 
 export function CompletionSeal({
   visible,
@@ -20,6 +39,8 @@ export function CompletionSeal({
   visible: boolean;
   onDone?: () => void;
 }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
   useEffect(() => {
     if (!visible) return;
     const t = window.setTimeout(() => onDone?.(), 2400);
@@ -53,13 +74,13 @@ export function CompletionSeal({
           <span className="absolute inset-2 rounded-full border border-amber-800/40" />
           <div className="flex flex-col items-center justify-center text-center">
             <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-amber-950/90">
-              Trabajo
+              {t.workLabel}
             </span>
             <span className="font-display text-[16px] font-extrabold leading-none tracking-tight text-amber-950">
-              COMPLETADA
+              {t.completed}
             </span>
             <span className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.28em] text-amber-950/80">
-              · 2026 ·
+              {t.year}
             </span>
           </div>
         </div>

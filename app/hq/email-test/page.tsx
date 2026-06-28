@@ -12,7 +12,7 @@ export default async function HQEmailTest() {
 
   const apiKeySet = Boolean(process.env.RESEND_API_KEY);
   const fromEmail =
-    process.env.RESEND_FROM_EMAIL ?? 'Portal Home <onboarding@resend.dev>';
+    process.env.RESEND_FROM_EMAIL ?? 'Zapli <onboarding@resend.dev>';
   const usingSandboxSender = fromEmail.includes('onboarding@resend.dev');
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hq.portalservices.digital';
@@ -105,7 +105,7 @@ export default async function HQEmailTest() {
             <strong>Settings → Environment Variables</strong> agregá:
             <pre className="mt-1 overflow-x-auto rounded-lg bg-white p-2 text-[11px] text-graphite-1 ring-1 ring-inset ring-cyan-200">
               RESEND_API_KEY=re_xxxxxxxxxxxxxx{'\n'}
-              RESEND_FROM_EMAIL=Portal Home &lt;noreply@portalservices.digital&gt;
+              RESEND_FROM_EMAIL=Zapli &lt;noreply@portalservices.digital&gt;
             </pre>
           </Step>
           <Step n={6}>

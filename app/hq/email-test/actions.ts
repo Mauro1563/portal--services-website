@@ -20,7 +20,7 @@ export async function sendTestEmail(): Promise<TestEmailResult> {
   if (!key) return { ok: false, reason: 'no_key' };
 
   const from =
-    process.env.RESEND_FROM_EMAIL ?? 'Portal Home <onboarding@resend.dev>';
+    process.env.RESEND_FROM_EMAIL ?? 'Zapli <onboarding@resend.dev>';
   const to = admin.email;
   const stamp = new Date().toISOString();
 
@@ -33,14 +33,14 @@ export async function sendTestEmail(): Promise<TestEmailResult> {
     body: JSON.stringify({
       from,
       to,
-      subject: 'Portal Home — Resend test',
+      subject: 'Zapli — Resend test',
       html: `
         <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;padding:24px;">
           <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;">
             <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#0ea5e9;">Resend test</p>
             <h1 style="margin:6px 0 0;font-size:20px;color:#0f172a;">Resend is working ✓</h1>
             <p style="margin:14px 0 0;font-size:13px;line-height:1.55;color:#475569;">
-              If you're reading this in your inbox, the Portal Home production deploy
+              If you're reading this in your inbox, the Zapli production deploy
               can deliver email through Resend with the current API key and sender.
             </p>
             <p style="margin:18px 0 0;font-size:11px;color:#94a3b8;">Sent at ${stamp}</p>

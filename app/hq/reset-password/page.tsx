@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { createClient } from '@/lib/supabase/server';
 import { updatePassword } from '../actions';
 
@@ -46,7 +46,7 @@ export default async function ResetPassword({ searchParams }: Props) {
       <div className="w-full max-w-sm">
         <div className="rounded-3xl bg-paper p-8 ring-1 ring-line shadow-[0_24px_60px_-20px_rgba(15,23,42,0.18)]">
           <div className="mb-6 flex justify-center">
-            <Logo size="md" variant="full" />
+            <ZapliLogo size="md" />
           </div>
           <div className="flex items-center gap-2 text-brand-600">
             <ShieldCheck className="h-4 w-4" />

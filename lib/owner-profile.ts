@@ -30,7 +30,7 @@ const EMPTY: OwnerProfile = {
 const SELECT =
   'business_name, business_logo_url, business_type, hero_color, brand_primary_color, brand_secondary_color, default_charge_rate_pence';
 
-// Portal Home defaults (cyan + blue) used when the owner hasn't picked colors.
+// Zapli defaults (cyan + blue) used when the owner hasn't picked colors.
 export const DEFAULT_BRAND_PRIMARY = '#22d3ee';
 export const DEFAULT_BRAND_SECONDARY = '#2563eb';
 

@@ -6,6 +6,9 @@ import { Check, ChevronDown, Globe } from 'lucide-react';
 import { setLocale } from '@/app/i18n/actions';
 
 // EN-default-first ordering: English first, then Spanish, then Portuguese.
+// Labels mirror `LOCALE_LABELS` from lib/i18n.ts; that module is server-only,
+// so we duplicate the strings here for the client switcher. Keep these two
+// maps in sync.
 const LOCALES = [
   { code: 'en', label: 'English' },
   { code: 'es', label: 'Español' },
@@ -223,15 +226,15 @@ export function LocaleSwitcher({
   // nav) keep working unchanged.
   const trigger = (() => {
     if (variant === 'premium') {
-      // Solid midnight pill so the trigger reads on both light and dark
-      // backgrounds — same visual on the white marketing nav and the navy
-      // owner/cleaner/client headers.
+      // Midnight pill with electric-cyan accent border. Shows the full
+      // language name (not the 2-letter code) so the trigger reads naturally
+      // on both the white marketing nav and dark app headers.
       return (
-        'inline-flex h-9 items-center gap-1.5 rounded-full bg-[#0B1220] px-3 ' +
-        'text-[11px] font-semibold uppercase tracking-[0.18em] text-white/90 ' +
-        'ring-1 ring-cyan-400/20 shadow-[0_4px_14px_-6px_rgba(34,211,238,0.35)] ' +
-        'transition-colors hover:bg-[#111c33] hover:text-white ' +
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60'
+        'inline-flex h-9 items-center gap-2 rounded-full bg-[#0D0D11] px-3.5 ' +
+        'text-[13px] font-medium text-[#F8F9FA] ' +
+        'border border-cyan-400/30 ' +
+        'transition-colors hover:bg-[#15151B] ' +
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F5D4]/60'
       );
     }
     return (
@@ -246,16 +249,15 @@ export function LocaleSwitcher({
 
   const panel = (() => {
     if (variant === 'premium') {
-      // Smooth open transition per spec: scale-95 opacity-0 -> scale-100
-      // opacity-100, 150ms cubic-bezier(0.16,1,0.3,1). Reduced motion drops
-      // the transform/transition and snaps in.
       // Smooth pop-in: scale-95 opacity-0 -> scale-100 opacity-100 over 150ms
-      // with a soft easing curve. Skip the transform entirely when the user
-      // has reduced-motion enabled.
+      // with a soft easing curve (configured in tailwind.config.ts as
+      // `animate-locale-pop`). Skip the transform entirely when the user has
+      // reduced-motion enabled.
       const motion = reducedMotion ? '' : 'animate-locale-pop';
       return (
-        'absolute right-0 top-11 z-50 w-44 origin-top-right overflow-hidden rounded-xl ' +
-        'bg-[#0B1220] ring-1 ring-cyan-400/20 shadow-[0_8px_24px_-8px_rgba(34,211,238,0.3)] ' +
+        'absolute right-0 top-[calc(100%+6px)] z-50 w-44 origin-top-right overflow-hidden rounded-xl ' +
+        'bg-[#0D0D11] ring-1 ring-[#00F5D4]/20 shadow-[0_8px_24px_-8px_rgba(0,245,212,0.25)] ' +
+        'py-1 ' +
         motion
       );
     }
@@ -272,10 +274,10 @@ export function LocaleSwitcher({
   const itemClass = (active: boolean) => {
     if (variant === 'premium') {
       return (
-        'flex w-full items-center justify-between gap-2 px-4 py-2.5 text-left text-sm transition-colors ' +
+        'flex w-full items-center justify-between gap-2 px-4 py-2.5 text-left text-[13.5px] transition-colors ' +
         (active
-          ? 'bg-[#0E1A2E] text-[#22d3ee] font-semibold'
-          : 'text-slate-300 hover:bg-white/5 hover:text-white') +
+          ? 'text-[#00F5D4] font-semibold'
+          : 'text-[#F8F9FA] hover:bg-white/5') +
         ' focus:outline-none focus-visible:bg-white/5'
       );
     }
@@ -289,7 +291,7 @@ export function LocaleSwitcher({
 
   const checkClass =
     variant === 'premium'
-      ? 'h-3.5 w-3.5 text-[#22d3ee]'
+      ? 'h-4 w-4 text-[#00F5D4]'
       : variant === 'onLight'
       ? 'h-3.5 w-3.5 text-blue-600'
       : 'h-3.5 w-3.5 text-cyan-300';
@@ -307,10 +309,14 @@ export function LocaleSwitcher({
       >
         {variant === 'premium' ? (
           <>
-            <Globe className="h-3.5 w-3.5 text-cyan-300/80" aria-hidden />
-            <span>{pending ? '…' : current.toUpperCase()}</span>
+            <Globe className="h-4 w-4 text-[#00F5D4]" aria-hidden />
+            <span>
+              {pending
+                ? '…'
+                : LOCALES.find((l) => l.code === current)?.label ?? 'English'}
+            </span>
             <ChevronDown
-              className={`h-3.5 w-3.5 text-white/60 transition-transform ${
+              className={`h-4 w-4 text-[#00F5D4] transition-transform ${
                 open ? 'rotate-180' : ''
               }`}
               aria-hidden

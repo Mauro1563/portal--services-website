@@ -311,7 +311,7 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
             </div>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-                Mi perfil
+                {t.myProfile}
               </p>
               <h1 className="mt-0.5 font-display text-xl font-semibold text-text-1">
                 {profile.name}
@@ -322,26 +322,26 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
             <button
               type="button"
               onClick={startEditing}
-              title="Editar tus datos personales — nombre, teléfono, email y dirección"
+              title={t.editTitle}
               className="inline-flex items-center gap-1 rounded-full border border-line bg-paper px-3 py-1.5 text-[11px] font-semibold text-text-1 hover:border-brand-400"
             >
               <Pencil className="h-3 w-3" />
-              Editar
+              {t.edit}
             </button>
           ) : null}
         </header>
 
         {savedFlash ? (
           <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[12px] font-semibold text-emerald-800">
-            ✓ Cambios guardados.
+            ✓ {t.changesSaved}
           </div>
         ) : null}
 
         <section className="rounded-3xl border border-surface-2 bg-surface-0 p-5 shadow-card">
           <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-            PIN de acceso
+            {t.accessPin}
             <span
-              title="Tu PIN te identifica al hacer login en la app. Solo HQ puede cambiarlo."
+              title={t.pinHelpTitle}
               className="grid h-3.5 w-3.5 cursor-help place-items-center text-text-3"
             >
               <HelpCircle className="h-3 w-3" />
@@ -351,52 +351,52 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
             {profile.pin}
           </p>
           <p className="mt-2 text-[11px] text-text-3">
-            Tu PIN lo configura HQ. Pídele a tu manager que lo cambie si es necesario.
+            {t.pinInfo}
           </p>
         </section>
 
         <div className="mt-6 space-y-4">
           <Field
-            label="Nombre completo"
+            label={t.fieldName}
             icon={<User className="h-4 w-4" />}
             value={isEditing ? draft.name : profile.name}
             editable={isEditing}
             type="text"
             onChange={(v) => setDraft((d) => ({ ...d, name: v }))}
-            title="Tu nombre como aparece para los clientes y en los recibos"
+            title={t.fieldNameTitle}
             error={errors.name}
           />
 
           <Field
-            label="Teléfono"
+            label={t.fieldPhone}
             icon={<Phone className="h-4 w-4" />}
             value={isEditing ? draft.phone : profile.phone}
             editable={isEditing}
             type="tel"
             onChange={(v) => setDraft((d) => ({ ...d, phone: v }))}
-            title="Número UK para que clientes y manager te llamen"
+            title={t.fieldPhoneTitle}
             error={errors.phone}
           />
 
           <Field
-            label="Email"
+            label={t.fieldEmail}
             icon={<Mail className="h-4 w-4" />}
             value={isEditing ? draft.email : profile.email}
             editable={isEditing}
             type="email"
             onChange={(v) => setDraft((d) => ({ ...d, email: v }))}
-            title="Email donde recibir asignaciones y notificaciones"
+            title={t.fieldEmailTitle}
             error={errors.email}
           />
 
           <Field
-            label="Dirección"
+            label={t.fieldAddress}
             icon={<MapPin className="h-4 w-4" />}
             value={isEditing ? draft.address : profile.address}
             editable={isEditing}
             type="text"
             onChange={(v) => setDraft((d) => ({ ...d, address: v }))}
-            title="Dirección base para calcular distancias y tiempos a las propiedades"
+            title={t.fieldAddressTitle}
             error={errors.address}
           />
 
@@ -405,18 +405,18 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
               <button
                 type="button"
                 onClick={cancelEditing}
-                title="Descartar los cambios y volver a los valores actuales"
+                title={t.cancelTitle}
                 className="flex h-11 w-full items-center justify-center rounded-xl border border-line bg-paper text-sm font-bold uppercase tracking-[0.16em] text-text-1 transition hover:bg-surface-2"
               >
-                Cancelar
+                {t.cancel}
               </button>
               <button
                 type="button"
                 onClick={saveChanges}
-                title="Guardar los cambios en tu perfil"
+                title={t.saveTitle}
                 className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold uppercase tracking-[0.16em] text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110"
               >
-                Guardar
+                {t.save}
               </button>
             </div>
           ) : null}
@@ -425,60 +425,63 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
         {/* Preferences */}
         <section className="mt-8 rounded-3xl border border-surface-2 bg-surface-0 p-5 shadow-card">
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-text-3">
-            Preferencias
+            {t.preferences}
           </p>
 
           <ToggleRow
             icon={<Bell className="h-4 w-4 text-brand-600" />}
-            label="Notificaciones push"
-            description="Recibe avisos cuando te asignen una nueva tarea"
+            label={t.pushNotifications}
+            description={t.pushDescription}
             on={notifications}
             onToggle={() => {
               setNotifications((v) => !v);
-              showToast(`Notificaciones ${!notifications ? 'activadas' : 'desactivadas'}`);
+              showToast(!notifications ? t.notifOn : t.notifOff);
             }}
-            title="Activar o desactivar las notificaciones push del móvil"
+            title={t.pushToggleTitle}
           />
 
           <ToggleRow
             icon={<Moon className="h-4 w-4 text-brand-600" />}
-            label="Modo oscuro"
-            description="Tema oscuro para usar la app de noche"
+            label={t.darkMode}
+            description={t.darkDescription}
             on={darkMode}
             onToggle={() => {
               setDarkMode((v) => !v);
-              showToast(`Modo oscuro ${!darkMode ? 'activado' : 'desactivado'}`);
+              showToast(!darkMode ? t.darkOn : t.darkOff);
             }}
-            title="Cambiar entre tema claro y oscuro"
+            title={t.darkToggleTitle}
           />
 
           <div className="mt-4">
             <p className="inline-flex items-center gap-2 text-[12px] font-semibold text-text-1">
               <Globe className="h-4 w-4 text-brand-600" />
-              Idioma
+              {t.language}
             </p>
             <p className="ml-6 text-[11px] text-text-3">
-              Idioma de la interfaz de la app
+              {t.languageDescription}
             </p>
             <div className="ml-6 mt-2 inline-flex rounded-full border border-line bg-paper p-0.5">
-              {(['es', 'en'] as const).map((lng) => (
-                <button
-                  key={lng}
-                  type="button"
-                  onClick={() => {
-                    setLanguage(lng);
-                    showToast(`Idioma: ${lng === 'es' ? 'Español' : 'English'}`);
-                  }}
-                  title={`Cambiar el idioma de la app a ${lng === 'es' ? 'Español' : 'English'}`}
-                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
-                    language === lng
-                      ? 'bg-brand-600 text-white shadow-sm'
-                      : 'text-text-3 hover:text-text-1'
-                  }`}
-                >
-                  {lng === 'es' ? 'Español' : 'English'}
-                </button>
-              ))}
+              {(['es', 'en'] as const).map((lng) => {
+                const label = lng === 'es' ? 'Español' : 'English';
+                return (
+                  <button
+                    key={lng}
+                    type="button"
+                    onClick={() => {
+                      setLanguage(lng);
+                      showToast(t.languageSet(label));
+                    }}
+                    title={t.languageToggleTitle(label)}
+                    className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                      language === lng
+                        ? 'bg-brand-600 text-white shadow-sm'
+                        : 'text-text-3 hover:text-text-1'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -487,20 +490,20 @@ function ProfileBody({ onReset }: { onReset: () => void }) {
           <button
             type="button"
             onClick={onReset}
-            title="Reiniciar la demo — devuelve el perfil al estado inicial"
+            title={t.resetDemoTitle}
             className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-line bg-paper text-[12px] font-bold uppercase tracking-[0.14em] text-text-3 transition hover:text-text-1"
           >
             <RotateCcw className="h-3.5 w-3.5" />
-            Reiniciar demo
+            {t.resetDemo}
           </button>
           <button
             type="button"
             onClick={fakeSignOut}
-            title="Cerrar sesión — en la app real te lleva a la pantalla de login"
+            title={t.signOutTitle}
             className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-red-200 bg-red-50 text-[12px] font-bold uppercase tracking-[0.14em] text-red-700 transition hover:bg-red-100"
           >
             <LogOut className="h-3.5 w-3.5" />
-            Cerrar sesión
+            {t.signOut}
           </button>
         </div>
       </div>

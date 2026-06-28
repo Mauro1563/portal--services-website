@@ -9,7 +9,7 @@ import {
   PoundSterling,
   TrendingUp,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
 import {
@@ -153,7 +153,7 @@ export default async function OperativeEarningsPage() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <Logo size="sm" />
+          <ZapliLogo size="sm" />
           <span className="-mr-2 flex h-9 w-9" aria-hidden />
         </div>
       </header>

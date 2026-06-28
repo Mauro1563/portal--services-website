@@ -8,7 +8,7 @@ import {
   Sparkles,
   Star,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { submitReferralLead } from './actions';
 
@@ -116,7 +116,7 @@ export default async function ReferralLanding({
               />
             ) : (
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-cyan-300">
-                <Logo size="sm" />
+                <ZapliLogo size="sm" />
               </span>
             )}
             <div className="min-w-0">

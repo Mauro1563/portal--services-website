@@ -43,6 +43,14 @@ const config: Config = {
           pearl: '#fafcff',
           bubble: 'rgba(34, 211, 238, 0.12)',
         },
+        // ── Zapli brand tokens ──────────────────────────────────────
+        // Exact spec colors from the Zapli brand: midnight background,
+        // electric cyan neon accent, and platinum text white.
+        zapli: {
+          midnight: '#0D0D11', // background
+          neon: '#00F5D4', // electric cyan accent
+          platinum: '#F8F9FA', // text white
+        },
       },
       backgroundImage: {
         'brand-gradient':

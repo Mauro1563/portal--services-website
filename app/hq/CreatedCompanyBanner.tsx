@@ -13,7 +13,7 @@ export function CreatedCompanyBanner({
   const [copied, setCopied] = useState<'creds' | 'pwd' | null>(null);
 
   const fullMessage =
-    `🎉 Welcome to Portal Home!\n\n` +
+    `🎉 Welcome to Zapli!\n\n` +
     `Your account is ready. Sign in here:\n` +
     `https://hq.portalservices.digital/login\n\n` +
     `Email: ${email}\n` +

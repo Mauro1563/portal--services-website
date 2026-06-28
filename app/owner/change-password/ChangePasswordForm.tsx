@@ -10,7 +10,7 @@ import {
   Lock,
   ShieldCheck,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { completeForcedPasswordChange } from '@/app/signup/actions';
 
 export function ChangePasswordForm() {

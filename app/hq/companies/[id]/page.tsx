@@ -17,7 +17,7 @@ import {
   Upload,
   Users,
 } from 'lucide-react';
-import { Logo } from '@/components/Logo';
+import { ZapliLogo } from '@/components/brand/ZapliLogo';
 import { requireSuperAdmin } from '@/lib/super-admin';
 import { createAdminClient } from '@/lib/supabase/admin';
 import {
@@ -85,7 +85,7 @@ export default async function CompanyDetail({ params, searchParams }: Props) {
       <header className="sticky top-0 z-40 border-b border-navy-800/40 bg-navy-900 text-white">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
-            <Logo size="sm" />
+            <ZapliLogo size="sm" />
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-200">
               <Crown className="h-3 w-3" /> HQ
             </span>
