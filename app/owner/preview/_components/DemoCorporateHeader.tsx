@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Bell, Check, Globe, Settings, Clock, X } from 'lucide-react';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 type Notification = {
   id: string;
@@ -151,6 +152,9 @@ export function DemoCorporateHeader({
             </p>
           </div>
           <div ref={popoverRef} className="relative flex shrink-0 items-center gap-2">
+            {/* Locale switcher first so it sits at the very top-right edge of
+                the preview header — mirrors the real /owner CorporateHeader. */}
+            <LocaleSwitcher variant="premium" />
             <button
               ref={bellRef}
               type="button"

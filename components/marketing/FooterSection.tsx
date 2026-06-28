@@ -38,6 +38,9 @@ const COPY: Record<
 > = {
   es: {
     tagline: 'Una plataforma. Un lugar. Todos conectados.',
+    // Language column intentionally removed — the LocaleSwitcher now lives
+    // in the top nav, so the footer is three columns (Producto / Empresa /
+    // Legal) instead of four.
     columns: [
       {
         eyebrow: 'Producto',
@@ -64,14 +67,6 @@ const COPY: Record<
           { label: 'Términos', href: '/es/terms' },
           { label: 'Cookies', href: '/es/cookies' },
           { label: 'Seguridad', href: '/security' },
-        ],
-      },
-      {
-        eyebrow: 'Idioma',
-        links: [
-          { label: 'Español', href: '/es' },
-          { label: 'English', href: '/en' },
-          { label: 'Português', href: '/pt' },
         ],
       },
     ],
@@ -115,14 +110,6 @@ const COPY: Record<
           { label: 'Security', href: '/security' },
         ],
       },
-      {
-        eyebrow: 'Language',
-        links: [
-          { label: 'Español', href: '/es' },
-          { label: 'English', href: '/en' },
-          { label: 'Português', href: '/pt' },
-        ],
-      },
     ],
     ctaEyebrow: 'Start today',
     ctaHeadlineLead: 'Ready to get started?',
@@ -162,14 +149,6 @@ const COPY: Record<
           { label: 'Termos', href: '/pt/terms' },
           { label: 'Cookies', href: '/pt/cookies' },
           { label: 'Segurança', href: '/security' },
-        ],
-      },
-      {
-        eyebrow: 'Idioma',
-        links: [
-          { label: 'Español', href: '/es' },
-          { label: 'English', href: '/en' },
-          { label: 'Português', href: '/pt' },
         ],
       },
     ],
@@ -252,7 +231,7 @@ export default async function FooterSection() {
 
       {/* Footer columns */}
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-20 lg:px-8">
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
             <Logo size="sm" />
@@ -267,8 +246,8 @@ export default async function FooterSection() {
             </a>
           </div>
 
-          {t.columns.map((col, idx) => (
-            <div key={col.eyebrow} className={idx === 3 ? 'hidden sm:block' : undefined}>
+          {t.columns.map((col) => (
+            <div key={col.eyebrow}>
               <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
                 {col.eyebrow}
               </div>

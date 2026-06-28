@@ -4,6 +4,23 @@ import enMessages from '@/messages/en.json';
 import esMessages from '@/messages/es.json';
 import ptMessages from '@/messages/pt.json';
 
+/**
+ * Locale resolution — EN-default-first policy.
+ *
+ * English is the unconditional default. Browser `Accept-Language` detection
+ * is intentionally OFF (next-intl `localeDetection: false`) so that a first-
+ * time visitor with a Spanish or Portuguese browser still lands on /en/.
+ *
+ * Priority on the client (resolved by <LocaleSwitcher /> + middleware):
+ *   1. localStorage('portal_locale')  — survives across tabs and restarts
+ *   2. Cookie 'portal_locale'         — set by middleware + setLocale action
+ *   3. URL prefix /en|/es|/pt         — synced into the cookie by middleware
+ *   4. Fallback 'en'                  — DEFAULT_LOCALE below
+ *
+ * Server-side (this file) only sees the cookie, so steps (1) and (3) are
+ * collapsed into (2) by the time getLocale() runs.
+ */
+
 export type Locale = 'en' | 'es' | 'pt';
 export const SUPPORTED_LOCALES: readonly Locale[] = ['en', 'es', 'pt'] as const;
 export const DEFAULT_LOCALE: Locale = 'en';

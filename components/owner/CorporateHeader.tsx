@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Building2, Settings } from 'lucide-react';
 import { NotificationsBell } from '@/components/owner/NotificationsBell';
 import type { NotificationsPayload } from '@/app/owner/notifications/actions';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
 /**
  * Dark navy hero header for the owner dashboard — the "Corporate Trust"
@@ -9,7 +11,7 @@ import type { NotificationsPayload } from '@/app/owner/notifications/actions';
  * left, notifications + settings right. Full-bleed inside the page
  * container so the gradient reaches edge-to-edge on mobile.
  */
-export function CorporateHeader({
+export async function CorporateHeader({
   firstName,
   businessName,
   subtitle,
@@ -22,6 +24,9 @@ export function CorporateHeader({
   /** Pre-fetched on the server so the bell doesn't pay a round-trip on mount. */
   initialNotifications?: NotificationsPayload;
 }) {
+  // Read the cookie-backed locale on the server so the premium switcher's
+  // trigger label renders correct on first paint, no FOUC.
+  const locale = await getLocale();
   return (
     <header className="-mx-3 -mt-4 mb-5 sm:-mx-4 sm:-mt-5 lg:-mx-8 lg:-mt-7">
       <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
@@ -49,6 +54,7 @@ export function CorporateHeader({
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            <LocaleSwitcher current={locale} variant="premium" />
             <div className="rounded-full bg-white/10 p-1 backdrop-blur">
               <NotificationsBell initialData={initialNotifications} />
             </div>

@@ -264,7 +264,7 @@ export default async function HeroSection() {
             </span>
           </Link>
           <div className="flex items-center gap-2">
-            <LocaleSwitcher current={locale} variant="onLight" />
+            <LocaleSwitcher current={locale} variant="premium" />
             <Link
               href="/login"
               className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/40"

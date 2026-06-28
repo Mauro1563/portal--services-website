@@ -34,6 +34,12 @@ import {
 } from 'lucide-react';
 import { DemoBottomTabBar } from '../_components/DemoBottomTabBar';
 import { DemoSheet } from '@/components/preview/DemoSheet';
+import {
+  ASSET_FILENAMES,
+  exportBusinessCard,
+  exportFlyerA5,
+  exportInstagramSquare,
+} from './_lib/exporters';
 
 type PromoCode = {
   code: string;
@@ -67,6 +73,9 @@ export default function OwnerMarketingPreview() {
   const [copied, setCopied] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [showLandingPreview, setShowLandingPreview] = useState(false);
+
+  // Track which downloadable is currently generating (for the disabled state).
+  const [generating, setGenerating] = useState<string | null>(null);
 
   // New-promo modal state
   const [showNew, setShowNew] = useState(false);
@@ -111,6 +120,32 @@ export default function OwnerMarketingPreview() {
   function deletePromo(code: string) {
     setPromoCodes((prev) => prev.filter((p) => p.code !== code));
     showToast('Código eliminado');
+  }
+
+  async function downloadAsset(
+    key: string,
+    generator: () => Promise<Blob>,
+    filename: string,
+  ) {
+    if (generating) return;
+    setGenerating(key);
+    showToast('Generando…');
+    try {
+      const blob = await generator();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast(`Descargado · ${filename}`);
+    } catch {
+      showToast('No se pudo generar el archivo');
+    } finally {
+      setGenerating(null);
+    }
   }
 
   const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(publicUrl)}&size=200x200`;
@@ -411,26 +446,49 @@ export default function OwnerMarketingPreview() {
           <div className="mt-4 grid gap-2 sm:grid-cols-3">
             {(
               [
-                { label: 'Flyer A5 (PDF)', Icon: FileText },
-                { label: 'Tarjeta de visita', Icon: Printer },
-                { label: 'Plantilla Instagram', Icon: ImageIcon },
+                {
+                  key: 'flyer',
+                  label: 'Flyer A5',
+                  Icon: FileText,
+                  generator: exportFlyerA5,
+                  filename: ASSET_FILENAMES.flyer,
+                },
+                {
+                  key: 'card',
+                  label: 'Tarjeta de visita',
+                  Icon: Printer,
+                  generator: exportBusinessCard,
+                  filename: ASSET_FILENAMES.card,
+                },
+                {
+                  key: 'instagram',
+                  label: 'Plantilla Instagram',
+                  Icon: ImageIcon,
+                  generator: exportInstagramSquare,
+                  filename: ASSET_FILENAMES.instagram,
+                },
               ] as const
-            ).map(({ label, Icon }) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => showToast('Próximamente — feature en preparación')}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-              >
-                <Icon className="h-4 w-4 text-blue-600" />
-                {label}
-              </button>
-            ))}
+            ).map(({ key, label, Icon, generator, filename }) => {
+              const busy = generating === key;
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  disabled={generating !== null}
+                  onClick={() => downloadAsset(key, generator, filename)}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <Icon className="h-4 w-4 text-blue-600" />
+                  {busy ? 'Generando…' : label}
+                </button>
+              );
+            })}
           </div>
 
           <p className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-slate-500">
-            <Info className="h-3 w-3" /> En la versión completa, descargas un PDF
-            con tu logo y datos pre-rellenados.
+            <Info className="h-3 w-3" /> Se descargan en formato SVG con tu logo
+            y datos pre-rellenados. Ábrelos en cualquier navegador o editor para
+            imprimir o convertir a PDF.
           </p>
         </section>
       </div>

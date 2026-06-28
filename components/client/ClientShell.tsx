@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import type { ClientContext } from '@/lib/client-auth';
 import { ClientTabBar, type Tab } from './ClientTabBar';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 /**
  * Mobile-first shell for the client portal. Uses the owner's white-label
@@ -66,6 +67,15 @@ export function ClientShell({
             ) : (
               <Logo size="sm" />
             )}
+
+            {/* Locale switcher pinned to the top-right of the client header.
+                Uses the premium midnight pill so it pops on the white bar
+                without competing with the business logo on the left. The
+                switcher reads the locale cookie + localStorage on the client
+                and self-corrects on mount, so we don't need an async prop. */}
+            <div className="ml-auto">
+              <LocaleSwitcher variant="premium" />
+            </div>
           </div>
         </header>
       )}

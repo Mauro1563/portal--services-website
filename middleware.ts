@@ -71,8 +71,8 @@ export async function middleware(request: NextRequest) {
   // app routes (/login, /signup, /welcome, /owner/*) render in the same
   // language the user picked on the public site.
   const urlLocale = pathname.split('/')[1];
+  const existing = request.cookies.get(PORTAL_LOCALE_COOKIE)?.value;
   if (MARKETING_LOCALES.includes(urlLocale)) {
-    const existing = request.cookies.get(PORTAL_LOCALE_COOKIE)?.value;
     if (existing !== urlLocale) {
       response.cookies.set(PORTAL_LOCALE_COOKIE, urlLocale, {
         maxAge: 60 * 60 * 24 * 365,
@@ -81,6 +81,16 @@ export async function middleware(request: NextRequest) {
         path: '/',
       });
     }
+  } else if (!existing) {
+    // Cookie-less first visit with no locale segment in the URL: pin to EN
+    // immediately so downstream cookie-driven sections render in English
+    // without waiting for the next-intl redirect round-trip to /en/.
+    response.cookies.set(PORTAL_LOCALE_COOKIE, defaultLocale, {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+      httpOnly: false,
+      path: '/',
+    });
   }
   return response;
 }

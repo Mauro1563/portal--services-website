@@ -75,8 +75,13 @@ const config: Config = {
         'fade-in': 'fadeIn 0.3s ease-out',
         float: 'float 6s ease-in-out infinite',
         shimmer: 'shimmer 2s linear infinite',
+        'locale-pop': 'localePop 150ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
       keyframes: {
+        localePop: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
         sparkle: {
           '0%, 100%': { opacity: '0.4', transform: 'scale(0.85)' },
           '50%': { opacity: '1', transform: 'scale(1.05)' },

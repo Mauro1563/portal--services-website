@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { signOutOperative } from '@/app/operative/actions';
 import { ThemeToggle } from '@/components/operative/ThemeToggle';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 const DAY_NAMES = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 const DAY_FULL = [
@@ -22,7 +23,7 @@ const MONTH = [
  * style. Three lines: portal label, agenda title, big date string
  * (MARTES 28 MAR). Sign-out + theme toggle on the right.
  */
-export function AgendaHeader({
+export async function AgendaHeader({
   cleanerName,
   now,
   doneCount,
@@ -66,6 +67,7 @@ export function AgendaHeader({
           {decorationSlot ? <div className="mt-1">{decorationSlot}</div> : null}
         </div>
         <div className="flex items-center gap-1.5">
+          <LocaleSwitcher variant="premium" />
           <ThemeToggle />
           <form action={signOutOperative}>
             <button

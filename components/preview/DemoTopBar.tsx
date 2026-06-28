@@ -12,8 +12,17 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
  */
 export function DemoTopBar({
   portal,
+  title,
 }: {
   portal: 'owner' | 'cleaner' | 'client';
+  /**
+   * Optional override for the centre badge label. When omitted we fall back
+   * to the default "Demo · {Portal}". Useful for portal variants that share
+   * the same role colour but want a more specific label (e.g. the Airbnb
+   * cleaner demo wants "DEMO · CLEANER (AIRBNB)" without coining a new
+   * portal tone).
+   */
+  title?: string;
 }) {
   const portalLabel = {
     owner: 'Owner',
@@ -49,7 +58,7 @@ export function DemoTopBar({
           className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] ${tone}`}
         >
           <Sparkles className="h-2.5 w-2.5" />
-          Demo · {portalLabel}
+          {title ?? `Demo · ${portalLabel}`}
         </span>
 
         {/* Right — back to marketing */}
