@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Check, Sparkles } from "lucide-react";
 import { getLocale, type Locale } from "@/lib/i18n";
 
 /**
@@ -28,16 +29,16 @@ type PricingCopy = {
 
 const COPY: Record<Locale, PricingCopy> = {
   es: {
-    eyebrow: "precios",
+    eyebrow: "Precios",
     heading: "Planes pensados para tu negocio",
     sub: "Elige el plan que mejor se adapta a tu tamaño. Sin permanencia, cambia o cancela cuando quieras.",
-    mostPopular: "más popular",
+    mostPopular: "Más popular",
     footnote:
       "Todos los precios en euros (EUR), IVA no incluido. Cancela cuando quieras.",
     plans: [
       {
         id: "starter",
-        name: "starter",
+        name: "STARTER",
         price: "€0",
         priceSuffix: "14 días",
         description: "Prueba todas las funciones esenciales sin compromiso.",
@@ -52,7 +53,7 @@ const COPY: Record<Locale, PricingCopy> = {
       },
       {
         id: "pro",
-        name: "pro",
+        name: "PRO",
         price: "€39",
         priceSuffix: "/mes",
         description: "Para negocios en crecimiento que quieren escalar.",
@@ -69,7 +70,7 @@ const COPY: Record<Locale, PricingCopy> = {
       },
       {
         id: "premium",
-        name: "premium",
+        name: "PREMIUM",
         price: "€99",
         priceSuffix: "/mes",
         description: "Para equipos grandes con necesidades avanzadas.",
@@ -86,16 +87,16 @@ const COPY: Record<Locale, PricingCopy> = {
     ],
   },
   en: {
-    eyebrow: "pricing",
+    eyebrow: "Pricing",
     heading: "Plans built for your business",
     sub: "Pick the plan that fits your size. No lock-in — change or cancel anytime.",
-    mostPopular: "most popular",
+    mostPopular: "Most popular",
     footnote:
       "All prices in euros (EUR), VAT not included. Cancel anytime.",
     plans: [
       {
         id: "starter",
-        name: "starter",
+        name: "STARTER",
         price: "€0",
         priceSuffix: "14 days",
         description: "Try every essential feature with no commitment.",
@@ -110,7 +111,7 @@ const COPY: Record<Locale, PricingCopy> = {
       },
       {
         id: "pro",
-        name: "pro",
+        name: "PRO",
         price: "€39",
         priceSuffix: "/month",
         description: "For growing businesses ready to scale.",
@@ -127,7 +128,7 @@ const COPY: Record<Locale, PricingCopy> = {
       },
       {
         id: "premium",
-        name: "premium",
+        name: "PREMIUM",
         price: "€99",
         priceSuffix: "/month",
         description: "For large teams with advanced needs.",
@@ -144,16 +145,16 @@ const COPY: Record<Locale, PricingCopy> = {
     ],
   },
   pt: {
-    eyebrow: "preços",
+    eyebrow: "Preços",
     heading: "Planos pensados para o seu negócio",
     sub: "Escolha o plano que melhor se adapta ao seu tamanho. Sem fidelização, mude ou cancele quando quiser.",
-    mostPopular: "mais popular",
+    mostPopular: "Mais popular",
     footnote:
       "Todos os preços em euros (EUR), IVA não incluído. Cancele quando quiser.",
     plans: [
       {
         id: "starter",
-        name: "starter",
+        name: "STARTER",
         price: "€0",
         priceSuffix: "14 dias",
         description: "Experimente todas as funções essenciais sem compromisso.",
@@ -168,7 +169,7 @@ const COPY: Record<Locale, PricingCopy> = {
       },
       {
         id: "pro",
-        name: "pro",
+        name: "PRO",
         price: "€39",
         priceSuffix: "/mês",
         description: "Para negócios em crescimento que querem escalar.",
@@ -185,7 +186,7 @@ const COPY: Record<Locale, PricingCopy> = {
       },
       {
         id: "premium",
-        name: "premium",
+        name: "PREMIUM",
         price: "€99",
         priceSuffix: "/mês",
         description: "Para equipas grandes com necessidades avançadas.",
@@ -203,64 +204,53 @@ const COPY: Record<Locale, PricingCopy> = {
   },
 };
 
-const SERIF = "'Instrument Serif', Georgia, serif";
-const MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
-
 export default async function PricingSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
     <section
       id="precios"
-      className="relative bg-[#F4EFE6] ps-paper-grain py-24 md:py-40"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 py-12 sm:py-28"
     >
-      <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
-        <div className="mx-auto max-w-2xl">
-          <p className="text-[12px] text-[#141414]" style={{ fontFamily: MONO }}>
-            <span
-              className="pb-1"
-              style={{
-                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '100% 1px',
-                backgroundPosition: '0 calc(100% + 4px)',
-              }}
-            >
-              {t.eyebrow}
-            </span>
+      {/* decorative blurs */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-[40rem] -translate-x-1/2 rounded-full bg-cyan-200/30 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 right-0 h-80 w-[32rem] rounded-full bg-blue-200/30 blur-3xl"
+      />
+
+      <div className="relative mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+            {t.eyebrow}
           </p>
-          <h2
-            className="mt-6 text-[32px] leading-[0.95] tracking-[-0.03em] text-[#141414] md:text-[64px]"
-            style={{ fontFamily: SERIF, fontWeight: 400 }}
-          >
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
             {t.heading}
           </h2>
-          <p className="mt-6 max-w-[62ch] text-[18px] leading-[1.45] text-[#54524D] md:text-[22px]">
+          <p className="mt-4 text-base text-slate-600 sm:text-lg">
             {t.sub}
           </p>
         </div>
 
-        <div className="mt-16 grid gap-6 md:mt-24 md:gap-8 md:grid-cols-3 md:items-stretch">
+        <div className="mt-10 grid gap-6 sm:mt-14 sm:gap-8 md:grid-cols-3 md:items-stretch">
           {t.plans.map((plan) => {
             const isHighlighted = plan.highlighted === true;
-            // Three card variants from the brief:
-            //  - standard: clay on paper
-            //  - highlight: ink (used here for PRO — "one important card")
-            const cardClass = isHighlighted
-              ? "relative flex flex-col rounded-[12px] bg-[#141414] p-10 text-[#F4EFE6] md:p-14"
-              : "relative flex flex-col rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-10 text-[#141414] md:p-14";
-
-            const metaColor = isHighlighted ? 'text-[#F4EFE6]/65' : 'text-[#54524D]';
-            const bulletBg = '#FF5B1F';
-
             return (
-              <div key={plan.id} className={cardClass}>
+              <div
+                key={plan.id}
+                className={
+                  isHighlighted
+                    ? "relative flex flex-col rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900 to-blue-900 p-6 text-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.45)] ring-4 ring-blue-500/30 sm:p-8 md:-mt-4 md:mb-4 md:scale-[1.04]"
+                    : "relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8"
+                }
+              >
                 {isHighlighted && (
-                  <div className="absolute -top-3 left-10">
-                    <span
-                      className="inline-flex items-center rounded-full bg-[#FF5B1F] px-3 py-1 text-[12px] text-[#1A0A04]"
-                      style={{ fontFamily: MONO }}
-                    >
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900 shadow-lg">
+                      <Sparkles className="h-3 w-3" />
                       {t.mostPopular}
                     </span>
                   </div>
@@ -268,53 +258,80 @@ export default async function PricingSection() {
 
                 <div className="flex-1">
                   <p
-                    className={`text-[12px] ${isHighlighted ? 'text-[#F4EFE6]/65' : 'text-[#141414]'}`}
-                    style={{ fontFamily: MONO }}
+                    className={
+                      isHighlighted
+                        ? "text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300"
+                        : "text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700"
+                    }
                   >
-                    <span
-                      className="pb-1"
-                      style={{
-                        backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundSize: '100% 1px',
-                        backgroundPosition: '0 calc(100% + 4px)',
-                      }}
-                    >
-                      {plan.name}
-                    </span>
+                    {plan.name}
                   </p>
 
-                  <div className="mt-6 flex items-baseline gap-2 md:mt-8">
+                  <div className="mt-3 flex items-baseline gap-2 sm:mt-4">
                     <span
-                      className={`text-[64px] leading-[0.9] tabular-nums tracking-[-0.03em] md:text-[88px] ${isHighlighted ? 'text-[#F4EFE6]' : 'text-[#141414]'}`}
-                      style={{ fontFamily: SERIF, fontWeight: 400 }}
+                      className={
+                        isHighlighted
+                          ? "font-display text-4xl font-bold tabular-nums text-white sm:text-5xl md:text-6xl"
+                          : "font-display text-4xl font-bold tabular-nums text-slate-900 sm:text-5xl md:text-6xl"
+                      }
                     >
                       {plan.price}
                     </span>
                     <span
-                      className={`text-[14px] ${metaColor}`}
-                      style={{ fontFamily: MONO }}
+                      className={
+                        isHighlighted
+                          ? "text-sm font-medium text-white/70"
+                          : "text-sm font-medium text-slate-500"
+                      }
                     >
                       {plan.priceSuffix}
                     </span>
                   </div>
 
-                  <p className={`mt-4 text-[15px] leading-[1.55] ${metaColor}`}>
+                  <p
+                    className={
+                      isHighlighted
+                        ? "mt-3 text-sm text-white/80"
+                        : "mt-3 text-sm text-slate-600"
+                    }
+                  >
                     {plan.description}
                   </p>
 
-                  <ul className="mt-8 space-y-3">
+                  <ul className="mt-4 space-y-2 sm:mt-6 sm:space-y-3">
                     {plan.features.map((feature, idx) => (
                       <li
                         key={feature}
-                        className={`${idx > 3 ? 'hidden items-start gap-3 md:flex' : 'flex items-start gap-3'} text-[14px] leading-[1.5] ${isHighlighted ? 'text-[#F4EFE6]' : 'text-[#141414]'}`}
+                        className={
+                          idx > 3
+                            ? "hidden items-start gap-3 sm:flex"
+                            : "flex items-start gap-3"
+                        }
                       >
                         <span
-                          aria-hidden
-                          className="mt-[8px] inline-block h-[3px] w-[10px] shrink-0"
-                          style={{ backgroundColor: bulletBg }}
-                        />
-                        <span>{feature}</span>
+                          className={
+                            isHighlighted
+                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-cyan-300/20 ring-2 ring-cyan-300/40"
+                              : "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-emerald-50 ring-2 ring-emerald-100"
+                          }
+                        >
+                          <Check
+                            className={
+                              isHighlighted
+                                ? "h-3.5 w-3.5 text-cyan-300"
+                                : "h-3.5 w-3.5 text-emerald-600"
+                            }
+                          />
+                        </span>
+                        <span
+                          className={
+                            isHighlighted
+                              ? "text-sm text-white/90"
+                              : "text-sm text-slate-700"
+                          }
+                        >
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -324,10 +341,9 @@ export default async function PricingSection() {
                   href="/signup"
                   className={
                     isHighlighted
-                      ? "mt-10 inline-flex w-full items-center justify-center rounded-full bg-[#FF5B1F] px-6 py-3.5 text-sm font-semibold text-[#1A0A04] transition-colors hover:bg-[#E84D14]"
-                      : "mt-10 inline-flex w-full items-center justify-center rounded-full bg-[#141414] px-6 py-3.5 text-sm font-semibold text-[#F4EFE6] transition-colors hover:bg-[#000]"
+                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-6 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:from-cyan-200 hover:to-blue-400 sm:mt-8"
+                      : "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-md transition hover:from-blue-500 hover:to-blue-600 sm:mt-8"
                   }
-                  style={{ transitionDuration: '160ms' }}
                 >
                   {plan.cta}
                 </Link>
@@ -336,10 +352,7 @@ export default async function PricingSection() {
           })}
         </div>
 
-        <p
-          className="mt-12 text-[12px] text-[#54524D] md:mt-16"
-          style={{ fontFamily: MONO }}
-        >
+        <p className="mt-6 text-center text-xs text-slate-500 sm:mt-10">
           {t.footnote}
         </p>
       </div>

@@ -159,37 +159,41 @@ export function SwipeableTaskCard({
 
   return (
     <div ref={wrapRef} className="relative">
-      {/* Right-swipe wash (moss = success): emerges from the LEFT edge.
+      {/* Right-swipe wash (emerald): emerges from the LEFT edge.
           Sits behind the card so its colour wipes underneath. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-start overflow-hidden rounded-[12px] bg-[#3F5B3A]"
-        style={{ opacity: enabled && isRight ? 0.18 + ratio * 0.7 : 0 }}
+        className="pointer-events-none absolute inset-0 flex items-center justify-start overflow-hidden rounded-2xl bg-emerald-500"
+        style={{ opacity: enabled && isRight ? 0.18 + ratio * 0.55 : 0 }}
       >
         <div
-          className="ml-4 flex items-center gap-2 text-[#F4EFE6]"
+          className="ml-4 flex items-center gap-2 text-white"
           style={{
             transform: `translateX(${Math.min(0, dx - 28)}px) scale(${0.85 + ratio * 0.25})`,
           }}
         >
           <CheckCircle2 className="h-6 w-6" />
-          <span className="ps-mono text-[12px]">completar</span>
+          <span className="text-[12px] font-bold uppercase tracking-wider">
+            Completar
+          </span>
         </div>
       </div>
 
-      {/* Left-swipe action (call client = mandarin = action): emerges from the RIGHT edge. */}
+      {/* Left-swipe action (call client): emerges from the RIGHT edge. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-end overflow-hidden rounded-[12px] bg-[#FF5B1F]"
-        style={{ opacity: enabled && isLeft ? 0.18 + ratio * 0.7 : 0 }}
+        className="pointer-events-none absolute inset-0 flex items-center justify-end overflow-hidden rounded-2xl bg-sky-600"
+        style={{ opacity: enabled && isLeft ? 0.18 + ratio * 0.55 : 0 }}
       >
         <div
-          className="mr-4 flex items-center gap-2 text-[#1A0A04]"
+          className="mr-4 flex items-center gap-2 text-white"
           style={{
             transform: `translateX(${Math.max(0, dx + 28)}px) scale(${0.85 + ratio * 0.25})`,
           }}
         >
-          <span className="ps-mono text-[12px]">llamar</span>
+          <span className="text-[12px] font-bold uppercase tracking-wider">
+            Llamar
+          </span>
           <Phone className="h-5 w-5" />
         </div>
       </div>

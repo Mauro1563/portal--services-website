@@ -31,9 +31,8 @@ const INSIGHTS = [
 function heatColor(count: number) {
   const max = Math.max(...HEATMAP);
   const ratio = count / max;
-  // Warm mandarin wash on clay — denser cells = stronger mandarin tint.
-  const lightness = Math.round(92 - ratio * 28);
-  return `oklch(${lightness}% ${0.04 + ratio * 0.12} 50)`;
+  const lightness = Math.round(94 - ratio * 36);
+  return `oklch(${lightness}% 0.12 155)`;
 }
 
 export function DemoPullSummary() {
@@ -119,12 +118,12 @@ export function DemoPullSummary() {
           className="pointer-events-none fixed inset-x-0 top-0 z-40 flex justify-center"
           style={{ transform: `translateY(${dy * 0.5}px)` }}
         >
-          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#1414141A] bg-[#141414] px-3 py-1.5 font-mono text-[11px] font-semibold text-[#F4EFE6]">
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-slate-900/85 px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg backdrop-blur">
             <ChevronDown
               className="h-3.5 w-3.5 transition-transform"
               style={{ transform: `rotate(${ratio * 180}deg)` }}
             />
-            {ratio >= 1 ? 'soltar para ver insight' : 'tirar para ver insight'}
+            {ratio >= 1 ? 'Soltar para ver insight' : 'Tirar para ver insight'}
           </div>
         </div>
       ) : null}
@@ -134,26 +133,22 @@ export function DemoPullSummary() {
         type="button"
         onClick={() => setOpen(true)}
         title="Ver el insight del día (heatmap de los últimos 28 días)"
-        className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-full border border-[#1414141A] bg-[#F4EFE6] px-3 font-mono text-[12px] font-semibold text-[#141414] transition-colors hover:bg-[#E4DACA]"
-        style={{ transitionDuration: '160ms' }}
+        className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-full bg-gradient-to-br from-violet-600 to-blue-700 px-3 text-[12px] font-semibold text-white shadow-sm transition hover:brightness-110"
       >
-        <Sparkles className="h-3.5 w-3.5 text-[#FF5B1F]" /> insight del día
+        <Sparkles className="h-3.5 w-3.5" /> Insight del día
       </button>
 
       {open ? (
-        <section className="ps-set mt-4 overflow-hidden rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 sm:p-6">
+        <section className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5 demo-pop">
           <header className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="inline-flex items-center gap-2 font-mono text-[12px] text-[#54524D]">
-                <Sparkles className="h-3 w-3 text-[#FF5B1F]" />
-                insight del día
-                <span className="inline-block h-[1px] w-5 align-middle bg-[#FF5B1F]" />
-              </p>
-            </div>
+            <h3 className="inline-flex items-center gap-2 font-display text-base font-semibold text-slate-900">
+              <Sparkles className="h-4 w-4 text-violet-600" />
+              Insight del día
+            </h3>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="ps-link font-mono text-[11px] text-[#54524D]"
+              className="text-[11px] font-semibold text-slate-500 hover:text-slate-900"
             >
               Ocultar
             </button>
@@ -164,32 +159,30 @@ export function DemoPullSummary() {
               <div
                 key={i}
                 title={`${c} reservas`}
-                className="h-7 rounded-[6px] border border-[#1414141A]"
+                className="h-7 rounded-md ring-1 ring-slate-200/60"
                 style={{ backgroundColor: heatColor(c) }}
               />
             ))}
           </div>
-          <p className="mt-4 min-h-[44px] text-[14px] leading-[1.45] text-[#141414]">
-            <span className="font-mono text-[11px] uppercase tracking-[0.04em] text-[#54524D]">IA · </span>
+          <p className="mt-3 min-h-[40px] text-[13px] leading-snug text-slate-700">
+            <span className="font-semibold">IA · </span>
             {revealed}
             {revealed.length < insight.length ? (
-              <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-[#FF5B1F] align-middle" />
+              <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-slate-400 align-middle" />
             ) : null}
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-full bg-[#FF5B1F] px-4 py-2 text-[12px] font-semibold text-[#1A0A04]"
-              style={{ transitionDuration: '160ms' }}
+              className="rounded-full bg-blue-600 px-3 py-1.5 text-[11.5px] font-semibold text-white hover:bg-blue-700"
             >
               Sí, ajustar
             </button>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-full border border-[#1414141A] bg-transparent px-4 py-2 text-[12px] font-semibold text-[#141414] hover:bg-[#F4EFE6]"
-              style={{ transitionDuration: '160ms' }}
+              className="rounded-full bg-white px-3 py-1.5 text-[11.5px] font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
             >
               Más tarde
             </button>

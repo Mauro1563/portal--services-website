@@ -29,38 +29,37 @@ const ITEMS: Array<{
 ];
 
 /**
- * Preview-only bottom nav — paper canvas, hairline top border, ultramarine
- * active indicator (owner's per-portal secondary), graphite inactive labels.
- * Every href points inside /owner/preview/*.
+ * Preview-only bottom nav — same Corporate Trust style as the real
+ * BottomTabBar but every href points inside /owner/preview/* so the
+ * clickable tour never leaks into the authed routes.
  */
 export function DemoBottomTabBar({ active }: { active: DemoTab }) {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#1414141A] bg-[#F4EFE6]/95 backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       aria-label="Primary"
     >
-      <ul className="mx-auto flex h-16 max-w-md items-stretch justify-around">
+      <ul className="mx-auto flex max-w-md items-stretch justify-around">
         {ITEMS.map(({ key, href, label, Icon }) => {
           const isActive = key === active;
           return (
             <li key={key} className="flex-1">
               <Link
                 href={href}
-                className={`relative flex h-full flex-col items-center justify-center gap-1 font-mono text-[11px] font-semibold transition-colors ${
-                  isActive ? 'text-[#141414]' : 'text-[#54524D] hover:text-[#141414]'
+                className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition ${
+                  isActive ? 'text-blue-700' : 'text-slate-600 hover:text-slate-900'
                 }`}
-                style={{ transitionDuration: '160ms' }}
                 aria-current={isActive ? 'page' : undefined}
               >
                 {isActive ? (
                   <span
                     aria-hidden
-                    className="absolute top-0 h-[2px] w-10 rounded-b bg-[#1B2D6B]"
+                    className="absolute top-0 h-[3px] w-10 rounded-b bg-blue-600"
                   />
                 ) : null}
                 <Icon
-                  className={`h-5 w-5 ${isActive ? 'stroke-[1.75]' : 'stroke-[1.5]'}`}
+                  className={`h-5 w-5 ${isActive ? 'stroke-[2.25]' : 'stroke-[1.75]'}`}
                 />
                 <span>{label}</span>
               </Link>

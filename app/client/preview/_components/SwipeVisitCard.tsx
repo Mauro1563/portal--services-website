@@ -181,45 +181,27 @@ export function SwipeVisitCard({
   const iconScale = 0.7 + Math.min(0.6, Math.abs(dx) / (w * 0.5)) * 0.6;
 
   return (
-    <div ref={wrapRef} className="relative overflow-hidden rounded-[12px]">
-      {/* Accept reveal — moss wash from the right with a check icon. Moss
-          is the cleaner-portal secondary repurposed here as the success
-          "after-state" color per design brief. */}
+    <div ref={wrapRef} className="relative overflow-hidden rounded-2xl">
+      {/* Accept reveal — emerald wash from the right with a check icon. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-end rounded-[12px] pr-6"
-        style={{
-          opacity: acceptOpacity,
-          background:
-            'linear-gradient(to left, rgba(63, 91, 58, 0.95), rgba(63, 91, 58, 0.7) 60%, rgba(63, 91, 58, 0) 100%)',
-        }}
+        className="pointer-events-none absolute inset-0 flex items-center justify-end rounded-2xl bg-gradient-to-l from-emerald-500/95 via-emerald-500/80 to-emerald-500/0 pr-6"
+        style={{ opacity: acceptOpacity }}
       >
         <Check
-          className="h-12 w-12"
-          style={{
-            color: '#F4EFE6',
-            transform: `scale(${iconScale})`,
-            transition: 'transform 80ms linear',
-          }}
+          className="h-12 w-12 text-white drop-shadow"
+          style={{ transform: `scale(${iconScale})`, transition: 'transform 80ms linear' }}
         />
       </div>
-      {/* Reject reveal — mandarin wash from the left with X icon. */}
+      {/* Reject reveal — slate-rose wash from the left with X icon. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-start rounded-[12px] pl-6"
-        style={{
-          opacity: rejectOpacity,
-          background:
-            'linear-gradient(to right, rgba(255, 91, 31, 0.95), rgba(255, 91, 31, 0.7) 60%, rgba(255, 91, 31, 0) 100%)',
-        }}
+        className="pointer-events-none absolute inset-0 flex items-center justify-start rounded-2xl bg-gradient-to-r from-rose-500/95 via-rose-500/80 to-rose-500/0 pl-6"
+        style={{ opacity: rejectOpacity }}
       >
         <X
-          className="h-12 w-12"
-          style={{
-            color: '#1A0A04',
-            transform: `scale(${iconScale})`,
-            transition: 'transform 80ms linear',
-          }}
+          className="h-12 w-12 text-white drop-shadow"
+          style={{ transform: `scale(${iconScale})`, transition: 'transform 80ms linear' }}
         />
       </div>
 
@@ -241,10 +223,10 @@ export function SwipeVisitCard({
 
       {/* Hint pill — fades out once the user starts dragging. */}
       <p
-        className="ps-mono pointer-events-none mt-3 text-center text-[11px] text-[#54524D] transition"
+        className="pointer-events-none mt-2 text-center text-[10.5px] font-semibold uppercase tracking-[0.18em] text-slate-400 transition"
         style={{ opacity: Math.abs(dx) > 4 ? 0 : 1 }}
       >
-        desliza →  aceptar     ← rechazar
+        Desliza →  aceptar     ← rechazar
       </p>
       {/* a11y-only explanation. */}
       <p className="sr-only">

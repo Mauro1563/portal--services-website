@@ -127,19 +127,19 @@ const INITIAL_TASKS: DemoTask[] = [
 
 const STATUS_META: Record<DemoStatus, { label: string; cls: string; dot: string }> = {
   scheduled: {
-    label: 'pendiente',
-    cls: 'border border-[#1414141A] bg-[#F4EFE6] text-[#54524D]',
-    dot: 'bg-[#54524D]/40',
+    label: 'Pendiente',
+    cls: 'bg-slate-100 text-slate-700',
+    dot: 'bg-slate-400',
   },
   in_progress: {
-    label: 'en curso',
-    cls: 'bg-[#FF5B1F] text-[#1A0A04]',
-    dot: 'bg-[#FF5B1F] animate-pulse',
+    label: 'En curso',
+    cls: 'bg-amber-100 text-amber-800',
+    dot: 'bg-amber-500 animate-pulse',
   },
   completed: {
-    label: 'completada',
-    cls: 'bg-[#3F5B3A] text-[#F4EFE6]',
-    dot: 'bg-[#3F5B3A]',
+    label: 'Completada',
+    cls: 'bg-emerald-100 text-emerald-800',
+    dot: 'bg-emerald-500',
   },
 };
 
@@ -335,8 +335,8 @@ function OperativePreviewHomeBody({
     lightboxTask && lightbox ? lightboxTask.photos[lightbox.idx] : null;
 
   return (
-    <main className="ps-paper-grain min-h-screen pb-24">
-      <div className="mx-auto max-w-md px-4 pt-6 md:pt-10">
+    <main className="min-h-screen bg-canvas pb-24">
+      <div className="mx-auto max-w-md px-4 py-5">
         <AgendaHeader
           cleanerName="Carmen López"
           now={now}
@@ -361,36 +361,35 @@ function OperativePreviewHomeBody({
             the single source of truth (no double-rendering the in-progress
             task in two surfaces). */}
         {heroTask && heroTask.status !== 'completed' ? (
-          <div className="mt-6">
+          <div className="mt-5">
           <PullToCheckInHero
             enabled={heroTask.status === 'scheduled'}
             onCheckIn={() => handleCheckIn(heroTask.id)}
           >
-          <section className="ps-set rounded-[12px] bg-[#141414] p-6 text-[#F4EFE6]">
+          <section className="rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
             <div className="flex items-center justify-between gap-2">
-              <p className="ps-mono text-[12px] text-[#F4EFE6]/60">
-                <span className="ps-link-mandarin text-[#F4EFE6]">siguiente parada</span>
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">
+                Siguiente parada
               </p>
-              <span className="ps-mono text-[12px] tabular-nums text-[#F4EFE6]/70">
+              <span className="text-[11px] font-semibold tabular-nums text-text-3">
                 {heroTask.start_time}
               </span>
             </div>
-            <h2 className="ps-serif mt-3 text-[32px] leading-[0.95] tracking-[-0.02em] text-[#F4EFE6]">
+            <h2 className="mt-2 font-display text-lg font-semibold text-text-1">
               {heroTask.client_name}
             </h2>
-            <p className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-[#F4EFE6]/70">
-              <MapPin className="h-3.5 w-3.5 text-[#FF5B1F]" />
+            <p className="mt-1 inline-flex items-center gap-1 text-xs text-text-2">
+              <MapPin className="h-3.5 w-3.5 text-brand-600" />
               {heroTask.address} · {heroTask.postcode}
             </p>
 
-            <div className="mt-5 flex items-stretch gap-2">
+            <div className="mt-4 flex items-stretch gap-2">
               <a
                 href={heroTask.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Abrir esta dirección en Google Maps para navegar paso a paso"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#FF5B1F] px-5 py-3 text-[15px] font-medium text-[#1A0A04] transition-colors hover:bg-[#FF5B1F]/90"
-                style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.5)] transition active:scale-[0.99]"
               >
                 <Navigation2 className="h-4 w-4" /> Ir a la dirección
               </a>
@@ -398,8 +397,7 @@ function OperativePreviewHomeBody({
                 href={`tel:${heroTask.phone}`}
                 aria-label="Llamar al cliente"
                 title="Llamar al cliente o manager desde el teléfono"
-                className="inline-flex h-auto min-h-[44px] w-12 shrink-0 items-center justify-center rounded-full border border-[#F4EFE6]/25 text-[#F4EFE6] transition-colors hover:border-[#F4EFE6]"
-                style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                className="inline-flex h-auto min-h-[44px] w-12 shrink-0 items-center justify-center rounded-xl border border-surface-2 bg-surface-0 text-text-1 transition hover:border-brand-300 hover:text-brand-700"
               >
                 <Phone className="h-4 w-4" />
               </a>
@@ -410,18 +408,17 @@ function OperativePreviewHomeBody({
         ) : null}
 
         {/* Agenda timeline — interactive */}
-        <section className="mt-8">
+        <section className="mt-6">
           <div className="flex items-center justify-between">
-            <h2 className="ps-mono inline-flex items-center gap-1.5 text-[12px] text-[#54524D]">
-              <span className="ps-link-mandarin text-[#141414]">agenda de hoy</span>
+            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-text-3">
+              Agenda de hoy
               <button
                 type="button"
                 aria-label="Ayuda sobre la agenda"
                 aria-expanded={agendaHelpOpen}
                 aria-controls="agenda-help"
                 onClick={() => setAgendaHelpOpen((o) => !o)}
-                className="grid h-5 w-5 place-items-center rounded-full border border-[#1414141A] text-[#54524D] transition-colors hover:border-[#141414] hover:text-[#141414]"
-                style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                className="grid h-5 w-5 place-items-center rounded-full bg-surface-2 text-text-3 transition hover:bg-surface-3 hover:text-text-1"
               >
                 <HelpCircle className="h-3 w-3" />
               </button>
@@ -429,27 +426,27 @@ function OperativePreviewHomeBody({
             <Link
               href="/operative/preview/week"
               title="Ver el resumen de toda la semana"
-              className="ps-mono inline-flex items-center gap-1 text-[12px] text-[#141414] ps-link ps-link-mandarin"
+              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-brand-700 hover:text-brand-800"
             >
-              <Navigation2 className="h-3 w-3" /> ver semana
+              <Navigation2 className="h-3 w-3" /> Ver semana
             </Link>
           </div>
           {agendaHelpOpen ? (
             <p
               id="agenda-help"
-              className="mt-3 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] px-4 py-3 text-[13px] leading-relaxed text-[#54524D]"
+              className="mt-2 rounded-lg border border-dashed border-surface-2 bg-surface-1/60 px-3 py-2 text-[11px] leading-relaxed text-text-2"
             >
               Toca cualquier tarea para ver notas del cliente, hacer check-in o subir fotos.
             </p>
           ) : null}
 
           <ol
-            className="relative mt-5"
+            className="relative mt-4"
             style={{ ['--rail-offset' as string]: 'calc(52px + 0.75rem + 0.5rem)' }}
           >
             <span
               aria-hidden
-              className="absolute top-3 bottom-3 w-px bg-[#1414141A]"
+              className="absolute top-3 bottom-3 w-px bg-surface-2"
               style={{ left: 'var(--rail-offset)' }}
             />
             {tasks.map((task) => {
@@ -466,21 +463,21 @@ function OperativePreviewHomeBody({
                 >
                   <div className="flex items-stretch gap-3">
                     {/* Time column */}
-                    <div className="flex w-[52px] shrink-0 flex-col items-end pt-3">
-                      <p className="ps-serif text-[22px] leading-none tracking-[-0.02em] tabular-nums text-[#141414]">
+                    <div className="flex w-[52px] shrink-0 flex-col items-end pt-2.5">
+                      <p className="font-display text-base font-bold tabular-nums text-text-1">
                         {task.start_time}
                       </p>
-                      <p className="ps-mono mt-1 inline-flex items-center gap-0.5 text-[11px] text-[#54524D]">
+                      <p className="mt-0.5 inline-flex items-center gap-0.5 text-[10px] text-text-3">
                         <Clock className="h-2.5 w-2.5" />
                         {formatHours(task.estimated_duration_min)}
                       </p>
                     </div>
 
                     {/* Status dot */}
-                    <span className="relative flex w-4 shrink-0 justify-center pt-4">
+                    <span className="relative flex w-4 shrink-0 justify-center pt-3.5">
                       <span
                         aria-hidden
-                        className={`h-3 w-3 rounded-full ring-4 ring-[#F4EFE6] ${st.dot}`}
+                        className={`h-3 w-3 rounded-full ring-4 ring-surface-1 ${st.dot}`}
                       />
                     </span>
 
@@ -493,7 +490,7 @@ function OperativePreviewHomeBody({
                       onComplete={() => handleComplete(task.id)}
                       onCallClient={() => handleCallClient(task.id)}
                     >
-                    <div className="ps-set rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5">
+                    <div className="rounded-2xl border border-surface-2 bg-paper p-3 shadow-card transition">
                       <button
                         type="button"
                         onClick={() => toggleExpand(task.id)}
@@ -501,58 +498,58 @@ function OperativePreviewHomeBody({
                         className="flex w-full items-start justify-between gap-2 text-left"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="ps-serif truncate text-[20px] leading-tight tracking-[-0.015em] text-[#141414]">
+                          <p className="truncate font-display text-sm font-semibold text-text-1">
                             {task.client_name}
                           </p>
-                          <p className="ps-mono mt-1 truncate text-[12px] text-[#54524D]">
+                          <p className="mt-0.5 truncate text-[11px] text-text-3">
                             {task.property_name}
                           </p>
                         </div>
                         <span
-                          className={`ps-mono shrink-0 rounded-full px-2.5 py-0.5 text-[11px] ${st.cls}`}
+                          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${st.cls}`}
                         >
                           {st.label}
                         </span>
                         {isExpanded ? (
-                          <ChevronUp className="mt-1 h-4 w-4 text-[#54524D]" />
+                          <ChevronUp className="mt-1 h-4 w-4 text-text-3" />
                         ) : (
-                          <ChevronDown className="mt-1 h-4 w-4 text-[#54524D]" />
+                          <ChevronDown className="mt-1 h-4 w-4 text-text-3" />
                         )}
                       </button>
 
-                      <p className="mt-2 inline-flex items-center gap-1.5 truncate text-[12px] text-[#54524D]">
-                        <MapPin className="h-3 w-3 shrink-0 text-[#FF5B1F]" />
+                      <p className="mt-1 inline-flex items-center gap-1 truncate text-[11px] text-text-3">
+                        <MapPin className="h-3 w-3 shrink-0 text-brand-600" />
                         <span className="truncate">
                           {task.address}, {task.postcode}
                         </span>
                       </p>
 
                       {task.checkInAt ? (
-                        <p className="ps-mono mt-2 inline-flex items-center gap-1 text-[11px] text-[#141414]">
-                          <Play className="h-2.5 w-2.5 text-[#FF5B1F]" />
-                          check-in registrado a las {task.checkInAt}
+                        <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700">
+                          <Play className="h-2.5 w-2.5" />
+                          Check-in registrado a las {task.checkInAt}
                         </p>
                       ) : null}
                       {task.completedAt ? (
-                        <p className="ps-mono mt-2 inline-flex items-center gap-1 text-[11px] text-[#3F5B3A]">
+                        <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
                           <CheckCircle2 className="h-2.5 w-2.5" />
-                          completada a las {task.completedAt}
+                          Completada a las {task.completedAt}
                         </p>
                       ) : null}
                       {task.status === 'completed' && task.tipPence > 0 ? (
                         <span
                           title="Propina del cliente — 100% para ti, ya sumada a tus ganancias del día"
-                          className="ps-mono mt-2 inline-flex items-center gap-1 rounded-full border border-[#1414141A] bg-[#F4EFE6] px-2.5 py-0.5 text-[11px] text-[#141414]"
+                          className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800"
                         >
-                          propina <span className="tabular-nums">£{(task.tipPence / 100).toFixed(2)}</span>
+                          Propina £{(task.tipPence / 100).toFixed(2)}
                         </span>
                       ) : null}
                       {task.status === 'in_progress' ? (
-                        <div className="mt-3 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] px-3 py-2.5">
+                        <div className="mt-2 rounded-xl bg-amber-50 px-3 py-2 ring-1 ring-amber-100">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="ps-mono inline-flex items-center gap-1 text-[12px] text-[#141414]">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800">
                               <Clock className="h-3 w-3" />
-                              horas trabajadas
+                              Horas trabajadas
                             </span>
                             <div className="flex items-center gap-1.5">
                               <button
@@ -561,8 +558,7 @@ function OperativePreviewHomeBody({
                                 aria-label="Restar 15 minutos"
                                 title="Restar 15 minutos"
                                 disabled={(task.actualHours ?? 0) <= 0}
-                                className="grid h-11 w-11 place-items-center rounded-[12px] border border-[#1414141A] bg-[#E4DACA] text-[#141414] transition-colors hover:border-[#141414] disabled:cursor-not-allowed disabled:opacity-40"
-                                style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                                className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-40"
                               >
                                 <Minus className="h-4 w-4" />
                               </button>
@@ -575,19 +571,18 @@ function OperativePreviewHomeBody({
                                 placeholder="0.0"
                                 aria-label="Horas trabajadas"
                                 title="Reporta cuántas horas tardaste — actualiza tus ganancias al instante"
-                                className="ps-serif h-11 w-16 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] text-center text-[18px] tabular-nums text-[#141414] focus:border-[#FF5B1F] focus:outline-none"
+                                className="h-11 w-16 rounded-lg border border-amber-200 bg-white text-center text-[15px] font-semibold tabular-nums text-text-1"
                               />
                               <button
                                 type="button"
                                 onClick={() => handleAdjustHours(task.id, 0.25)}
                                 aria-label="Sumar 15 minutos"
                                 title="Sumar 15 minutos"
-                                className="grid h-11 w-11 place-items-center rounded-[12px] border border-[#1414141A] bg-[#E4DACA] text-[#141414] transition-colors hover:border-[#141414]"
-                                style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                                className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100"
                               >
                                 <Plus className="h-4 w-4" />
                               </button>
-                              <span className="ps-mono text-[12px] text-[#54524D]">h</span>
+                              <span className="text-[11px] font-semibold text-amber-700">h</span>
                             </div>
                           </div>
                         </div>
@@ -595,7 +590,7 @@ function OperativePreviewHomeBody({
 
                       {/* Secondary actions: small icon chips, right-aligned, no
                           single dominant primary in this row. */}
-                      <div className="mt-3 flex flex-wrap items-center justify-end gap-1.5">
+                      <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
                         <a
                           href={task.mapsUrl}
                           target="_blank"
@@ -603,8 +598,7 @@ function OperativePreviewHomeBody({
                           onClick={(e) => e.stopPropagation()}
                           aria-label="Navegar con Google Maps"
                           title="Navegar a esta dirección con Google Maps"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#1414141A] bg-[#F4EFE6] text-[#141414] transition-colors hover:border-[#141414]"
-                          style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition hover:bg-brand-100"
                         >
                           <Navigation2 className="h-3.5 w-3.5" />
                         </a>
@@ -613,10 +607,10 @@ function OperativePreviewHomeBody({
                             type="button"
                             onClick={() => handleCheckIn(task.id)}
                             title="Marcar que has llegado al cliente — registra la hora de inicio"
-                            className="ps-mono inline-flex items-center gap-1 rounded-full bg-[#FF5B1F] px-3 py-1 text-[11px] text-[#1A0A04]"
+                            className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700 transition hover:bg-amber-100"
                           >
                             <Play className="h-3 w-3" />
-                            check-in
+                            Check-in
                           </button>
                         ) : null}
                         {task.status === 'in_progress' ? (
@@ -625,8 +619,7 @@ function OperativePreviewHomeBody({
                             onClick={() => handleUploadPhoto(task.id)}
                             aria-label="Subir foto del trabajo"
                             title="Subir foto del trabajo terminado — el cliente la verá en su portal"
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#1414141A] bg-[#F4EFE6] text-[#141414] transition-colors hover:border-[#141414]"
-                            style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-50 text-cyan-700 transition hover:bg-cyan-100"
                           >
                             <Camera className="h-3.5 w-3.5" />
                           </button>
@@ -641,8 +634,7 @@ function OperativePreviewHomeBody({
                           type="button"
                           onClick={() => handleComplete(task.id)}
                           title="Marcar la tarea como terminada para liberarte de esta parada"
-                          className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#FF5B1F] px-4 py-3 text-[14px] font-medium text-[#1A0A04] transition-colors hover:bg-[#FF5B1F]/90"
-                          style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.55)] transition active:scale-[0.99]"
                         >
                           <CheckCircle2 className="h-4 w-4" />
                           Marcar completada
@@ -651,22 +643,26 @@ function OperativePreviewHomeBody({
 
                       {/* Expanded details + photo grid */}
                       {isExpanded ? (
-                        <div className="ps-set mt-3 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] p-4">
-                          <p className="ps-mono text-[12px] text-[#54524D]">cliente</p>
-                          <p className="ps-serif mt-1 text-[18px] leading-tight tracking-[-0.015em] text-[#141414]">
+                        <div className="mt-3 rounded-xl border border-dashed border-surface-2 bg-surface-1/40 p-3">
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-text-3">
+                            Cliente
+                          </p>
+                          <p className="mt-0.5 text-[12px] font-semibold text-text-1">
                             {task.client_name}
                           </p>
-                          <p className="ps-mono mt-3 text-[12px] text-[#54524D]">notas del propietario</p>
-                          <p className="mt-1 text-[13px] leading-relaxed text-[#141414]">
+                          <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-text-3">
+                            Notas del propietario
+                          </p>
+                          <p className="mt-0.5 text-[11.5px] leading-relaxed text-text-2">
                             {task.notes}
                           </p>
 
                           {task.photos.length > 0 ? (
                             <>
-                              <p className="ps-mono mt-4 text-[12px] text-[#54524D]">
-                                fotos subidas (<span className="tabular-nums">{task.photos.length}</span>)
+                              <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-text-3">
+                                Fotos subidas ({task.photos.length})
                               </p>
-                              <div className="mt-2 grid grid-cols-3 gap-1.5">
+                              <div className="mt-1.5 grid grid-cols-3 gap-1.5">
                                 {task.photos.map((src, i) => (
                                   // eslint-disable-next-line @next/next/no-img-element
                                   <button
@@ -674,7 +670,7 @@ function OperativePreviewHomeBody({
                                     key={`${src}-${i}`}
                                     onClick={() => setLightbox({ taskId: task.id, idx: i })}
                                     title="Ampliar foto — desde el lightbox puedes eliminarla"
-                                    className="overflow-hidden rounded-[12px] border border-[#1414141A]"
+                                    className="overflow-hidden rounded-lg ring-1 ring-surface-2"
                                   >
                                     <img
                                       src={src}
@@ -706,16 +702,15 @@ function OperativePreviewHomeBody({
 
         {/* Demo-only reset — kept as a quiet inline link, well clear of the
             thumb zone, so demo chrome doesn't bleed into production-shaped UI. */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <button
             type="button"
             onClick={onReset}
             title="Reiniciar la demo — vuelve al estado inicial sin recargar"
-            className="ps-mono inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] text-[#54524D] transition-colors hover:text-[#141414]"
-            style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-text-3 transition hover:text-text-1"
           >
             <RotateCcw className="h-3 w-3" />
-            reiniciar demo
+            Reiniciar demo
           </button>
         </div>
       </div>
@@ -723,7 +718,7 @@ function OperativePreviewHomeBody({
       {/* Photo lightbox */}
       {lightbox && lightboxSrc && lightboxTask ? (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-[#141414]/85 p-4"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4"
           onClick={() => setLightbox(null)}
         >
           <div
@@ -734,7 +729,7 @@ function OperativePreviewHomeBody({
               type="button"
               onClick={() => setLightbox(null)}
               title="Cerrar"
-              className="absolute -top-10 right-0 grid h-8 w-8 place-items-center rounded-full border border-[#F4EFE6]/25 text-[#F4EFE6]"
+              className="absolute -top-10 right-0 grid h-8 w-8 place-items-center rounded-full bg-white/15 text-white backdrop-blur"
             >
               <X className="h-4 w-4" />
             </button>
@@ -742,20 +737,20 @@ function OperativePreviewHomeBody({
             <img
               src={lightboxSrc}
               alt={`Foto del trabajo en ${lightboxTask.property_name}`}
-              className="w-full rounded-[12px] border border-[#F4EFE6]/15"
+              className="w-full rounded-2xl"
             />
             <div className="mt-3 flex items-center justify-between gap-2">
-              <p className="ps-mono text-[12px] text-[#F4EFE6]/70">
-                {lightboxTask.property_name} · foto <span className="tabular-nums">{lightbox.idx + 1}</span> de <span className="tabular-nums">{lightboxTask.photos.length}</span>
+              <p className="text-[11px] text-white/80">
+                {lightboxTask.property_name} · foto {lightbox.idx + 1} de {lightboxTask.photos.length}
               </p>
               <button
                 type="button"
                 onClick={() => handleDeletePhoto(lightbox.taskId, lightbox.idx)}
                 title="Eliminar esta foto del registro de la tarea"
-                className="ps-mono inline-flex items-center gap-1 rounded-full bg-[#FF5B1F] px-3 py-1.5 text-[12px] text-[#1A0A04]"
+                className="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-red-500"
               >
                 <Trash2 className="h-3 w-3" />
-                eliminar foto
+                Eliminar foto
               </button>
             </div>
           </div>
@@ -766,19 +761,15 @@ function OperativePreviewHomeBody({
           peripherally without dominating the screen. */}
       {toast ? (
         <div
-          className="pointer-events-none fixed inset-x-0 bottom-24 z-[70] mx-auto flex max-w-md justify-center px-4"
+          className="pointer-events-none fixed inset-x-0 bottom-20 z-[70] mx-auto flex max-w-md justify-center px-4"
           aria-live="polite"
         >
           <div
-            className={`ps-mono rounded-full bg-[#141414] px-4 py-2 text-[12px] text-[#F4EFE6] transition ${
+            className={`rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
               toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
             }`}
-            style={{
-              transitionDuration: 'var(--dur-base)',
-              transitionTimingFunction: 'var(--ease)',
-            }}
           >
-            <span className="text-[#FF5B1F]">✓</span> {toast}
+            ✓ {toast}
           </div>
         </div>
       ) : null}

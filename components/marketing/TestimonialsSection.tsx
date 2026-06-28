@@ -1,3 +1,4 @@
+import { Quote } from 'lucide-react';
 import { getLocale, type Locale } from '@/lib/i18n';
 
 type Testimonial = {
@@ -5,6 +6,7 @@ type Testimonial = {
   name: string;
   role: string;
   initials: string;
+  gradient: string;
 };
 
 /**
@@ -23,10 +25,10 @@ const COPY: Record<
   }
 > = {
   es: {
-    eyebrow: 'testimonios',
+    eyebrow: 'Testimonios',
     heading: 'Equipos que confían en nosotros',
     sub: 'Operadores y propietarios que han transformado su negocio con nuestra plataforma.',
-    worksWith: 'trabajamos con',
+    worksWith: 'Trabajamos con',
     testimonials: [
       {
         quote:
@@ -34,6 +36,7 @@ const COPY: Record<
         name: 'Laura Martín',
         role: 'Directora de Operaciones, Cleaners UK',
         initials: 'LM',
+        gradient: 'from-blue-600 to-cyan-500',
       },
       {
         quote:
@@ -41,6 +44,7 @@ const COPY: Record<
         name: 'Carlos Ruiz',
         role: 'Fundador, AirHosts Madrid',
         initials: 'CR',
+        gradient: 'from-emerald-500 to-teal-500',
       },
       {
         quote:
@@ -48,14 +52,15 @@ const COPY: Record<
         name: 'Sofía Navarro',
         role: 'CEO, PristineHouse',
         initials: 'SN',
+        gradient: 'from-violet-500 to-blue-600',
       },
     ],
   },
   en: {
-    eyebrow: 'testimonials',
+    eyebrow: 'Testimonials',
     heading: 'Teams that trust us',
     sub: 'Operators and property owners who have transformed their business with our platform.',
-    worksWith: 'we work with',
+    worksWith: 'We work with',
     testimonials: [
       {
         quote:
@@ -63,6 +68,7 @@ const COPY: Record<
         name: 'Laura Martín',
         role: 'Head of Operations, Cleaners UK',
         initials: 'LM',
+        gradient: 'from-blue-600 to-cyan-500',
       },
       {
         quote:
@@ -70,6 +76,7 @@ const COPY: Record<
         name: 'Carlos Ruiz',
         role: 'Founder, AirHosts Madrid',
         initials: 'CR',
+        gradient: 'from-emerald-500 to-teal-500',
       },
       {
         quote:
@@ -77,14 +84,15 @@ const COPY: Record<
         name: 'Sofía Navarro',
         role: 'CEO, PristineHouse',
         initials: 'SN',
+        gradient: 'from-violet-500 to-blue-600',
       },
     ],
   },
   pt: {
-    eyebrow: 'testemunhos',
+    eyebrow: 'Testemunhos',
     heading: 'Equipas que confiam em nós',
     sub: 'Operadores e proprietários que transformaram o seu negócio com a nossa plataforma.',
-    worksWith: 'trabalhamos com',
+    worksWith: 'Trabalhamos com',
     testimonials: [
       {
         quote:
@@ -92,6 +100,7 @@ const COPY: Record<
         name: 'Laura Martín',
         role: 'Diretora de Operações, Cleaners UK',
         initials: 'LM',
+        gradient: 'from-blue-600 to-cyan-500',
       },
       {
         quote:
@@ -99,6 +108,7 @@ const COPY: Record<
         name: 'Carlos Ruiz',
         role: 'Fundador, AirHosts Madrid',
         initials: 'CR',
+        gradient: 'from-emerald-500 to-teal-500',
       },
       {
         quote:
@@ -106,6 +116,7 @@ const COPY: Record<
         name: 'Sofía Navarro',
         role: 'CEO, PristineHouse',
         initials: 'SN',
+        gradient: 'from-violet-500 to-blue-600',
       },
     ],
   },
@@ -119,100 +130,62 @@ const COMPANIES: string[] = [
   'MadridClean',
 ];
 
-const SERIF = "'Instrument Serif', Georgia, serif";
-const MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
-
 export default async function TestimonialsSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="relative bg-[#F4EFE6] ps-paper-grain py-24 md:py-40">
-      <div className="mx-auto max-w-[1280px] px-6 md:px-12">
-        <div className="mx-auto max-w-2xl">
-          <p className="text-[12px] text-[#141414]" style={{ fontFamily: MONO }}>
-            <span
-              className="pb-1"
-              style={{
-                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '100% 1px',
-                backgroundPosition: '0 calc(100% + 4px)',
-              }}
-            >
-              {t.eyebrow}
-            </span>
+    <section className="relative bg-slate-50 py-12 sm:py-28">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+            {t.eyebrow}
           </p>
-          <h2
-            className="mt-6 text-[32px] leading-[0.95] tracking-[-0.03em] text-[#141414] md:text-[64px]"
-            style={{ fontFamily: SERIF, fontWeight: 400 }}
-          >
+          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
             {t.heading}
           </h2>
-          <p className="mt-6 max-w-[62ch] text-[18px] leading-[1.45] text-[#54524D] md:text-[22px]">
-            {t.sub}
-          </p>
+          <p className="mt-4 text-base text-slate-600">{t.sub}</p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-6 md:mt-24 md:grid-cols-3 md:gap-8">
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-16 md:grid-cols-3">
           {t.testimonials.map((item, idx) => (
             <article
               key={item.name}
-              className={`relative ${idx === 0 ? 'flex' : 'hidden sm:flex'} flex-col rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-10 md:p-14`}
+              className={`relative ${idx === 0 ? 'flex' : 'hidden sm:flex'} flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-shadow hover:shadow-md sm:p-8`}
             >
-              {/* Single mandarin opening quote — set, not iconified */}
-              <span
-                aria-hidden
-                className="text-[64px] leading-[0.4] text-[#FF5B1F] md:text-[88px]"
-                style={{ fontFamily: SERIF, fontWeight: 400 }}
+              <div
+                className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} text-white shadow-sm ring-2 ring-white sm:mb-5`}
               >
-                &ldquo;
-              </span>
-              <blockquote
-                className="mt-6 flex-1 text-[20px] leading-[1.35] tracking-[-0.01em] text-[#141414] md:text-[24px]"
-                style={{ fontFamily: SERIF, fontWeight: 400 }}
-              >
-                {item.quote}
+                <Quote className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <blockquote className="flex-1 text-sm leading-relaxed text-slate-700 sm:text-[15px]">
+                &ldquo;{item.quote}&rdquo;
               </blockquote>
-              <div className="mt-10 flex items-center gap-3 border-t border-[#1414141A] pt-6">
+              <div className="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4 sm:mt-6 sm:pt-5">
                 <div
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#141414] text-[12px] text-[#F4EFE6]"
-                  style={{ fontFamily: MONO }}
+                  className={`flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br ${item.gradient} text-sm font-bold text-white shadow-[0_4px_12px_rgba(37,99,235,0.25)]`}
                   aria-hidden="true"
                 >
                   {item.initials}
                 </div>
                 <div>
-                  <p className="text-[15px] text-[#141414]">{item.name}</p>
-                  <p className="text-[12px] text-[#54524D]" style={{ fontFamily: MONO }}>
-                    {item.role}
+                  <p className="font-display text-sm font-bold text-slate-900">
+                    {item.name}
                   </p>
+                  <p className="text-xs text-slate-500">{item.role}</p>
                 </div>
               </div>
             </article>
           ))}
         </div>
 
-        <div className="mt-16 md:mt-24">
-          <p className="text-[12px] text-[#54524D]" style={{ fontFamily: MONO }}>
-            <span
-              className="pb-1"
-              style={{
-                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '100% 1px',
-                backgroundPosition: '0 calc(100% + 4px)',
-              }}
-            >
-              {t.worksWith}
-            </span>
+        <div className="mt-10 sm:mt-16">
+          <p className="text-center text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
+            {t.worksWith}
           </p>
-          <ul className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+          <ul className="mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {COMPANIES.map((name, idx) => (
               <li key={name} className={idx >= 3 ? 'hidden sm:block' : undefined}>
-                <span
-                  className="text-[20px] tracking-[-0.01em] text-[#141414] md:text-[24px]"
-                  style={{ fontFamily: SERIF, fontWeight: 400 }}
-                >
+                <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ring-1 ring-blue-100/40 sm:text-sm">
                   {name}
                 </span>
               </li>

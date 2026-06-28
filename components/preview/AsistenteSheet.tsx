@@ -13,7 +13,6 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Camera, Mic, Phone, Sparkles, Timer, X } from 'lucide-react';
-// Sparkles retained for the fallback suggestion icon mapping (iconFor → 'fallback').
 
 export type DemoTaskLike = {
   id: string;
@@ -238,7 +237,7 @@ export function AsistenteSheet({
         }}
       >
         <div
-          className="rounded-t-[12px] border-t border-x border-[#1414141A] bg-[#F4EFE6] pb-6 pt-2"
+          className="rounded-t-3xl bg-white pb-6 pt-2 shadow-[0_-24px_60px_-12px_rgba(15,23,42,0.35)]"
           style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
         >
           {/* Drag handle — wide, thumb-friendly */}
@@ -250,19 +249,20 @@ export function AsistenteSheet({
             className="flex cursor-grab justify-center py-2 touch-none"
             style={{ touchAction: 'none' }}
           >
-            <span className="block h-1 w-12 rounded-full bg-[#1414141A]" />
+            <span className="block h-1.5 w-12 rounded-full bg-slate-300" />
           </div>
 
           <div className="px-5">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="ps-mono text-[12px] text-[#54524D]">
-                  <span className="ps-link-mandarin text-[#141414]">asistente</span>
-                </p>
-                <h3 className="ps-serif mt-2 text-[28px] leading-[0.95] tracking-[-0.02em] text-[#141414]">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-700">
+                  <Sparkles className="h-3 w-3" />
+                  Asistente IA
+                </div>
+                <h3 className="mt-2 font-display text-lg font-bold text-slate-900">
                   ¿Qué puedo hacer por ti?
                 </h3>
-                <p className="mt-1 text-[13px] leading-snug text-[#54524D]">
+                <p className="mt-0.5 text-[12px] text-slate-500">
                   Sugerencias basadas en tu agenda ahora mismo.
                 </p>
               </div>
@@ -270,8 +270,7 @@ export function AsistenteSheet({
                 type="button"
                 onClick={onClose}
                 aria-label="Cerrar asistente"
-                className="grid h-9 w-9 place-items-center rounded-full border border-[#1414141A] text-[#54524D] transition-colors hover:border-[#141414] hover:text-[#141414]"
-                style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                className="grid h-9 w-9 place-items-center rounded-full text-slate-400 hover:bg-slate-100"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -281,11 +280,10 @@ export function AsistenteSheet({
             <button
               type="button"
               onClick={playFakeVoice}
-              className="mt-5 flex w-full items-center gap-3 rounded-full border border-[#1414141A] bg-[#E4DACA] px-3 py-2.5 text-left text-[13px] text-[#141414] transition-colors hover:border-[#141414]"
-              style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+              className="mt-4 flex w-full items-center gap-3 rounded-full border border-violet-200 bg-gradient-to-r from-violet-50 to-white px-3 py-2.5 text-left text-[13px] text-slate-700 transition hover:border-violet-300"
             >
               <span
-                className={`grid h-9 w-9 place-items-center rounded-full bg-[#FF5B1F] text-[#1A0A04] ${
+                className={`grid h-9 w-9 place-items-center rounded-full bg-violet-600 text-white shadow ${
                   voiceTyping ? 'animate-pulse' : ''
                 }`}
               >
@@ -294,13 +292,13 @@ export function AsistenteSheet({
               <span className="min-w-0 flex-1 truncate">
                 {voiceText || (voiceTyping ? 'Escuchando…' : 'Pulsa y habla — p.ej. "agenda Soho mañana 10am"')}
                 {voiceTyping ? (
-                  <span className="ml-0.5 inline-block h-3 w-[2px] animate-pulse bg-[#FF5B1F] align-middle" />
+                  <span className="ml-0.5 inline-block h-3 w-[2px] animate-pulse bg-violet-600 align-middle" />
                 ) : null}
               </span>
             </button>
 
             {/* Suggestions */}
-            <ul className="mt-5 space-y-2">
+            <ul className="mt-4 space-y-2">
               {suggestions.map((s) => {
                 const Icon = iconFor(s.kind);
                 return (
@@ -311,17 +309,16 @@ export function AsistenteSheet({
                         onAction?.(s);
                         onClose();
                       }}
-                      className="ps-set flex w-full items-start gap-3 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] px-4 py-3 text-left transition-colors hover:border-[#141414]"
-                      style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+                      className="flex w-full items-start gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left transition hover:border-violet-300 hover:bg-violet-50/40"
                     >
-                      <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] text-[#141414]">
+                      <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-700">
                         <Icon className="h-4 w-4" />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[14px] font-medium text-[#141414]">
+                        <span className="block text-[13px] font-semibold text-slate-900">
                           {s.title}
                         </span>
-                        <span className="mt-0.5 block text-[12px] leading-snug text-[#54524D]">
+                        <span className="mt-0.5 block text-[11.5px] leading-snug text-slate-500">
                           {s.subtitle}
                         </span>
                       </span>

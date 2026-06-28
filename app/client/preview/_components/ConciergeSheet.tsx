@@ -54,20 +54,27 @@ const PROMPTS: Prompt[] = [
   },
 ];
 
-// Sparkle glyph used both on the pill and the sheet header — re-skinned
-// to the new palette: solid mandarin disc with the sparkles glyph in
-// mandarin-ink, no conic gradient (kills the "AI-rainbow" cliché while
-// preserving the visual anchor between pill and sheet header).
+// Sparkle glyph used both on the pill and the sheet header — the
+// rotating conic mask is the visual anchor that ties them together.
 function SparkleGlyph({ size = 18 }: { size?: number }) {
   return (
     <span
       aria-hidden
       className="relative inline-grid place-items-center rounded-full"
-      style={{ width: size, height: size, backgroundColor: '#FF5B1F' }}
+      style={{ width: size, height: size }}
     >
+      <span
+        className="absolute inset-0 rounded-full client-sparkle-mask"
+        style={{
+          WebkitMask:
+            'radial-gradient(circle, transparent 35%, #000 38%, #000 100%)',
+          mask: 'radial-gradient(circle, transparent 35%, #000 38%, #000 100%)',
+          opacity: 0.55,
+        }}
+      />
       <Sparkles
-        className="relative"
-        style={{ width: size * 0.62, height: size * 0.62, color: '#1A0A04' }}
+        className="relative text-white"
+        style={{ width: size * 0.62, height: size * 0.62 }}
       />
     </span>
   );
@@ -134,58 +141,57 @@ export function ConciergeSheet() {
         onClick={() => setOpen(true)}
         title="Habla con Sofía, tu asistente"
         aria-label="Abrir asistente Sofía"
-        className={`ps-mono fixed bottom-[5.5rem] left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-4 py-2.5 text-[12px] text-[#F4EFE6] transition will-change-transform ${
+        className={`fixed bottom-20 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(99,102,241,0.65)] transition will-change-transform hover:scale-[1.03] ${
           open ? 'pointer-events-none scale-90 opacity-0' : 'opacity-100'
         }`}
-        style={{ transitionDuration: '280ms', transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)' }}
+        style={{ transitionDuration: '260ms', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
       >
         <SparkleGlyph size={16} />
-        pregúntame algo
+        Pregúntame algo
       </button>
 
       {/* The sheet — bottom-anchored, scrim, focus-trap-light. */}
       {open && (
         <div
-          className="fixed inset-0 z-40 flex items-end justify-center"
-          style={{ backgroundColor: 'rgba(20, 20, 20, 0.5)' }}
+          className="fixed inset-0 z-40 flex items-end justify-center bg-black/50"
           onClick={close}
           role="dialog"
           aria-modal="true"
           aria-label="Asistente Sofía"
         >
           <div
-            className="relative w-full max-w-md rounded-t-[12px] border-t border-[#1414141A] p-5 pb-[calc(env(safe-area-inset-bottom)+5rem)] client-fade-up"
-            style={{ backgroundColor: '#F4EFE6' }}
+            className="relative w-full max-w-md rounded-t-3xl bg-white p-5 pb-[calc(env(safe-area-inset-bottom)+5rem)] shadow-xl client-fade-up"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full" style={{ backgroundColor: '#1414141A' }} />
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200" />
             <button
               type="button"
               onClick={close}
               title="Cerrar"
-              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-[#54524D] hover:bg-[#E4DACA] hover:text-[#141414]"
-              style={{ transitionDuration: '160ms' }}
+              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-slate-500 hover:bg-slate-100"
             >
               <X className="h-4 w-4" />
             </button>
 
             {/* Header — visually echoes the pill so it reads as the
                 same object morphing into place. */}
-            <div className="flex items-center gap-3">
-              <SparkleGlyph size={28} />
+            <div className="flex items-center gap-2">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600">
+                <SparkleGlyph size={18} />
+              </span>
               <div>
-                <p className="ps-serif text-[24px] leading-none tracking-[-0.015em] text-[#141414]">
+                <p className="font-display text-base font-bold text-slate-900">
                   Sofía
                 </p>
-                <p className="ps-mono mt-1 text-[11px] text-[#54524D]">
-                  tu asistente del portal — pruébala
+                <p className="text-[11px] text-slate-500">
+                  Tu asistente del portal — pruébala
                 </p>
               </div>
             </div>
 
             {/* Prompt list (hidden once a prompt is picked). */}
             {!picked && (
-              <ul className="mt-5 flex flex-col gap-2">
+              <ul className="mt-4 flex flex-col gap-2">
                 {PROMPTS.map((p, i) => (
                   <li
                     key={p.id}
@@ -196,11 +202,10 @@ export function ConciergeSheet() {
                       type="button"
                       onClick={() => setPicked(p)}
                       title={p.text}
-                      className="group flex w-full items-center justify-between gap-3 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] px-4 py-3 text-left text-[13px] text-[#141414] transition hover:bg-[#141414] hover:text-[#F4EFE6]"
-                      style={{ transitionDuration: '160ms' }}
+                      className="group flex w-full items-center justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-left text-[13px] font-medium text-slate-800 ring-1 ring-inset ring-slate-100 transition hover:bg-blue-50 hover:ring-blue-200"
                     >
                       <span>{p.text}</span>
-                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#54524D] transition group-hover:text-[#FF5B1F]" />
+                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition group-hover:text-blue-600" />
                     </button>
                   </li>
                 ))}
@@ -209,53 +214,42 @@ export function ConciergeSheet() {
 
             {/* Streamed reply view. */}
             {picked && (
-              <div className="mt-5">
-                <p className="ps-mono text-[11px] text-[#54524D]">tú</p>
-                <p className="mt-1 text-[14px] text-[#141414]">{picked.text}</p>
-
-                <p className="ps-mono mt-4 text-[11px] text-[#54524D]">
-                  <span
-                    style={{
-                      backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '100% 1px',
-                      backgroundPosition: '0 calc(100% + 3px)',
-                      paddingBottom: '3px',
-                    }}
-                  >
-                    sofía
-                  </span>
+              <div className="mt-4">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  Tú
                 </p>
-                <p className="mt-2 min-h-[5.5rem] text-[14px] leading-relaxed text-[#141414]">
+                <p className="mt-1 text-[13px] text-slate-700">{picked.text}</p>
+
+                <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
+                  Sofía
+                </p>
+                <p className="mt-1 min-h-[5.5rem] text-[13.5px] leading-relaxed text-slate-800">
                   {streamed}
                   {!streamingDone && (
                     <span
                       aria-hidden
-                      className="ml-0.5 inline-block h-[1em] w-[2px] -mb-[3px] align-middle client-stream-caret"
-                      style={{ backgroundColor: '#FF5B1F' }}
+                      className="ml-0.5 inline-block h-[1em] w-[2px] -mb-[3px] bg-slate-700 align-middle client-stream-caret"
                     />
                   )}
                 </p>
 
-                <div className="mt-5 flex gap-2">
+                <div className="mt-4 flex gap-2">
                   <button
                     type="button"
                     onClick={() => setPicked(null)}
                     title="Volver a las sugerencias"
-                    className="ps-mono rounded-full border border-[#1414141A] px-4 py-2.5 text-[12px] text-[#141414] hover:bg-[#E4DACA]"
-                    style={{ transitionDuration: '160ms' }}
+                    className="rounded-2xl bg-slate-100 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
                   >
-                    atrás
+                    Atrás
                   </button>
                   <button
                     type="button"
                     onClick={close}
                     disabled={!streamingDone}
                     title={picked.action.label}
-                    className="ps-mono flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-[12px] text-[#1A0A04] transition disabled:cursor-not-allowed disabled:opacity-50"
-                    style={{ backgroundColor: '#FF5B1F', transitionDuration: '160ms' }}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {picked.action.label.toLowerCase()}
+                    {picked.action.label}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </button>
                 </div>

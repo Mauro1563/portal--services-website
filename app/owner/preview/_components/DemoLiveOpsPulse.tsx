@@ -39,9 +39,9 @@ type State = {
 };
 
 const INITIAL_CLEANERS: Cleaner[] = [
-  { id: 'carmen', name: 'Carmen', short: 'CR', color: 'bg-[#1B2D6B]', p: 0.18, v: 0.05 },
-  { id: 'lucia', name: 'Lucía', short: 'LV', color: 'bg-[#FF5B1F]', p: 0.42, v: 0.045 },
-  { id: 'pedro', name: 'Pedro', short: 'PK', color: 'bg-[#141414]', p: 0.66, v: 0.04 },
+  { id: 'carmen', name: 'Carmen', short: 'CR', color: 'bg-blue-600', p: 0.18, v: 0.05 },
+  { id: 'lucia', name: 'Lucía', short: 'LV', color: 'bg-emerald-600', p: 0.42, v: 0.045 },
+  { id: 'pedro', name: 'Pedro', short: 'PK', color: 'bg-amber-500', p: 0.66, v: 0.04 },
 ];
 
 const TIMELINE: Array<Omit<Event, 'id'> & { afterTicks: number }> = [
@@ -101,7 +101,7 @@ export function DemoLiveOpsPulse() {
   }, [reduced]);
 
   return (
-    <div className="mt-4 select-none rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] px-3 py-2.5">
+    <div className="mt-3 select-none rounded-xl bg-gradient-to-r from-slate-50 via-white to-slate-50 px-3 py-2 ring-1 ring-slate-200">
       <div className="relative h-6">
         {/* The thin activity path — last 8 hours sparkline-style */}
         <svg
@@ -112,9 +112,9 @@ export function DemoLiveOpsPulse() {
         >
           <defs>
             <linearGradient id="demo-pulse-grad" x1="0" x2="1">
-              <stop offset="0" stopColor="#141414" stopOpacity="0.15" />
-              <stop offset="0.5" stopColor="#FF5B1F" stopOpacity="0.55" />
-              <stop offset="1" stopColor="#141414" stopOpacity="0.15" />
+              <stop offset="0" stopColor="#3b82f6" stopOpacity="0.15" />
+              <stop offset="0.5" stopColor="#06b6d4" stopOpacity="0.55" />
+              <stop offset="1" stopColor="#10b981" stopOpacity="0.15" />
             </linearGradient>
           </defs>
           <path
@@ -131,7 +131,7 @@ export function DemoLiveOpsPulse() {
               x2={(i * 320) / 8}
               y1="20"
               y2="22"
-              stroke="rgba(20,20,20,0.18)"
+              stroke="rgba(15,23,42,0.18)"
               strokeWidth="1"
             />
           ))}
@@ -145,7 +145,7 @@ export function DemoLiveOpsPulse() {
               style={{ left: `${Math.min(98, Math.max(2, c.p * 100))}%` }}
             >
               <span
-                className={`relative grid h-4 w-4 place-items-center rounded-full text-[8px] font-bold text-[#F4EFE6] ${c.color}`}
+                className={`relative grid h-4 w-4 place-items-center rounded-full text-[8px] font-bold text-white shadow ${c.color}`}
               >
                 {c.short}
                 {state.haloFor === c.id ? (
@@ -160,12 +160,14 @@ export function DemoLiveOpsPulse() {
           ))}
         </div>
       </div>
-      <p className="mt-2 flex items-center justify-between gap-2 font-mono text-[11px] leading-tight text-[#54524D]">
-        <span>últimas 8h</span>
+      <p className="mt-1.5 flex items-center justify-between gap-2 text-[11px] leading-tight text-slate-600">
+        <span className="font-semibold uppercase tracking-wider text-slate-500">
+          Últimas 8h
+        </span>
         {state.event ? (
           <span
             key={reduced ? 'static' : state.event.id}
-            className={`min-w-0 truncate text-right text-[#141414] ${reduced ? '' : 'demo-whisper'}`}
+            className={`min-w-0 truncate text-right text-slate-700 ${reduced ? '' : 'demo-whisper'}`}
           >
             {reduced ? 'última actividad: hace 2 min' : state.event.label}
           </span>

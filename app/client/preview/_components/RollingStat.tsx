@@ -72,12 +72,11 @@ export function RollingStat({
       {showPulse && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -m-3 rounded-[12px]"
+          className="pointer-events-none absolute inset-0 -m-3 rounded-2xl"
           style={{
             animation:
-              'demo-halo-pulse 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both',
-            // Mandarin pulse — the single "live" ping per design brief.
-            background: '#FF5B1F',
+              'demo-halo-pulse 700ms cubic-bezier(0.22, 1, 0.36, 1) both',
+            background: 'currentColor',
             opacity: 0.18,
           }}
         />

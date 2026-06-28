@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {
   ArrowRight,
+  Sparkles,
   Building2,
   Users,
   UserRound,
@@ -13,6 +14,7 @@ import {
   Star,
   MessageSquare,
   CreditCard,
+  PlayCircle,
 } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { getLocale, type Locale } from '@/lib/i18n';
@@ -35,7 +37,6 @@ const COPY: Record<
   {
     eyebrow: string;
     headlineA: string;
-    headlineEmphasis: string; // the italicised word — gets a mandarin underline
     headlineB: string;
     sub: string;
     ctaPrimary: string;
@@ -53,16 +54,15 @@ const COPY: Record<
   }
 > = {
   es: {
-    eyebrow: "hoy en producción",
+    eyebrow: 'Plataforma todo en uno',
     headlineA: 'Gestiona tu empresa de limpieza',
-    headlineEmphasis: 'sin',
-    headlineB: ' papeles ni hojas de cálculo.',
+    headlineB: 'sin papeles ni hojas de cálculo.',
     sub: 'Reservas, equipos y cobros conectados en un mismo sitio. Tus operarios fichan, tus clientes reservan online y tú lo controlas todo desde un panel claro.',
     ctaPrimary: 'Prueba gratis',
     ctaSecondary: 'Iniciar sesión',
     note: 'Sin tarjeta de crédito. Cancelas cuando quieras.',
     signIn: 'Iniciar sesión',
-    demoBadge: 'demo en vivo',
+    demoBadge: 'Probar demo',
     portalsTitle: 'Tres apps, un mismo sistema.',
     portalsSub: 'Toca cualquiera para entrar a su demo en vivo — sin registro.',
     portals: {
@@ -111,16 +111,15 @@ const COPY: Record<
     },
   },
   en: {
-    eyebrow: 'now shipping',
+    eyebrow: 'The all-in-one platform',
     headlineA: 'Run your cleaning business',
-    headlineEmphasis: 'without',
-    headlineB: ' paperwork or spreadsheets.',
+    headlineB: 'without paperwork or spreadsheets.',
     sub: 'Bookings, teams and payments in one place. Your cleaners clock in, your customers book online, and you stay on top with a clear dashboard.',
     ctaPrimary: 'Start free',
     ctaSecondary: 'Sign in',
     note: 'No credit card. Cancel anytime.',
     signIn: 'Sign in',
-    demoBadge: 'live demo',
+    demoBadge: 'Try the demo',
     portalsTitle: 'Three apps, one system.',
     portalsSub: 'Tap any to enter the live demo — no sign-up.',
     portals: {
@@ -169,16 +168,15 @@ const COPY: Record<
     },
   },
   pt: {
-    eyebrow: 'agora em produção',
+    eyebrow: 'A plataforma tudo-em-um',
     headlineA: 'Gere a sua empresa de limpeza',
-    headlineEmphasis: 'sem',
-    headlineB: ' papelada nem folhas de cálculo.',
+    headlineB: 'sem papelada nem folhas de cálculo.',
     sub: 'Reservas, equipas e cobranças num só lugar. As suas limpadoras fazem check-in, os clientes reservam online e você controla tudo num painel claro.',
     ctaPrimary: 'Experimentar grátis',
     ctaSecondary: 'Entrar',
     note: 'Sem cartão de crédito. Cancele quando quiser.',
     signIn: 'Entrar',
-    demoBadge: 'demo ao vivo',
+    demoBadge: 'Experimentar demo',
     portalsTitle: 'Três apps, um sistema.',
     portalsSub: 'Toque em qualquer uma para abrir o demo — sem registo.',
     portals: {
@@ -232,39 +230,44 @@ export default async function HeroSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="relative overflow-hidden bg-[#F4EFE6] ps-paper-grain">
-      <div className="relative max-w-[1280px] mx-auto px-6 md:px-12">
-        {/* Top nav — Instrument Serif wordmark with mandarin period.
-            Replaces the cyan→blue gradient square. */}
-        <nav className="flex items-center justify-between py-6 md:py-8">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-sky-50/40 to-white">
+      {/* Soft decorative blobs — warm + airy instead of dark navy */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-cyan-200/40 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/3 -right-40 h-[28rem] w-[28rem] rounded-full bg-blue-200/40 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-100/40 blur-3xl"
+      />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Top nav — same brand mark, now dark-on-light */}
+        <nav className="flex items-center justify-between py-5 sm:py-6">
           <Link
             href="/"
-            className="inline-flex items-baseline gap-0 text-[#141414]"
-            aria-label="Portal Services"
+            className="inline-flex items-center gap-2.5"
+            aria-label="Portal Home"
           >
-            <span
-              className="font-serif text-[18px] leading-none tracking-[-0.01em]"
-              style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-            >
-              Portal
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold text-white shadow-[0_8px_18px_-8px_rgba(34,211,238,0.6)]">
+              P
             </span>
-            <span className="mx-[3px] text-[18px] leading-none text-[#FF5B1F]">.</span>
-            <span
-              className="font-serif text-[18px] leading-none tracking-[-0.01em]"
-              style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-            >
-              Services
-            </span>
-            <span className="ml-3 hidden text-[13px] text-[#54524D] sm:inline">
-              Cleaning &amp; Facilities
+            <span className="font-display text-base font-semibold leading-tight text-slate-900">
+              Portal Home
+              <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-blue-600">
+                Cleaning &amp; Facilities
+              </span>
             </span>
           </Link>
           <div className="flex items-center gap-2">
             <LocaleSwitcher current={locale} variant="onLight" />
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[#1414141A] bg-transparent px-4 py-2 text-sm font-medium text-[#141414] transition-colors hover:bg-[#E4DACA]"
-              style={{ transitionDuration: '160ms' }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/40"
             >
               {t.signIn}
               <ArrowRight className="h-3.5 w-3.5" />
@@ -272,113 +275,59 @@ export default async function HeroSection() {
           </div>
         </nav>
 
-        {/* Hero — 7/5 asymmetric magazine layout */}
-        <div className="grid grid-cols-1 gap-12 pt-12 pb-24 md:pt-24 md:pb-40 lg:grid-cols-12 lg:gap-10 lg:pt-32 lg:pb-48">
-          {/* Left column — magazine type, 7 of 12 */}
-          <div className="lg:col-span-7 ps-set">
-            {/* Mono micro-line with mandarin underline — replaces the eyebrow pill */}
-            <p
-              className="text-[12px] text-[#141414]"
-              style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", letterSpacing: 0 }}
-            >
-              <span
-                className="pb-1"
-                style={{
-                  backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: '100% 1px',
-                  backgroundPosition: '0 calc(100% + 4px)',
-                }}
-              >
-                {t.eyebrow}
-              </span>
-            </p>
+        {/* Hero content */}
+        <div className="pt-6 pb-10 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
+          <div className="max-w-3xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+              <Sparkles className="h-3 w-3" />
+              {t.eyebrow}
+            </span>
 
-            <h1
-              className="mt-8 text-[44px] leading-[0.92] tracking-[-0.04em] text-[#141414] md:mt-10 md:text-[88px] lg:text-[112px]"
-              style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontWeight: 400 }}
-            >
-              {t.headlineA}{' '}
-              <em
-                className="not-italic"
-                style={{ fontStyle: 'italic' }}
-              >
-                <span
-                  className="pb-1"
-                  style={{
-                    backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '100% 1px',
-                    backgroundPosition: '0 calc(100% - 2px)',
-                  }}
-                >
-                  {t.headlineEmphasis}
-                </span>
-              </em>
-              {t.headlineB}
+            <h1 className="mt-6 font-display text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              {t.headlineA}
+              <span className="block bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 bg-clip-text text-transparent">
+                {t.headlineB}
+              </span>
             </h1>
 
-            <p className="mt-8 max-w-[62ch] text-[18px] leading-[1.45] text-[#54524D] md:text-[22px]">
+            <p className="mt-4 max-w-2xl text-base text-slate-600 sm:mt-6 sm:text-lg">
               {t.sub}
             </p>
 
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-4 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF5B1F] px-7 py-3.5 text-sm font-semibold text-[#1A0A04] transition-colors hover:bg-[#E84D14]"
-                style={{ transitionDuration: '160ms' }}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(37,99,235,0.45)] transition hover:from-blue-500 hover:to-blue-600"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1414141A] bg-transparent px-7 py-3.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#E4DACA]"
-                style={{ transitionDuration: '160ms' }}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/40"
               >
                 {t.ctaSecondary}
               </Link>
             </div>
 
-            <p
-              className="mt-6 text-[12px] text-[#54524D]"
-              style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" }}
-            >
-              {t.note}
-            </p>
+            <p className="mt-4 text-xs text-slate-500">{t.note}</p>
           </div>
 
-          {/* Right column — three portal cards stacked, 5 of 12.
-              Cleaner card is the "expanded" highlight (ink). */}
-          <div className="lg:col-span-5">
-            <div className="mb-6 flex items-center justify-between gap-3">
-              <h2
-                className="text-[24px] leading-[1] tracking-[-0.02em] text-[#141414] md:text-[28px]"
-                style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontWeight: 400 }}
-              >
-                {t.portalsTitle}
-              </h2>
-              <span
-                className="hidden shrink-0 text-[12px] text-[#141414] sm:inline"
-                style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" }}
-              >
-                <span
-                  className="pb-1"
-                  style={{
-                    backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '100% 1px',
-                    backgroundPosition: '0 calc(100% + 4px)',
-                  }}
-                >
-                  {t.demoBadge}
-                </span>
+          {/* Three portal cards — now fully clickable demos */}
+          <div className="mt-8 sm:mt-16">
+            <div className="mb-5 flex items-end justify-between gap-3">
+              <div>
+                <h2 className="font-display text-lg font-semibold text-slate-900 sm:text-xl">
+                  {t.portalsTitle}
+                </h2>
+                <p className="mt-1 text-sm text-slate-600">{t.portalsSub}</p>
+              </div>
+              <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 sm:inline-flex">
+                <PlayCircle className="h-3 w-3" />
+                {t.demoBadge}
               </span>
             </div>
-            <p className="mb-6 text-[15px] leading-[1.55] text-[#54524D]">{t.portalsSub}</p>
-
-            {/* Horizontal snap row on mobile, stacked column on desktop */}
-            <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 md:mx-0 md:flex-col md:gap-4 md:overflow-visible md:px-0 md:pb-0">
+            <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto -mx-4 px-4 pb-2 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0">
               <PortalCard
                 label="Owner"
                 title={t.portals.owner.title}
@@ -389,7 +338,10 @@ export default async function HeroSection() {
                 featureIcons={[Calendar, DollarSign, Building2]}
                 icon={<Building2 className="h-4 w-4" />}
                 href="/owner/preview"
-                variant="standard"
+                gradient="from-slate-800 via-slate-900 to-blue-900"
+                chip="text-cyan-300 border-cyan-300/30 bg-cyan-300/10"
+                accent="text-cyan-200"
+                bullet="bg-cyan-400/15 text-cyan-200 ring-cyan-300/20"
               />
               <PortalCard
                 label="Cleaner"
@@ -401,7 +353,10 @@ export default async function HeroSection() {
                 featureIcons={[MapPin, Camera, Wallet]}
                 icon={<Users className="h-4 w-4" />}
                 href="/operative/preview"
-                variant="highlight"
+                gradient="from-emerald-500 via-emerald-600 to-teal-700"
+                chip="text-emerald-50 border-emerald-200/40 bg-emerald-100/10"
+                accent="text-emerald-50"
+                bullet="bg-emerald-400/15 text-emerald-50 ring-emerald-200/30"
               />
               <PortalCard
                 label="Client"
@@ -413,20 +368,13 @@ export default async function HeroSection() {
                 featureIcons={[Bell, MessageSquare, CreditCard]}
                 icon={<UserRound className="h-4 w-4" />}
                 href="/client/preview"
-                variant="standard"
+                gradient="from-sky-500 via-blue-600 to-blue-700"
+                chip="text-sky-100 border-sky-200/40 bg-sky-200/10"
+                accent="text-sky-50"
+                bullet="bg-sky-400/15 text-sky-50 ring-sky-200/30"
               />
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Hairline divider at the foot of the section — small mandarin notch */}
-      <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
-        <div className="relative h-px bg-[#1414141A]">
-          <span
-            aria-hidden
-            className="absolute left-0 top-1/2 h-[6px] w-[3px] -translate-y-1/2 bg-[#FF5B1F]"
-          />
         </div>
       </div>
     </section>
@@ -445,7 +393,10 @@ function PortalCard({
   featureIcons,
   icon,
   href,
-  variant,
+  gradient,
+  chip,
+  accent,
+  bullet,
 }: {
   label: string;
   title: string;
@@ -456,105 +407,80 @@ function PortalCard({
   featureIcons: IconLike[];
   icon: React.ReactNode;
   href: string;
-  variant: 'standard' | 'highlight';
+  gradient: string;
+  chip: string;
+  accent: string;
+  bullet: string;
 }) {
-  // Editorial paper cards. Standard = clay on paper. Highlight = ink card,
-  // the "one important card per screen" inversion that replaces the old
-  // gradient tiles. Hairline border only, no shadows. 12px radius.
-  const isHighlight = variant === 'highlight';
-  const surface = isHighlight
-    ? 'bg-[#141414] text-[#F4EFE6] border-0'
-    : 'bg-[#E4DACA] text-[#141414] border border-[#1414141A]';
-  const meta = isHighlight ? 'text-[#F4EFE6]/65' : 'text-[#54524D]';
-  const ctaBg = isHighlight
-    ? 'bg-[#FF5B1F] text-[#1A0A04]'
-    : 'bg-[#141414] text-[#F4EFE6]';
-
   return (
     <Link
       href={href}
       aria-label={cta}
-      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-[12px] p-7 transition-transform md:min-w-0 md:p-8 ${surface}`}
-      style={{ transitionDuration: '280ms', transitionTimingFunction: 'cubic-bezier(0.2,0.8,0.2,1)' }}
+      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-4 shadow-[0_18px_34px_-18px_rgba(15,23,42,0.45)] ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-18px_rgba(15,23,42,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:min-w-0 sm:p-5`}
     >
-      <div className="flex items-start justify-between">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-10 -right-10 hidden h-32 w-32 rounded-full bg-white/10 blur-2xl sm:block"
+      />
+      <div className="relative flex items-start justify-between">
         <span
-          className="text-[12px]"
-          style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" }}
+          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.22em] ${chip}`}
         >
-          <span
-            className="pb-1"
-            style={{
-              backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: '100% 1px',
-              backgroundPosition: '0 calc(100% + 4px)',
-            }}
-          >
-            {label.toLowerCase()}
-          </span>
+          {label}
         </span>
-        <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full ${isHighlight ? 'bg-[#F4EFE6]/10' : 'bg-[#141414]/5'}`}>
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20 sm:h-8 sm:w-8">
           {icon}
         </span>
       </div>
 
-      <div className="mt-8">
-        <p
-          className="text-[24px] leading-[1] tracking-[-0.02em] md:text-[28px]"
-          style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontWeight: 400 }}
-        >
-          {title}
-        </p>
-        <p className={`mt-3 text-[14px] leading-[1.5] ${meta}`}>{description}</p>
+      <div className="relative mt-5 sm:mt-8">
+        <p className="font-display text-sm font-semibold text-white sm:text-base">{title}</p>
+        <p className="mt-1 text-[11px] leading-relaxed text-white/75 sm:text-xs">{description}</p>
       </div>
 
-      {/* KPI mini-stats — printed-receipt setting, no glass, no gradient */}
-      <div className="mt-6 hidden grid-cols-2 gap-px overflow-hidden rounded-[12px] sm:grid">
+      {/* KPI mini-stats — gives buyers a glance at the kind of data each panel handles */}
+      <div className="relative mt-3 hidden grid-cols-2 gap-2 sm:mt-4 sm:grid">
         {kpis.map((k) => (
           <div
             key={k.label}
-            className={`px-4 py-3 ${isHighlight ? 'bg-[#F4EFE6]/[0.06]' : 'bg-[#141414]/[0.04]'}`}
+            className="rounded-xl bg-white/10 px-3 py-2 ring-1 ring-white/15 backdrop-blur-sm"
           >
-            <p
-              className={`text-[12px] ${meta}`}
-              style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" }}
-            >
-              {k.label.toLowerCase()}
+            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/60">
+              {k.label}
             </p>
-            <p
-              className="mt-1 text-[22px] leading-[1] tabular-nums"
-              style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontWeight: 400 }}
-            >
+            <p className={`mt-0.5 text-sm font-bold tabular-nums ${accent}`}>
               {k.value}
             </p>
           </div>
         ))}
       </div>
 
-      <ul className="mt-6 space-y-2.5">
+      {/* Feature bullets — what's inside */}
+      <ul className="relative mt-3 space-y-2 sm:mt-4">
         {features.map((f, i) => {
           const Icon = featureIcons[i] ?? Star;
           return (
             <li
               key={f}
-              className={`${i >= 2 ? 'hidden sm:flex' : 'flex'} items-center gap-2.5 text-[13px] leading-[1.4] ${meta}`}
+              className={`${i >= 2 ? 'hidden sm:flex' : 'flex'} items-center gap-2 text-[11px] text-white/85 sm:text-[12px]`}
             >
-              <Icon className="h-3 w-3 shrink-0" />
-              <span>{f}</span>
+              <span
+                className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ${bullet}`}
+              >
+                <Icon className="h-2.5 w-2.5" />
+              </span>
+              <span className="leading-tight">{f}</span>
             </li>
           );
         })}
       </ul>
 
-      <div className={`mt-7 inline-flex items-center justify-between rounded-full px-4 py-2 ${ctaBg}`}>
-        <span
-          className="text-[12px]"
-          style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" }}
-        >
-          {cta.toLowerCase()}
+      {/* CTA — makes the whole card visibly clickable */}
+      <div className="relative mt-4 flex items-center justify-between rounded-xl bg-white/12 px-3 py-1.5 ring-1 ring-white/15 transition group-hover:bg-white/20 sm:mt-5 sm:py-2">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-white sm:text-[11px]">
+          {cta}
         </span>
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" style={{ transitionDuration: '280ms' }} />
+        <ArrowRight className="h-4 w-4 text-white transition group-hover:translate-x-0.5" />
       </div>
     </Link>
   );

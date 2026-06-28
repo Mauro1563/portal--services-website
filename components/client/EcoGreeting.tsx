@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Hand, Search, SlidersHorizontal } from 'lucide-react';
 
 /**
  * Greeting + search row at the top of the client home — modeled on
@@ -30,52 +30,39 @@ export function EcoGreeting({
   const initial = firstName.charAt(0).toUpperCase() || '·';
 
   return (
-    <section className="ps-set px-1 pt-1">
+    <section className="px-1 pt-1">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="ps-serif text-[40px] leading-[0.95] tracking-[-0.03em] text-[#141414]">
-            <span
-              style={{
-                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '100% 1px',
-                backgroundPosition: '0 calc(100% + 2px)',
-                paddingBottom: '4px',
-              }}
-            >
-              {firstName}
-            </span>
+          <p className="inline-flex items-center gap-1.5 font-display text-xl font-bold tracking-tight text-slate-900">
+            {firstName}
+            <Hand className="h-5 w-5 -rotate-12 text-amber-400" />
           </p>
-          <p className="ps-mono mt-2 text-[12px] text-[#54524D]">
-            empecemos tu próxima limpieza
+          <p className="mt-0.5 text-[12.5px] text-slate-500">
+            Empecemos tu próxima limpieza
           </p>
         </div>
-        <span
-          className="ps-serif grid h-11 w-11 shrink-0 place-items-center rounded-full text-[18px] text-[#1A0A04]"
-          style={{ backgroundColor: '#E8C8C0' }}
-        >
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white shadow-[0_6px_14px_-6px_rgba(37,99,235,0.55)]">
           {initial}
         </span>
       </div>
 
-      <form action={searchAction} method="get" className="mt-5 flex gap-2">
+      <form action={searchAction} method="get" className="mt-4 flex gap-2">
         <label className="relative block flex-1">
           <Search
-            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#54524D]"
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
             aria-hidden
           />
           <input
             type="text"
             name="q"
             placeholder="Buscar servicio…"
-            className="block h-11 w-full rounded-[12px] border border-[#1414141A] bg-[#E4DACA] pl-10 pr-3 text-[14px] text-[#141414] placeholder:text-[#54524D] focus:border-[#FF5B1F] focus:outline-none focus:ring-1 focus:ring-[#FF5B1F]"
+            className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </label>
         <button
           type="submit"
           aria-label="Filtros"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-[12px] border border-[#1414141A] bg-[#E4DACA] text-[#141414] transition hover:bg-[#141414] hover:text-[#F4EFE6]"
-          style={{ transitionDuration: '160ms' }}
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-slate-900 text-white transition hover:bg-slate-700"
         >
           <SlidersHorizontal className="h-4 w-4" />
         </button>
