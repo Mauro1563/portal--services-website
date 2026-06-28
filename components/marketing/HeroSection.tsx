@@ -46,6 +46,8 @@ const COPY: Record<
     demoBadge: string;
     portalsTitle: string;
     portalsSub: string;
+    modeResidential: string;
+    modeAirbnb: string;
     portals: {
       owner: PortalCopy;
       cleaner: PortalCopy;
@@ -57,7 +59,7 @@ const COPY: Record<
     eyebrow: 'Plataforma todo en uno',
     headlineA: 'Gestiona tu empresa de limpieza',
     headlineB: 'sin papeles ni hojas de cálculo.',
-    sub: 'Reservas, equipos y cobros conectados en un mismo sitio. Tus operarios fichan, tus clientes reservan online y tú lo controlas todo desde un panel claro.',
+    sub: 'Reservas, equipos y cobros conectados en un mismo sitio. Sirve tanto limpieza residencial recurrente como turnovers de Airbnb.',
     ctaPrimary: 'Prueba gratis',
     ctaSecondary: 'Iniciar sesión',
     note: 'Sin tarjeta de crédito. Cancelas cuando quieras.',
@@ -65,6 +67,8 @@ const COPY: Record<
     demoBadge: 'Probar demo',
     portalsTitle: 'Tres apps, un mismo sistema.',
     portalsSub: 'Toca cualquiera para entrar a su demo en vivo — sin registro.',
+    modeResidential: 'Residencial',
+    modeAirbnb: 'Airbnb',
     portals: {
       owner: {
         title: 'Panel del dueño',
@@ -114,7 +118,7 @@ const COPY: Record<
     eyebrow: 'The all-in-one platform',
     headlineA: 'Run your cleaning business',
     headlineB: 'without paperwork or spreadsheets.',
-    sub: 'Bookings, teams and payments in one place. Your cleaners clock in, your customers book online, and you stay on top with a clear dashboard.',
+    sub: 'Bookings, teams and payments in one place. Works for recurring residential cleaning and short-let Airbnb turnovers.',
     ctaPrimary: 'Start free',
     ctaSecondary: 'Sign in',
     note: 'No credit card. Cancel anytime.',
@@ -122,6 +126,8 @@ const COPY: Record<
     demoBadge: 'Try the demo',
     portalsTitle: 'Three apps, one system.',
     portalsSub: 'Tap any to enter the live demo — no sign-up.',
+    modeResidential: 'Residential',
+    modeAirbnb: 'Airbnb',
     portals: {
       owner: {
         title: 'Owner dashboard',
@@ -171,7 +177,7 @@ const COPY: Record<
     eyebrow: 'A plataforma tudo-em-um',
     headlineA: 'Gere a sua empresa de limpeza',
     headlineB: 'sem papelada nem folhas de cálculo.',
-    sub: 'Reservas, equipas e cobranças num só lugar. As suas limpadoras fazem check-in, os clientes reservam online e você controla tudo num painel claro.',
+    sub: 'Reservas, equipas e cobranças num só lugar. Funciona para limpeza residencial recorrente e turnovers de alojamento local.',
     ctaPrimary: 'Experimentar grátis',
     ctaSecondary: 'Entrar',
     note: 'Sem cartão de crédito. Cancele quando quiser.',
@@ -179,6 +185,8 @@ const COPY: Record<
     demoBadge: 'Experimentar demo',
     portalsTitle: 'Três apps, um sistema.',
     portalsSub: 'Toque em qualquer uma para abrir o demo — sem registo.',
+    modeResidential: 'Residencial',
+    modeAirbnb: 'Airbnb',
     portals: {
       owner: {
         title: 'Painel do dono',
@@ -289,6 +297,17 @@ export default async function HeroSection() {
                 {t.headlineB}
               </span>
             </h1>
+
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-50 ring-1 ring-inset ring-slate-200 px-1 py-1 text-[12px]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold text-slate-900 shadow-sm">
+                <span aria-hidden>🏠</span>
+                {t.modeResidential}
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-transparent px-3 py-1 text-slate-600">
+                <span aria-hidden>🏨</span>
+                {t.modeAirbnb}
+              </span>
+            </div>
 
             <p className="mt-4 max-w-2xl text-base text-slate-600 sm:mt-6 sm:text-lg">
               {t.sub}
