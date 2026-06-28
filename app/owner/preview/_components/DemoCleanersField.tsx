@@ -13,26 +13,33 @@ export type DemoFieldCheckin = {
 };
 
 /**
- * Preview-only version of CleanersField — same layout/colors as the
- * real component but routes link to /owner/preview/tasks/<id> so the
- * tour stays self-contained.
+ * Preview-only version of CleanersField — clay surface, hairline border,
+ * mandarin pulse on the live indicator, mono metadata under each row.
+ * Routes link to /owner/preview/tasks/<id> so the tour stays self-contained.
  */
 export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5">
-      <header className="flex items-center justify-between gap-2">
+    <section className="ps-set rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 md:p-6">
+      <header className="flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="inline-flex items-center gap-2 font-display text-lg font-semibold text-slate-900">
-            <Radio className="h-3.5 w-3.5 text-emerald-500" aria-hidden />
+          <p className="inline-flex items-center gap-2 font-mono text-[12px] text-[#54524D]">
+            <Radio className="h-3 w-3 text-[#FF5B1F]" aria-hidden />
+            en campo
+            <span className="ml-0.5 inline-block h-[1px] w-5 align-middle bg-[#FF5B1F]" />
+          </p>
+          <h2
+            className="mt-1 text-[28px] leading-[1] tracking-[-0.02em] text-[#141414] md:text-[32px]"
+            style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}
+          >
             Operarios en campo
           </h2>
-          <p className="mt-0.5 text-[12.5px] text-slate-600">
-            {checkins.length} visitas en las últimas 8 horas
+          <p className="mt-1 font-mono text-[11px] text-[#54524D]">
+            {checkins.length} visitas · últimas 8 horas
           </p>
         </div>
         <Link
           href="/owner/preview/tasks"
-          className="shrink-0 text-[12px] font-semibold text-blue-700 hover:text-blue-800"
+          className="ps-link shrink-0 font-mono text-[12px] text-[#141414]"
         >
           Ver todos →
         </Link>
@@ -40,7 +47,7 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
 
       <DemoLiveOpsPulse />
 
-      <ul className="mt-3 space-y-2">
+      <ul className="mt-4 space-y-2">
         {checkins.map((c) => {
           const initials =
             c.cleanerName
@@ -56,20 +63,21 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
           return (
             <li
               key={c.taskId}
-              className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/40 transition hover:border-blue-300 hover:bg-blue-50/30 focus-within:border-blue-300"
+              className="group flex min-h-[64px] items-center gap-3 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] transition-colors hover:bg-[#F4EFE6]/60 focus-within:border-[#FF5B1F]"
+              style={{ transitionDuration: '160ms' }}
             >
               <Link
                 href={`/owner/preview/tasks/${c.taskId}`}
-                className="flex min-w-0 flex-1 items-center gap-3 rounded-l-xl px-3 py-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"
+                className="flex min-w-0 flex-1 items-center gap-3 rounded-l-[12px] px-3 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#FF5B1F]"
               >
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-blue-50 text-[12px] font-bold text-blue-700 ring-1 ring-blue-100">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#1414141A] bg-[#E4DACA] font-mono text-[11px] font-bold text-[#141414]">
                   {initials}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-semibold text-slate-900">
+                  <p className="truncate text-[14px] font-semibold text-[#141414]">
                     {c.cleanerName}
                   </p>
-                  <p className="mt-0.5 truncate text-[11.5px] text-slate-600">
+                  <p className="mt-0.5 truncate font-mono text-[11px] text-[#54524D]">
                     {c.clientName} · {c.propertyName} · {c.relative}
                   </p>
                 </div>
@@ -81,7 +89,8 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
                   rel="noopener noreferrer"
                   aria-label={`Ver ${c.propertyName} en el mapa`}
                   title="Abrir ubicación en Google Maps"
-                  className="mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                  className="mr-2 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#FF5B1F] text-[#1A0A04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141414]"
+                  style={{ transitionDuration: '160ms' }}
                 >
                   <MapPin className="h-3.5 w-3.5" />
                 </a>

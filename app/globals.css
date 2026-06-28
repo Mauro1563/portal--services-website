@@ -1,6 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ============================================================
+   Portal Services — 2026 design tokens (refresh).
+   Warm paper canvas, near-black ink, electric mandarin accent.
+   Per-portal secondary (owner = ultramarine).
+   ============================================================ */
+:root {
+  --paper: #F4EFE6;
+  --ink: #141414;
+  --graphite: #54524D;
+  --mandarin: #FF5B1F;
+  --mandarin-ink: #1A0A04;
+  --moss: #3F5B3A;
+  --clay: #E4DACA;
+  --hairline: rgba(20, 20, 20, 0.10);
+  --ultramarine: #1B2D6B;
+  --petal: #E8C8C0;
+
+  /* Motion. One curve, three durations. */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 520ms;
+}
+
+/* The "set" entrance — 4px Y + opacity, like a postcard laid down. */
+@keyframes ps-set {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.ps-set { animation: ps-set var(--dur-base) var(--ease) both; }
+
+/* Instrument Serif display utility — used for hero KPI numerals + headlines
+   on the refreshed cleaner surface. Falls back to system serif so SSR + slow
+   networks render acceptable type before the Google Font lands. */
+.ps-serif { font-family: 'Instrument Serif', 'Times New Roman', Georgia, serif; font-weight: 400; }
+.ps-serif-italic { font-family: 'Instrument Serif', 'Times New Roman', Georgia, serif; font-weight: 400; font-style: italic; }
+.ps-mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+/* Mandarin underline link affordance — draws in from left on hover. */
+.ps-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  text-underline-offset: 4px;
+  transition: background-size var(--dur-base) var(--ease);
+}
+.ps-link:hover, .ps-link:focus-visible { background-size: 100% 1px; }
+.ps-link-mandarin {
+  background-image: linear-gradient(#FF5B1F, #FF5B1F);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 calc(100% + 4px);
+  padding-bottom: 4px;
+}
+
+/* Paper grain — a tiny SVG noise wash on --paper surfaces.
+   0.02 opacity, tile-repeats. Adds tactile feel to the canvas. */
+.ps-paper-grain {
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/></svg>");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-set { animation: none !important; }
+  .ps-link { transition: none !important; background-size: 100% 1px; }
+}
 
 /* Portal Services — brand tokens. Marketing pages render on a light canvas
    with strategic dark bands (hero accent, CTA, footer). The /hq admin

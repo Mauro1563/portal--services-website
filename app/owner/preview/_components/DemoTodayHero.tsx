@@ -1,13 +1,15 @@
 'use client';
 
 /**
- * "Mejor del día" hero card. Front side shows today's standout cleaner,
- * task count, on-time %, and a property thumb. A slow conic-gradient
- * spotlight rotates behind the avatar (paused when tab hidden to spare
- * GPU). Tapping flips to the back — a 7-day sparkline + "Enviar bonus"
- * button that drops a tiny SVG confetti star on press.
+ * "Mejor del día" — the owner portal's single highlight card per screen.
+ * Ultramarine background (owner's per-portal secondary), paper text, mandarin
+ * accents for the badge + the bonus CTA. Front side shows today's standout
+ * cleaner; tapping flips to the back — a 7-day sparkline + "Enviar bonus"
+ * button that drops a mandarin "set" stamp on press (the owner's signature
+ * delight — an ink-press on the day's column).
  *
- * Reduced motion: spotlight stops, flip becomes a crossfade.
+ * Behaviour preserved: 3D flip via rotateY, spotlight rotation paused when
+ * the tab is hidden, bonus animation via WAAPI, reduced-motion fallback.
  */
 import { useEffect, useRef, useState } from 'react';
 import { Award, Building2, Send } from 'lucide-react';
@@ -44,44 +46,48 @@ export function DemoTodayHero() {
     setBonusSent(true);
     const btn = buttonRef.current;
     if (!btn || reduced) return;
-    // SVG confetti star — single element, animated via WAAPI then removed.
+    // Mandarin ink-press "set" stamp — the owner portal's signature delight.
     const rect = btn.getBoundingClientRect();
-    const star = document.createElement('div');
-    star.setAttribute('aria-hidden', 'true');
-    star.style.position = 'fixed';
-    star.style.left = `${rect.left + rect.width / 2 - 10}px`;
-    star.style.top = `${rect.top - 6}px`;
-    star.style.width = '20px';
-    star.style.height = '20px';
-    star.style.pointerEvents = 'none';
-    star.style.zIndex = '60';
-    star.innerHTML =
-      '<svg viewBox="0 0 20 20" fill="#facc15" xmlns="http://www.w3.org/2000/svg"><path d="M10 0l2.6 6.4L19 8l-5 4.6L15.4 19 10 15.5 4.6 19 6 12.6 1 8l6.4-1.6L10 0z"/></svg>';
-    document.body.appendChild(star);
-    const dx = (Math.random() - 0.5) * 80;
-    star.animate(
+    const stamp = document.createElement('div');
+    stamp.setAttribute('aria-hidden', 'true');
+    stamp.style.position = 'fixed';
+    stamp.style.left = `${rect.left + rect.width / 2 - 14}px`;
+    stamp.style.top = `${rect.top - 8}px`;
+    stamp.style.width = '28px';
+    stamp.style.height = '28px';
+    stamp.style.pointerEvents = 'none';
+    stamp.style.zIndex = '60';
+    stamp.innerHTML =
+      '<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="24" height="24" rx="3" fill="#FF5B1F"/><text x="14" y="19" text-anchor="middle" font-family="Instrument Serif, serif" font-size="14" fill="#1A0A04">set</text></svg>';
+    document.body.appendChild(stamp);
+    const dx = (Math.random() - 0.5) * 60;
+    stamp.animate(
       [
-        { transform: 'translateY(0) scale(1) rotate(0deg)', opacity: 1 },
-        { transform: `translate(${dx}px, -90px) scale(0.6) rotate(180deg)`, opacity: 0 },
+        { transform: 'translateY(0) scale(0.4) rotate(-8deg)', opacity: 0 },
+        { transform: `translate(${dx * 0.4}px, -20px) scale(1.1) rotate(-4deg)`, opacity: 1, offset: 0.4 },
+        { transform: `translate(${dx}px, -80px) scale(0.8) rotate(6deg)`, opacity: 0 },
       ],
-      { duration: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
-    ).onfinish = () => star.remove();
+      { duration: 520, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },
+    ).onfinish = () => stamp.remove();
   }
 
   return (
     <section
-      className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5"
+      className="ps-set relative overflow-hidden rounded-[12px] bg-[#1B2D6B] p-5 text-[#F4EFE6] md:p-6"
       style={{ perspective: '1200px' }}
     >
-      <header className="mb-3 flex items-center justify-between">
-        <h2 className="inline-flex items-center gap-2 font-display text-lg font-semibold text-slate-900">
-          <Award className="h-4 w-4 text-amber-500" /> Mejor del día
-        </h2>
+      <header className="mb-4 flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <p className="inline-flex items-center gap-2 font-mono text-[12px] text-[#F4EFE6]/70">
+            mejor del día
+            <span className="inline-block h-[1px] w-5 align-middle bg-[#FF5B1F]" />
+          </p>
+        </div>
         <button
           type="button"
           onClick={() => setFlipped((s) => !s)}
           title="Ver detalle semanal de Carmen"
-          className="text-[11.5px] font-semibold text-blue-700 hover:text-blue-800"
+          className="ps-link font-mono text-[11px] text-[#F4EFE6]"
         >
           {flipped ? '← Volver' : 'Ver detalle →'}
         </button>
@@ -89,12 +95,12 @@ export function DemoTodayHero() {
 
       <div
         ref={cardRef}
-        className="relative h-[148px] w-full"
+        className="relative h-[160px] w-full"
         style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
       >
         {/* Front */}
         <div
-          className="absolute inset-0 transition-all duration-500"
+          className="absolute inset-0"
           style={{
             transform: reduced
               ? 'none'
@@ -103,43 +109,50 @@ export function DemoTodayHero() {
                 : 'rotateY(0deg)',
             backfaceVisibility: 'hidden',
             opacity: reduced && flipped ? 0 : 1,
-            transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            transitionProperty: 'transform, opacity',
+            transitionDuration: '520ms',
+            transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
           }}
         >
           <div className="flex h-full items-center gap-4">
-            <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 text-2xl font-bold text-white ring-2 ring-amber-300/70">
+            <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-full bg-[#F4EFE6] text-2xl font-bold text-[#1B2D6B] ring-1 ring-[#FF5B1F]/60" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}>
               CR
-              {/* Conic spotlight (paused when tab hidden via data-paused). */}
+              {/* Mandarin conic spotlight (paused when tab hidden). */}
               <span
                 aria-hidden
                 className={`pointer-events-none absolute -inset-6 rounded-full ${reduced ? '' : 'demo-spotlight'}`}
                 style={{
                   background:
-                    'conic-gradient(from 0deg, transparent 0deg, #fbbf24 12deg, transparent 60deg, transparent 360deg)',
+                    'conic-gradient(from 0deg, transparent 0deg, #FF5B1F 14deg, transparent 70deg, transparent 360deg)',
                   filter: 'blur(18px)',
-                  opacity: 0.35,
+                  opacity: 0.4,
                   animationPlayState: 'var(--play, running)',
                 }}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-semibold text-slate-900">Carmen Ruiz</p>
-              <p className="mt-0.5 text-[12px] text-slate-600">
+              <p
+                className="text-[28px] leading-[1] tracking-[-0.02em] text-[#F4EFE6] md:text-[32px]"
+                style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}
+              >
+                Carmen <span className="italic">Ruiz</span>
+              </p>
+              <p className="mt-1 font-mono text-[11px] text-[#F4EFE6]/70">
                 3 limpiezas hoy · 98% a tiempo
               </p>
-              <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 ring-1 ring-amber-200">
-                <Award className="h-3 w-3" /> Estrella del día
+              <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#FF5B1F] px-2.5 py-0.5 font-mono text-[11px] font-semibold text-[#1A0A04]">
+                <Award className="h-3 w-3" /> estrella del día
               </div>
             </div>
-            <div className="hidden h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-emerald-200 via-emerald-100 to-amber-100 sm:flex sm:items-center sm:justify-center">
-              <Building2 className="h-7 w-7 text-emerald-700" />
+            <div className="hidden h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[12px] border border-[#F4EFE6]/20 bg-[#F4EFE6]/5 sm:flex">
+              <Building2 className="h-7 w-7 text-[#F4EFE6]/80" strokeWidth={1.25} />
             </div>
           </div>
         </div>
 
         {/* Back */}
         <div
-          className="absolute inset-0 transition-all duration-500"
+          className="absolute inset-0"
           style={{
             transform: reduced
               ? 'none'
@@ -148,22 +161,27 @@ export function DemoTodayHero() {
                 : 'rotateY(180deg)',
             backfaceVisibility: 'hidden',
             opacity: reduced ? (flipped ? 1 : 0) : 1,
-            transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            transitionProperty: 'transform, opacity',
+            transitionDuration: '520ms',
+            transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
           }}
         >
           <div className="flex h-full flex-col justify-between">
             <div>
-              <p className="text-[12.5px] font-semibold text-slate-900">
+              <p
+                className="text-[20px] leading-[1.05] tracking-[-0.015em] text-[#F4EFE6]"
+                style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}
+              >
                 Carmen Ruiz · últimos 7 días
               </p>
-              <p className="mt-0.5 text-[11px] text-slate-500">
-                Media de puntualidad: 91%
+              <p className="mt-0.5 font-mono text-[11px] text-[#F4EFE6]/65">
+                media de puntualidad: 91%
               </p>
-              <svg viewBox="0 0 140 32" className="mt-1.5 h-9 w-full">
+              <svg viewBox="0 0 140 32" className="mt-2 h-10 w-full">
                 <polyline
                   fill="none"
-                  stroke="#2563eb"
-                  strokeWidth="2"
+                  stroke="#F4EFE6"
+                  strokeWidth="1.5"
                   points={SPARK.map((v, i) => `${(i / (SPARK.length - 1)) * 140},${32 - ((v - 80) / 20) * 28}`).join(' ')}
                 />
                 {SPARK.map((v, i) => (
@@ -172,7 +190,7 @@ export function DemoTodayHero() {
                     cx={(i / (SPARK.length - 1)) * 140}
                     cy={32 - ((v - 80) / 20) * 28}
                     r={i === SPARK.length - 1 ? 3 : 1.5}
-                    fill={i === SPARK.length - 1 ? '#f59e0b' : '#2563eb'}
+                    fill={i === SPARK.length - 1 ? '#FF5B1F' : '#F4EFE6'}
                   />
                 ))}
               </svg>
@@ -183,14 +201,15 @@ export function DemoTodayHero() {
                 type="button"
                 onClick={sendBonus}
                 disabled={bonusSent}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 px-3 text-[12px] font-semibold text-white transition hover:brightness-110 disabled:cursor-default disabled:opacity-60"
+                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-[#FF5B1F] px-4 text-[12px] font-semibold text-[#1A0A04] disabled:cursor-default disabled:opacity-50"
+                style={{ transitionDuration: '160ms' }}
               >
                 <Send className="h-3.5 w-3.5" />
                 {bonusSent ? 'Bonus enviado' : 'Enviar bonus £20'}
               </button>
               {bonusSent ? (
-                <span className="text-[11px] font-medium text-emerald-700">
-                  Bonus de £20 enviado a Carmen
+                <span className="font-mono text-[11px] text-[#F4EFE6]/80">
+                  £20 enviado a Carmen
                 </span>
               ) : null}
             </div>

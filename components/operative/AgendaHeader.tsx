@@ -2,25 +2,26 @@ import Link from 'next/link';
 import { signOutOperative } from '@/app/operative/actions';
 import { ThemeToggle } from '@/components/operative/ThemeToggle';
 
-const DAY_NAMES = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
+const DAY_NAMES = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
 const DAY_FULL = [
-  'DOMINGO',
-  'LUNES',
-  'MARTES',
-  'MIÉRCOLES',
-  'JUEVES',
-  'VIERNES',
-  'SÁBADO',
+  'domingo',
+  'lunes',
+  'martes',
+  'miércoles',
+  'jueves',
+  'viernes',
+  'sábado',
 ];
 const MONTH = [
-  'ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN',
-  'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC',
+  'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+  'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
 ];
 
 /**
- * "Tu Agenda Hoy" header — large display date in the Efficient Work
- * style. Three lines: portal label, agenda title, big date string
- * (MARTES 28 MAR). Sign-out + theme toggle on the right.
+ * "Tu Agenda Hoy" header — editorial-paper rendition. A big Instrument
+ * Serif day-of-month number anchors the block, with a single mandarin
+ * underline on the cleaner's first name. Status chips sit underneath as
+ * mono microcopy. Replaces the prior slate-gradient card.
  */
 export function AgendaHeader({
   cleanerName,
@@ -54,13 +55,13 @@ export function AgendaHeader({
   const dayNum = now.getDate();
 
   return (
-    <header className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 px-5 pb-5 pt-6 text-white shadow-card-lg">
+    <header className="ps-set rounded-[12px] border border-[#1414141A] bg-[#E4DACA] px-5 pb-5 pt-6 text-[#141414]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300/90">
-            Cleaner · {firstName}
+          <p className="ps-mono text-[12px] text-[#54524D]">
+            cleaner · <span className="ps-link-mandarin text-[#141414]">{firstName}</span>
           </p>
-          <h1 className="mt-1 font-display text-[15px] font-medium text-white/85">
+          <h1 className="ps-serif mt-1 text-[20px] leading-none tracking-[-0.015em] text-[#141414]">
             Tu agenda hoy
           </h1>
           {decorationSlot ? <div className="mt-1">{decorationSlot}</div> : null}
@@ -70,7 +71,8 @@ export function AgendaHeader({
           <form action={signOutOperative}>
             <button
               type="submit"
-              className="rounded-full border border-white/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85 transition hover:border-white/50 hover:bg-white/10 hover:text-white"
+              className="rounded-full border border-[#1414141A] px-3 py-1 text-[12px] font-medium text-[#54524D] transition-colors hover:border-[#141414] hover:text-[#141414]"
+              style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
             >
               Salir
             </button>
@@ -78,42 +80,45 @@ export function AgendaHeader({
         </div>
       </div>
 
-      <div className="mt-4 flex items-end justify-between gap-3">
-        <div className="flex items-baseline gap-2">
-          <span className="font-display text-5xl font-bold leading-none tracking-tight text-white tabular-nums">
+      <div className="mt-5 flex items-end justify-between gap-3">
+        <div className="flex items-baseline gap-3">
+          <span className="ps-serif text-[88px] leading-[0.85] tracking-[-0.04em] tabular-nums text-[#141414]">
             {dayNum}
           </span>
           <div className="flex flex-col leading-tight">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85">
+            <span className="ps-serif-italic text-[22px] leading-none tracking-[-0.02em] text-[#141414]">
               {dayFull}
             </span>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
-              {monthShort}
+            <span className="ps-mono mt-1 text-[12px] text-[#54524D]">
+              {monthShort} · {String(dayNum).padStart(2, '0')}/{String(now.getMonth() + 1).padStart(2, '0')}
             </span>
           </div>
         </div>
-        <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-white/55 sm:inline">
-          {dayShort} · {String(dayNum).padStart(2, '0')}/{String(now.getMonth() + 1).padStart(2, '0')}
+        <span className="ps-mono hidden text-[12px] text-[#54524D] sm:inline">
+          {dayShort}
         </span>
       </div>
 
-      <div className="mt-3 flex items-center gap-2">
+      <div className="mt-4 flex items-center gap-2">
         <Link
           href={weekHref}
           title="Ver el resumen semanal de tareas"
-          className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/85 transition hover:bg-white/20"
+          className="ps-mono inline-flex items-center gap-1 rounded-full border border-[#1414141A] bg-[#F4EFE6] px-3 py-1 text-[12px] text-[#141414] transition-colors hover:border-[#141414]"
+          style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
         >
           {totalCount === 0
-            ? 'Sin tareas hoy'
+            ? 'sin tareas hoy'
             : `${doneCount}/${totalCount} ${totalCount === 1 ? 'tarea' : 'tareas'}`}
         </Link>
         {totalCount > 0 && inProgressTaskId ? (
           <a
             href={`#task-${inProgressTaskId}`}
             title="Saltar a la tarea que tienes en curso ahora mismo"
-            className="inline-flex items-center gap-1 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-200 transition hover:bg-emerald-400/25"
+            className="ps-mono inline-flex items-center gap-1.5 rounded-full bg-[#FF5B1F] px-3 py-1 text-[12px] text-[#1A0A04] transition-colors"
+            style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
           >
-            En curso
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#1A0A04] animate-pulse" />
+            en curso
           </a>
         ) : null}
       </div>

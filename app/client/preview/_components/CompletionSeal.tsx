@@ -33,32 +33,48 @@ export function CompletionSeal({
       className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
       aria-hidden="true"
     >
-      {/* Desaturating veil over the card behind. */}
-      <div className="absolute inset-0 rounded-3xl bg-slate-50/60 backdrop-grayscale-[40%]" />
+      {/* Desaturating veil over the card behind. Paper-tinted, no blur,
+          no rounded-3xl — matches the new 12px surface language. */}
+      <div
+        className="absolute inset-0 rounded-[12px] backdrop-grayscale-[40%]"
+        style={{ backgroundColor: 'rgba(244, 239, 230, 0.7)' }}
+      />
 
-      {/* The seal itself. */}
+      {/* The seal itself — petal disc with mandarin ring + ink stamp text.
+          Per design brief: client delight uses only petal + mandarin. */}
       <div className="relative client-seal-drop">
-        {/* Dust ring — one-shot expanding circle. */}
+        {/* Dust ring — one-shot expanding circle, mandarin hairline. */}
         <span
-          className="absolute left-1/2 top-1/2 -ml-12 -mt-12 h-24 w-24 rounded-full border border-amber-300/70 client-seal-dust"
+          className="absolute left-1/2 top-1/2 -ml-12 -mt-12 h-24 w-24 rounded-full client-seal-dust"
+          style={{ border: '1px solid rgba(255, 91, 31, 0.6)' }}
         />
         <div
-          className="relative grid h-28 w-28 place-items-center rounded-full border-[3px] border-amber-700/80 text-amber-900 shadow-[0_8px_18px_-6px_rgba(180,83,9,0.45)]"
+          className="relative grid h-28 w-28 place-items-center rounded-full"
           style={{
-            background:
-              'radial-gradient(circle at 35% 30%, #fde68a 0%, #f59e0b 55%, #b45309 100%)',
+            background: 'radial-gradient(circle at 35% 30%, #F4D9D2 0%, #E8C8C0 55%, #C99C92 100%)',
+            border: '3px solid #FF5B1F',
+            color: '#1A0A04',
           }}
         >
           {/* Inner stamp ring. */}
-          <span className="absolute inset-2 rounded-full border border-amber-800/40" />
+          <span
+            className="absolute inset-2 rounded-full"
+            style={{ border: '1px solid rgba(255, 91, 31, 0.45)' }}
+          />
           <div className="flex flex-col items-center justify-center text-center">
-            <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-amber-950/90">
-              Trabajo
+            <span className="ps-mono text-[10px]" style={{ color: '#1A0A04' }}>
+              trabajo
             </span>
-            <span className="font-display text-[16px] font-extrabold leading-none tracking-tight text-amber-950">
-              COMPLETADA
+            <span
+              className="ps-serif text-[20px] leading-none tracking-[-0.02em]"
+              style={{ color: '#1A0A04' }}
+            >
+              completada
             </span>
-            <span className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.28em] text-amber-950/80">
+            <span
+              className="ps-mono mt-1 text-[9px]"
+              style={{ color: '#1A0A04' }}
+            >
               · 2026 ·
             </span>
           </div>

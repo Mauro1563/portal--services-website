@@ -136,11 +136,12 @@ export function PullToCheckInHero({
           }}
         >
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-md transition ${
+            className={`ps-mono inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] transition-colors ${
               armed
-                ? 'bg-emerald-600 text-white'
-                : 'bg-white text-amber-700 ring-1 ring-amber-200'
+                ? 'bg-[#FF5B1F] text-[#1A0A04]'
+                : 'bg-[#F4EFE6] text-[#141414] border border-[#1414141A]'
             }`}
+            style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
           >
             <Play
               className="h-3 w-3"
@@ -149,7 +150,7 @@ export function PullToCheckInHero({
                 transition: 'transform 160ms ease-out',
               }}
             />
-            {armed ? 'Suelta para hacer check-in' : 'Tira para hacer check-in'}
+            {armed ? 'suelta para hacer check-in' : 'tira para hacer check-in'}
           </span>
         </div>
       ) : null}

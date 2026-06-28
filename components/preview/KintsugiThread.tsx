@@ -3,13 +3,13 @@
 /**
  * KintsugiThread
  * --------------
- * A single hairline gold thread that grows under the cleaner's name as
+ * A single hairline moss thread that grows under the cleaner's name as
  * tasks get completed. The path is an irregular, calligraphic stroke
  * (not a generic progress bar) segmented at task fractions. We animate
  * stroke-dashoffset from 100 → 100 - progress*100 with a CSS transition;
  * when progress reaches 100% the stroke briefly blooms in width and
- * shifts colour from gold to champagne, then settles, and a tiny
- * "jornada completa" caption fades in once.
+ * picks up a mandarin glint, then settles, and a tiny mono caption
+ * fades in once.
  *
  * Reduced motion: jump to the final offset, skip the bloom.
  */
@@ -68,20 +68,20 @@ export function KintsugiThread({
       >
         <defs>
           <linearGradient id="kintsugiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#B8862F" />
-            <stop offset="50%" stopColor="#E5C97A" />
-            <stop offset="100%" stopColor="#B8862F" />
+            <stop offset="0%" stopColor="#3F5B3A" />
+            <stop offset="50%" stopColor="#3F5B3A" />
+            <stop offset="100%" stopColor="#3F5B3A" />
           </linearGradient>
           <linearGradient id="kintsugiBloom" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#F5E6B3" />
-            <stop offset="50%" stopColor="#FFF6D5" />
-            <stop offset="100%" stopColor="#F5E6B3" />
+            <stop offset="0%" stopColor="#3F5B3A" />
+            <stop offset="50%" stopColor="#FF5B1F" />
+            <stop offset="100%" stopColor="#3F5B3A" />
           </linearGradient>
         </defs>
         {/* Faint baseline so a 0/totalCount day still has a hint of the form. */}
         <path
           d={PATH_D}
-          stroke="rgba(255,255,255,0.10)"
+          stroke="rgba(20,20,20,0.10)"
           strokeWidth={1}
           fill="none"
           strokeLinecap="round"
@@ -98,20 +98,21 @@ export function KintsugiThread({
           strokeDashoffset={offset}
           style={{
             transition:
-              'stroke-dashoffset 280ms cubic-bezier(0.22, 1, 0.36, 1), stroke-width 320ms ease-out, stroke 320ms ease-out',
+              'stroke-dashoffset var(--dur-base) var(--ease), stroke-width var(--dur-slow) var(--ease), stroke var(--dur-slow) var(--ease)',
             filter: bloomed
-              ? 'drop-shadow(0 0 6px rgba(255, 246, 213, 0.55))'
-              : 'drop-shadow(0 0 2px rgba(184, 134, 47, 0.25))',
+              ? 'drop-shadow(0 0 4px rgba(255, 91, 31, 0.40))'
+              : 'none',
           }}
         />
       </svg>
       <p
-        className={`mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200/90 transition-opacity duration-500 ${
+        className={`ps-mono mt-1 text-[12px] text-[#3F5B3A] transition-opacity ${
           showCaption ? 'opacity-100' : 'opacity-0'
         }`}
+        style={{ transitionDuration: 'var(--dur-slow)', transitionTimingFunction: 'var(--ease)' }}
         aria-live="polite"
       >
-        {showCaption ? 'Jornada completa' : ' '}
+        {showCaption ? 'jornada completa' : ' '}
       </p>
     </div>
   );

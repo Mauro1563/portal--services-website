@@ -1,4 +1,4 @@
-import { Check, Building2, Sparkles, Users } from "lucide-react";
+import { Building2, Sparkles, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { getLocale, type Locale } from "@/lib/i18n";
@@ -30,13 +30,13 @@ const COPY: Record<
   }
 > = {
   es: {
-    eyebrow: "Una plataforma, tres experiencias",
-    title: "3 portales, una plataforma",
+    eyebrow: "una plataforma, tres experiencias",
+    title: "Tres portales, una plataforma",
     subtitle:
       "Conectamos a propietarios, profesionales de limpieza y clientes en una única solución pensada para cada rol.",
     portals: {
       owner: {
-        badge: "OWNER",
+        badge: "owner",
         headline: "Control total de tu negocio",
         description:
           "Visibilidad en tiempo real de ingresos, reservas y equipos desde un solo panel corporativo.",
@@ -45,10 +45,10 @@ const COPY: Record<
           "Gestión de reservas, alertas y operativos",
           "Informes financieros listos para tu gestoría",
         ],
-        cta: "ver más",
+        cta: "ver el panel",
       },
       cleaner: {
-        badge: "CLEANER",
+        badge: "cleaner",
         headline: "Trabaja con eficiencia móvil",
         description:
           "Tu agenda diaria, ganancias y rutas optimizadas en una app pensada para el día a día.",
@@ -57,10 +57,10 @@ const COPY: Record<
           "Seguimiento de ganancias en tiempo real",
           "Check-in rápido y notas por servicio",
         ],
-        cta: "ver más",
+        cta: "ver la app",
       },
       client: {
-        badge: "CLIENT",
+        badge: "client",
         headline: "Reserva en segundos, vive sin estrés",
         description:
           "Un marketplace amable para encontrar el servicio perfecto y disfrutar de promos exclusivas.",
@@ -69,18 +69,18 @@ const COPY: Record<
           "Promos EcoGreeting y club de fidelidad",
           "Pagos seguros y seguimiento del servicio",
         ],
-        cta: "ver más",
+        cta: "ver el portal",
       },
     },
   },
   en: {
-    eyebrow: "One platform, three experiences",
-    title: "3 portals, one platform",
+    eyebrow: "one platform, three experiences",
+    title: "Three portals, one platform",
     subtitle:
       "We connect owners, cleaning professionals and clients in a single solution tailored to each role.",
     portals: {
       owner: {
-        badge: "OWNER",
+        badge: "owner",
         headline: "Full control of your business",
         description:
           "Real-time visibility into revenue, bookings and teams from a single corporate dashboard.",
@@ -89,10 +89,10 @@ const COPY: Record<
           "Manage bookings, alerts and operatives",
           "Financial reports ready for your accountant",
         ],
-        cta: "see more",
+        cta: "open the dashboard",
       },
       cleaner: {
-        badge: "CLEANER",
+        badge: "cleaner",
         headline: "Work with mobile efficiency",
         description:
           "Your daily schedule, earnings and optimised routes in an app built for day-to-day work.",
@@ -101,10 +101,10 @@ const COPY: Record<
           "Live earnings tracking",
           "Quick check-in and per-service notes",
         ],
-        cta: "see more",
+        cta: "open the app",
       },
       client: {
-        badge: "CLIENT",
+        badge: "client",
         headline: "Book in seconds, live stress-free",
         description:
           "A friendly marketplace to find the perfect service and enjoy exclusive promos.",
@@ -113,18 +113,18 @@ const COPY: Record<
           "EcoGreeting promos and loyalty club",
           "Secure payments and service tracking",
         ],
-        cta: "see more",
+        cta: "open the portal",
       },
     },
   },
   pt: {
-    eyebrow: "Uma plataforma, três experiências",
-    title: "3 portais, uma plataforma",
+    eyebrow: "uma plataforma, três experiências",
+    title: "Três portais, uma plataforma",
     subtitle:
       "Conectamos proprietários, profissionais de limpeza e clientes numa solução única pensada para cada papel.",
     portals: {
       owner: {
-        badge: "OWNER",
+        badge: "owner",
         headline: "Controlo total do seu negócio",
         description:
           "Visibilidade em tempo real de receitas, reservas e equipas a partir de um único painel corporativo.",
@@ -133,10 +133,10 @@ const COPY: Record<
           "Gestão de reservas, alertas e operários",
           "Relatórios financeiros prontos para a contabilidade",
         ],
-        cta: "ver mais",
+        cta: "abrir o painel",
       },
       cleaner: {
-        badge: "CLEANER",
+        badge: "cleaner",
         headline: "Trabalhe com eficiência móvel",
         description:
           "A sua agenda diária, ganhos e rotas otimizadas numa app pensada para o dia a dia.",
@@ -145,10 +145,10 @@ const COPY: Record<
           "Acompanhamento de ganhos em tempo real",
           "Check-in rápido e notas por serviço",
         ],
-        cta: "ver mais",
+        cta: "abrir a app",
       },
       client: {
-        badge: "CLIENT",
+        badge: "client",
         headline: "Reserve em segundos, viva sem stress",
         description:
           "Um marketplace amigável para encontrar o serviço perfeito e aproveitar promoções exclusivas.",
@@ -157,128 +157,133 @@ const COPY: Record<
           "Promoções EcoGreeting e clube de fidelidade",
           "Pagamentos seguros e acompanhamento do serviço",
         ],
-        cta: "ver mais",
+        cta: "abrir o portal",
       },
     },
   },
 };
 
+// Per-portal secondary tints, applied as a single "tape" stripe at the
+// top edge of each card. Mandarin remains the only action color, the
+// secondary just identifies which portal you're looking at.
 type PortalStyle = {
   key: "owner" | "cleaner" | "client";
   href: string;
-  badgeClass: string;
-  headerGradient: string;
-  iconTileGradient: string;
-  iconRing: string;
+  secondary: string;
   Icon: LucideIcon;
-  linkClass: string;
 };
 
 const PORTAL_STYLES: readonly PortalStyle[] = [
-  {
-    key: "owner",
-    href: "/owner/preview",
-    badgeClass: "bg-slate-900 text-cyan-300",
-    headerGradient: "bg-gradient-to-r from-slate-900 via-slate-900 to-blue-900",
-    iconTileGradient: "bg-gradient-to-br from-blue-600 to-blue-700",
-    iconRing: "ring-4 ring-blue-100",
-    Icon: Building2,
-    linkClass: "text-blue-700 hover:text-blue-800",
-  },
-  {
-    key: "cleaner",
-    href: "/operative/preview",
-    badgeClass: "bg-slate-900 text-cyan-300",
-    headerGradient: "bg-gradient-to-r from-slate-900 via-slate-900 to-blue-900",
-    iconTileGradient: "bg-gradient-to-br from-emerald-500 to-emerald-600",
-    iconRing: "ring-4 ring-emerald-100",
-    Icon: Users,
-    linkClass: "text-emerald-700 hover:text-emerald-800",
-  },
-  {
-    key: "client",
-    href: "/client/preview",
-    badgeClass: "bg-blue-50 text-blue-700 ring-1 ring-blue-100",
-    headerGradient: "bg-gradient-to-r from-blue-50 via-sky-50 to-cyan-50",
-    iconTileGradient: "bg-gradient-to-br from-blue-600 to-blue-700",
-    iconRing: "ring-4 ring-blue-100",
-    Icon: Sparkles,
-    linkClass: "text-blue-700 hover:text-blue-800",
-  },
+  { key: "owner", href: "/owner/preview", secondary: "#1B2D6B", Icon: Building2 },
+  { key: "cleaner", href: "/operative/preview", secondary: "#3F5B3A", Icon: Users },
+  { key: "client", href: "/client/preview", secondary: "#E8C8C0", Icon: Sparkles },
 ];
+
+const SERIF = "'Instrument Serif', Georgia, serif";
+const MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
 
 export default async function PortalsSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="bg-slate-50 py-12 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
-            {t.eyebrow}
+    <section className="bg-[#F4EFE6] ps-paper-grain py-24 md:py-40">
+      <div className="mx-auto max-w-[1280px] px-6 md:px-12">
+        <div className="mx-auto max-w-3xl">
+          {/* mono micro-line replaces the eyebrow pill */}
+          <p className="text-[12px] text-[#141414]" style={{ fontFamily: MONO }}>
+            <span
+              className="pb-1"
+              style={{
+                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '100% 1px',
+                backgroundPosition: '0 calc(100% + 4px)',
+              }}
+            >
+              {t.eyebrow}
+            </span>
           </p>
-          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+          <h2
+            className="mt-6 text-[32px] leading-[0.95] tracking-[-0.03em] text-[#141414] md:text-[64px]"
+            style={{ fontFamily: SERIF, fontWeight: 400 }}
+          >
             {t.title}
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+          <p className="mt-6 max-w-[62ch] text-[18px] leading-[1.45] text-[#54524D] md:text-[22px]">
             {t.subtitle}
           </p>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 md:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-6 md:mt-24 md:grid-cols-3 md:gap-8">
           {PORTAL_STYLES.map((style) => {
             const { Icon } = style;
             const portal = t.portals[style.key];
             return (
               <article
                 key={style.key}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:shadow-lg"
+                className="group relative flex flex-col rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-10 md:p-14"
               >
-                <div className={`h-2 w-full ${style.headerGradient}`} />
+                {/* Per-portal "tape" — a single 3px secondary stripe at the top.
+                    Mandarin remains the only action color; this is identity, not chrome. */}
+                <span
+                  aria-hidden
+                  className="absolute left-0 right-0 top-0 h-[3px] rounded-t-[12px]"
+                  style={{ backgroundColor: style.secondary }}
+                />
 
-                <div className="flex flex-1 flex-col p-5 sm:p-7">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[12px] text-[#141414]" style={{ fontFamily: MONO }}>
                     <span
-                      className={`inline-flex h-10 w-10 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${style.iconTileGradient} ${style.iconRing} shadow-sm`}
-                    >
-                      <Icon className="h-5 w-5 text-white" />
-                    </span>
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] ${style.badgeClass}`}
+                      className="pb-1"
+                      style={{
+                        backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '100% 1px',
+                        backgroundPosition: '0 calc(100% + 4px)',
+                      }}
                     >
                       {portal.badge}
                     </span>
-                  </div>
+                  </span>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#141414]/5 text-[#141414]">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                </div>
 
-                  <h3 className="mt-4 font-display text-xl font-bold leading-tight text-slate-900 sm:mt-6 sm:text-2xl">
-                    {portal.headline}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:mt-3">
-                    {portal.description}
-                  </p>
+                <h3
+                  className="mt-10 text-[28px] leading-[1.02] tracking-[-0.02em] text-[#141414] md:text-[36px]"
+                  style={{ fontFamily: SERIF, fontWeight: 400 }}
+                >
+                  {portal.headline}
+                </h3>
+                <p className="mt-4 text-[15px] leading-[1.55] text-[#54524D] md:text-[16px]">
+                  {portal.description}
+                </p>
 
-                  <ul className="mt-4 space-y-3 sm:mt-6">
-                    {portal.features.map((feature, idx) => (
-                      <li
-                        key={feature}
-                        className={`flex items-start gap-3 text-sm text-slate-700 ${idx === 2 ? "hidden sm:flex" : ""}`}
-                      >
-                        <span className="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-slate-900/5">
-                          <Check className="h-3.5 w-3.5 text-slate-900" />
-                        </span>
-                        <span className="leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-6 pt-3 sm:mt-8 sm:pt-4">
-                    <Link
-                      href={style.href}
-                      className={`inline-flex items-center gap-1 text-sm font-semibold transition ${style.linkClass}`}
+                <ul className="mt-8 space-y-3">
+                  {portal.features.map((feature, idx) => (
+                    <li
+                      key={feature}
+                      className={`flex items-start gap-3 text-[14px] leading-[1.5] text-[#141414] ${idx === 2 ? 'hidden sm:flex' : ''}`}
                     >
-                      {portal.cta} <span aria-hidden="true">→</span>
-                    </Link>
-                  </div>
+                      <span
+                        aria-hidden
+                        className="mt-[8px] inline-block h-[3px] w-[10px] shrink-0 bg-[#FF5B1F]"
+                      />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-10 pt-6 border-t border-[#1414141A]">
+                  <Link
+                    href={style.href}
+                    className="inline-flex items-center gap-1.5 text-[13px] text-[#141414]"
+                    style={{ fontFamily: MONO }}
+                  >
+                    <span className="ps-link">{portal.cta}</span>
+                    <span aria-hidden>→</span>
+                  </Link>
                 </div>
               </article>
             );

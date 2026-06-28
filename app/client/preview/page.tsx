@@ -20,7 +20,6 @@ import {
   Check,
   CheckCircle2,
   Copy,
-  Hand,
   HelpCircle,
   MapPin,
   RotateCcw,
@@ -52,68 +51,50 @@ function StatChip({
   icon: Icon,
   label,
   value,
-  tone,
   emphasis = 'neutral',
-  dotTone,
   title,
   onClick,
 }: {
   icon: typeof CalendarCheck;
   label: string;
   value: string;
-  tone: 'blue' | 'emerald' | 'amber';
   /**
-   * 'accent' — the single live/primary metric (filled tone surface).
-   * The accent chip also fires a single quiet ring pulse after the
-   * digit-flip tally finishes on first mount.
-   * 'neutral' — secondary metrics rendered as quiet pills with a
-   *             tone-colored dot, so the accent metric leads.
+   * Per design brief: three competing chip colors (blue/emerald/amber) are
+   * killed. Chips collapse to a single neutral language — clay surface,
+   * hairline border, mono micro-label, serif numeral. The 'accent' chip
+   * is the only one allowed a mandarin pulse (the "live" metric).
    */
   emphasis?: 'accent' | 'neutral';
-  dotTone?: 'blue' | 'emerald' | 'amber';
   title?: string;
   onClick?: () => void;
 }) {
-  const accentTones: Record<typeof tone, string> = {
-    blue: 'bg-blue-50 text-blue-800 ring-blue-100 hover:bg-blue-100',
-    emerald: 'bg-emerald-50 text-emerald-800 ring-emerald-100 hover:bg-emerald-100',
-    amber: 'bg-amber-50 text-amber-800 ring-amber-100 hover:bg-amber-100',
-  };
-  const dotColors: Record<NonNullable<typeof dotTone>, string> = {
-    blue: 'bg-blue-500',
-    emerald: 'bg-emerald-500',
-    amber: 'bg-amber-500',
-  };
   const isAccent = emphasis === 'accent';
-  const surface = isAccent
-    ? accentTones[tone]
-    : 'bg-white text-slate-700 ring-slate-200 hover:bg-slate-50';
   return (
     <button
       type="button"
       onClick={onClick}
       title={title}
-      className={`flex flex-1 items-center gap-2 rounded-2xl px-3 py-2.5 text-left ring-1 ring-inset transition ${surface}`}
+      className="ps-set flex flex-1 items-center gap-2.5 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] px-3 py-3 text-left text-[#141414] transition hover:bg-[#141414] hover:text-[#F4EFE6]"
+      style={{ transitionDuration: '160ms' }}
     >
       {isAccent ? (
-        <Icon className="h-4 w-4 shrink-0" />
+        <span
+          aria-hidden
+          className="relative grid h-6 w-6 shrink-0 place-items-center rounded-full"
+          style={{ backgroundColor: '#FF5B1F', color: '#1A0A04' }}
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </span>
       ) : (
         <span
           aria-hidden="true"
-          className={`h-2 w-2 shrink-0 rounded-full ${
-            dotColors[dotTone ?? tone]
-          }`}
+          className="h-1.5 w-1.5 shrink-0 rounded-full"
+          style={{ backgroundColor: '#54524D' }}
         />
       )}
       <div className="min-w-0">
-        <p
-          className={`text-[11.5px] font-semibold ${
-            isAccent ? '' : 'text-slate-500'
-          }`}
-        >
-          {label}
-        </p>
-        <p className="text-sm font-bold">
+        <p className="ps-mono text-[11px] text-[#54524D]">{label.toLowerCase()}</p>
+        <p className="ps-serif mt-0.5 text-[22px] leading-none tabular-nums">
           <RollingStat value={value} pulse={isAccent} />
         </p>
       </div>
@@ -134,7 +115,7 @@ function HelpTip({ label }: { label: string }) {
       type="button"
       aria-label={label}
       title={label}
-      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-[#54524D] hover:bg-[#E4DACA] hover:text-[#141414] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5B1F]"
     >
       <HelpCircle className="h-3.5 w-3.5" />
     </button>
@@ -254,16 +235,27 @@ function ClientPreviewInner({
   return (
     <ClientShell ctx={MOCK_CTX} token={PREVIEW_TOKEN} activeTab="home" hideHeader>
       {/* Header: greeting + search/filter — wired to local state, not a
-          GET-navigation, so the input actually filters the lists below. */}
-      <section className="px-1 pt-1">
+          GET-navigation, so the input actually filters the lists below.
+          Hand-wave emoji killed; the name carries a mandarin underline
+          instead, per the design brief. */}
+      <section className="ps-set px-1 pt-1">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="inline-flex items-center gap-1.5 font-display text-xl font-bold tracking-tight text-slate-900">
-              Sofía
-              <Hand className="h-5 w-5 -rotate-12 text-amber-400" />
+            <p className="ps-serif text-[44px] leading-[0.92] tracking-[-0.04em] text-[#141414]">
+              <span
+                style={{
+                  backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '100% 1px',
+                  backgroundPosition: '0 calc(100% + 2px)',
+                  paddingBottom: '4px',
+                }}
+              >
+                Sofía
+              </span>
             </p>
-            <p className="mt-0.5 text-[13px] text-slate-600">
-              Empecemos tu próxima limpieza
+            <p className="ps-mono mt-3 text-[12px] text-[#54524D]">
+              empecemos tu próxima limpieza
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -271,21 +263,25 @@ function ClientPreviewInner({
               type="button"
               onClick={onReset}
               title="Reiniciar la demo a su estado inicial"
-              className="grid h-10 w-10 place-items-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+              className="grid h-10 w-10 place-items-center rounded-full text-[#54524D] hover:bg-[#E4DACA] hover:text-[#141414]"
               aria-label="Reiniciar demo"
+              style={{ transitionDuration: '160ms' }}
             >
               <RotateCcw className="h-4 w-4" />
             </button>
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white">
+            <span
+              className="ps-serif grid h-11 w-11 shrink-0 place-items-center rounded-full text-[18px] text-[#1A0A04]"
+              style={{ backgroundColor: '#E8C8C0' }}
+            >
               S
             </span>
           </div>
         </div>
 
-        <div className="mt-4 flex gap-2">
+        <div className="mt-5 flex gap-2">
           <label className="relative block flex-1">
             <Search
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#54524D]"
               aria-hidden
             />
             <input
@@ -295,7 +291,7 @@ function ClientPreviewInner({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar servicio…"
               title="Filtra las categorías y el equipo abajo por nombre"
-              className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="block h-11 w-full rounded-[12px] border border-[#1414141A] bg-[#E4DACA] pl-10 pr-3 text-[14px] text-[#141414] placeholder:text-[#54524D] focus:border-[#FF5B1F] focus:outline-none focus:ring-1 focus:ring-[#FF5B1F]"
             />
           </label>
           <button
@@ -303,11 +299,15 @@ function ClientPreviewInner({
             onClick={() => setFilterOpen(true)}
             aria-label="Filtros"
             title="Filtrar por tipo de servicio, valoración y disponibilidad"
-            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50"
+            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-[12px] border border-[#1414141A] bg-[#E4DACA] text-[#141414] transition hover:bg-[#141414] hover:text-[#F4EFE6]"
+            style={{ transitionDuration: '160ms' }}
           >
             <SlidersHorizontal className="h-4 w-4" />
             {activeFilterCount > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-blue-600 px-1 text-[9px] font-bold text-white ring-2 ring-white">
+              <span
+                className="ps-mono absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[9px] text-[#1A0A04]"
+                style={{ backgroundColor: '#FF5B1F', boxShadow: '0 0 0 2px #F4EFE6' }}
+              >
                 {activeFilterCount}
               </span>
             )}
@@ -315,22 +315,28 @@ function ClientPreviewInner({
         </div>
       </section>
 
-      {/* Primary action — owns the first viewport. The blue gradient is
-          reserved for this CTA only; secondary surfaces stay neutral. */}
+      {/* Primary action — the single per-portal mandarin highlight card.
+          Editorial / press-print: serif headline, mono micro-label, no
+          gradient, no blur shadow, hairline-free (mandarin fill = the
+          accent). */}
       <Link
         href="/client/preview/book"
         title="Reservar una nueva limpieza"
-        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-5 text-white shadow-[0_14px_32px_-14px_rgba(37,99,235,0.65)] transition hover:from-blue-700 hover:to-blue-900"
+        className="ps-set mt-6 flex items-center justify-between gap-4 rounded-[12px] p-6 transition"
+        style={{ backgroundColor: '#FF5B1F', color: '#1A0A04', transitionDuration: '160ms' }}
       >
         <div className="min-w-0">
-          <p className="text-[12px] font-semibold text-blue-100">
-            Listo en 30 segundos
+          <p className="ps-mono text-[11px] text-[#1A0A04]/70">
+            listo en 30 segundos
           </p>
-          <p className="mt-1 font-display text-xl font-bold leading-tight">
-            Reservar limpieza
+          <p className="ps-serif mt-1 text-[32px] leading-[0.95] tracking-[-0.03em]">
+            Reservar <em>limpieza</em>
           </p>
         </div>
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+        <span
+          className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[#1A0A04]/15"
+          style={{ backgroundColor: 'rgba(26, 10, 4, 0.08)' }}
+        >
           <ArrowRight className="h-5 w-5" />
         </span>
       </Link>
@@ -341,10 +347,9 @@ function ClientPreviewInner({
         <PromoBanner token={PREVIEW_TOKEN} />
       </div>
 
-      <div className="mt-3 flex gap-2">
+      <div className="mt-4 flex gap-2">
         <StatChip
           icon={CalendarCheck}
-          tone="blue"
           emphasis="accent"
           label="Próximas"
           value="2"
@@ -353,9 +358,7 @@ function ClientPreviewInner({
         />
         <StatChip
           icon={CheckCircle2}
-          tone="emerald"
           emphasis="neutral"
-          dotTone="emerald"
           label="Hechas"
           value="12"
           title="Ver el historial de limpiezas completadas"
@@ -363,9 +366,7 @@ function ClientPreviewInner({
         />
         <StatChip
           icon={Star}
-          tone="amber"
           emphasis="neutral"
-          dotTone="amber"
           label="Rating"
           value="4.8"
           title="Ver las valoraciones recientes que has dado"
@@ -377,10 +378,12 @@ function ClientPreviewInner({
       {visibleServices.length > 0 ? (
         <ServiceCatalog token={PREVIEW_TOKEN} services={visibleServices} />
       ) : (
-        <section className="mt-6">
-          <h2 className="text-[13px] font-bold text-slate-900">Categorías</h2>
-          <p className="mt-3 rounded-2xl bg-white p-4 text-center text-[12px] text-slate-500 ring-1 ring-inset ring-slate-100">
-            No hay servicios que coincidan con tu búsqueda.
+        <section className="mt-8">
+          <h2 className="ps-serif text-[28px] leading-[0.95] tracking-[-0.03em] text-[#141414]">
+            Categorías
+          </h2>
+          <p className="ps-mono mt-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 text-center text-[12px] text-[#54524D]">
+            no hay servicios que coincidan con tu búsqueda.
           </p>
         </section>
       )}
@@ -403,10 +406,12 @@ function ClientPreviewInner({
         {visibleCleaners.length > 0 ? (
           <FeaturedCleaners token={PREVIEW_TOKEN} cleaners={visibleCleaners} />
         ) : (
-          <section className="mt-6">
-            <h2 className="text-[13px] font-bold text-slate-900">Tu equipo</h2>
-            <p className="mt-3 rounded-2xl bg-white p-4 text-center text-[12px] text-slate-500 ring-1 ring-inset ring-slate-100">
-              No hay cleaners que coincidan con los filtros.
+          <section className="mt-8">
+            <h2 className="ps-serif text-[28px] leading-[0.95] tracking-[-0.03em] text-[#141414]">
+              Tu equipo
+            </h2>
+            <p className="ps-mono mt-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 text-center text-[12px] text-[#54524D]">
+              no hay cleaners que coincidan con los filtros.
             </p>
           </section>
         )}
@@ -432,30 +437,33 @@ function ClientPreviewInner({
         />
       </div>
 
-      <section className="mt-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[13px] font-bold text-slate-900">Próxima visita</h2>
+      <section className="mt-8">
+        <div className="flex items-end justify-between">
+          <h2 className="ps-serif text-[28px] leading-[0.95] tracking-[-0.03em] text-[#141414]">
+            Próxima visita
+          </h2>
           <HelpTip label="Las visitas aceptadas aparecen aquí; las pendientes te pediremos confirmación." />
         </div>
         {nextStatus === 'rejected' ? (
-          <div className="mt-3 rounded-3xl bg-white p-4 text-center ring-1 ring-inset ring-slate-100">
-            <p className="text-[12px] font-semibold text-slate-700">
+          <div className="ps-set mt-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 text-center">
+            <p className="ps-serif text-[20px] tracking-[-0.015em] text-[#141414]">
               Cancelaste esta visita.
             </p>
-            <p className="mt-1 text-[11px] text-slate-500">
-              El equipo te propondrá una nueva fecha por chat.
+            <p className="ps-mono mt-2 text-[12px] text-[#54524D]">
+              el equipo te propondrá una nueva fecha por chat.
             </p>
             <button
               type="button"
               onClick={() => setNextStatus('pending')}
               title="Restaurar la visita para probar otra acción"
-              className="mt-3 rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold text-white hover:bg-slate-700"
+              className="ps-mono mt-4 rounded-full bg-[#141414] px-4 py-2 text-[11px] text-[#F4EFE6] hover:bg-[#1A0A04]"
+              style={{ transitionDuration: '160ms' }}
             >
-              Restaurar (demo)
+              restaurar (demo)
             </button>
           </div>
         ) : (
-          <div className="relative mt-3 rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
+          <div className="ps-set relative mt-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5">
             {/* Wax-seal celebration overlay — only when status flips to
                 'done'. Auto-dismisses; the underlying status sticks. */}
             <CompletionSeal
@@ -468,36 +476,54 @@ function ClientPreviewInner({
                 <Link
                   href="/client/preview/cleaning"
                   title="Toca para ver el detalle completo de la visita"
-                  className="group -m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
+                  className="group -m-1 flex items-start gap-3 rounded-[12px] p-1 transition"
+                  style={{ transitionDuration: '160ms' }}
                 >
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
+                  <span
+                    className="grid h-12 w-12 shrink-0 place-items-center rounded-[12px] border border-[#1414141A] text-[#141414]"
+                    style={{ backgroundColor: '#F4EFE6' }}
+                  >
                     <CalendarCheck className="h-5 w-5" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-blue-700">
-                      Mañana · 10:00
+                    <p className="ps-mono text-[11px] text-[#54524D]">
+                      <span
+                        style={{
+                          backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundSize: '100% 1px',
+                          backgroundPosition: '0 calc(100% + 3px)',
+                          paddingBottom: '3px',
+                        }}
+                      >
+                        mañana · 10:00
+                      </span>
                     </p>
-                    <p className="mt-0.5 font-display text-sm font-bold text-slate-900">
+                    <p className="ps-serif mt-1.5 text-[20px] leading-tight tracking-[-0.015em] text-[#141414]">
                       Limpieza estándar
                     </p>
-                    <p className="mt-0.5 text-[12px] text-slate-600">
-                      Con Ana Ruiz · ~2 h
+                    <p className="mt-0.5 text-[13px] text-[#54524D]">
+                      Con Ana Ruiz · <span className="tabular-nums">~2</span> h
                     </p>
-                    <p className="mt-1 flex items-center gap-1 text-[11px] text-slate-500">
+                    <p className="ps-mono mt-1.5 flex items-center gap-1 text-[11px] text-[#54524D]">
                       <MapPin className="h-3 w-3 shrink-0" />
                       <span className="truncate">{PROPERTY.address}</span>
                     </p>
                   </div>
-                  <span className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white transition group-hover:bg-slate-700">
-                    Ver
+                  <span
+                    className="ps-mono shrink-0 self-center rounded-full bg-[#141414] px-3 py-1.5 text-[11px] text-[#F4EFE6] transition group-hover:bg-[#1A0A04]"
+                    style={{ transitionDuration: '160ms' }}
+                  >
+                    ver
                   </span>
                 </Link>
               );
 
-              // Legacy fallback row — keyboard / reduced-motion users
-              // get the classic two-button accept/reject as before.
+              // Legacy fallback row — keyboard / reduced-motion users get the
+              // classic two-button accept/reject. Both go mandarin (action)
+              // per design brief; the green emerald accept is killed.
               const fallbackRow = (
-                <div className="mt-3 flex gap-2">
+                <div className="mt-4 flex gap-2">
                   <button
                     type="button"
                     onClick={(e) => {
@@ -506,9 +532,10 @@ function ClientPreviewInner({
                       showToast('Visita confirmada');
                     }}
                     title="Confirmar esta visita"
-                    className="flex-1 rounded-xl bg-emerald-600 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-white hover:bg-emerald-700"
+                    className="ps-mono flex-1 rounded-full px-3 py-2 text-[11px] text-[#1A0A04] transition"
+                    style={{ backgroundColor: '#FF5B1F', transitionDuration: '160ms' }}
                   >
-                    Aceptar
+                    aceptar
                   </button>
                   <button
                     type="button"
@@ -518,9 +545,10 @@ function ClientPreviewInner({
                       showToast('Visita cancelada');
                     }}
                     title="Rechazar esta visita — el equipo te propondrá otra fecha"
-                    className="flex-1 rounded-xl bg-slate-100 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
+                    className="ps-mono flex-1 rounded-full border border-[#1414141A] bg-transparent px-3 py-2 text-[11px] text-[#141414] hover:bg-[#141414] hover:text-[#F4EFE6]"
+                    style={{ transitionDuration: '160ms' }}
                   >
-                    Rechazar
+                    rechazar
                   </button>
                 </div>
               );
@@ -548,7 +576,7 @@ function ClientPreviewInner({
 
                   {/* Quick actions: state transitions for non-pending. */}
                   {nextStatus === 'accepted' && (
-                    <div className="mt-3 flex gap-2">
+                    <div className="mt-4 flex gap-2">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -558,16 +586,20 @@ function ClientPreviewInner({
                           showToast('Marcada como completada');
                         }}
                         title="Marcar la limpieza como completada"
-                        className="flex-1 rounded-xl bg-emerald-600 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-white hover:bg-emerald-700"
+                        className="ps-mono flex-1 rounded-full px-3 py-2 text-[11px] text-[#1A0A04] transition"
+                        style={{ backgroundColor: '#FF5B1F', transitionDuration: '160ms' }}
                       >
-                        Marcar completada
+                        marcar completada
                       </button>
                     </div>
                   )}
                   {nextStatus === 'done' && (
-                    <div className="mt-3 flex gap-2">
-                      <div className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-inset ring-emerald-100">
-                        <CheckCircle2 className="h-3.5 w-3.5" /> Completada · ahora
+                    <div className="mt-4 flex gap-2">
+                      <div
+                        className="ps-mono flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[#1414141A] px-3 py-2 text-[11px]"
+                        style={{ backgroundColor: 'rgba(63, 91, 58, 0.12)', color: '#3F5B3A' }}
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" /> completada · ahora
                       </div>
                     </div>
                   )}
@@ -584,38 +616,48 @@ function ClientPreviewInner({
         onClose={() => setReferralOpen(false)}
         title="Invita a un amigo"
       >
-        <p className="text-[13px] text-slate-600">
-          Cuando tu amigo reserve su primera limpieza, ambos recibís £10 de
-          crédito.
+        <p className="text-[14px] text-[#54524D]">
+          Cuando tu amigo reserve su primera limpieza, ambos recibís{' '}
+          <span className="ps-serif text-[#141414]">£10</span> de crédito.
         </p>
-        <div className="mt-4 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-100">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            Tu código de referido
+        <div className="mt-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5">
+          <p className="ps-mono text-[11px] text-[#54524D]">
+            tu código de referido
           </p>
           <div className="mt-2 flex items-center justify-between gap-3">
-            <code className="font-mono text-2xl font-bold tracking-widest text-blue-700">
+            <code
+              className="ps-serif text-[40px] leading-none tracking-tight text-[#141414]"
+              style={{
+                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '100% 1px',
+                backgroundPosition: '0 calc(100% + 4px)',
+                paddingBottom: '4px',
+              }}
+            >
               PREVIEW
             </code>
             <button
               type="button"
               onClick={copyReferral}
               title="Copiar código al portapapeles"
-              className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-2 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
+              className="ps-mono inline-flex items-center gap-1 rounded-full bg-[#141414] px-3 py-2 text-[11px] text-[#F4EFE6] hover:bg-[#1A0A04]"
+              style={{ transitionDuration: '160ms' }}
             >
               {copied ? (
                 <>
-                  <Check className="h-3 w-3" /> Copiado
+                  <Check className="h-3 w-3" /> copiado
                 </>
               ) : (
                 <>
-                  <Copy className="h-3 w-3" /> Copiar código
+                  <Copy className="h-3 w-3" /> copiar código
                 </>
               )}
             </button>
           </div>
         </div>
-        <p className="mt-4 text-[11px] text-slate-400">
-          Compártelo por WhatsApp, email o SMS — quien lo use al registrarse
+        <p className="ps-mono mt-4 text-[11px] text-[#54524D]">
+          compártelo por whatsapp, email o sms — quien lo use al registrarse
           activa el descuento automáticamente.
         </p>
       </DemoSheet>
@@ -636,34 +678,35 @@ function ClientPreviewInner({
             <FlippableCleanerCard
               cleanerName={openCleaner.name}
               front={
-                <div className="rounded-2xl p-1">
+                <div className="rounded-[12px] p-1">
                   <div className="flex items-center gap-3 pr-8">
-                    <div className="grid h-14 w-14 place-items-center rounded-full bg-slate-700 text-lg font-bold text-white">
+                    <div className="ps-serif grid h-14 w-14 place-items-center rounded-full text-[22px] text-[#F4EFE6]" style={{ backgroundColor: '#141414' }}>
                       {openCleaner.name.split(' ').map((w) => w[0]).join('')}
                     </div>
                     <div className="flex-1">
-                      <p className="inline-flex items-center gap-1 text-[12px] text-amber-700">
-                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                        {openCleaner.avgStars?.toFixed(1) ?? '—'} ·{' '}
-                        {openCleaner.ratingCount} reviews
+                      <p className="ps-mono inline-flex items-center gap-1 text-[12px] text-[#141414]">
+                        <Star className="h-3 w-3" style={{ fill: '#FF5B1F', color: '#FF5B1F' }} />
+                        <span className="tabular-nums">{openCleaner.avgStars?.toFixed(1) ?? '—'}</span>{' '}
+                        ·{' '}
+                        <span className="tabular-nums">{openCleaner.ratingCount}</span> reviews
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4 rounded-2xl bg-slate-50 p-3 ring-1 ring-inset ring-slate-100">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      Trabajos recientes
+                  <div className="mt-4 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] p-4">
+                    <p className="ps-mono text-[11px] text-[#54524D]">
+                      trabajos recientes
                     </p>
-                    <ul className="mt-2 space-y-1.5 text-[12.5px] text-slate-700">
-                      <li className="flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                    <ul className="mt-2 space-y-2 text-[13px] text-[#141414]">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: '#3F5B3A' }} />
                         Limpieza profunda · {LONDON_PROPERTIES.soho.address}
                       </li>
-                      <li className="flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: '#3F5B3A' }} />
                         Limpieza estándar · {LONDON_PROPERTIES.notting.address}
                       </li>
-                      <li className="flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: '#3F5B3A' }} />
                         Cristales · {LONDON_PROPERTIES.camden.address}
                       </li>
                     </ul>
@@ -674,10 +717,11 @@ function ClientPreviewInner({
             <Link
               href="/client/preview/book"
               title={`Pedir que ${openCleaner.name} sea tu cleaner asignado`}
-              className="mt-4 flex h-11 items-center justify-center rounded-2xl bg-blue-600 px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] hover:bg-blue-700"
+              className="ps-mono mt-4 flex h-11 items-center justify-center rounded-full px-4 text-[12px] text-[#1A0A04] transition"
+              style={{ backgroundColor: '#FF5B1F', transitionDuration: '160ms' }}
               onClick={() => setCleanerOpen(null)}
             >
-              Pedir esta persona
+              pedir esta persona
             </Link>
           </>
         )}
@@ -689,13 +733,13 @@ function ClientPreviewInner({
         onClose={() => setFilterOpen(false)}
         title="Filtros"
       >
-        <p className="mt-1 text-[12px] text-slate-500">
+        <p className="mt-1 text-[13px] text-[#54524D]">
           Afina lo que ves en Categorías y Tu equipo.
         </p>
 
-        <div className="mt-4">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            Tipo de servicio
+        <div className="mt-5">
+          <p className="ps-mono text-[11px] text-[#54524D]">
+            tipo de servicio
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {SERVICE_FILTERS.map((f) => {
@@ -706,22 +750,24 @@ function ClientPreviewInner({
                   type="button"
                   onClick={() => toggleServiceFilter(f)}
                   title={`Mostrar servicios de ${f.toLowerCase()}`}
-                  className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
-                    on
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                  className="ps-mono rounded-full px-3 py-1.5 text-[11px] transition"
+                  style={{
+                    backgroundColor: on ? '#141414' : 'transparent',
+                    color: on ? '#F4EFE6' : '#141414',
+                    border: on ? '1px solid #141414' : '1px solid #1414141A',
+                    transitionDuration: '160ms',
+                  }}
                 >
-                  {f}
+                  {f.toLowerCase()}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="mt-4">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            Valoración mínima del cleaner
+        <div className="mt-5">
+          <p className="ps-mono text-[11px] text-[#54524D]">
+            valoración mínima del cleaner
           </p>
           <div className="mt-2 flex gap-2">
             {[0, 3, 4, 4.5].map((n) => (
@@ -730,21 +776,23 @@ function ClientPreviewInner({
                 type="button"
                 onClick={() => setMinStars(n)}
                 title={n === 0 ? 'Sin filtro de rating' : `Mostrar solo ${n}+`}
-                className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold transition ${
-                  minStars === n
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                className="ps-mono flex-1 rounded-[12px] px-2 py-1.5 text-[11px] tabular-nums transition"
+                style={{
+                  backgroundColor: minStars === n ? '#141414' : 'transparent',
+                  color: minStars === n ? '#F4EFE6' : '#141414',
+                  border: minStars === n ? '1px solid #141414' : '1px solid #1414141A',
+                  transitionDuration: '160ms',
+                }}
               >
-                {n === 0 ? 'Todos' : `${n}+ ★`}
+                {n === 0 ? 'todos' : `${n}+ ★`}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="mt-4">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            Disponibilidad
+        <div className="mt-5">
+          <p className="ps-mono text-[11px] text-[#54524D]">
+            disponibilidad
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {AVAIL_FILTERS.map((f) => {
@@ -755,35 +803,39 @@ function ClientPreviewInner({
                   type="button"
                   onClick={() => setAvailFilter(on ? null : f)}
                   title={`Filtrar por disponibilidad: ${f.toLowerCase()}`}
-                  className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
-                    on
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                  className="ps-mono rounded-full px-3 py-1.5 text-[11px] transition"
+                  style={{
+                    backgroundColor: on ? '#141414' : 'transparent',
+                    color: on ? '#F4EFE6' : '#141414',
+                    border: on ? '1px solid #141414' : '1px solid #1414141A',
+                    transitionDuration: '160ms',
+                  }}
                 >
-                  {f}
+                  {f.toLowerCase()}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="mt-5 flex gap-2">
+        <div className="mt-6 flex gap-2">
           <button
             type="button"
             onClick={clearFilters}
             title="Quitar todos los filtros"
-            className="flex-1 rounded-2xl bg-slate-100 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
+            className="ps-mono flex-1 rounded-full border border-[#1414141A] px-4 py-2.5 text-[12px] text-[#141414] hover:bg-[#E4DACA]"
+            style={{ transitionDuration: '160ms' }}
           >
-            Limpiar
+            limpiar
           </button>
           <button
             type="button"
             onClick={() => setFilterOpen(false)}
             title="Aplicar y cerrar"
-            className="flex-1 rounded-2xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white hover:bg-blue-700"
+            className="ps-mono flex-1 rounded-full px-4 py-2.5 text-[12px] text-[#1A0A04]"
+            style={{ backgroundColor: '#FF5B1F', transitionDuration: '160ms' }}
           >
-            Aplicar
+            aplicar
           </button>
         </div>
       </DemoSheet>
@@ -794,21 +846,25 @@ function ClientPreviewInner({
         onClose={() => setRatingsOpen(false)}
         title="Valoraciones recientes"
       >
-        <p className="text-[12px] text-slate-500">
-          Promedio: <span className="font-bold text-slate-900">4.8</span> ·{' '}
-          {RECENT_RATINGS.length} valoraciones
+        <p className="ps-mono text-[12px] text-[#54524D]">
+          promedio:{' '}
+          <span className="ps-serif text-[18px] tabular-nums text-[#141414]">
+            4.8
+          </span>{' '}
+          · <span className="tabular-nums">{RECENT_RATINGS.length}</span>{' '}
+          valoraciones
         </p>
-        <ul className="mt-3 flex flex-col gap-2">
+        <ul className="mt-4 flex flex-col gap-2">
           {RECENT_RATINGS.map((r) => (
             <li
               key={r.id}
-              className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 p-3 ring-1 ring-inset ring-slate-100"
+              className="flex items-center justify-between gap-3 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-4"
             >
               <div className="min-w-0">
-                <p className="text-[12.5px] font-semibold text-slate-900">
+                <p className="text-[13px] font-semibold text-[#141414]">
                   {r.cleaner}
                 </p>
-                <p className="text-[11px] text-slate-500">
+                <p className="ps-mono mt-0.5 text-[11px] text-[#54524D]">
                   {r.service} · {r.when}
                 </p>
               </div>
@@ -816,11 +872,12 @@ function ClientPreviewInner({
                 {[1, 2, 3, 4, 5].map((n) => (
                   <Star
                     key={n}
-                    className={`h-3.5 w-3.5 ${
+                    className="h-3.5 w-3.5"
+                    style={
                       n <= r.stars
-                        ? 'fill-amber-400 text-amber-400'
-                        : 'text-slate-300'
-                    }`}
+                        ? { fill: '#FF5B1F', color: '#FF5B1F' }
+                        : { color: '#1414141A' }
+                    }
                   />
                 ))}
               </div>

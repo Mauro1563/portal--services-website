@@ -64,9 +64,10 @@ export function ClientTabBar({
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-slate-200 bg-white/95 backdrop-blur-xl"
+      className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md border-t border-[#1414141A] backdrop-blur-xl"
+      style={{ backgroundColor: 'rgba(244, 239, 230, 0.96)' }}
     >
-      <ul className="grid grid-cols-4">
+      <ul className="grid h-16 grid-cols-4">
         {items.map(({ key, href, label, Icon, badge }) => {
           const isActive = key === active;
           return (
@@ -74,25 +75,29 @@ export function ClientTabBar({
               <Link
                 href={href}
                 prefetch={true}
-                className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider transition ${
-                  isActive ? 'text-blue-700' : 'text-slate-400 hover:text-slate-700'
+                className={`ps-mono relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] transition ${
+                  isActive ? 'text-[#141414]' : 'text-[#54524D] hover:text-[#141414]'
                 }`}
               >
                 {isActive ? (
                   <span
                     aria-hidden
-                    className="absolute top-0 h-[3px] w-10 rounded-b bg-blue-600"
+                    className="absolute top-0 h-[2px] w-8"
+                    style={{ backgroundColor: '#FF5B1F' }}
                   />
                 ) : null}
                 <span className="relative">
-                  <Icon className={`h-5 w-5 ${isActive ? 'stroke-[2.25]' : 'stroke-[1.75]'}`} />
+                  <Icon className={`h-5 w-5 ${isActive ? 'stroke-[2]' : 'stroke-[1.5]'}`} />
                   {badge && badge > 0 ? (
-                    <span className="absolute -right-2 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white ring-2 ring-white">
+                    <span
+                      className="absolute -right-2 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[9px] font-bold text-[#1A0A04] ring-2"
+                      style={{ backgroundColor: '#FF5B1F', boxShadow: '0 0 0 2px #F4EFE6' }}
+                    >
                       {badge > 9 ? '9+' : badge}
                     </span>
                   ) : null}
                 </span>
-                <span>{label}</span>
+                <span className="lowercase">{label}</span>
               </Link>
             </li>
           );

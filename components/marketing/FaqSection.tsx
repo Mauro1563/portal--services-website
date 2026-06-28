@@ -1,21 +1,9 @@
-import {
-  HelpCircle,
-  ChevronDown,
-  Wallet,
-  Building2,
-  Languages,
-  Smartphone,
-  ShieldCheck,
-  LifeBuoy,
-} from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { getLocale, type Locale } from '@/lib/i18n';
 
 type Faq = {
-  icon: typeof HelpCircle;
   question: string;
   answer: string;
-  accent: string;
-  ring: string;
 };
 
 /**
@@ -27,49 +15,16 @@ type FaqCopy = {
   eyebrow: string;
   title: string;
   intro: string;
-  faqs: Array<Omit<Faq, 'icon' | 'accent' | 'ring'>>;
+  faqs: Faq[];
   footerEyebrow: string;
   footerTitle: string;
   footerSub: string;
   footerCta: string;
 };
 
-const FAQ_STYLES: Array<Pick<Faq, 'icon' | 'accent' | 'ring'>> = [
-  {
-    icon: Wallet,
-    accent: 'from-blue-500 to-blue-700',
-    ring: 'ring-blue-100',
-  },
-  {
-    icon: Building2,
-    accent: 'from-cyan-500 to-blue-600',
-    ring: 'ring-cyan-100',
-  },
-  {
-    icon: Languages,
-    accent: 'from-violet-500 to-blue-600',
-    ring: 'ring-violet-100',
-  },
-  {
-    icon: Smartphone,
-    accent: 'from-emerald-500 to-emerald-700',
-    ring: 'ring-emerald-100',
-  },
-  {
-    icon: ShieldCheck,
-    accent: 'from-amber-500 to-orange-600',
-    ring: 'ring-amber-100',
-  },
-  {
-    icon: LifeBuoy,
-    accent: 'from-rose-500 to-pink-600',
-    ring: 'ring-rose-100',
-  },
-];
-
 const COPY: Record<Locale, FaqCopy> = {
   es: {
-    eyebrow: 'FAQ',
+    eyebrow: 'preguntas',
     title: 'Preguntas frecuentes',
     intro:
       '¿No encuentras lo que buscas? Escríbenos y te respondemos en menos de 2 horas.',
@@ -105,14 +60,14 @@ const COPY: Record<Locale, FaqCopy> = {
           'Nuestro equipo de soporte responde por chat y email en menos de 2 horas en horario laboral (L-V 9-19h CET). Los planes Pro incluyen soporte prioritario con respuesta en menos de 1 hora, y Enterprise dispone de un Customer Success Manager dedicado y SLA garantizado de 30 minutos 24/7.',
       },
     ],
-    footerEyebrow: '¿Más preguntas?',
+    footerEyebrow: '¿más preguntas?',
     footerTitle: 'Habla con nuestro equipo',
     footerSub:
       'Resolvemos cualquier duda sobre planes, integraciones o migración desde otra plataforma.',
     footerCta: 'Contactar con soporte',
   },
   en: {
-    eyebrow: 'FAQ',
+    eyebrow: 'questions',
     title: 'Frequently asked questions',
     intro:
       "Everything you need to know before getting started. Can't find what you're looking for? Drop us a line and we'll reply in under 2 hours.",
@@ -148,14 +103,14 @@ const COPY: Record<Locale, FaqCopy> = {
           'Our support team replies via chat and email in under 2 hours during business hours (Mon–Fri 9am–7pm CET). Pro plans get priority support with under 1-hour responses, and Enterprise customers get a dedicated Customer Success Manager and a guaranteed 30-minute SLA, 24/7.',
       },
     ],
-    footerEyebrow: 'More questions?',
+    footerEyebrow: 'more questions?',
     footerTitle: 'Talk to our team',
     footerSub:
       'We answer anything about plans, integrations or migrating from another platform.',
     footerCta: 'Contact support',
   },
   pt: {
-    eyebrow: 'FAQ',
+    eyebrow: 'perguntas',
     title: 'Perguntas frequentes',
     intro:
       'Tudo o que precisa saber antes de começar. Não encontra o que procura? Escreva-nos e respondemos em menos de 2 horas.',
@@ -191,7 +146,7 @@ const COPY: Record<Locale, FaqCopy> = {
           'A nossa equipa de suporte responde por chat e email em menos de 2 horas em horário laboral (Seg–Sex 9h–19h CET). Os planos Pro incluem suporte prioritário com resposta em menos de 1 hora, e o Enterprise dispõe de um Customer Success Manager dedicado e SLA garantido de 30 minutos 24/7.',
       },
     ],
-    footerEyebrow: 'Mais perguntas?',
+    footerEyebrow: 'mais perguntas?',
     footerTitle: 'Fale com a nossa equipa',
     footerSub:
       'Esclarecemos qualquer dúvida sobre planos, integrações ou migração de outra plataforma.',
@@ -199,91 +154,103 @@ const COPY: Record<Locale, FaqCopy> = {
   },
 };
 
+const SERIF = "'Instrument Serif', Georgia, serif";
+const MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
+
 export default async function FaqSection() {
   const locale = await getLocale();
   const t = COPY[locale];
-  const faqs: Faq[] = t.faqs.map((entry, i) => ({
-    ...entry,
-    ...FAQ_STYLES[i % FAQ_STYLES.length],
-  }));
 
   return (
-    <section className="relative overflow-hidden bg-slate-50 py-12 sm:py-28">
-      {/* Decorative blue/sky wash */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-100 via-sky-100 to-cyan-100 opacity-60 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-100/50 blur-3xl"
-      />
-
-      <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <section className="relative bg-[#F4EFE6] ps-paper-grain py-24 md:py-40">
+      <div className="relative mx-auto max-w-[1024px] px-6 md:px-12">
         {/* Header */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 ring-1 ring-blue-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <HelpCircle className="h-3 w-3 text-blue-700" aria-hidden />
-            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+        <div>
+          <p className="text-[12px] text-[#141414]" style={{ fontFamily: MONO }}>
+            <span
+              className="pb-1"
+              style={{
+                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '100% 1px',
+                backgroundPosition: '0 calc(100% + 4px)',
+              }}
+            >
               {t.eyebrow}
             </span>
-          </div>
-          <h2 className="font-display mt-5 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+          </p>
+          <h2
+            className="mt-6 text-[32px] leading-[0.95] tracking-[-0.03em] text-[#141414] md:text-[64px]"
+            style={{ fontFamily: SERIF, fontWeight: 400 }}
+          >
             {t.title}
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
+          <p className="mt-6 max-w-[62ch] text-[18px] leading-[1.45] text-[#54524D] md:text-[22px]">
             {t.intro}
           </p>
         </div>
 
-        {/* FAQ list */}
-        <ul className="mt-8 space-y-3 sm:mt-12 sm:space-y-4">
-          {faqs.map((faq) => {
-            const Icon = faq.icon;
-            return (
-              <li key={faq.question}>
-                <details className="group rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition open:shadow-[0_4px_16px_rgba(15,23,42,0.06)]">
-                  <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6 sm:py-6 [&::-webkit-details-marker]:hidden">
-                    <span
-                      className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${faq.accent} text-white shadow-[0_4px_12px_rgba(37,99,235,0.18)] ring-2 sm:h-10 sm:w-10 sm:ring-4 ${faq.ring}`}
-                    >
-                      <Icon className="h-4 w-4" aria-hidden />
-                    </span>
-                    <span className="flex-1 text-left text-sm font-semibold text-slate-900 sm:text-lg">
-                      {faq.question}
-                    </span>
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-blue-600 group-open:text-white">
-                      <ChevronDown
-                        className="h-4 w-4 transition-transform duration-200 group-open:rotate-180"
-                        aria-hidden
-                      />
-                    </span>
-                  </summary>
-                  <div className="px-5 pb-6 sm:px-6 sm:pb-7">
-                    <div className="ml-0 border-l-0 border-slate-100 pl-0 text-sm leading-relaxed text-slate-600 sm:ml-14 sm:border-l-2 sm:pl-4 sm:text-base">
-                      {faq.answer}
-                    </div>
-                  </div>
-                </details>
-              </li>
-            );
-          })}
+        {/* FAQ list — flat hairline rows, no cards. The classic editorial Q&A column. */}
+        <ul className="mt-16 border-t border-[#1414141A] md:mt-24">
+          {t.faqs.map((faq, idx) => (
+            <li key={faq.question} className="border-b border-[#1414141A]">
+              <details className="group">
+                <summary className="flex cursor-pointer list-none items-start gap-6 py-6 md:py-8 [&::-webkit-details-marker]:hidden">
+                  <span
+                    className="w-8 shrink-0 pt-1 text-[12px] text-[#54524D] tabular-nums"
+                    style={{ fontFamily: MONO }}
+                  >
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <span
+                    className="flex-1 text-[20px] leading-[1.2] tracking-[-0.015em] text-[#141414] md:text-[28px]"
+                    style={{ fontFamily: SERIF, fontWeight: 400 }}
+                  >
+                    {faq.question}
+                  </span>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center text-[#141414] transition-transform group-open:rotate-180" style={{ transitionDuration: '280ms' }}>
+                    <ChevronDown className="h-4 w-4" aria-hidden />
+                  </span>
+                </summary>
+                <div className="flex gap-6 pb-8">
+                  <span className="w-8 shrink-0" />
+                  <p className="max-w-[62ch] flex-1 pr-8 text-[15px] leading-[1.55] text-[#54524D] md:text-[16px]">
+                    {faq.answer}
+                  </p>
+                </div>
+              </details>
+            </li>
+          ))}
         </ul>
 
-        {/* Footer CTA */}
-        <div className="mt-12 rounded-2xl bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50 px-5 py-6 text-center ring-1 ring-blue-100 sm:rounded-3xl sm:px-10 sm:py-10">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
-            {t.footerEyebrow}
+        {/* Footer CTA — flat ink card, mandarin underline on the link */}
+        <div className="mt-16 rounded-[12px] bg-[#141414] p-10 text-[#F4EFE6] md:mt-24 md:p-14">
+          <p className="text-[12px] text-[#F4EFE6]/65" style={{ fontFamily: MONO }}>
+            <span
+              className="pb-1"
+              style={{
+                backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '100% 1px',
+                backgroundPosition: '0 calc(100% + 4px)',
+              }}
+            >
+              {t.footerEyebrow}
+            </span>
           </p>
-          <h3 className="font-display mt-2 text-lg font-bold text-slate-900 sm:text-2xl">
+          <h3
+            className="mt-4 text-[28px] leading-[1] tracking-[-0.02em] md:text-[40px]"
+            style={{ fontFamily: SERIF, fontWeight: 400 }}
+          >
             {t.footerTitle}
           </h3>
-          <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
+          <p className="mt-4 max-w-[62ch] text-[15px] leading-[1.55] text-[#F4EFE6]/70 md:text-[16px]">
             {t.footerSub}
           </p>
           <a
             href="mailto:hola@portalservices.digital"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.25)] transition hover:from-blue-700 hover:to-blue-800"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#FF5B1F] px-6 py-3 text-sm font-semibold text-[#1A0A04] transition-colors hover:bg-[#E84D14]"
+            style={{ transitionDuration: '160ms' }}
           >
             {t.footerCta}
           </a>

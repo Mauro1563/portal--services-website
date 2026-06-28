@@ -61,10 +61,11 @@ export function FlippableCleanerCard({
             : `Conocer a ${firstName} — cómo trabaja`
         }
         aria-pressed={flipped}
-        className="absolute -top-1 right-0 z-20 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-700 ring-1 ring-inset ring-slate-200 backdrop-blur transition hover:bg-white"
+        className="ps-mono absolute -top-1 right-0 z-20 inline-flex items-center gap-1 rounded-full border border-[#1414141A] px-2.5 py-1 text-[10px] text-[#141414] backdrop-blur transition"
+        style={{ backgroundColor: 'rgba(244, 239, 230, 0.92)', transitionDuration: '160ms' }}
       >
-        <Sparkles className="h-3 w-3 text-amber-500" />
-        {flipped ? 'Datos' : 'Conócela'}
+        <Sparkles className="h-3 w-3" style={{ color: '#FF5B1F' }} />
+        {flipped ? 'datos' : 'conócela'}
       </button>
 
       {reduced ? (
@@ -107,24 +108,38 @@ export function FlippableCleanerCard({
 
 function CleanerBack({ cleanerName }: { cleanerName: string }) {
   return (
-    <div className="relative h-full rounded-2xl bg-gradient-to-br from-amber-50 to-white p-4 ring-1 ring-inset ring-amber-100">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
-        Cómo trabaja {cleanerName}
+    <div
+      className="relative h-full rounded-[12px] border border-[#1414141A] p-5"
+      style={{ backgroundColor: '#E8C8C0' }}
+    >
+      <p className="ps-mono text-[11px] text-[#54524D]">
+        <span
+          style={{
+            backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '100% 1px',
+            backgroundPosition: '0 calc(100% + 3px)',
+            paddingBottom: '3px',
+          }}
+        >
+          cómo trabaja {cleanerName.toLowerCase()}
+        </span>
       </p>
-      <p className="mt-2 text-[13px] leading-relaxed text-slate-700">
+      <p className="ps-serif mt-3 text-[18px] leading-snug tracking-[-0.015em] text-[#141414]">
         Empieza por la cocina, usa productos eco, y le encanta dejar las
         almohadas como en hotel.
       </p>
 
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-4 flex items-center gap-3">
         <RoomIcon icon={ChefHat} label="Cocina" />
         <RoomIcon icon={Bath} label="Baño" />
         <RoomIcon icon={Bed} label="Dormitorio" />
       </div>
 
-      {/* Kintsugi-style gold accent — a single hairline gold stroke
-          across the bottom that breaks into two slivers, evoking the
-          repaired-with-gold motif. */}
+      {/* Kintsugi-style accent — re-skinned to mandarin per the design
+          brief (the per-portal delight uses only the portal's secondary
+          color + mandarin; here we lean on mandarin against petal so the
+          stitch reads as "repaired with gold" without literal gold). */}
       <svg
         aria-hidden
         className="absolute inset-x-3 bottom-2 h-2"
@@ -133,10 +148,10 @@ function CleanerBack({ cleanerName }: { cleanerName: string }) {
       >
         <defs>
           <linearGradient id="kint-grad" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%"   stopColor="#fbbf24" stopOpacity="0" />
-            <stop offset="35%"  stopColor="#f59e0b" stopOpacity="1" />
-            <stop offset="65%"  stopColor="#d97706" stopOpacity="1" />
-            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+            <stop offset="0%"   stopColor="#FF5B1F" stopOpacity="0" />
+            <stop offset="35%"  stopColor="#FF5B1F" stopOpacity="1" />
+            <stop offset="65%"  stopColor="#FF5B1F" stopOpacity="1" />
+            <stop offset="100%" stopColor="#FF5B1F" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path
@@ -159,11 +174,14 @@ function RoomIcon({
   label: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-1 text-amber-800">
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-white shadow-sm ring-1 ring-inset ring-amber-100">
+    <div className="flex flex-col items-center gap-1.5 text-[#141414]">
+      <span
+        className="grid h-10 w-10 place-items-center rounded-[12px] border border-[#1414141A]"
+        style={{ backgroundColor: '#F4EFE6' }}
+      >
         <Icon className="h-4 w-4" />
       </span>
-      <span className="text-[10px] font-semibold text-slate-600">{label}</span>
+      <span className="ps-mono text-[10px] text-[#54524D]">{label.toLowerCase()}</span>
     </div>
   );
 }

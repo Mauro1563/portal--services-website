@@ -12,7 +12,6 @@ import {
   Megaphone,
   Palette,
   Plus,
-  Sparkles,
   Users,
   X,
 } from 'lucide-react';
@@ -22,8 +21,6 @@ type Tile = {
   label: string;
   hint: string;
   Icon: React.ComponentType<{ className?: string }>;
-  iconBg: string;
-  iconText: string;
   title: string;
 };
 
@@ -33,8 +30,6 @@ const PRIMARY: Tile[] = [
     label: 'Limpiezas',
     hint: '4 programadas hoy',
     Icon: ListChecks,
-    iconBg: 'bg-blue-50',
-    iconText: 'text-blue-700',
     title: 'Ver todas las limpiezas (programadas, en curso y completadas)',
   },
   {
@@ -42,8 +37,6 @@ const PRIMARY: Tile[] = [
     label: 'Equipo',
     hint: '4 operarios activos',
     Icon: Users,
-    iconBg: 'bg-amber-50',
-    iconText: 'text-amber-700',
     title: 'Ver el equipo de cleaners y reasignar tareas',
   },
 ];
@@ -54,8 +47,6 @@ const SECONDARY: Tile[] = [
     label: 'Propiedades',
     hint: '6 sitios',
     Icon: Building2,
-    iconBg: 'bg-emerald-50',
-    iconText: 'text-emerald-700',
     title: 'Gestionar las propiedades de tus clientes',
   },
   {
@@ -63,8 +54,6 @@ const SECONDARY: Tile[] = [
     label: 'Clientes',
     hint: '6 activos',
     Icon: BarChart3,
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
     title: 'Lista de clientes y acceso a sus portales',
   },
   {
@@ -72,8 +61,6 @@ const SECONDARY: Tile[] = [
     label: 'Branding',
     hint: 'Logo y colores',
     Icon: Palette,
-    iconBg: 'bg-fuchsia-50',
-    iconText: 'text-fuchsia-700',
     title: 'Personaliza el nombre, logo y colores del portal de tus clientes',
   },
   {
@@ -81,8 +68,6 @@ const SECONDARY: Tile[] = [
     label: 'Marketing',
     hint: 'QR, promos, redes',
     Icon: Megaphone,
-    iconBg: 'bg-rose-50',
-    iconText: 'text-rose-700',
     title: 'Comparte tu enlace, crea códigos promocionales y descarga material',
   },
 ];
@@ -119,37 +104,48 @@ export function DemoQuickActions() {
   }
 
   return (
-    <section>
-      <div className="mb-3 flex items-center justify-between px-1">
-        <h2 className="font-display text-base font-semibold text-slate-900">
-          Accesos rápidos
-        </h2>
+    <section className="ps-set">
+      <div className="mb-4 flex items-end justify-between gap-3 px-1">
+        <div className="min-w-0">
+          <p className="font-mono text-[12px] text-[#54524D]">
+            accesos
+            <span className="ml-1 inline-block h-[1px] w-5 align-middle bg-[#FF5B1F]" />
+          </p>
+          <h2
+            className="mt-1 text-[28px] leading-[1] tracking-[-0.02em] text-[#141414] md:text-[32px]"
+            style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}
+          >
+            Accesos rápidos
+          </h2>
+        </div>
         <button
           type="button"
           onClick={() => setShowNew((s) => !s)}
           title="Crear una nueva limpieza desde el dashboard"
-          className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#FF5B1F] px-4 py-2 text-[12px] font-semibold text-[#1A0A04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141414]"
+          style={{ transitionDuration: '160ms' }}
         >
           <Plus className="h-3.5 w-3.5" /> Nueva tarea
         </button>
       </div>
 
       {showNew ? (
-        <div className="mb-3 rounded-2xl border border-blue-200 bg-blue-50/40 p-3">
+        <div className="ps-set mb-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5">
           <div className="flex items-center justify-between">
-            <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-900">
-              <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Programar limpieza
+            <p className="font-mono text-[12px] text-[#54524D]">
+              programar limpieza
+              <span className="ml-1 inline-block h-[1px] w-5 align-middle bg-[#FF5B1F]" />
             </p>
             <button
               type="button"
               onClick={() => setShowNew(false)}
               aria-label="Cerrar"
-              className="rounded-full p-1 text-slate-500 hover:bg-white"
+              className="rounded-full p-1 text-[#54524D] hover:bg-[#F4EFE6]"
             >
               <X className="h-3.5 w-3.5" />
             </button>
           </div>
-          <div className="mt-2 grid gap-2 sm:grid-cols-[2fr_1fr]">
+          <div className="mt-3 grid gap-2 sm:grid-cols-[2fr_1fr]">
             <label className="sr-only" htmlFor="quick-property">
               Propiedad
             </label>
@@ -157,7 +153,7 @@ export function DemoQuickActions() {
               id="quick-property"
               value={property}
               onChange={(e) => setProperty(e.target.value)}
-              className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+              className="h-10 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] px-3 text-[13px] text-[#141414] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5B1F]"
             >
               <option value="">Selecciona propiedad…</option>
               {PROPERTY_OPTIONS.map((p) => (
@@ -174,14 +170,15 @@ export function DemoQuickActions() {
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-[13px] text-slate-900"
+              className="h-10 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] px-3 text-[13px] text-[#141414] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5B1F]"
             />
           </div>
           <button
             type="button"
             onClick={add}
             disabled={!property || !time}
-            className="mt-2 h-9 rounded-lg bg-blue-600 px-3 text-[12px] font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="mt-3 h-10 rounded-full bg-[#141414] px-4 text-[12px] font-semibold text-[#F4EFE6] disabled:cursor-not-allowed disabled:opacity-40"
+            style={{ transitionDuration: '160ms' }}
           >
             Añadir al planning
           </button>
@@ -190,24 +187,24 @@ export function DemoQuickActions() {
               {added.map((t) => (
                 <li
                   key={t.id}
-                  className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-[12px] text-slate-700 ring-1 ring-slate-200"
+                  className="ps-set flex items-center gap-2 rounded-[12px] border border-[#1414141A] bg-[#F4EFE6] px-3 py-2 font-mono text-[12px] text-[#141414]"
                 >
-                  <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                  <CheckCircle2 className="h-3 w-3 text-[#3F5B3A]" />
                   <span className="font-semibold">{t.time}</span>
-                  <span aria-hidden>·</span>
+                  <span aria-hidden className="text-[#54524D]">·</span>
                   <span>{t.property}</span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-2 inline-flex items-center gap-1 text-[11.5px] text-slate-600">
+            <p className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-[#54524D]">
               <Info className="h-3 w-3" /> Los datos se quedan sólo en la demo.
             </p>
           )}
         </div>
       ) : null}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {PRIMARY.map((t) => {
           const Icon = t.Icon;
           return (
@@ -215,28 +212,28 @@ export function DemoQuickActions() {
               key={t.href}
               href={t.href}
               title={t.title}
-              className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              className="ps-set group flex items-center gap-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 transition-colors hover:bg-[#E4DACA]/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5B1F] md:p-6"
+              style={{ transitionDuration: '160ms' }}
             >
-              <span
-                className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${t.iconBg} ${t.iconText}`}
-              >
-                <Icon className="h-5 w-5" />
-              </span>
+              <Icon className="h-5 w-5 shrink-0 text-[#141414]" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[15px] font-semibold text-slate-900">
+                <p
+                  className="text-[20px] leading-tight tracking-[-0.015em] text-[#141414] md:text-[24px]"
+                  style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}
+                >
                   {t.label}
                 </p>
-                <p className="mt-0.5 truncate text-[12px] text-slate-600">
+                <p className="mt-1 font-mono text-[11px] text-[#54524D]">
                   {t.hint}
                 </p>
               </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 transition group-hover:text-slate-500" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-[#54524D] transition-transform group-hover:translate-x-1" />
             </Link>
           );
         })}
       </div>
 
-      <ul className="mt-3 divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+      <ul className="ps-set mt-3 divide-y divide-[#1414141A] overflow-hidden rounded-[12px] border border-[#1414141A] bg-[#E4DACA]">
         {SECONDARY.map((t) => {
           const Icon = t.Icon;
           return (
@@ -244,22 +241,19 @@ export function DemoQuickActions() {
               <Link
                 href={t.href}
                 title={t.title}
-                className="group flex items-center gap-3 px-4 py-3 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"
+                className="group flex min-h-[64px] items-center gap-4 px-5 py-4 transition-colors hover:bg-[#E4DACA]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#FF5B1F]"
+                style={{ transitionDuration: '160ms' }}
               >
-                <span
-                  className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg ${t.iconBg} ${t.iconText}`}
-                >
-                  <Icon className="h-4 w-4" />
-                </span>
+                <Icon className="h-4 w-4 shrink-0 text-[#141414]" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13.5px] font-semibold text-slate-900">
+                  <p className="truncate text-[14px] font-semibold text-[#141414]">
                     {t.label}
                   </p>
-                  <p className="mt-0.5 truncate text-[11.5px] text-slate-600">
+                  <p className="mt-0.5 truncate font-mono text-[11px] text-[#54524D]">
                     {t.hint}
                   </p>
                 </div>
-                <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 transition group-hover:text-slate-500" />
+                <ChevronRight className="h-4 w-4 shrink-0 text-[#54524D] transition-transform group-hover:translate-x-1" />
               </Link>
             </li>
           );

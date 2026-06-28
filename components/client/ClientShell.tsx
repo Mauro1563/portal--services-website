@@ -35,25 +35,29 @@ export function ClientShell({
 
   return (
     <main
-      className={`relative min-h-screen bg-slate-50 text-slate-900 ${
+      className={`ps-paper-grain relative min-h-screen text-[#141414] ${
         showTabs ? 'pb-24' : 'pb-10'
       }`}
+      style={{ backgroundColor: '#F4EFE6' }}
     >
       {!hideHeader && (
-        <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
+        <header
+          className="sticky top-0 z-40 border-b border-[#1414141A]"
+          style={{ backgroundColor: '#F4EFE6' }}
+        >
           <div className="mx-auto flex h-14 max-w-md items-center gap-3 px-4">
             {showBack && backHref ? (
               <Link
                 href={backHref}
                 aria-label="Atrás"
-                className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-slate-700 hover:bg-slate-100"
+                className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-[#141414] hover:bg-[#E4DACA]"
               >
                 <BackArrow />
               </Link>
             ) : null}
 
             {title ? (
-              <h1 className="font-display text-sm font-semibold tracking-tight text-slate-900">
+              <h1 className="ps-serif text-[20px] tracking-[-0.015em] text-[#141414]">
                 {title}
               </h1>
             ) : logoUrl ? (
@@ -70,10 +74,10 @@ export function ClientShell({
         </header>
       )}
 
-      <div className="mx-auto max-w-md px-4 pt-4">{children}</div>
+      <div className="mx-auto max-w-md px-4 pt-6 md:pt-10">{children}</div>
 
-      <footer className="mx-auto mt-8 max-w-md px-4 pb-4 text-center text-[12px] text-slate-500">
-        Portal · servicios de limpieza en Londres
+      <footer className="ps-mono mx-auto mt-10 max-w-md px-4 pb-4 text-center text-[12px] text-[#54524D]">
+        Portal<span style={{ color: '#FF5B1F' }}>·</span>Services — Londres
       </footer>
 
       {showTabs && token && activeTab ? (

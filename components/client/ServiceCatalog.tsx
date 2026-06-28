@@ -21,28 +21,25 @@ export type CatalogService = {
  * commonly used by Spanish/English cleaning shops. Falls back to a
  * generic sparkle for anything we don't recognise.
  */
-function iconFor(name: string): {
-  Icon: typeof Sparkles;
-  bg: string;
-  fg: string;
-} {
+function iconFor(name: string): { Icon: typeof Sparkles } {
+  // Color-coded tile chrome killed per design brief — all category icons render
+  // on the same paper-on-clay surface; only the glyph shape distinguishes
+  // them. State / identity comes from copy, not chroma.
   const n = name.toLowerCase();
-  if (n.includes('mudanza') || n.includes('move'))
-    return { Icon: Box, bg: 'bg-amber-50', fg: 'text-amber-600' };
+  if (n.includes('mudanza') || n.includes('move')) return { Icon: Box };
   if (n.includes('vidrio') || n.includes('window') || n.includes('cristal'))
-    return { Icon: SquareDashedBottom, bg: 'bg-sky-50', fg: 'text-sky-600' };
+    return { Icon: SquareDashedBottom };
   if (
     n.includes('profunda') ||
     n.includes('deep') ||
     n.includes('post') ||
     n.includes('obra')
   )
-    return { Icon: Hammer, bg: 'bg-violet-50', fg: 'text-violet-600' };
-  if (n.includes('cocina') || n.includes('kitchen'))
-    return { Icon: Brush, bg: 'bg-rose-50', fg: 'text-rose-600' };
+    return { Icon: Hammer };
+  if (n.includes('cocina') || n.includes('kitchen')) return { Icon: Brush };
   if (n.includes('aire') || n.includes('air') || n.includes('vent'))
-    return { Icon: Wind, bg: 'bg-teal-50', fg: 'text-teal-600' };
-  return { Icon: Sparkles, bg: 'bg-blue-50', fg: 'text-blue-600' };
+    return { Icon: Wind };
+  return { Icon: Sparkles };
 }
 
 /**
@@ -61,21 +58,27 @@ export function ServiceCatalog({
 }) {
   if (services.length === 0) {
     return (
-      <section className="mt-6">
-        <h2 className="text-[13px] font-bold text-slate-900">Categorías</h2>
+      <section className="mt-8">
+        <h2 className="ps-serif text-[28px] leading-[0.95] tracking-[-0.03em] text-[#141414]">
+          Categorías
+        </h2>
         <Link
           href={`/client/${token}/book`}
-          className="mt-3 flex items-center gap-3 rounded-2xl border border-dashed border-blue-200 bg-blue-50/40 p-4 transition hover:border-blue-300 hover:bg-blue-50/70"
+          className="mt-4 flex items-center gap-3 rounded-[12px] border border-dashed border-[#1414141A] bg-[#E4DACA] p-5 transition hover:border-[#FF5B1F]"
+          style={{ transitionDuration: '160ms' }}
         >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-700">
+          <span
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] border border-[#1414141A] text-[#141414]"
+            style={{ backgroundColor: '#F4EFE6' }}
+          >
             <Plus className="h-4 w-4" />
           </span>
           <div className="min-w-0">
-            <p className="text-[13px] font-semibold text-slate-900">
+            <p className="text-[14px] font-semibold text-[#141414]">
               Pide tu primer servicio
             </p>
-            <p className="mt-0.5 text-[11px] text-slate-600">
-              Tu equipo aún no publicó precios — abre el chat y avísales.
+            <p className="ps-mono mt-1 text-[11px] text-[#54524D]">
+              tu equipo aún no publicó precios — abre el chat y avísales.
             </p>
           </div>
         </Link>
@@ -84,32 +87,47 @@ export function ServiceCatalog({
   }
 
   return (
-    <section className="mt-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-[13px] font-bold text-slate-900">Categorías</h2>
+    <section className="mt-8">
+      <div className="flex items-end justify-between">
+        <h2 className="ps-serif text-[28px] leading-[0.95] tracking-[-0.03em] text-[#141414]">
+          Categorías
+        </h2>
         <Link
           href={`/client/${token}/book`}
-          className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-blue-700 hover:text-blue-800"
+          className="ps-mono inline-flex items-center gap-0.5 text-[12px] text-[#141414]"
         >
-          Ver todo <ChevronRight className="h-3 w-3" />
+          <span
+            style={{
+              backgroundImage: 'linear-gradient(#FF5B1F, #FF5B1F)',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: '100% 1px',
+              backgroundPosition: '0 calc(100% + 3px)',
+              paddingBottom: '3px',
+            }}
+          >
+            ver todo
+          </span>
+          <ChevronRight className="h-3 w-3" />
         </Link>
       </div>
-      <div className="mt-3 grid grid-cols-3 gap-2.5">
+      <div className="mt-4 grid grid-cols-3 gap-2.5">
         {services.slice(0, 6).map((s) => {
-          const { Icon, bg, fg } = iconFor(s.name);
+          const { Icon } = iconFor(s.name);
           return (
             <Link
               key={s.id}
               href={`/client/${token}/book?service=${s.id}`}
-              className="group flex flex-col items-center gap-2 rounded-2xl bg-white p-3 text-center ring-1 ring-inset ring-slate-100 transition hover:-translate-y-0.5 hover:ring-blue-200 hover:shadow-[0_8px_20px_-10px_rgba(37,99,235,0.35)]"
+              className="ps-set group flex flex-col items-center gap-2 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-4 text-center transition hover:bg-[#141414] hover:text-[#F4EFE6]"
+              style={{ transitionDuration: '160ms' }}
             >
               <span
-                className={`grid h-12 w-12 place-items-center rounded-2xl ${bg} ${fg}`}
+                className="grid h-12 w-12 place-items-center rounded-[12px] border border-[#1414141A] text-[#141414] group-hover:border-[#F4EFE6]/30 group-hover:bg-[#F4EFE6] group-hover:text-[#141414]"
+                style={{ backgroundColor: '#F4EFE6' }}
               >
                 <Icon className="h-5 w-5" />
               </span>
               <span
-                className="line-clamp-2 text-[12px] font-semibold leading-tight text-slate-700 group-hover:text-blue-700"
+                className="line-clamp-2 text-[12px] font-semibold leading-tight text-[#141414] group-hover:text-[#F4EFE6]"
                 style={{ textWrap: 'balance' } as React.CSSProperties}
               >
                 {s.name}

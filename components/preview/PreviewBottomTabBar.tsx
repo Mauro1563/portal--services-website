@@ -73,7 +73,7 @@ export function PreviewBottomTabBar({
 }) {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-surface-2 bg-surface-0/95 backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#1414141A] bg-[#F4EFE6]/95 backdrop-blur"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <ul className="mx-auto flex max-w-md items-stretch justify-around">
@@ -133,22 +133,23 @@ function NavItem({
       <Link
         href={href}
         title={title}
-        className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition ${
-          active ? 'text-brand-600' : 'text-text-3 hover:text-text-1'
+        className={`relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] transition-colors ${
+          active ? 'text-[#141414]' : 'text-[#54524D] hover:text-[#141414]'
         }`}
+        style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
       >
         {active ? (
           <span
             aria-hidden
-            className="absolute top-0 h-[3px] w-10 rounded-b bg-brand-600"
+            className="absolute top-0 h-[2px] w-8 bg-[#FF5B1F]"
           />
         ) : null}
         <span className="relative">
           <Icon
-            className={`h-5 w-5 ${active ? 'stroke-[2.25]' : 'stroke-[1.75]'}`}
+            className={`h-5 w-5 ${active ? 'stroke-[2]' : 'stroke-[1.5]'}`}
           />
         </span>
-        <span className="tracking-wider uppercase">{label}</span>
+        <span className="ps-mono text-[11px] lowercase">{label.toLowerCase()}</span>
       </Link>
     </li>
   );
@@ -211,12 +212,15 @@ function AsistenteButton({
       }}
       aria-label="Abrir asistente IA"
       title="Asistente IA — pulsa o arrastra hacia arriba"
-      className="relative -mt-3 flex h-14 w-full flex-col items-center justify-end gap-1 text-[10px] font-semibold text-violet-700"
+      className="relative -mt-3 flex h-16 w-full flex-col items-center justify-end gap-1 text-[11px] text-[#141414]"
     >
-      <span className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-violet-500 via-fuchsia-500 to-amber-400 text-white shadow-[0_8px_22px_-6px_rgba(124,58,237,0.55)] transition active:scale-95">
+      <span
+        className="grid h-12 w-12 place-items-center rounded-full bg-[#FF5B1F] text-[#1A0A04] transition-transform active:scale-95"
+        style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+      >
         <Sparkles className="h-5 w-5" />
       </span>
-      <span className="tracking-wider uppercase">Asistente</span>
+      <span className="ps-mono text-[11px] lowercase">asistente</span>
     </button>
   );
 }

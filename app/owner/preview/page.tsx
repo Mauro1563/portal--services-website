@@ -3,7 +3,7 @@
  * No auth, no Supabase. Every link routes inside /owner/preview/*.
  */
 import Link from 'next/link';
-import { ArrowRight, BarChart3 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { DemoStatCardsRow } from './_components/DemoStatCardsRow';
 import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart';
 import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
@@ -63,18 +63,18 @@ const checkins: DemoFieldCheckin[] = [
 
 export default function OwnerPreviewHome() {
   return (
-    <main className="min-h-screen bg-slate-50 pb-20">
-      <div className="mx-auto max-w-5xl px-3 pt-4 sm:px-4 sm:pt-5 lg:px-8 lg:pt-7">
+    <main className="ps-paper-grain min-h-screen pb-24 text-[#141414]">
+      <div className="mx-auto max-w-5xl px-4 pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pt-10">
         <DemoCorporateHeader
           firstName="Alan"
           subtitle="Alan Cleaners · 4 limpiezas hoy"
         />
 
-        <div className="mb-4 flex justify-end">
+        <div className="mb-6 flex justify-end">
           <DemoPullSummary />
         </div>
 
-        <div>
+        <div className="space-y-6 md:space-y-8">
           <DemoStatCardsRow
             cleanersActive={3}
             bookingsWeek={12}
@@ -83,44 +83,39 @@ export default function OwnerPreviewHome() {
             revenueDelta={{ label: '+12%', positive: true }}
           />
 
-          <div className="mt-6">
+          <div className="ps-set rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 md:p-6">
             <RevenueChart data={revenueData} />
           </div>
 
-          <div className="mt-4">
-            <DemoCleanersField checkins={checkins} />
-          </div>
+          <DemoCleanersField checkins={checkins} />
 
-          <div className="mt-6">
-            <DemoTodayHero />
-          </div>
+          <DemoTodayHero />
 
-          <div className="mt-8">
-            <DemoQuickActions />
-          </div>
+          <DemoQuickActions />
 
           <Link
             href="/owner/preview/analytics"
             title="Ver tendencias semanales y KPIs detallados"
-            className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-blue-300 hover:bg-blue-50/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="ps-set group flex items-center justify-between gap-4 rounded-[12px] border border-[#1414141A] bg-[#E4DACA] p-5 text-[#141414] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5B1F] md:p-6"
+            style={{ transitionDuration: '160ms' }}
           >
-            <div className="flex min-w-0 items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-700">
-                <BarChart3 className="h-5 w-5" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-[15px] font-semibold text-slate-900">
-                  Ver analítica completa
-                </p>
-                <p className="mt-0.5 text-[12px] text-slate-600">
-                  Tendencias semanales, ingresos y KPIs detallados
-                </p>
-              </div>
+            <div className="min-w-0">
+              <p className="font-mono text-[12px] text-[#54524D]">
+                analítica
+                <span className="ml-1 inline-block h-[1px] w-6 align-middle bg-[#FF5B1F]" />
+              </p>
+              <p className="mt-2 font-serif text-[24px] leading-[1.05] tracking-[-0.02em] text-[#141414] md:text-[28px]" style={{ fontFamily: "'Instrument Serif', serif" }}>
+                Ver analítica completa
+              </p>
+              <p className="mt-1 text-[13px] text-[#54524D]">
+                Tendencias semanales, ingresos y KPIs detallados.
+              </p>
             </div>
-            <ArrowRight className="h-5 w-5 shrink-0 text-blue-600" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-[#FF5B1F] transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-        <div className="mt-10">
+
+        <div className="mt-10 md:mt-14">
           <DemoPhotoStrip
             title="Limpiezas recientes del equipo"
             caption="Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante."

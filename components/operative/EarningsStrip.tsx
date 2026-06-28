@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChevronRight, Coins, TrendingUp } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 function formatMoney(pence: number): string {
   // Always show pence on the money screen — silent rounding erodes trust.
@@ -8,17 +8,9 @@ function formatMoney(pence: number): string {
 }
 
 /**
- * Big-number earnings card pinned high on the cleaner home — answers the
- * one question a cleaner asks mid-shift: "how much have I made today?"
- * Shows today + week so they get instant context without going to /week.
- *
- * The numbers are computed by the caller from
- *   actual_hours * cleaner_pay_rate_pence + tip_pence
- * (see lib/cleaner-earnings.ts). This component just renders.
- *
- * Tapping the strip opens /operative/earnings — the per-task breakdown
- * with tips listed individually, which is the "show me where this
- * number came from" follow-up question.
+ * Cleaner highlight card — the "one big thing" per cleaner screen.
+ * Moss background (`#3F5B3A`) + paper text, Instrument Serif numeral.
+ * Tapping the card opens the per-task earnings breakdown.
  */
 export function EarningsStrip({
   todayPence,
@@ -39,32 +31,31 @@ export function EarningsStrip({
       href={href}
       prefetch={true}
       aria-label="Ver desglose de ganancias"
-      className="mt-4 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4 shadow-card transition hover:border-emerald-300 hover:shadow-md"
+      className="ps-set group mt-6 flex items-center gap-4 rounded-[12px] bg-[#3F5B3A] p-5 text-[#F4EFE6]"
     >
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-emerald-600 text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.6)]">
-        <Coins className="h-5 w-5" />
-      </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700">
-          Ganado hoy
+        <p className="ps-mono text-[12px] text-[#F4EFE6]/75">
+          ganado hoy
         </p>
         {isEmpty ? (
-          <p className="mt-1 max-w-[18ch] text-[11px] leading-snug text-emerald-800/80">
+          <p className="ps-serif-italic mt-2 max-w-[22ch] text-[20px] leading-tight text-[#F4EFE6]/85">
             Empieza tu primera tarea para ver tus ganancias.
           </p>
         ) : (
           <>
-            <p className="mt-0.5 font-display text-[40px] font-bold leading-none tabular-nums text-text-1">
+            <p className="ps-serif mt-1 text-[56px] leading-[0.95] tracking-[-0.03em] tabular-nums text-[#F4EFE6]">
               {formatMoney(todayPence)}
             </p>
-            <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-text-3">
-              <TrendingUp className="h-3 w-3" />
-              Semana {formatMoney(weekPence)}
+            <p className="ps-mono mt-2 text-[12px] text-[#F4EFE6]/70">
+              semana <span className="tabular-nums text-[#F4EFE6]">{formatMoney(weekPence)}</span>
             </p>
           </>
         )}
       </div>
-      <ChevronRight className="h-4 w-4 shrink-0 text-emerald-700" />
+      <ChevronRight
+        className="h-4 w-4 shrink-0 text-[#F4EFE6]/70 transition-transform group-hover:translate-x-0.5"
+        style={{ transitionDuration: 'var(--dur-fast)', transitionTimingFunction: 'var(--ease)' }}
+      />
     </Link>
   );
 }

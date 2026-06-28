@@ -82,9 +82,9 @@ function tokenize(text: string): Token[] {
 
 const TOKEN_CLS: Record<Token['kind'], string> = {
   plain: '',
-  property: 'bg-blue-100 text-blue-800 px-1 rounded',
-  time: 'bg-amber-100 text-amber-800 px-1 rounded',
-  day: 'bg-violet-100 text-violet-800 px-1 rounded',
+  property: 'border-b border-[#FF5B1F] text-[#141414] pb-0.5',
+  time: 'font-mono text-[#FF5B1F]',
+  day: 'italic text-[#1B2D6B]',
 };
 
 export function DemoCommandPalette() {
@@ -245,17 +245,18 @@ export function DemoCommandPalette() {
 
   return (
     <>
-      {/* Trigger: floating mic chip above the bottom tab bar */}
+      {/* Trigger: floating mandarin chip above the bottom tab bar */}
       <button
         type="button"
         onClick={() => setOpen(true)}
         title="Comando rápido por voz o texto (Cmd/Ctrl-K)"
         aria-label="Abrir comando rápido"
-        className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-gradient-to-br from-slate-900 to-blue-900 px-4 text-[12.5px] font-semibold text-white shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] transition hover:scale-[1.02] active:scale-95"
+        className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-[#FF5B1F] px-4 text-[12.5px] font-semibold text-[#1A0A04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141414]"
+        style={{ transitionDuration: '160ms' }}
       >
-        <Mic className="h-4 w-4 text-cyan-300" />
+        <Mic className="h-4 w-4" />
         <span>Voz</span>
-        <kbd className="hidden rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-white/80 sm:inline">⌘K</kbd>
+        <kbd className="hidden rounded border border-[#1A0A04]/30 px-1.5 py-0.5 font-mono text-[10px] text-[#1A0A04] sm:inline">⌘K</kbd>
       </button>
 
       {open ? (
@@ -263,7 +264,7 @@ export function DemoCommandPalette() {
           role="dialog"
           aria-modal="true"
           aria-label="Comando rápido"
-          className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/40 px-4 pt-[18vh] backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-[#141414]/40 px-4 pt-[18vh] backdrop-blur-sm"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setOpen(false);
@@ -272,36 +273,39 @@ export function DemoCommandPalette() {
         >
           <div
             ref={cardRef}
-            className="demo-pop w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200"
+            className="ps-set w-full max-w-xl overflow-hidden rounded-[12px] border border-[#1414141A] bg-[#F4EFE6]"
           >
-            {/* Spectrum analyzer */}
-            <div className="flex h-7 items-end justify-center gap-[3px] bg-slate-900 px-4 pt-2 pb-1">
+            {/* Spectrum analyzer — ink bar with mandarin bars */}
+            <div className="flex h-8 items-end justify-center gap-[3px] bg-[#141414] px-4 pt-2 pb-1.5">
               {bars.map((v, i) => (
                 <span
                   key={i}
-                  className="w-1 rounded-t bg-gradient-to-t from-cyan-400 to-blue-500 transition-[height] duration-100"
+                  className="w-1 rounded-t bg-[#FF5B1F] transition-[height] duration-100"
                   style={{ height: `${Math.max(2, v * 18)}px` }}
                 />
               ))}
             </div>
-            <form onSubmit={onSubmit} className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
-              <Sparkles className="h-4 w-4 shrink-0 text-blue-600" />
+            <form onSubmit={onSubmit} className="flex items-center gap-2 border-b border-[#1414141A] px-4 py-3">
+              <Sparkles className="h-4 w-4 shrink-0 text-[#FF5B1F]" />
               <input
                 ref={inputRef}
                 type="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Programar limpieza de Soho mañana 10am…"
-                className="min-w-0 flex-1 bg-transparent text-[15px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[15px] text-[#141414] placeholder:text-[#54524D] focus:outline-none"
                 autoComplete="off"
               />
               <button
                 type="button"
                 onClick={() => (listening ? stopListening() : startListening())}
                 aria-label={listening ? 'Detener dictado' : 'Dictar por voz'}
-                className={`grid h-9 w-9 place-items-center rounded-full transition ${
-                  listening ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                className={`grid h-9 w-9 place-items-center rounded-full transition-colors ${
+                  listening
+                    ? 'bg-[#FF5B1F] text-[#1A0A04]'
+                    : 'border border-[#1414141A] bg-transparent text-[#141414] hover:bg-[#E4DACA]'
                 }`}
+                style={{ transitionDuration: '160ms' }}
               >
                 <Mic className="h-4 w-4" />
               </button>
@@ -309,22 +313,23 @@ export function DemoCommandPalette() {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Cerrar"
-                className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+                className="rounded-full p-2 text-[#54524D] hover:bg-[#E4DACA]"
               >
                 <X className="h-4 w-4" />
               </button>
             </form>
             {/* Parsed preview */}
-            <div className="px-4 py-3">
-              <p className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500">
-                Vista previa
+            <div className="px-4 py-4">
+              <p className="font-mono text-[11px] text-[#54524D]">
+                vista previa
+                <span className="ml-1 inline-block h-[1px] w-5 align-middle bg-[#FF5B1F]" />
               </p>
-              <p className="mt-1.5 min-h-[24px] text-[14px] leading-snug text-slate-700">
+              <p className="mt-2 min-h-[28px] text-[14px] leading-snug text-[#141414]">
                 {tokens.length === 0 ? (
-                  <span className="text-slate-400">
-                    Tokens de propiedad <span className="rounded bg-blue-100 px-1 text-blue-800">propiedad</span>,
-                    {' '}<span className="rounded bg-violet-100 px-1 text-violet-800">día</span> y
-                    {' '}<span className="rounded bg-amber-100 px-1 text-amber-800">hora</span> aparecerán al escribir.
+                  <span className="text-[#54524D]">
+                    Tokens de <span className="border-b border-[#FF5B1F] pb-0.5">propiedad</span>,
+                    {' '}<span className="italic text-[#1B2D6B]">día</span> y
+                    {' '}<span className="font-mono text-[#FF5B1F]">hora</span> aparecerán al escribir.
                   </span>
                 ) : (
                   tokens.map((t, i) => (
@@ -335,11 +340,11 @@ export function DemoCommandPalette() {
                 )}
               </p>
               {committed ? (
-                <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2 py-1 text-[11.5px] font-semibold text-emerald-700">
+                <p className="ps-set mt-3 inline-flex items-center gap-1.5 rounded-full border border-[#3F5B3A]/30 px-2 py-1 font-mono text-[11px] text-[#3F5B3A]">
                   ✓ Tarea creada
                 </p>
               ) : null}
-              <p className="mt-3 text-[10.5px] text-slate-400">
+              <p className="mt-4 font-mono text-[10.5px] text-[#54524D]">
                 Enter para crear · Esc para cerrar · ⌘K para abrir
               </p>
             </div>
