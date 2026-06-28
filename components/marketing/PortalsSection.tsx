@@ -178,32 +178,32 @@ const PORTAL_STYLES: readonly PortalStyle[] = [
   {
     key: "owner",
     href: "/owner/preview",
-    badgeClass: "bg-slate-900 text-cyan-300",
-    headerGradient: "bg-gradient-to-r from-slate-900 via-slate-900 to-blue-900",
-    iconTileGradient: "bg-gradient-to-br from-blue-600 to-blue-700",
-    iconRing: "ring-4 ring-blue-100",
+    badgeClass: "bg-[#0A0D18] text-[#00D8C7]",
+    headerGradient: "bg-gradient-to-r from-[#0A0D18] via-[#0A0D18] to-slate-900",
+    iconTileGradient: "bg-gradient-to-br from-[#00D8C7] to-[#00D8C7]",
+    iconRing: "ring-4 ring-[#00D8C7]/20",
     Icon: Building2,
-    linkClass: "text-blue-700 hover:text-blue-800",
+    linkClass: "text-[#00D8C7] hover:text-[#0A0D18]",
   },
   {
     key: "cleaner",
     href: "/operative/preview",
-    badgeClass: "bg-slate-900 text-cyan-300",
-    headerGradient: "bg-gradient-to-r from-slate-900 via-slate-900 to-blue-900",
-    iconTileGradient: "bg-gradient-to-br from-emerald-500 to-emerald-600",
-    iconRing: "ring-4 ring-emerald-100",
+    badgeClass: "bg-[#0A0D18] text-[#00D8C7]",
+    headerGradient: "bg-gradient-to-r from-[#0A0D18] via-[#0A0D18] to-slate-900",
+    iconTileGradient: "bg-gradient-to-br from-[#00D8C7] to-[#00D8C7]",
+    iconRing: "ring-4 ring-[#00D8C7]/20",
     Icon: Users,
-    linkClass: "text-emerald-700 hover:text-emerald-800",
+    linkClass: "text-[#00D8C7] hover:text-[#0A0D18]",
   },
   {
     key: "client",
     href: "/client/preview",
-    badgeClass: "bg-blue-50 text-blue-700 ring-1 ring-blue-100",
-    headerGradient: "bg-gradient-to-r from-blue-50 via-sky-50 to-cyan-50",
-    iconTileGradient: "bg-gradient-to-br from-blue-600 to-blue-700",
-    iconRing: "ring-4 ring-blue-100",
+    badgeClass: "bg-[#00D8C7]/10 text-[#0A0D18] ring-1 ring-[#00D8C7]/20",
+    headerGradient: "bg-gradient-to-r from-[#00D8C7]/10 via-[#00D8C7]/15 to-[#00D8C7]/20",
+    iconTileGradient: "bg-gradient-to-br from-[#00D8C7] to-[#00D8C7]",
+    iconRing: "ring-4 ring-[#00D8C7]/20",
     Icon: Sparkles,
-    linkClass: "text-blue-700 hover:text-blue-800",
+    linkClass: "text-[#00D8C7] hover:text-[#0A0D18]",
   },
 ];
 
@@ -214,7 +214,7 @@ export default async function PortalsSection() {
     <section className="bg-slate-50 py-12 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]">
             {t.eyebrow}
           </p>
           <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">

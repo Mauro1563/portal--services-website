@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Bell, Check, Globe, Settings, Clock, X } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
@@ -10,7 +11,19 @@ type Notification = {
   id: NotifId;
   title: string;
   meta: string;
+  href: string;
   read: boolean;
+};
+
+/**
+ * Demo-only fallback hrefs so the bell in the preview header always has
+ * at least 3 routable items pointing at scheduler / cleaners / chat,
+ * matching the production data shape (`href` on each Notification).
+ */
+const DEMO_NOTIF_HREFS: Record<NotifId, string> = {
+  n1: '/owner/scheduler',
+  n2: '/owner/cleaners',
+  n3: '/owner/chat',
 };
 
 const COPY = {
@@ -123,6 +136,7 @@ export function DemoCorporateHeader({
     id,
     title: NOTIF_COPY[id].title,
     meta: NOTIF_COPY[id].meta,
+    href: DEMO_NOTIF_HREFS[id],
     read: readMap[id],
   }));
   const [notifOpen, setNotifOpen] = useState(false);

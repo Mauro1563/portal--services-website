@@ -23,7 +23,7 @@ export function SubmitButton({ label, pendingLabel }: Props) {
       type="submit"
       disabled={pending}
       aria-busy={pending}
-      className="group relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-[13px] font-bold uppercase tracking-[0.20em] text-white shadow-[0_14px_28px_-10px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] transition hover:brightness-[1.08] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-80 disabled:hover:brightness-100"
+      className="group relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#0A0D18] text-[13px] font-bold uppercase tracking-[0.20em] text-white shadow-[0_14px_28px_-10px_rgba(0,216,199,0.45),inset_0_1px_0_rgba(255,255,255,0.20)] ring-1 ring-[#00D8C7]/40 transition hover:brightness-[1.08] hover:ring-[#00D8C7] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-80 disabled:hover:brightness-100"
     >
       <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
       {pending ? (

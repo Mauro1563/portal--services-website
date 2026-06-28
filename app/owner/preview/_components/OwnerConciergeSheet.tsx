@@ -29,6 +29,7 @@ const COPY = {
     openSofia: 'Open Sofía assistant',
     sofia: 'Sofía',
     yourAssistant: 'Your portal assistant — try it',
+    ctaSubtitle: 'Your Zapli assistant — ask anything about your business',
     sofiaAssistant: 'Sofía assistant',
     close: 'Close',
     you: 'You',

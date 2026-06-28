@@ -37,33 +37,33 @@ type FaqCopy = {
 const FAQ_STYLES: Array<Pick<Faq, 'icon' | 'accent' | 'ring'>> = [
   {
     icon: Wallet,
-    accent: 'from-blue-500 to-blue-700',
-    ring: 'ring-blue-100',
+    accent: 'from-[#00D8C7] to-[#00B8AA]',
+    ring: 'ring-[#00D8C7]/20',
   },
   {
     icon: Building2,
-    accent: 'from-cyan-500 to-blue-600',
-    ring: 'ring-cyan-100',
+    accent: 'from-[#00D8C7] to-[#00B8AA]',
+    ring: 'ring-[#00D8C7]/20',
   },
   {
     icon: Languages,
-    accent: 'from-violet-500 to-blue-600',
-    ring: 'ring-violet-100',
+    accent: 'from-[#00D8C7] to-[#00B8AA]',
+    ring: 'ring-[#00D8C7]/20',
   },
   {
     icon: Smartphone,
-    accent: 'from-emerald-500 to-emerald-700',
-    ring: 'ring-emerald-100',
+    accent: 'from-[#00D8C7] to-[#00B8AA]',
+    ring: 'ring-[#00D8C7]/20',
   },
   {
     icon: ShieldCheck,
-    accent: 'from-amber-500 to-orange-600',
-    ring: 'ring-amber-100',
+    accent: 'from-[#00D8C7] to-[#00B8AA]',
+    ring: 'ring-[#00D8C7]/20',
   },
   {
     icon: LifeBuoy,
-    accent: 'from-rose-500 to-pink-600',
-    ring: 'ring-rose-100',
+    accent: 'from-[#00D8C7] to-[#00B8AA]',
+    ring: 'ring-[#00D8C7]/20',
   },
 ];
 
@@ -212,19 +212,19 @@ export default async function FaqSection() {
       {/* Decorative blue/sky wash */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-100 via-sky-100 to-cyan-100 opacity-60 blur-3xl"
+        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-[#00D8C7]/15 opacity-60 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-blue-100/50 blur-3xl"
+        className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#00D8C7]/10 blur-3xl"
       />
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 ring-1 ring-blue-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <HelpCircle className="h-3 w-3 text-blue-700" aria-hidden />
-            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 ring-1 ring-[#00D8C7]/20 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <HelpCircle className="h-3 w-3 text-[#00D8C7]" aria-hidden />
+            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]">
               {t.eyebrow}
             </span>
           </div>
@@ -252,7 +252,7 @@ export default async function FaqSection() {
                     <span className="flex-1 text-left text-sm font-semibold text-slate-900 sm:text-lg">
                       {faq.question}
                     </span>
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-blue-600 group-open:text-white">
+                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-[#00D8C7] group-open:text-white">
                       <ChevronDown
                         className="h-4 w-4 transition-transform duration-200 group-open:rotate-180"
                         aria-hidden

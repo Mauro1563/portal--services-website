@@ -107,15 +107,24 @@ export function NotificationsBell({
 
   return (
     <div ref={containerRef} className="relative">
+      {/* aria-live region so screen readers announce new unread counts
+          without forcing focus into the bell. */}
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {count > 0
+          ? `${count} notificación${count === 1 ? '' : 'es'} sin leer`
+          : 'Sin notificaciones nuevas'}
+      </span>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label="Notificaciones"
-        className="relative grid h-9 w-9 place-items-center rounded-lg border border-surface-2 bg-white text-text-2 transition hover:border-surface-3 hover:bg-surface-1"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        className="relative grid h-10 w-10 place-items-center rounded-lg border border-surface-2 bg-white text-[#0A0D18] transition hover:border-surface-3 hover:bg-surface-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
       >
-        <Bell className="h-4 w-4" />
+        <Bell className="h-5 w-5" />
         {count > 0 && (
-          <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-bold text-white ring-2 ring-white">
+          <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white ring-2 ring-white">
             {count > 9 ? '9+' : count}
           </span>
         )}

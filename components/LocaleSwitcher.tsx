@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Check, ChevronDown, Globe } from 'lucide-react';
+import { Check, Globe } from 'lucide-react';
 import { setLocale } from '@/app/i18n/actions';
 
 // EN-default-first ordering: English first, then Spanish, then Portuguese.
@@ -226,13 +226,13 @@ export function LocaleSwitcher({
   // nav) keep working unchanged.
   const trigger = (() => {
     if (variant === 'premium') {
-      // Midnight pill with electric-cyan accent border. Shows the full
-      // language name (not the 2-letter code) so the trigger reads naturally
-      // on both the white marketing nav and dark app headers.
+      // Midnight round chip (~36px) showing only the globe icon at rest. The
+      // dropdown panel reveals the full language names on open, so the closed
+      // state stays compact in the navbar.
       return (
-        'inline-flex h-9 items-center gap-2 rounded-full bg-[#0D0D11] px-3.5 ' +
-        'text-[13px] font-medium text-[#F8F9FA] ' +
-        'border border-cyan-400/30 ' +
+        'group inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#0A0D18] ' +
+        'text-[#F8F9FA] ' +
+        'border border-white/10 ' +
         'transition-colors hover:bg-[#15151B] ' +
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60'
       );
@@ -306,22 +306,12 @@ export function LocaleSwitcher({
         className={trigger}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-label={`Change language (current: ${
+          LOCALES.find((l) => l.code === current)?.label ?? 'English'
+        })`}
       >
         {variant === 'premium' ? (
-          <>
-            <Globe className="h-4 w-4 text-[#00D8C7]" aria-hidden />
-            <span>
-              {pending
-                ? '…'
-                : LOCALES.find((l) => l.code === current)?.label ?? 'English'}
-            </span>
-            <ChevronDown
-              className={`h-4 w-4 text-[#00D8C7] transition-transform ${
-                open ? 'rotate-180' : ''
-              }`}
-              aria-hidden
-            />
-          </>
+          <Globe className="h-4 w-4 text-[#00D8C7]" aria-hidden />
         ) : (
           <>
             <Globe className="h-3.5 w-3.5" />
