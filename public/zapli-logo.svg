@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-label="zapli">
+  <title>zapli</title>
+  <!-- Lightning bolt mark, 24x24, left aligned -->
+  <g transform="translate(8 16)">
+    <path d="M14 0L2 14h7L7 24l12-14h-7l2-10z" fill="#00D8C7"/>
+  </g>
+  <!-- Wordmark: "zapl" + i (dot replaced by bolt) -->
+  <text x="44" y="40" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-weight="600" font-size="32" fill="#1A1A1A" letter-spacing="-0.5">zapl</text>
+  <!-- i stem -->
+  <rect x="135" y="22" width="4" height="18" rx="1" fill="#1A1A1A"/>
+  <!-- Bolt serving as the dot of the i -->
+  <g transform="translate(127 0) scale(0.85)">
+    <path d="M14 0L2 14h7L7 24l12-14h-7l2-10z" fill="#00D8C7"/>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0A0D18"/>
+  <!-- Centered lightning bolt, 200px tall.
+       Path bounds: x 0..125, y 0..200. Centered: translate by (256-62.5, 256-100) = (193.5, 156). -->
+  <g transform="translate(193.5 156)" filter="url(#glow)">
+    <path d="M75 0 L0 115 H50 L35 200 L125 80 H70 L90 0 Z" fill="#00D8C7"/>
+  </g>
+</svg>
