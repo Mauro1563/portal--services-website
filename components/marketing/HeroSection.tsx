@@ -242,7 +242,7 @@ export default async function HeroSection() {
       {/* Soft decorative blobs — warm + airy instead of dark navy */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-cyan-200/40 blur-3xl"
+        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-[#00D8C7]/15 blur-3xl"
       />
       <div
         aria-hidden
@@ -286,22 +286,26 @@ export default async function HeroSection() {
         {/* Hero content */}
         <div className="pt-6 pb-10 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#00D8C7]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7] ring-1 ring-inset ring-[#00D8C7]/20">
               <Sparkles className="h-3 w-3" />
               {t.eyebrow}
             </span>
 
             <h1 className="mt-6 font-display text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               {t.headlineA}
-              <span className="block bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-[#00D8C7] to-[#4FFFE5] bg-clip-text text-transparent">
                 {t.headlineB}
               </span>
             </h1>
 
             <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-50 ring-1 ring-inset ring-slate-200 px-1 py-1 text-[12px]">
-              <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold text-slate-900 shadow-sm">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 font-semibold text-slate-900 shadow-sm">
                 <span aria-hidden>🏠</span>
                 {t.modeResidential}
+                <span
+                  aria-hidden
+                  className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7] shadow-[0_0_6px_rgba(0,216,199,0.7)]"
+                />
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-transparent px-3 py-1 text-slate-600">
                 <span aria-hidden>🏨</span>
@@ -316,7 +320,7 @@ export default async function HeroSection() {
             <div className="mt-4 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(37,99,235,0.45)] transition hover:from-blue-500 hover:to-blue-600"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] transition hover:bg-[#2BF0DE]"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />

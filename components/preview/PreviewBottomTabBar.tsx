@@ -134,13 +134,13 @@ function NavItem({
         href={href}
         title={title}
         className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition ${
-          active ? 'text-brand-600' : 'text-text-3 hover:text-text-1'
+          active ? 'text-[#00D8C7]' : 'text-text-3 hover:text-text-1'
         }`}
       >
         {active ? (
           <span
             aria-hidden
-            className="absolute top-0 h-[3px] w-10 rounded-b bg-brand-600"
+            className="absolute top-0 h-[3px] w-10 rounded-b bg-[#00D8C7]"
           />
         ) : null}
         <span className="relative">

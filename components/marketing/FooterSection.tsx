@@ -191,14 +191,14 @@ export default async function FooterSection() {
           <div className="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15 backdrop-blur">
-                <Sparkles className="h-3 w-3 text-cyan-300" aria-hidden="true" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300">
+                <Sparkles className="h-3 w-3 text-[#00D8C7]" aria-hidden="true" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]">
                   {t.ctaEyebrow}
                 </span>
               </div>
               <h2 className="font-display mt-3 text-2xl font-bold leading-tight text-white sm:mt-5 sm:text-4xl lg:text-5xl">
                 {t.ctaHeadlineLead}{' '}
-                <span className="bg-gradient-to-r from-cyan-200 to-sky-300 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#00D8C7] to-[#4FFFE5] bg-clip-text text-transparent">
                   {t.ctaHeadlineAccent}
                 </span>
               </h2>
@@ -210,7 +210,7 @@ export default async function FooterSection() {
             <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-end">
               <Link
                 href="/signup"
-                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.7)] ring-1 ring-blue-400/30 transition hover:from-blue-500 hover:to-blue-600 sm:px-7 sm:py-4 sm:text-base"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#00D8C7] px-5 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] ring-1 ring-[#00D8C7]/40 transition hover:bg-[#2BF0DE] sm:px-7 sm:py-4 sm:text-base"
               >
                 {t.ctaPrimary}
                 <ArrowRight
@@ -240,7 +240,7 @@ export default async function FooterSection() {
             </p>
             <a
               href="mailto:hola@portalservices.digital"
-              className="mt-3 inline-block text-sm text-slate-600 transition hover:text-blue-700"
+              className="mt-3 inline-block border-b border-[#00D8C7]/20 pb-1 text-sm text-slate-600 transition hover:border-[#00D8C7] hover:text-[#00D8C7]"
             >
               hola@portalservices.digital
             </a>

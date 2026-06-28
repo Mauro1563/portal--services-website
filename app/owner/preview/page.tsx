@@ -120,7 +120,7 @@ export default function OwnerPreviewHome() {
       {/* Ambient depth: cyan/blue blob top-right — sits behind content. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 -right-32 z-0 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-cyan-300 to-blue-400 opacity-30 blur-3xl"
+        className="pointer-events-none absolute -top-32 -right-32 z-0 h-[420px] w-[420px] rounded-full bg-[#00D8C7]/15 blur-3xl"
       />
       <div className="relative z-10 mx-auto max-w-5xl px-3 pt-4 sm:px-4 sm:pt-5 lg:px-8 lg:pt-7">
         <DemoCorporateHeader
@@ -166,22 +166,22 @@ export default function OwnerPreviewHome() {
           <Link
             href="/owner/preview/scheduler"
             title={t.schedulerTitle}
-            className="group mt-4 flex items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(37,99,235,0.25)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="group mt-4 flex items-center justify-between gap-3 rounded-2xl bg-[#0A0D18] p-4 text-white shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(10,13,24,0.45)] transition duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
           >
             <div className="flex min-w-0 items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-sm">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#00D8C7] text-[#0A0D18] shadow-sm">
                 <Sparkles className="h-5 w-5" />
               </span>
               <div className="min-w-0">
-                <p className="text-[15px] font-semibold text-slate-900">
+                <p className="text-[15px] font-semibold text-white">
                   {t.schedulerLabel}
                 </p>
-                <p className="mt-0.5 text-[12px] text-slate-600">
+                <p className="mt-0.5 text-[12px] text-white/70">
                   {t.schedulerHint}
                 </p>
               </div>
             </div>
-            <ArrowRight className="h-5 w-5 shrink-0 text-blue-600 transition group-hover:translate-x-0.5" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-[#00D8C7] transition group-hover:translate-x-0.5" />
           </Link>
 
           <div className="mt-8">

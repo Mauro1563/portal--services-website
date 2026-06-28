@@ -33,7 +33,7 @@ export function DemoTopBar({
   const tone = {
     owner: 'bg-slate-900 text-cyan-300',
     cleaner: 'bg-emerald-600 text-emerald-50',
-    client: 'bg-blue-600 text-blue-50',
+    client: 'bg-[#00D8C7] text-[#0A0D18]',
   }[portal];
 
   return (
@@ -45,7 +45,7 @@ export function DemoTopBar({
           className="inline-flex items-center gap-1.5 -ml-1 rounded-md px-1.5 py-1 text-slate-900 transition hover:bg-slate-100"
           aria-label="Zapli"
         >
-          <span className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-cyan-400 to-blue-600 text-[10px] font-bold text-white">
+          <span className="grid h-6 w-6 place-items-center rounded-md bg-[#00D8C7] text-[10px] font-bold text-[#0A0D18]">
             Z
           </span>
           <span className="font-display text-[12px] font-semibold leading-none">

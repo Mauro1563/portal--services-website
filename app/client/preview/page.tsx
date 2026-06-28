@@ -580,17 +580,17 @@ function ClientPreviewInner({
       <Link
         href="/client/preview/book"
         title={t.bookCtaTitle}
-        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-5 text-white shadow-[0_14px_32px_-14px_rgba(37,99,235,0.65)] transition hover:from-blue-700 hover:to-blue-900"
+        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-[#00D8C7] p-5 text-[#0A0D18] shadow-[0_14px_32px_-14px_rgba(0,216,199,0.7)] transition hover:brightness-105"
       >
         <div className="min-w-0">
-          <p className="text-[12px] font-semibold text-blue-100">
+          <p className="text-[12px] font-semibold text-[#0A0D18]/70">
             {t.bookCtaKicker}
           </p>
           <p className="mt-1 font-display text-xl font-bold leading-tight">
             {t.bookCtaLabel}
           </p>
         </div>
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#0A0D18]/10 backdrop-blur">
           <ArrowRight className="h-5 w-5" />
         </span>
       </Link>

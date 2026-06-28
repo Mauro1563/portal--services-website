@@ -243,13 +243,13 @@ export default async function PricingSection() {
                 key={plan.id}
                 className={
                   isHighlighted
-                    ? "relative flex flex-col rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900 to-blue-900 p-6 text-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.45)] ring-4 ring-blue-500/30 sm:p-8 md:-mt-4 md:mb-4 md:scale-[1.04]"
+                    ? "relative flex flex-col rounded-2xl bg-[#0A0D18] p-6 text-white shadow-[0_20px_60px_-15px_rgba(10,13,24,0.55)] ring-4 ring-[#00D8C7]/30 sm:p-8 md:-mt-4 md:mb-4 md:scale-[1.04]"
                     : "relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8"
                 }
               >
                 {isHighlighted && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900 shadow-lg">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#00D8C7] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)]">
                       <Sparkles className="h-3 w-3" />
                       {t.mostPopular}
                     </span>
@@ -260,7 +260,7 @@ export default async function PricingSection() {
                   <p
                     className={
                       isHighlighted
-                        ? "text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-300"
+                        ? "text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]"
                         : "text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700"
                     }
                   >
@@ -311,14 +311,14 @@ export default async function PricingSection() {
                         <span
                           className={
                             isHighlighted
-                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-cyan-300/20 ring-2 ring-cyan-300/40"
+                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#00D8C7]/15 ring-2 ring-[#00D8C7]/40"
                               : "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-emerald-50 ring-2 ring-emerald-100"
                           }
                         >
                           <Check
                             className={
                               isHighlighted
-                                ? "h-3.5 w-3.5 text-cyan-300"
+                                ? "h-3.5 w-3.5 text-[#00D8C7]"
                                 : "h-3.5 w-3.5 text-emerald-600"
                             }
                           />
@@ -341,7 +341,7 @@ export default async function PricingSection() {
                   href="/signup"
                   className={
                     isHighlighted
-                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-cyan-300 to-blue-500 px-6 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:from-cyan-200 hover:to-blue-400 sm:mt-8"
+                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-bold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] transition hover:bg-[#2BF0DE] sm:mt-8"
                       : "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-md transition hover:from-blue-500 hover:to-blue-600 sm:mt-8"
                   }
                 >

@@ -615,9 +615,9 @@ function OperativePreviewHomeBody({
           >
           <section className="rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700">
+              <span className="inline-flex items-center rounded-full bg-[#00D8C7] px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#0A0D18]">
                 {t.nextStop}
-              </p>
+              </span>
               <span className="text-[11px] font-semibold tabular-nums text-text-3">
                 {heroTask.start_time}
               </span>

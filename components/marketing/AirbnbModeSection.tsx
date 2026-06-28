@@ -344,8 +344,8 @@ function PortalCard({
         })}
       </ul>
 
-      {/* CTA pill */}
-      <div className="relative mt-5 flex items-center justify-between rounded-xl bg-white/12 px-3 py-2 ring-1 ring-white/15 transition group-hover:bg-white/20">
+      {/* CTA pill — neon cyan glow on hover ties the orange Airbnb mode back to the Zapli brand accent */}
+      <div className="relative mt-5 flex items-center justify-between rounded-xl bg-white/12 px-3 py-2 ring-1 ring-white/15 transition group-hover:bg-white/20 group-hover:shadow-[0_0_24px_rgba(0,216,199,0.45)] group-hover:ring-[#00D8C7]/40">
         <span className="text-[11px] font-bold uppercase tracking-wider text-white">
           {cta}
         </span>
