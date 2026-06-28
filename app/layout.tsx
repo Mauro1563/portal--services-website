@@ -36,35 +36,35 @@ export const viewport: import('next').Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Portal Home — Plataforma para empresas de limpieza de hogar y Airbnb',
-    template: '%s | Portal Home',
+    default: 'Zapli — Smart Turnover & Home Management',
+    template: '%s | Zapli',
   },
   description:
-    'Portal Home — Plataforma para empresas de limpieza de hogar y gestión de Airbnb. Gestiona tu equipo, clientes y propiedades en tiempo real. Reemplaza WhatsApp y Excel.',
-  applicationName: 'Portal Home',
+    'Zapli — Smart Turnover & Home Management. Gestiona tu equipo, clientes y propiedades de Airbnb en tiempo real. Reemplaza WhatsApp y Excel.',
+  applicationName: 'Zapli',
   keywords: [
     'software gestión limpieza hogar',
     'gestión limpieza Airbnb',
     'plataforma empresa de limpieza',
     'home cleaning software',
     'Airbnb cleaning management',
-    'Portal Home',
+    'Zapli',
   ],
-  authors: [{ name: 'Portal Home' }],
+  authors: [{ name: 'Zapli' }],
   openGraph: {
-    title: 'Portal Home — La plataforma para tu empresa de limpieza',
+    title: 'Zapli — Smart Turnover & Home Management',
     description:
-      'Gestiona tu equipo, tus clientes y tus propiedades de Airbnb desde un solo lugar. Foto de cada limpieza, check-in con GPS, valoraciones automáticas y portal del cliente.',
+      'Gestiona tu equipo, tus clientes y tus propiedades de Airbnb desde un solo lugar con Zapli. Foto de cada limpieza, check-in con GPS, valoraciones automáticas y portal del cliente.',
     url: SITE_URL,
-    siteName: 'Portal Home',
+    siteName: 'Zapli',
     locale: 'es_ES',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Portal Home',
+    title: 'Zapli — Smart Turnover & Home Management',
     description:
-      'La plataforma para empresas de limpieza de hogar y Airbnb. Reemplaza WhatsApp y Excel con una sola herramienta.',
+      'Zapli es la plataforma para empresas de limpieza de hogar y Airbnb. Reemplaza WhatsApp y Excel con una sola herramienta.',
   },
   robots: {
     index: true,
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 const softwareLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Portal Home',
+  name: 'Zapli',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   url: SITE_URL,
@@ -102,7 +102,7 @@ const softwareLd = {
   },
   publisher: {
     '@type': 'Organization',
-    name: 'Portal Home',
+    name: 'Zapli',
     url: SITE_URL,
   },
 };

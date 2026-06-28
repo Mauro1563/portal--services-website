@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "Portal Home — Plataforma para empresas de limpieza de hogar y Airbnb",
-    "description": "Gestiona tu equipo, tus clientes y tus propiedades de Airbnb en tiempo real. Foto de cada limpieza, check-in con GPS, valoraciones y portal del cliente. Reemplaza WhatsApp y Excel.",
-    "keywords": "software gestión limpieza hogar, gestión limpieza Airbnb, plataforma empresa de limpieza, app limpiadoras, rotaciones Airbnb, Portal Home",
-    "ogTitle": "Portal Home — La plataforma para tu empresa de limpieza",
-    "ogDescription": "Gestiona tu equipo, tus clientes y tus propiedades de Airbnb desde un solo lugar. Foto de cada limpieza, check-in con GPS, valoraciones y portal del cliente.",
-    "ogImageAlt": "Portal Home — Plataforma para limpieza de hogar y Airbnb"
+    "title": "Zapli — Smart Turnover & Home Management",
+    "description": "Zapli gestiona tu equipo, tus clientes y tus propiedades de Airbnb en tiempo real. Foto de cada limpieza, check-in con GPS, valoraciones y portal del cliente. Reemplaza WhatsApp y Excel.",
+    "keywords": "software gestión limpieza hogar, gestión limpieza Airbnb, plataforma empresa de limpieza, app limpiadoras, rotaciones Airbnb, Zapli",
+    "ogTitle": "Zapli — Smart Turnover & Home Management",
+    "ogDescription": "Zapli es la plataforma de smart turnover y home management. Gestiona tu equipo, tus clientes y tus propiedades de Airbnb desde un solo lugar — fotos, check-in con GPS, valoraciones y portal del cliente.",
+    "ogImageAlt": "Zapli — Smart Turnover & Home Management"
   },
   "social": {
     "trust": "La plataforma elegida por equipos de limpieza de hogar y Airbnb en Reino Unido, España y Portugal."
@@ -34,7 +34,7 @@
     "more": "Más"
   },
   "hero": {
-    "eyebrow": "Portal Services",
+    "eyebrow": "Zapli",
     "title_a": "La plataforma de gestión operativa para",
     "title_b": "empresas de limpieza y servicios.",
     "subtitle": "Controla equipos, edificios, calidad y comunicación desde un solo lugar, en tiempo real, desde cualquier dispositivo.",
@@ -106,7 +106,7 @@
     "director_f5": "Encuestas de satisfacción",
     "hq_title": "Portal HQ — Centro de control",
     "hq_tag": "El cerebro de la plataforma",
-    "hq_who": "Propietarios y administradores de Portal Services",
+    "hq_who": "Propietarios y administradores de Zapli",
     "hq_desc": "Control absoluto de la plataforma: gestión de usuarios, edificios, contraseñas, branding, seguridad y accesos.",
     "hq_f1": "Gestión de usuarios y permisos",
     "hq_f2": "Configuración de edificios y branding",
@@ -222,7 +222,7 @@
     "trial_note": "Prueba gratuita 30 días — sin tarjeta de crédito. Cancela cuando quieras.",
     "footnote": "Todos los precios en GBP, sin IVA. Descuentos por volumen disponibles. Cambia de plan en cualquier momento.",
     "popular": "Más popular",
-    "corporate_eyebrow": "Portal Services · Corporativo",
+    "corporate_eyebrow": "Zapli · Corporativo",
     "corporate_starter_name": "Starter",
     "corporate_starter_range": "1 – 3 edificios · hasta 10 operativos",
     "corporate_starter_price": "£49",
@@ -355,7 +355,7 @@
     "companyLinks": { "hq": "Acceso HQ", "privacy": "Privacidad", "terms": "Términos" },
     "contact": "Contacto",
     "legal": "Legal",
-    "rights": "© 2026 Portal Home. Todos los derechos reservados.",
+    "rights": "© 2026 Zapli. Todos los derechos reservados.",
     "madeWith": "Hecho con ♥ en Madrid · Londres · Lisboa"
   },
   "howItWorks": {
@@ -473,7 +473,7 @@
           "sub": "Centro de control",
           "title": "Portal HQ",
           "tag": "El cerebro de la plataforma",
-          "for": "Para propietarios y administradores de Portal Services",
+          "for": "Para propietarios y administradores de Zapli",
           "features": [
             "Gestión de usuarios y permisos",
             "Configuración de edificios y branding",
@@ -909,7 +909,7 @@
         "privacy": "Privacidad",
         "terms": "Términos"
       },
-      "copyright": "© 2026 Portal Services. Todos los derechos reservados."
+      "copyright": "© 2026 Zapli. Todos los derechos reservados."
     },
     "ticker": {
       "trial": "✓ Prueba gratis 30 días",
@@ -1068,12 +1068,12 @@
         "terms": "Términos",
         "gdpr": "GDPR"
       },
-      "bottom": "© 2026 Portal Home. Todos los derechos reservados.",
+      "bottom": "© 2026 Zapli. Todos los derechos reservados.",
       "langs": "ES · EN · PT"
     }
   },
   "common": {
-    "appName": "Portal Home",
+    "appName": "Zapli",
     "save": "Guardar",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
@@ -1127,7 +1127,7 @@
     "iAmCleaner": "Soy limpiadora",
     "newHere": "¿Eres nuevo?",
     "learnMore": "Conocer la plataforma",
-    "goodbye": "Cuenta eliminada. Gracias por usar Portal Home."
+    "goodbye": "Cuenta eliminada. Gracias por usar Zapli."
   },
   "welcome": {
     "title": "Bienvenido",
@@ -1157,7 +1157,7 @@
     "createAccountBtn": "Crear cuenta",
     "forgotPassword": "¿Olvidaste la contraseña?",
     "back": "Volver",
-    "badge": "Portal Home",
+    "badge": "Zapli",
     "pageTitle": "Inicia sesión en tu cuenta",
     "pageSubtitle": "Introduce tus credenciales para continuar",
     "emailPh": "nombre@email.com",

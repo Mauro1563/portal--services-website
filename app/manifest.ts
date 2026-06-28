@@ -11,8 +11,8 @@ import type { MetadataRoute } from 'next';
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Portal Home',
-    short_name: 'Portal Home',
+    name: 'Zapli',
+    short_name: 'Zapli',
     description:
       'Plataforma para empresas de limpieza de hogar y gestión de Airbnb.',
     start_url: '/operative',

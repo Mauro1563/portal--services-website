@@ -251,15 +251,15 @@ export default async function HeroSection() {
           <Link
             href="/"
             className="inline-flex items-center gap-2.5"
-            aria-label="Portal Home"
+            aria-label="Zapli"
           >
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold text-white shadow-[0_8px_18px_-8px_rgba(34,211,238,0.6)]">
-              P
+              Z
             </span>
             <span className="font-display text-base font-semibold leading-tight text-slate-900">
-              Portal Home
+              Zapli
               <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-blue-600">
-                Cleaning &amp; Facilities
+                Smart Turnover &amp; Home Management
               </span>
             </span>
           </Link>

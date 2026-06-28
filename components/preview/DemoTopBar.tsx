@@ -5,7 +5,7 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
  * Slim top strip mounted above every /<portal>/preview route via a layout.
  * Keeps the portal's own header intact (some have the white-label logo
  * centered) but adds two things prospects need:
- *   • Portal Home wordmark in the LEFT corner so the brand is always visible
+ *   • Zapli wordmark in the LEFT corner so the brand is always visible
  *   • a clear "Volver al sitio" link in the RIGHT corner to bounce back
  *     to the marketing landing without hunting for the browser back button.
  * The center "DEMO" badge makes it obvious that data is mocked.
@@ -43,13 +43,13 @@ export function DemoTopBar({
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 -ml-1 rounded-md px-1.5 py-1 text-slate-900 transition hover:bg-slate-100"
-          aria-label="Portal Home"
+          aria-label="Zapli"
         >
           <span className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-cyan-400 to-blue-600 text-[10px] font-bold text-white">
-            P
+            Z
           </span>
           <span className="font-display text-[12px] font-semibold leading-none">
-            Portal Home
+            Zapli
           </span>
         </Link>
 

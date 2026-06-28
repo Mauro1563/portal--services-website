@@ -73,11 +73,11 @@ const COPY: Record<
     ctaEyebrow: 'Empieza hoy',
     ctaHeadlineLead: '¿Listo para empezar?',
     ctaHeadlineAccent: 'Prueba 14 días gratis',
-    ctaSub: 'Sin tarjeta. Sin compromisos. Activa Portal Home en minutos y empieza a gestionar tu equipo, clientes y reservas desde un solo lugar.',
+    ctaSub: 'Sin tarjeta. Sin compromisos. Activa Zapli en minutos y empieza a gestionar tu equipo, clientes y reservas desde un solo lugar.',
     ctaPrimary: 'Prueba 14 días gratis',
     ctaSecondary: 'Hablar con ventas',
     copyright: (year) =>
-      `© ${year} Portal Home. Todos los derechos reservados.`,
+      `© ${year} Zapli. Todos los derechos reservados.`,
     legalShort: { privacy: 'Privacidad', terms: 'Términos', status: 'Estado' },
   },
   en: {
@@ -114,11 +114,11 @@ const COPY: Record<
     ctaEyebrow: 'Start today',
     ctaHeadlineLead: 'Ready to get started?',
     ctaHeadlineAccent: 'Try it free for 14 days',
-    ctaSub: 'No credit card. No commitment. Set up Portal Home in minutes and start managing your team, customers and bookings from one place.',
+    ctaSub: 'No credit card. No commitment. Set up Zapli in minutes and start managing your team, customers and bookings from one place.',
     ctaPrimary: 'Start 14-day free trial',
     ctaSecondary: 'Talk to sales',
     copyright: (year) =>
-      `© ${year} Portal Home. All rights reserved.`,
+      `© ${year} Zapli. All rights reserved.`,
     legalShort: { privacy: 'Privacy', terms: 'Terms', status: 'Status' },
   },
   pt: {
@@ -155,11 +155,11 @@ const COPY: Record<
     ctaEyebrow: 'Comece hoje',
     ctaHeadlineLead: 'Pronto para começar?',
     ctaHeadlineAccent: 'Experimente 14 dias grátis',
-    ctaSub: 'Sem cartão. Sem compromissos. Active o Portal Home em minutos e comece a gerir a sua equipa, clientes e reservas num só lugar.',
+    ctaSub: 'Sem cartão. Sem compromissos. Active o Zapli em minutos e comece a gerir a sua equipa, clientes e reservas num só lugar.',
     ctaPrimary: 'Experimentar 14 dias grátis',
     ctaSecondary: 'Falar com vendas',
     copyright: (year) =>
-      `© ${year} Portal Home. Todos os direitos reservados.`,
+      `© ${year} Zapli. Todos os direitos reservados.`,
     legalShort: { privacy: 'Privacidade', terms: 'Termos', status: 'Estado' },
   },
 };

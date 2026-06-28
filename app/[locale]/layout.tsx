@@ -25,8 +25,8 @@ export async function generateMetadata({
   const title = t('title');
   const description = t('description');
   return {
-    // Use absolute so the root layout's "| Portal Home" template doesn't
-    // double up with the "Portal Home —" prefix already in metadata.title.
+    // Use absolute so the root layout's "| Zapli" template doesn't
+    // double up with the "Zapli —" prefix already in metadata.title.
     title: { absolute: title },
     description,
     keywords: t('keywords'),

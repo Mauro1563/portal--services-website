@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ?? 'Portal Home <onboarding@resend.dev>';
+  process.env.RESEND_FROM_EMAIL ?? 'Zapli <onboarding@resend.dev>';
 
 // Normalize the env-var hostname so email links always carry an explicit
 // https:// scheme — same problem WhatsApp has if the env is set bare.
@@ -99,7 +99,7 @@ export async function notifyOwnerOfCompletion(taskId: string) {
              style="display:inline-block;margin-top:22px;background:linear-gradient(135deg,#22d3ee,#2563eb);color:#fff;text-decoration:none;font-weight:500;font-size:14px;padding:10px 18px;border-radius:10px;">
             View task
           </a>
-          <p style="margin:28px 0 0;color:#475569;font-size:11px;">Portal Home · You're receiving this because you own this property in your dashboard.</p>
+          <p style="margin:28px 0 0;color:#475569;font-size:11px;">Zapli · You're receiving this because you own this property in your dashboard.</p>
         </div>
       </div>
     `;
@@ -198,7 +198,7 @@ export async function notifyOwnerApproved(input: {
           <div style="background:linear-gradient(135deg,#22d3ee,#2563eb);padding:24px;color:#fff;">
             <p style="margin:0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.16em;opacity:0.85;">Portal aprobado</p>
             <h1 style="margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-0.01em;">¡Bienvenido${input.name ? `, ${escapeHtml(input.name.split(/\s+/)[0])}` : ''}!</h1>
-            <p style="margin:6px 0 0;font-size:13px;opacity:0.9;">Tu cuenta en Portal Home Digital ya está activa.</p>
+            <p style="margin:6px 0 0;font-size:13px;opacity:0.9;">Tu cuenta en Zapli ya está activa.</p>
           </div>
           <div style="padding:24px;">
             <p style="margin:0 0 14px;font-size:14px;line-height:1.55;color:#334155;">
@@ -250,7 +250,7 @@ export async function notifyOwnerOfClientMessage(input: {
   messageBody: string;
 }): Promise<NotifyResult> {
   try {
-    const subject = `${input.clientName} te escribió en Portal Home`;
+    const subject = `${input.clientName} te escribió en Zapli`;
     const trimmed =
       input.messageBody.length > 400
         ? input.messageBody.slice(0, 397) + '…'
@@ -262,7 +262,7 @@ export async function notifyOwnerOfClientMessage(input: {
     const { waUrl } = await import('@/lib/phone');
     const wa = waUrl(
       input.clientPhone,
-      `Hola ${input.clientName.split(' ')[0] ?? ''}, ya leí tu mensaje en Portal Home — `,
+      `Hola ${input.clientName.split(' ')[0] ?? ''}, ya leí tu mensaje en Zapli — `,
     );
 
     const safeName = escapeHtml(input.clientName);
