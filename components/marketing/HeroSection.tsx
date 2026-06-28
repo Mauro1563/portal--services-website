@@ -238,19 +238,19 @@ export default async function HeroSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-[#F2FFFC] to-white">
-      {/* Soft decorative ambient — teal + midnight only */}
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-white">
+      {/* Soft decorative ambient — quiet teal + midnight, no neon flood */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-[#00D8C7]/20 blur-3xl"
+        className="pointer-events-none absolute -top-40 -left-32 h-96 w-96 rounded-full bg-[#0D9488]/8 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-1/3 -right-40 h-[28rem] w-[28rem] rounded-full bg-[#00D8C7]/15 blur-3xl"
+        className="pointer-events-none absolute top-1/3 -right-40 h-[28rem] w-[28rem] rounded-full bg-[#0D9488]/6 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[#0A0D18]/[0.04] blur-3xl"
+        className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[#0A0D18]/[0.03] blur-3xl"
       />
       {/* Subtle dot grid for depth — almost invisible but kills the flat feeling */}
       <div
@@ -271,12 +271,12 @@ export default async function HeroSection() {
             className="inline-flex items-center gap-2.5"
             aria-label="Zapli"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#0A0D18] text-sm font-bold text-[#00D8C7] ring-1 ring-[#00D8C7]/40 shadow-[0_8px_18px_-8px_rgba(0,216,199,0.55)]">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#0A0D18] text-sm font-bold text-[#0D9488] ring-1 ring-[#0D9488]/30 shadow-[0_6px_14px_-6px_rgba(13,148,136,0.35)]">
               Z
             </span>
             <span className="font-display text-base font-semibold leading-tight text-slate-900">
               Zapli
-              <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-[#00B8A8]">
+              <span className="block text-[9.5px] font-medium uppercase tracking-[0.18em] text-slate-500">
                 Smart Turnover &amp; Home Management
               </span>
             </span>
@@ -285,7 +285,7 @@ export default async function HeroSection() {
             <LocaleSwitcher current={locale} variant="premium" />
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-[#00D8C7] hover:bg-[#00D8C7]/5"
+              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-[#0D9488] hover:bg-[#0D9488]/5"
             >
               {t.signIn}
               <ArrowRight className="h-3.5 w-3.5" />
@@ -296,14 +296,14 @@ export default async function HeroSection() {
         {/* Hero content */}
         <div className="pt-6 pb-10 sm:pt-16 sm:pb-24 lg:pt-20 lg:pb-28">
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-[#00D8C7]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7] ring-1 ring-inset ring-[#00D8C7]/20">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#0D9488]/8 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0D9488] ring-1 ring-inset ring-[#0D9488]/25">
               <Sparkles className="h-3 w-3" />
               {t.eyebrow}
             </span>
 
             <h1 className="mt-6 font-display text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               {t.headlineA}
-              <span className="block bg-gradient-to-r from-[#00D8C7] to-[#4FFFE5] bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-[#0F766E] to-[#0D9488] bg-clip-text text-transparent">
                 {t.headlineB}
               </span>
             </h1>
@@ -314,7 +314,7 @@ export default async function HeroSection() {
                 {t.modeResidential}
                 <span
                   aria-hidden
-                  className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7] shadow-[0_0_6px_rgba(0,216,199,0.7)]"
+                  className="ml-0.5 inline-block h-1.5 w-1.5 rounded-full bg-[#0D9488] shadow-[0_0_4px_rgba(13,148,136,0.5)]"
                 />
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-transparent px-3 py-1 text-slate-600">
@@ -330,14 +330,14 @@ export default async function HeroSection() {
             <div className="mt-4 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_28px_rgba(0,216,199,0.55),_inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-[#00D8C7]/60 transition duration-300 hover:-translate-y-0.5 hover:bg-[#2BF0DE] hover:shadow-[0_8px_36px_rgba(0,216,199,0.7),_inset_0_1px_0_rgba(255,255,255,0.5)]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0F766E] px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-10px_rgba(15,118,110,0.55),_inset_0_1px_0_rgba(255,255,255,0.15)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0D9488] hover:shadow-[0_14px_28px_-10px_rgba(15,118,110,0.6),_inset_0_1px_0_rgba(255,255,255,0.2)]"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#00D8C7] hover:bg-[#00D8C7]/5"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#0D9488] hover:bg-[#0D9488]/5"
               >
                 {t.ctaSecondary}
               </Link>
@@ -355,7 +355,7 @@ export default async function HeroSection() {
                 </h2>
                 <p className="mt-1 text-sm text-slate-600">{t.portalsSub}</p>
               </div>
-              <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-[#00D8C7]/30 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#0A0D18] sm:inline-flex">
+              <span className="hidden shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-700 sm:inline-flex">
                 <PlayCircle className="h-3 w-3" />
                 {t.demoBadge}
               </span>
@@ -372,9 +372,9 @@ export default async function HeroSection() {
                 icon={<Building2 className="h-4 w-4" />}
                 href="/owner/preview"
                 gradient="from-[#0A0D18] via-[#0A0D18] to-[#15151F]"
-                chip="text-[#00D8C7] border-[#00D8C7]/40 bg-[#00D8C7]/10"
-                accent="text-[#00D8C7]"
-                bullet="bg-[#00D8C7]/15 text-[#00D8C7] ring-[#00D8C7]/30"
+                chip="text-[#5EEAD4] border-[#5EEAD4]/40 bg-[#0D9488]/20"
+                accent="text-[#5EEAD4]"
+                bullet="bg-[#0D9488]/25 text-[#5EEAD4] ring-[#5EEAD4]/30"
               />
               <PortalCard
                 label="Cleaner"
@@ -387,9 +387,9 @@ export default async function HeroSection() {
                 icon={<Users className="h-4 w-4" />}
                 href="/operative/preview"
                 gradient="from-[#0A0D18] via-[#0F1925] to-[#0A2522]"
-                chip="text-[#00D8C7] border-[#00D8C7]/50 bg-[#00D8C7]/15"
-                accent="text-[#4FFFE5]"
-                bullet="bg-[#00D8C7]/20 text-[#4FFFE5] ring-[#00D8C7]/40"
+                chip="text-[#5EEAD4] border-[#5EEAD4]/40 bg-[#0D9488]/20"
+                accent="text-[#5EEAD4]"
+                bullet="bg-[#0D9488]/25 text-[#5EEAD4] ring-[#5EEAD4]/30"
               />
               <PortalCard
                 label="Client"
@@ -449,11 +449,11 @@ function PortalCard({
     <Link
       href={href}
       aria-label={cta}
-      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-4 shadow-[0_22px_44px_-20px_rgba(10,13,24,0.6),_inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_56px_-18px_rgba(0,216,199,0.35),_inset_0_1px_0_rgba(255,255,255,0.1)] hover:ring-[#00D8C7]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60 sm:min-w-0 sm:p-5`}
+      className={`group relative flex min-w-[78%] snap-start flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-4 shadow-[0_22px_44px_-20px_rgba(10,13,24,0.55),_inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-white/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_52px_-18px_rgba(13,148,136,0.22),_inset_0_1px_0_rgba(255,255,255,0.08)] hover:ring-[#5EEAD4]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EEAD4]/50 sm:min-w-0 sm:p-5`}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-10 -right-10 hidden h-32 w-32 rounded-full bg-[#00D8C7]/15 blur-2xl transition duration-500 group-hover:bg-[#00D8C7]/25 sm:block"
+        className="pointer-events-none absolute -top-10 -right-10 hidden h-32 w-32 rounded-full bg-[#0D9488]/12 blur-2xl transition duration-500 group-hover:bg-[#0D9488]/20 sm:block"
       />
       <div className="relative flex items-start justify-between">
         <span
