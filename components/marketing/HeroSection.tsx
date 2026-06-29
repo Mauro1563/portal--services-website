@@ -317,7 +317,7 @@ export default async function HeroSection() {
             <div className="mt-4 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0A0D18] px-6 py-3 text-sm font-semibold text-white shadow-[0_4px_12px_-4px_rgba(10,13,24,0.3)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#15151F]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_8px_24px_-6px_rgba(0,216,199,0.55),_inset_0_1px_0_rgba(255,255,255,0.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#2BF0DE] hover:shadow-[0_12px_28px_-6px_rgba(0,216,199,0.65),_inset_0_1px_0_rgba(255,255,255,0.45)]"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />
