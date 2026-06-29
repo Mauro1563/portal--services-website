@@ -147,11 +147,14 @@ function tokenize(text: string): Token[] {
   return out;
 }
 
+// Highlight tokens — kept neutral slate to obey the discipline. The
+// only chromatic chip is `time`, which retains amber as a semantic
+// "schedule / when" affordance.
 const TOKEN_CLS: Record<Token['kind'], string> = {
   plain: '',
-  property: 'bg-blue-100 text-blue-800 px-1 rounded',
+  property: 'bg-slate-100 text-slate-900 px-1 rounded',
   time: 'bg-amber-100 text-amber-800 px-1 rounded',
-  day: 'bg-violet-100 text-violet-800 px-1 rounded',
+  day: 'bg-slate-200 text-slate-900 px-1 rounded',
 };
 
 export function DemoCommandPalette() {
@@ -320,9 +323,9 @@ export function DemoCommandPalette() {
         onClick={() => setOpen(true)}
         title={t.quickCommandTitle}
         aria-label={t.openQuick}
-        className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-gradient-to-br from-slate-900 to-blue-900 px-4 text-[12.5px] font-semibold text-white shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] transition hover:scale-[1.02] active:scale-95"
+        className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-[#0A0D18] px-4 text-[12.5px] font-semibold text-white shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] transition hover:scale-[1.02] active:scale-95"
       >
-        <Mic className="h-4 w-4 text-cyan-300" />
+        <Mic className="h-4 w-4 text-[#00D8C7]" />
         <span>{t.voice}</span>
         <kbd className="hidden rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-white/80 sm:inline">⌘K</kbd>
       </button>
@@ -343,18 +346,19 @@ export function DemoCommandPalette() {
             ref={cardRef}
             className="demo-pop w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200"
           >
-            {/* Spectrum analyzer */}
-            <div className="flex h-7 items-end justify-center gap-[3px] bg-slate-900 px-4 pt-2 pb-1">
+            {/* Spectrum analyzer — bars sit on a midnight strip with
+                bright teal flood (dark surface, rule 2). */}
+            <div className="flex h-7 items-end justify-center gap-[3px] bg-[#0A0D18] px-4 pt-2 pb-1">
               {bars.map((v, i) => (
                 <span
                   key={i}
-                  className="w-1 rounded-t bg-gradient-to-t from-cyan-400 to-blue-500 transition-[height] duration-100"
+                  className="w-1 rounded-t bg-[#00D8C7] transition-[height] duration-100"
                   style={{ height: `${Math.max(2, v * 18)}px` }}
                 />
               ))}
             </div>
             <form onSubmit={onSubmit} className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
-              <Sparkles className="h-4 w-4 shrink-0 text-blue-600" />
+              <Sparkles className="h-4 w-4 shrink-0 text-[#00D8C7]" />
               <input
                 ref={inputRef}
                 type="text"
@@ -391,8 +395,8 @@ export function DemoCommandPalette() {
               <p className="mt-1.5 min-h-[24px] text-[14px] leading-snug text-slate-700">
                 {tokens.length === 0 ? (
                   <span className="text-slate-400">
-                    {t.tokensHint1} <span className="rounded bg-blue-100 px-1 text-blue-800">{t.tokensProperty}</span>{t.tokensComma1}
-                    {' '}<span className="rounded bg-violet-100 px-1 text-violet-800">{t.tokensDay}</span> {t.tokensAnd}
+                    {t.tokensHint1} <span className="rounded bg-slate-100 px-1 text-slate-900">{t.tokensProperty}</span>{t.tokensComma1}
+                    {' '}<span className="rounded bg-slate-200 px-1 text-slate-900">{t.tokensDay}</span> {t.tokensAnd}
                     {' '}<span className="rounded bg-amber-100 px-1 text-amber-800">{t.tokensTime}</span> {t.tokensTail}
                   </span>
                 ) : (

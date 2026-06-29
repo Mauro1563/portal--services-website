@@ -524,13 +524,13 @@ function buildStatusMeta(
     },
     in_progress: {
       label: t.statusInProgress,
-      cls: 'bg-orange-100 text-orange-800',
-      dot: 'bg-orange-500 animate-pulse',
+      cls: 'bg-slate-100 text-slate-900',
+      dot: 'bg-[#00D8C7] animate-pulse',
     },
     completed: {
       label: t.statusCompleted,
-      cls: 'bg-emerald-100 text-emerald-800',
-      dot: 'bg-emerald-500',
+      cls: 'bg-slate-900 text-white',
+      dot: 'bg-emerald-600',
     },
   };
 }
@@ -771,24 +771,18 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
         hogarHref="/operative/preview"
         airbnbHref="/operative/preview-airbnb"
       />
-      <main className="relative min-h-screen overflow-hidden bg-canvas pb-16">
-        {/* Ambient depth: warm orange/amber blob top-left, mirroring the
-            standard preview's emerald/teal blob but signalling the Airbnb
-            variant at a glance. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-32 -left-32 z-0 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-orange-300 to-amber-400 opacity-30 blur-3xl"
-        />
+      <main className="relative min-h-screen overflow-hidden bg-slate-50 pb-16">
         <div className="relative z-10 mx-auto max-w-md px-4 py-5">
           <header className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-orange-700">
+              <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-700">
+                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
                 {t.overline}
               </p>
-              <h1 className="mt-1 font-display text-2xl font-semibold text-text-1">
+              <h1 className="mt-1 font-display text-2xl font-semibold text-slate-900">
                 {t.greeting}
               </h1>
-              <p className="mt-0.5 text-[12px] text-text-3">
+              <p className="mt-0.5 text-[12px] text-slate-500">
                 {t.summary(doneCount, tasks.length)}
               </p>
             </div>
@@ -1094,11 +1088,11 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
             aria-live="polite"
           >
             <div
-              className={`rounded-full bg-orange-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
+              className={`inline-flex items-center gap-1.5 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
                 toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
               }`}
             >
-              ✓ {toast}
+              <span aria-hidden className="text-[#00D8C7]">✓</span> {toast}
             </div>
           </div>
         ) : null}
@@ -1129,9 +1123,10 @@ function TurnoverHero({
   }[countdown.tone];
 
   return (
-    <section className="rounded-2xl border border-orange-500/30 bg-orange-50/50 p-4 shadow-card">
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)]">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-orange-700">
+        <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
+          <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
           {copy.nextTurnover}
         </p>
         <span
@@ -1142,34 +1137,34 @@ function TurnoverHero({
           {countdown.label}
         </span>
       </div>
-      <h2 className="mt-2 font-display text-lg font-semibold text-text-1">
+      <h2 className="mt-2 font-display text-lg font-semibold text-slate-900">
         {task.property_name}
       </h2>
-      <p className="mt-1 inline-flex items-center gap-1 text-xs text-text-2">
-        <MapPin className="h-3.5 w-3.5 text-orange-600" />
+      <p className="mt-1 inline-flex items-center gap-1 text-xs text-slate-600">
+        <MapPin className="h-3.5 w-3.5 text-slate-400" />
         {task.address} · {task.postcode}
       </p>
 
-      <dl className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-white/70 px-3 py-2 ring-1 ring-orange-100">
+      <dl className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
         <div>
-          <dt className="text-[10px] font-bold uppercase tracking-wider text-text-3">
+          <dt className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
             {copy.previousGuest}
           </dt>
-          <dd className="mt-0.5 text-[12px] font-semibold text-text-1">
+          <dd className="mt-0.5 text-[12px] font-semibold text-slate-900">
             {copy.checkOutAt(task.previousCheckOut)}
           </dd>
-          <dd className="text-[10.5px] text-text-3">
+          <dd className="text-[10.5px] text-slate-500">
             {copy.cleaningStartsAt(task.cleaningStart)}
           </dd>
         </div>
         <div>
-          <dt className="text-[10px] font-bold uppercase tracking-wider text-text-3">
+          <dt className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
             {copy.nextGuest}
           </dt>
-          <dd className="mt-0.5 text-[12px] font-semibold text-text-1">
+          <dd className="mt-0.5 text-[12px] font-semibold text-slate-900">
             {copy.arrivalAt(task.nextCheckIn)}
           </dd>
-          <dd className="text-[10.5px] text-text-3">{copy.mustFinishBefore}</dd>
+          <dd className="text-[10.5px] text-slate-500">{copy.mustFinishBefore}</dd>
         </div>
       </dl>
 
@@ -1179,7 +1174,7 @@ function TurnoverHero({
           target="_blank"
           rel="noopener noreferrer"
           title={copy.goToAddressTitle}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-orange-600 px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(234,88,12,0.55)] transition active:scale-[0.99]"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A0D18] px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.5)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
         >
           <Navigation2 className="h-4 w-4" /> {copy.goToAddress}
         </a>
@@ -1188,13 +1183,13 @@ function TurnoverHero({
           onClick={onCopyLockbox}
           aria-label={copy.copyLockboxAria}
           title={copy.copyLockboxTitle(task.lockboxCode)}
-          className="inline-flex h-auto min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl border border-orange-200 bg-white px-3 text-orange-800 transition hover:border-orange-300 hover:bg-orange-50"
+          className="inline-flex h-auto min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
         >
-          <KeyRound className="h-4 w-4" />
+          <KeyRound className="h-4 w-4 text-slate-500" />
           <span className="font-mono text-[13px] font-bold tabular-nums">
             {task.lockboxCode}
           </span>
-          <Copy className="h-3 w-3 opacity-60" />
+          <Copy className="h-3 w-3 opacity-50" />
         </button>
       </div>
 
@@ -1202,7 +1197,7 @@ function TurnoverHero({
         <button
           type="button"
           onClick={onCheckIn}
-          className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-orange-300 bg-white px-3 py-2.5 text-[13px] font-semibold text-orange-800 transition hover:bg-orange-50"
+          className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[13px] font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
         >
           {copy.checkInOnArrival}
         </button>
@@ -1263,11 +1258,11 @@ function TurnoverCard({
     <div
       className={
         task.status === 'in_progress'
-          ? 'rounded-2xl bg-gradient-to-br from-orange-500/25 to-amber-500/10 p-[1px]'
+          ? 'rounded-2xl bg-gradient-to-br from-[#00D8C7]/30 to-[#00D8C7]/0 p-[1px]'
           : ''
       }
     >
-      <div className="rounded-2xl border border-surface-2 bg-paper p-3 shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)] transition duration-200">
+      <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)] transition duration-200">
         <button
           type="button"
           onClick={onToggleExpand}
@@ -1275,11 +1270,11 @@ function TurnoverCard({
           className="flex w-full items-start justify-between gap-2 text-left"
         >
           <div className="min-w-0 flex-1">
-            <p className="truncate font-display text-sm font-semibold text-text-1">
+            <p className="truncate font-display text-sm font-semibold text-slate-900">
               {task.property_name}
             </p>
-            <p className="mt-0.5 inline-flex items-center gap-1 truncate text-[11px] text-text-3">
-              <MapPin className="h-3 w-3 shrink-0 text-orange-600" />
+            <p className="mt-0.5 inline-flex items-center gap-1 truncate text-[11px] text-slate-500">
+              <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
               <span className="truncate">
                 {task.address}, {task.postcode}
               </span>
@@ -1340,13 +1335,13 @@ function TurnoverCard({
         ) : null}
 
         {task.checkInAt ? (
-          <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-orange-700">
-            <Clock className="h-2.5 w-2.5" />
+          <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-slate-700">
+            <Clock className="h-2.5 w-2.5 text-[#00D8C7]" />
             {copy.checkInLoggedAt(task.checkInAt)}
           </p>
         ) : null}
         {task.completedAt ? (
-          <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
+          <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
             <CheckCircle2 className="h-2.5 w-2.5" />
             {copy.completedAt(task.completedAt)}
           </p>
@@ -1361,7 +1356,7 @@ function TurnoverCard({
             onClick={(e) => e.stopPropagation()}
             aria-label={copy.navigateAria}
             title={copy.navigateTitle}
-            className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-[10.5px] font-semibold text-orange-700 transition hover:bg-orange-100"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-semibold text-slate-900 transition hover:bg-slate-50"
           >
             <Navigation2 className="h-3 w-3" />
             {copy.mapsLabel}
@@ -1374,7 +1369,7 @@ function TurnoverCard({
             }}
             aria-label={copy.copyLockboxAria}
             title={copy.copyLockboxTitle(task.lockboxCode)}
-            className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10.5px] font-semibold text-slate-800 transition hover:bg-slate-200"
+            className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10.5px] font-semibold text-slate-900 transition hover:bg-slate-200"
           >
             <KeyRound className="h-3 w-3" />
             <span className="font-mono tabular-nums">{task.lockboxCode}</span>
@@ -1387,8 +1382,9 @@ function TurnoverCard({
                 onCheckIn();
               }}
               title={copy.checkInScheduled}
-              className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10.5px] font-semibold text-orange-800 transition hover:bg-orange-200"
+              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-semibold text-slate-900 transition hover:bg-slate-50"
             >
+              <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#00D8C7]" />
               {copy.checkIn}
             </button>
           ) : null}
@@ -1401,7 +1397,7 @@ function TurnoverCard({
               }}
               aria-label={copy.uploadPhotoAria}
               title={copy.uploadPhotoTitle}
-              className="inline-flex items-center gap-1 rounded-full bg-cyan-50 px-2.5 py-1 text-[10.5px] font-semibold text-cyan-800 transition hover:bg-cyan-100"
+              className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-semibold text-slate-900 transition hover:bg-slate-50"
             >
               <Camera className="h-3 w-3" />
               {copy.photoLabel}
@@ -1409,13 +1405,13 @@ function TurnoverCard({
           ) : null}
           {task.status !== 'completed' ? (
             <span
-              className="ml-auto inline-flex items-center gap-1 text-[10.5px] font-semibold text-text-3"
+              className="ml-auto inline-flex items-center gap-1 text-[10.5px] font-semibold text-slate-500"
               title={copy.estimatedPayTitle}
             >
               {copy.estimatedPay((projectedPence / 100).toFixed(2))}
             </span>
           ) : (
-            <span className="ml-auto inline-flex items-center gap-1 text-[10.5px] font-semibold text-emerald-700">
+            <span className="ml-auto inline-flex items-center gap-1 text-[10.5px] font-semibold text-emerald-600">
               {copy.paidLabel(
                 (
                   (Math.round((task.actualHours ?? 0) * task.cleanerPayRatePence) +
@@ -1462,8 +1458,8 @@ function TurnoverCard({
                 <span
                   className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
                     enoughPhotos
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-white text-text-3 ring-1 ring-surface-2'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-white text-slate-700 ring-1 ring-slate-200'
                   }`}
                 >
                   {task.photos.length}/{MIN_PHOTOS_REQUIRED}

@@ -222,7 +222,7 @@ export function OwnerConciergeSheet() {
         onClick={() => setOpen(true)}
         title={t.talkToSofia}
         aria-label={t.openSofia}
-        className={`fixed bottom-20 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(99,102,241,0.65)] transition will-change-transform hover:scale-[1.03] ${
+        className={`fixed bottom-20 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(99,102,241,0.65)] transition will-change-transform hover:scale-[1.03] ${
           open ? 'pointer-events-none scale-90 opacity-0' : 'opacity-100'
         }`}
         style={{ transitionDuration: '260ms', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
@@ -257,7 +257,7 @@ export function OwnerConciergeSheet() {
             {/* Header — visually echoes the pill so it reads as the
                 same object morphing into place. */}
             <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#0A0D18]">
                 <SparkleGlyph size={18} />
               </span>
               <div>
@@ -283,10 +283,10 @@ export function OwnerConciergeSheet() {
                       type="button"
                       onClick={() => setPicked(p)}
                       title={p.text}
-                      className="group flex w-full items-center justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-left text-[13px] font-medium text-slate-800 ring-1 ring-inset ring-slate-100 transition hover:bg-blue-50 hover:ring-blue-200"
+                      className="group flex w-full items-center justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-left text-[13px] font-medium text-slate-800 ring-1 ring-inset ring-slate-100 transition hover:bg-slate-100 hover:ring-slate-300"
                     >
                       <span>{p.text}</span>
-                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition group-hover:text-blue-600" />
+                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition group-hover:text-slate-900" />
                     </button>
                   </li>
                 ))}
@@ -301,7 +301,7 @@ export function OwnerConciergeSheet() {
                 </p>
                 <p className="mt-1 text-[13px] text-slate-700">{picked.text}</p>
 
-                <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
+                <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-slate-900">
                   {t.sofia}
                 </p>
                 <p className="mt-1 min-h-[5.5rem] text-[13.5px] leading-relaxed text-slate-800">

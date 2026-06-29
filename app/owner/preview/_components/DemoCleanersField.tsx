@@ -62,7 +62,7 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
         </div>
         <Link
           href="/owner/preview/tasks"
-          className="shrink-0 text-[12px] font-semibold text-blue-700 hover:text-blue-800"
+          className="shrink-0 text-[12px] font-semibold text-slate-900 hover:text-slate-700"
         >
           {t.seeAll}
         </Link>
@@ -86,13 +86,13 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
           return (
             <li
               key={c.taskId}
-              className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/40 transition hover:border-blue-300 hover:bg-blue-50/30 focus-within:border-blue-300"
+              className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/40 transition hover:border-slate-300 hover:bg-slate-50 focus-within:border-slate-300"
             >
               <Link
                 href={`/owner/preview/tasks/${c.taskId}`}
-                className="flex min-w-0 flex-1 items-center gap-3 rounded-l-xl px-3 py-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"
+                className="flex min-w-0 flex-1 items-center gap-3 rounded-l-xl px-3 py-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#00D8C7]"
               >
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-blue-50 text-[12px] font-bold text-blue-700 ring-1 ring-blue-100">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-[12px] font-bold text-slate-700 ring-1 ring-slate-200">
                   {initials}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -111,7 +111,7 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
                   rel="noopener noreferrer"
                   aria-label={t.viewOnMap(c.propertyName)}
                   title={t.openInMaps}
-                  className="mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                  className="mr-2 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#0A0D18] text-white transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
                 >
                   <MapPin className="h-3.5 w-3.5" />
                 </a>

@@ -14,8 +14,6 @@ type Faq = {
   icon: typeof HelpCircle;
   question: string;
   answer: string;
-  accent: string;
-  ring: string;
 };
 
 /**
@@ -27,44 +25,20 @@ type FaqCopy = {
   eyebrow: string;
   title: string;
   intro: string;
-  faqs: Array<Omit<Faq, 'icon' | 'accent' | 'ring'>>;
+  faqs: Array<Omit<Faq, 'icon'>>;
   footerEyebrow: string;
   footerTitle: string;
   footerSub: string;
   footerCta: string;
 };
 
-const FAQ_STYLES: Array<Pick<Faq, 'icon' | 'accent' | 'ring'>> = [
-  {
-    icon: Wallet,
-    accent: 'from-[#00D8C7] to-[#00B8AA]',
-    ring: 'ring-[#00D8C7]/20',
-  },
-  {
-    icon: Building2,
-    accent: 'from-[#00D8C7] to-[#00B8AA]',
-    ring: 'ring-[#00D8C7]/20',
-  },
-  {
-    icon: Languages,
-    accent: 'from-[#00D8C7] to-[#00B8AA]',
-    ring: 'ring-[#00D8C7]/20',
-  },
-  {
-    icon: Smartphone,
-    accent: 'from-[#00D8C7] to-[#00B8AA]',
-    ring: 'ring-[#00D8C7]/20',
-  },
-  {
-    icon: ShieldCheck,
-    accent: 'from-[#00D8C7] to-[#00B8AA]',
-    ring: 'ring-[#00D8C7]/20',
-  },
-  {
-    icon: LifeBuoy,
-    accent: 'from-[#00D8C7] to-[#00B8AA]',
-    ring: 'ring-[#00D8C7]/20',
-  },
+const FAQ_ICONS: Array<Pick<Faq, 'icon'>> = [
+  { icon: Wallet },
+  { icon: Building2 },
+  { icon: Languages },
+  { icon: Smartphone },
+  { icon: ShieldCheck },
+  { icon: LifeBuoy },
 ];
 
 const COPY: Record<Locale, FaqCopy> = {
@@ -204,27 +178,20 @@ export default async function FaqSection() {
   const t = COPY[locale];
   const faqs: Faq[] = t.faqs.map((entry, i) => ({
     ...entry,
-    ...FAQ_STYLES[i % FAQ_STYLES.length],
+    ...FAQ_ICONS[i % FAQ_ICONS.length],
   }));
 
   return (
-    <section className="relative overflow-hidden bg-slate-50 py-12 sm:py-28">
-      {/* Decorative blue/sky wash */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-[#00D8C7]/15 opacity-60 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#00D8C7]/10 blur-3xl"
-      />
-
+    <section className="relative overflow-hidden bg-white py-12 sm:py-28">
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 ring-1 ring-[#00D8C7]/20 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <HelpCircle className="h-3 w-3 text-[#00D8C7]" aria-hidden />
-            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]">
+          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+              aria-hidden
+            />
+            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
               {t.eyebrow}
             </span>
           </div>
@@ -244,15 +211,13 @@ export default async function FaqSection() {
               <li key={faq.question}>
                 <details className="group rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition open:shadow-[0_4px_16px_rgba(15,23,42,0.06)]">
                   <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6 sm:py-6 [&::-webkit-details-marker]:hidden">
-                    <span
-                      className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${faq.accent} text-white shadow-[0_4px_12px_rgba(37,99,235,0.18)] ring-2 sm:h-10 sm:w-10 sm:ring-4 ${faq.ring}`}
-                    >
+                    <span className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 sm:h-10 sm:w-10">
                       <Icon className="h-4 w-4" aria-hidden />
                     </span>
                     <span className="flex-1 text-left text-sm font-semibold text-slate-900 sm:text-lg">
                       {faq.question}
                     </span>
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-[#00D8C7] group-open:text-white">
+                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-open:bg-slate-900 group-open:text-white">
                       <ChevronDown
                         className="h-4 w-4 transition-transform duration-200 group-open:rotate-180"
                         aria-hidden
@@ -270,20 +235,26 @@ export default async function FaqSection() {
           })}
         </ul>
 
-        {/* Footer CTA */}
-        <div className="mt-12 rounded-2xl bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50 px-5 py-6 text-center ring-1 ring-blue-100 sm:rounded-3xl sm:px-10 sm:py-10">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
-            {t.footerEyebrow}
-          </p>
-          <h3 className="font-display mt-2 text-lg font-bold text-slate-900 sm:text-2xl">
+        {/* Footer CTA — dark surface, bright teal button per rule 2 */}
+        <div className="mt-12 rounded-2xl bg-[#0A0D18] px-5 py-6 text-center sm:rounded-3xl sm:px-10 sm:py-10">
+          <div className="inline-flex items-center gap-2">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+              aria-hidden
+            />
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-300">
+              {t.footerEyebrow}
+            </p>
+          </div>
+          <h3 className="font-display mt-2 text-lg font-bold text-white sm:text-2xl">
             {t.footerTitle}
           </h3>
-          <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
+          <p className="mx-auto mt-2 max-w-md text-sm text-slate-400">
             {t.footerSub}
           </p>
           <a
             href="mailto:hola@portalservices.digital"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-3 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(37,99,235,0.25)] transition hover:from-blue-700 hover:to-blue-800"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_4px_12px_rgba(0,216,199,0.25)] transition hover:bg-[#00B8AA]"
           >
             {t.footerCta}
           </a>

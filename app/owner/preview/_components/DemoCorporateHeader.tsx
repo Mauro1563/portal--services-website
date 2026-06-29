@@ -224,7 +224,7 @@ export function DemoCorporateHeader({
 
   return (
     <header className="-mx-3 -mt-4 mb-5 sm:-mx-4 sm:-mt-5 lg:-mx-8 lg:-mt-7">
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
+      <div className="relative bg-[#0A0D18] px-5 pb-7 pt-7 text-white sm:px-7 lg:px-10 lg:pb-10 lg:pt-9">
         <div className="relative flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h1 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
@@ -254,7 +254,7 @@ export function DemoCorporateHeader({
               aria-haspopup="dialog"
               aria-expanded={notifOpen}
               title={t.notifTitle}
-              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
             >
               <Bell className="h-4 w-4" />
               {unread > 0 ? (
@@ -271,7 +271,7 @@ export function DemoCorporateHeader({
               aria-haspopup="dialog"
               aria-expanded={settingsOpen}
               title={t.settingsTitle}
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+              className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
             >
               <Settings className="h-4 w-4" />
             </button>
@@ -303,7 +303,7 @@ export function DemoCorporateHeader({
                       <button
                         type="button"
                         onClick={markAllRead}
-                        className="text-[11px] font-semibold text-blue-600 hover:text-blue-700"
+                        className="text-[11px] font-semibold text-slate-900 hover:text-slate-700"
                       >
                         {t.markAll}
                       </button>
@@ -333,7 +333,7 @@ export function DemoCorporateHeader({
                       >
                         <span
                           className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
-                            n.read ? 'bg-slate-300' : 'bg-blue-600'
+                            n.read ? 'bg-slate-300' : 'bg-[#00D8C7]'
                           }`}
                         />
                         <span className="min-w-0 flex-1">
@@ -407,7 +407,7 @@ export function DemoCorporateHeader({
                       onClick={() => setNotifications((v) => !v)}
                       title={notifications ? t.disablePush : t.enablePush}
                       className={`relative h-5 w-9 shrink-0 rounded-full transition ${
-                        notifications ? 'bg-blue-600' : 'bg-slate-200'
+                        notifications ? 'bg-[#0A0D18]' : 'bg-slate-200'
                       }`}
                     >
                       <span
@@ -430,7 +430,7 @@ export function DemoCorporateHeader({
                           onClick={() => setLanguage(lang)}
                           className={`flex-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition ${
                             language === lang
-                              ? 'bg-blue-600 text-white'
+                              ? 'bg-[#0A0D18] text-white'
                               : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
                           }`}
                         >

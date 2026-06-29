@@ -168,42 +168,46 @@ type PortalStyle = {
   href: string;
   badgeClass: string;
   headerGradient: string;
-  iconTileGradient: string;
+  iconTileClass: string;
   iconRing: string;
   Icon: LucideIcon;
   linkClass: string;
 };
 
+// All three portal cards now follow the same professional Zapli palette:
+// midnight header bars, slate icon tiles with a sparing teal ring micro-accent,
+// and slate-900 link text with a teal hover state. The bright teal flood is
+// reserved for the badge chip on the dark header bar (rule 2: dark surface).
 const PORTAL_STYLES: readonly PortalStyle[] = [
   {
     key: "owner",
     href: "/owner/preview",
-    badgeClass: "bg-[#0A0D18] text-[#00D8C7]",
-    headerGradient: "bg-gradient-to-r from-[#0A0D18] via-[#0A0D18] to-slate-900",
-    iconTileGradient: "bg-gradient-to-br from-[#00D8C7] to-[#00D8C7]",
-    iconRing: "ring-4 ring-[#00D8C7]/20",
+    badgeClass: "bg-[#00D8C7] text-[#0A0D18]",
+    headerGradient: "bg-[#0A0D18]",
+    iconTileClass: "bg-slate-900",
+    iconRing: "ring-1 ring-[#00D8C7]/30",
     Icon: Building2,
-    linkClass: "text-[#00D8C7] hover:text-[#0A0D18]",
+    linkClass: "text-slate-900 hover:text-[#00D8C7]",
   },
   {
     key: "cleaner",
     href: "/operative/preview",
-    badgeClass: "bg-[#0A0D18] text-[#00D8C7]",
-    headerGradient: "bg-gradient-to-r from-[#0A0D18] via-[#0A0D18] to-slate-900",
-    iconTileGradient: "bg-gradient-to-br from-[#00D8C7] to-[#00D8C7]",
-    iconRing: "ring-4 ring-[#00D8C7]/20",
+    badgeClass: "bg-[#00D8C7] text-[#0A0D18]",
+    headerGradient: "bg-[#0A0D18]",
+    iconTileClass: "bg-slate-900",
+    iconRing: "ring-1 ring-[#00D8C7]/30",
     Icon: Users,
-    linkClass: "text-[#00D8C7] hover:text-[#0A0D18]",
+    linkClass: "text-slate-900 hover:text-[#00D8C7]",
   },
   {
     key: "client",
     href: "/client/preview",
-    badgeClass: "bg-[#00D8C7]/10 text-[#0A0D18] ring-1 ring-[#00D8C7]/20",
-    headerGradient: "bg-gradient-to-r from-[#00D8C7]/10 via-[#00D8C7]/15 to-[#00D8C7]/20",
-    iconTileGradient: "bg-gradient-to-br from-[#00D8C7] to-[#00D8C7]",
-    iconRing: "ring-4 ring-[#00D8C7]/20",
+    badgeClass: "bg-[#00D8C7] text-[#0A0D18]",
+    headerGradient: "bg-[#0A0D18]",
+    iconTileClass: "bg-slate-900",
+    iconRing: "ring-1 ring-[#00D8C7]/30",
     Icon: Sparkles,
-    linkClass: "text-[#00D8C7] hover:text-[#0A0D18]",
+    linkClass: "text-slate-900 hover:text-[#00D8C7]",
   },
 ];
 
@@ -211,12 +215,17 @@ export default async function PortalsSection() {
   const locale = await getLocale();
   const t = COPY[locale];
   return (
-    <section className="bg-slate-50 py-12 sm:py-28">
+    <section className="bg-white py-12 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]">
+          {/* Eyebrow chip: slate-100 surface with slate-700 text and a tiny
+              teal dot as the only accent (rule 5). */}
+          <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" aria-hidden="true" />
             {t.eyebrow}
-          </p>
+          </span>
+          {/* Headline stays solid slate-900 — no teal fill, no gradient
+              (rule 4). */}
           <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
             {t.title}
           </h2>
@@ -232,20 +241,27 @@ export default async function PortalsSection() {
             return (
               <article
                 key={style.key}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:shadow-lg"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:shadow-lg"
               >
+                {/* Thin midnight header bar with a single teal hairline
+                    underneath as the micro-accent (rule 7). */}
                 <div className={`h-2 w-full ${style.headerGradient}`} />
+                <div className="h-px w-full bg-[#00D8C7]/40" />
 
                 <div className="flex flex-1 flex-col p-5 sm:p-7">
                   <div className="flex items-center gap-3">
                     <span
-                      className={`inline-flex h-10 w-10 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${style.iconTileGradient} ${style.iconRing} shadow-sm`}
+                      className={`inline-flex h-10 w-10 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${style.iconTileClass} ${style.iconRing} shadow-sm`}
                     >
                       <Icon className="h-5 w-5 text-white" />
                     </span>
+                    {/* Badge chip lives on the white card surface, so it
+                        uses slate-100/slate-900 with a teal dot rather than
+                        a teal flood (rule 5 applied at card level). */}
                     <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] ${style.badgeClass}`}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900"
                     >
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" aria-hidden="true" />
                       {portal.badge}
                     </span>
                   </div>
@@ -272,6 +288,8 @@ export default async function PortalsSection() {
                   </ul>
 
                   <div className="mt-6 pt-3 sm:mt-8 sm:pt-4">
+                    {/* "see more" link reads as a clean text link in
+                        slate-900, with teal only on hover (rule 7). */}
                     <Link
                       href={style.href}
                       className={`inline-flex items-center gap-1 text-sm font-semibold transition ${style.linkClass}`}

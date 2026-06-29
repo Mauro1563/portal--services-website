@@ -120,13 +120,14 @@ export function DemoTodayHero() {
     >
       <header className="mb-3 flex items-center justify-between">
         <h2 className="inline-flex items-center gap-2 font-display text-lg font-semibold text-slate-900">
+          {/* Amber stays semantic — recognition / "star of the day". */}
           <Award className="h-4 w-4 text-amber-500" /> {t.bestOfDay}
         </h2>
         <button
           type="button"
           onClick={() => setFlipped((s) => !s)}
           title={t.seeWeekly}
-          className="text-[11.5px] font-semibold text-blue-700 hover:text-blue-800"
+          className="text-[11.5px] font-semibold text-slate-900 hover:text-slate-700"
         >
           {flipped ? t.back : t.seeDetail}
         </button>
@@ -152,7 +153,7 @@ export function DemoTodayHero() {
           }}
         >
           <div className="flex h-full items-center gap-4">
-            <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 text-2xl font-bold text-white ring-2 ring-amber-300/70">
+            <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-full bg-[#0A0D18] text-2xl font-bold text-white ring-2 ring-amber-300/70">
               CR
               {/* Conic spotlight (paused when tab hidden via data-paused). */}
               <span
@@ -176,8 +177,8 @@ export function DemoTodayHero() {
                 <Award className="h-3 w-3" /> {t.starOfDay}
               </div>
             </div>
-            <div className="hidden h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-emerald-200 via-emerald-100 to-amber-100 sm:flex sm:items-center sm:justify-center">
-              <Building2 className="h-7 w-7 text-emerald-700" />
+            <div className="hidden h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:flex sm:items-center sm:justify-center">
+              <Building2 className="h-7 w-7 text-slate-700" />
             </div>
           </div>
         </div>
@@ -207,7 +208,7 @@ export function DemoTodayHero() {
               <svg viewBox="0 0 140 32" className="mt-1.5 h-9 w-full">
                 <polyline
                   fill="none"
-                  stroke="#2563eb"
+                  stroke="#0A0D18"
                   strokeWidth="2"
                   points={SPARK.map((v, i) => `${(i / (SPARK.length - 1)) * 140},${32 - ((v - 80) / 20) * 28}`).join(' ')}
                 />
@@ -217,7 +218,7 @@ export function DemoTodayHero() {
                     cx={(i / (SPARK.length - 1)) * 140}
                     cy={32 - ((v - 80) / 20) * 28}
                     r={i === SPARK.length - 1 ? 3 : 1.5}
-                    fill={i === SPARK.length - 1 ? '#f59e0b' : '#2563eb'}
+                    fill={i === SPARK.length - 1 ? '#00D8C7' : '#0A0D18'}
                   />
                 ))}
               </svg>
@@ -228,7 +229,7 @@ export function DemoTodayHero() {
                 type="button"
                 onClick={sendBonus}
                 disabled={bonusSent}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 px-3 text-[12px] font-semibold text-white transition hover:brightness-110 disabled:cursor-default disabled:opacity-60"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#0A0D18] px-3 text-[12px] font-semibold text-white transition hover:bg-slate-800 disabled:cursor-default disabled:opacity-60"
               >
                 <Send className="h-3.5 w-3.5" />
                 {bonusSent ? t.bonusSent : t.sendBonus}

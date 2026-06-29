@@ -72,10 +72,13 @@ type State = {
   tick: number;
 };
 
+// Cleaner pucks share the same midnight body — they're distinguished by
+// position + initials, not by decorative tint. Avoids a confetti of
+// blue/emerald/amber on what is supposed to be a monochrome lane.
 const INITIAL_CLEANERS: Cleaner[] = [
-  { id: 'carmen', name: 'Carmen', short: 'CR', color: 'bg-blue-600', p: 0.18, v: 0.05 },
-  { id: 'lucia', name: 'Lucía', short: 'LV', color: 'bg-emerald-600', p: 0.42, v: 0.045 },
-  { id: 'pedro', name: 'Pedro', short: 'PK', color: 'bg-amber-500', p: 0.66, v: 0.04 },
+  { id: 'carmen', name: 'Carmen', short: 'CR', color: 'bg-[#0A0D18]', p: 0.18, v: 0.05 },
+  { id: 'lucia', name: 'Lucía', short: 'LV', color: 'bg-slate-700', p: 0.42, v: 0.045 },
+  { id: 'pedro', name: 'Pedro', short: 'PK', color: 'bg-slate-500', p: 0.66, v: 0.04 },
 ];
 
 type TimelineSlot = {
@@ -153,10 +156,12 @@ export function DemoLiveOpsPulse() {
           className="absolute inset-0 h-full w-full"
         >
           <defs>
+            {/* Subtle slate sweep with a single teal accent at midline —
+                aligns with the micro-accent rule (sparse teal moments). */}
             <linearGradient id="demo-pulse-grad" x1="0" x2="1">
-              <stop offset="0" stopColor="#3b82f6" stopOpacity="0.15" />
-              <stop offset="0.5" stopColor="#06b6d4" stopOpacity="0.55" />
-              <stop offset="1" stopColor="#10b981" stopOpacity="0.15" />
+              <stop offset="0" stopColor="#0A0D18" stopOpacity="0.15" />
+              <stop offset="0.5" stopColor="#00D8C7" stopOpacity="0.55" />
+              <stop offset="1" stopColor="#0A0D18" stopOpacity="0.15" />
             </linearGradient>
           </defs>
           <path

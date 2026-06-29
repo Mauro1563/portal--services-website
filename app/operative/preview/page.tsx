@@ -340,13 +340,13 @@ function buildStatusMeta(t: CopyShape): Record<DemoStatus, { label: string; cls:
     },
     in_progress: {
       label: t.statusInProgress,
-      cls: 'bg-amber-100 text-amber-800',
-      dot: 'bg-amber-500 animate-pulse',
+      cls: 'bg-slate-100 text-slate-900',
+      dot: 'bg-[#00D8C7] animate-pulse',
     },
     completed: {
       label: t.statusCompleted,
-      cls: 'bg-emerald-100 text-emerald-800',
-      dot: 'bg-emerald-500',
+      cls: 'bg-slate-900 text-white',
+      dot: 'bg-emerald-600',
     },
   };
 }
@@ -565,16 +565,11 @@ function OperativePreviewHomeBody({
     lightboxTask && lightbox ? lightboxTask.photos[lightbox.idx] : null;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-canvas pb-24">
+    <main className="relative min-h-screen overflow-hidden bg-slate-50 pb-24">
       <PreviewFlavorToggle
         active="hogar"
         hogarHref="/operative/preview"
         airbnbHref="/operative/preview-airbnb"
-      />
-      {/* Ambient depth: emerald/teal blob top-left — sits behind content. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 -left-32 z-0 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-emerald-300 to-teal-400 opacity-30 blur-3xl"
       />
       <div className="relative z-10 mx-auto max-w-md px-4 py-5">
         <AgendaHeader
@@ -589,12 +584,8 @@ function OperativePreviewHomeBody({
           }
         />
 
-        {/* Soft radial highlight above the earnings stats */}
+        {/* Earnings strip — white surface with midnight numbers */}
         <div className="relative">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 -top-4 h-24 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.05),_transparent_60%)]"
-          />
           <PreviewEarningsStrip
             todayPence={todayPence}
             weekPence={weekPence}
@@ -613,20 +604,21 @@ function OperativePreviewHomeBody({
             enabled={heroTask.status === 'scheduled'}
             onCheckIn={() => handleCheckIn(heroTask.id)}
           >
-          <section className="rounded-2xl border border-brand-600/25 bg-brand-50/40 p-4 shadow-card">
+          <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)]">
             <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center rounded-full bg-[#00D8C7] px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#0A0D18]">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
+                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
                 {t.nextStop}
               </span>
-              <span className="text-[11px] font-semibold tabular-nums text-text-3">
+              <span className="text-[11px] font-semibold tabular-nums text-slate-500">
                 {heroTask.start_time}
               </span>
             </div>
-            <h2 className="mt-2 font-display text-lg font-semibold text-text-1">
+            <h2 className="mt-2 font-display text-lg font-semibold text-slate-900">
               {heroTask.client_name}
             </h2>
-            <p className="mt-1 inline-flex items-center gap-1 text-xs text-text-2">
-              <MapPin className="h-3.5 w-3.5 text-brand-600" />
+            <p className="mt-1 inline-flex items-center gap-1 text-xs text-slate-600">
+              <MapPin className="h-3.5 w-3.5 text-slate-400" />
               {heroTask.address} · {heroTask.postcode}
             </p>
 
@@ -636,7 +628,7 @@ function OperativePreviewHomeBody({
                 target="_blank"
                 rel="noopener noreferrer"
                 title={t.navigateTitle}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.5)] transition active:scale-[0.99]"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A0D18] px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.5)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
               >
                 <Navigation2 className="h-4 w-4" /> {t.goToAddress}
               </a>
@@ -644,7 +636,7 @@ function OperativePreviewHomeBody({
                 href={`tel:${heroTask.phone}`}
                 aria-label={t.callClientAria}
                 title={t.callClientTitle}
-                className="inline-flex h-auto min-h-[44px] w-12 shrink-0 items-center justify-center rounded-xl border border-surface-2 bg-surface-0 text-text-1 transition hover:border-brand-300 hover:text-brand-700"
+                className="inline-flex h-auto min-h-[44px] w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
               >
                 <Phone className="h-4 w-4" />
               </a>
@@ -657,7 +649,7 @@ function OperativePreviewHomeBody({
         {/* Agenda timeline — interactive */}
         <section className="mt-6">
           <div className="flex items-center justify-between">
-            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-text-3">
+            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
               {t.todayAgenda}
               <button
                 type="button"
@@ -665,7 +657,7 @@ function OperativePreviewHomeBody({
                 aria-expanded={agendaHelpOpen}
                 aria-controls="agenda-help"
                 onClick={() => setAgendaHelpOpen((o) => !o)}
-                className="grid h-5 w-5 place-items-center rounded-full bg-surface-2 text-text-3 transition hover:bg-surface-3 hover:text-text-1"
+                className="grid h-5 w-5 place-items-center rounded-full bg-slate-100 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
               >
                 <HelpCircle className="h-3 w-3" />
               </button>
@@ -673,7 +665,7 @@ function OperativePreviewHomeBody({
             <Link
               href="/operative/preview/week"
               title={t.seeWeekTitle}
-              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-brand-700 hover:text-brand-800"
+              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-slate-900 hover:text-[#0A0D18]"
             >
               <Navigation2 className="h-3 w-3" /> {t.seeWeek}
             </Link>
@@ -740,7 +732,7 @@ function OperativePreviewHomeBody({
                     <div
                       className={
                         task.status === 'in_progress'
-                          ? 'rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 p-[1px]'
+                          ? 'rounded-2xl bg-gradient-to-br from-[#00D8C7]/30 to-[#00D8C7]/0 p-[1px]'
                           : ''
                       }
                     >
@@ -771,21 +763,21 @@ function OperativePreviewHomeBody({
                         )}
                       </button>
 
-                      <p className="mt-1 inline-flex items-center gap-1 truncate text-[11px] text-text-3">
-                        <MapPin className="h-3 w-3 shrink-0 text-brand-600" />
+                      <p className="mt-1 inline-flex items-center gap-1 truncate text-[11px] text-slate-500">
+                        <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
                         <span className="truncate">
                           {task.address}, {task.postcode}
                         </span>
                       </p>
 
                       {task.checkInAt ? (
-                        <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700">
-                          <Play className="h-2.5 w-2.5" />
+                        <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-slate-700">
+                          <Play className="h-2.5 w-2.5 text-[#00D8C7]" />
                           {t.checkInLoggedAt(task.checkInAt)}
                         </p>
                       ) : null}
                       {task.completedAt ? (
-                        <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
+                        <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
                           <CheckCircle2 className="h-2.5 w-2.5" />
                           {t.completedAt(task.completedAt)}
                         </p>
@@ -793,16 +785,17 @@ function OperativePreviewHomeBody({
                       {task.status === 'completed' && task.tipPence > 0 ? (
                         <span
                           title={t.tipTitle}
-                          className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800"
+                          className="mt-1 inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-900"
                         >
+                          <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#00D8C7]" />
                           {t.tipLabel((task.tipPence / 100).toFixed(2))}
                         </span>
                       ) : null}
                       {task.status === 'in_progress' ? (
-                        <div className="mt-2 rounded-xl bg-amber-50 px-3 py-2 ring-1 ring-amber-100">
+                        <div className="mt-2 rounded-xl bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800">
-                              <Clock className="h-3 w-3" />
+                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-900">
+                              <Clock className="h-3 w-3 text-slate-500" />
                               {t.hoursWorked}
                             </span>
                             <div className="flex items-center gap-1.5">
@@ -812,7 +805,7 @@ function OperativePreviewHomeBody({
                                 aria-label={t.minus15Aria}
                                 title={t.minus15Title}
                                 disabled={(task.actualHours ?? 0) <= 0}
-                                className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-40"
+                                className="grid h-11 w-11 place-items-center rounded-lg border border-slate-200 bg-white text-slate-900 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
                               >
                                 <Minus className="h-4 w-4" />
                               </button>
@@ -825,18 +818,18 @@ function OperativePreviewHomeBody({
                                 placeholder="0.0"
                                 aria-label={t.hoursInputAria}
                                 title={t.hoursInputTitle}
-                                className="h-11 w-16 rounded-lg border border-amber-200 bg-white text-center text-[15px] font-semibold tabular-nums text-text-1"
+                                className="h-11 w-16 rounded-lg border border-slate-200 bg-white text-center text-[15px] font-semibold tabular-nums text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]"
                               />
                               <button
                                 type="button"
                                 onClick={() => handleAdjustHours(task.id, 0.25)}
                                 aria-label={t.plus15Aria}
                                 title={t.plus15Title}
-                                className="grid h-11 w-11 place-items-center rounded-lg border border-amber-200 bg-white text-amber-800 transition hover:bg-amber-100"
+                                className="grid h-11 w-11 place-items-center rounded-lg border border-slate-200 bg-white text-slate-900 transition hover:bg-slate-100"
                               >
                                 <Plus className="h-4 w-4" />
                               </button>
-                              <span className="text-[11px] font-semibold text-amber-700">h</span>
+                              <span className="text-[11px] font-semibold text-slate-600">h</span>
                             </div>
                           </div>
                         </div>
@@ -852,7 +845,7 @@ function OperativePreviewHomeBody({
                           onClick={(e) => e.stopPropagation()}
                           aria-label={t.navigateAria}
                           title={t.navigateTitle}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-700 transition hover:bg-brand-100"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
                         >
                           <Navigation2 className="h-3.5 w-3.5" />
                         </a>
@@ -861,9 +854,9 @@ function OperativePreviewHomeBody({
                             type="button"
                             onClick={() => handleCheckIn(task.id)}
                             title={t.checkInTitle}
-                            className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700 transition hover:bg-amber-100"
+                            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-900 transition hover:bg-slate-50"
                           >
-                            <Play className="h-3 w-3" />
+                            <Play className="h-3 w-3 text-[#00D8C7]" />
                             {t.checkIn}
                           </button>
                         ) : null}
@@ -873,7 +866,7 @@ function OperativePreviewHomeBody({
                             onClick={() => handleUploadPhoto(task.id)}
                             aria-label={t.uploadPhotoAria}
                             title={t.uploadPhotoTitle}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-50 text-cyan-700 transition hover:bg-cyan-100"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
                           >
                             <Camera className="h-3.5 w-3.5" />
                           </button>
@@ -888,7 +881,7 @@ function OperativePreviewHomeBody({
                           type="button"
                           onClick={() => handleComplete(task.id)}
                           title={t.markCompletedTitle}
-                          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.55)] transition active:scale-[0.99]"
+                          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#0A0D18] px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.55)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
                         >
                           <CheckCircle2 className="h-4 w-4" />
                           {t.markCompleted}
@@ -1037,11 +1030,11 @@ function OperativePreviewHomeBody({
           aria-live="polite"
         >
           <div
-            className={`rounded-full bg-emerald-600/95 px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
+            className={`inline-flex items-center gap-1.5 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-semibold text-white shadow-lg backdrop-blur transition duration-200 ease-out ${
               toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
             }`}
           >
-            ✓ {toast}
+            <span aria-hidden className="text-[#00D8C7]">✓</span> {toast}
           </div>
         </div>
       ) : null}

@@ -56,18 +56,14 @@ export async function AgendaHeader({
   const dayNum = now.getDate();
 
   return (
-    <header className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-[#F2FFFC] to-white px-4 pb-4 pt-4 text-slate-900 shadow-[0_2px_8px_-2px_rgba(15,23,42,0.06),_0_12px_28px_-12px_rgba(0,216,199,0.18)] sm:px-5 sm:pt-5">
-      {/* Subtle teal corner glow to add depth without weight */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-12 -right-10 h-32 w-32 rounded-full bg-[#00D8C7]/15 blur-2xl"
-      />
+    <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 pb-4 pt-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-12px_rgba(15,23,42,0.08)] sm:px-5 sm:pt-5">
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00B8A8]">
+          <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
             Cleaner · {firstName}
           </p>
-          <h1 className="mt-1 font-display text-[14px] font-medium text-slate-700">
+          <h1 className="mt-1 font-display text-[14px] font-medium text-slate-900">
             Tu agenda hoy
           </h1>
           {decorationSlot ? <div className="mt-1">{decorationSlot}</div> : null}
@@ -78,7 +74,7 @@ export async function AgendaHeader({
           <form action={signOutOperative}>
             <button
               type="submit"
-              className="rounded-full border border-slate-200 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600 transition hover:border-[#00D8C7] hover:bg-[#00D8C7]/10 hover:text-[#0A0D18]"
+              className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 hover:text-[#0A0D18]"
             >
               Salir
             </button>
@@ -119,8 +115,9 @@ export async function AgendaHeader({
           <a
             href={`#task-${inProgressTaskId}`}
             title="Saltar a la tarea que tienes en curso ahora mismo"
-            className="inline-flex items-center gap-1 rounded-full bg-[#00D8C7]/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#00B8A8] ring-1 ring-inset ring-[#00D8C7]/40 transition hover:bg-[#00D8C7]/25"
+            className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-700 transition hover:bg-slate-200"
           >
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7] animate-pulse" />
             En curso
           </a>
         ) : null}

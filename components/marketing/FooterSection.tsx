@@ -174,31 +174,29 @@ export default async function FooterSection() {
   const termsHref = `/${locale}/terms`;
 
   return (
-    <footer className="relative bg-slate-50">
-      {/* CTA Banner */}
+    <footer className="relative bg-white">
+      {/* CTA Banner — THE dark surface. Bright teal CTA is allowed here (rule 2). */}
       <div className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 px-5 py-8 shadow-[0_20px_60px_-20px_rgba(15,23,42,0.5)] sm:rounded-3xl sm:px-12 sm:py-16 lg:px-16 lg:py-20">
-          {/* Radial glow motifs */}
+        <div className="relative overflow-hidden rounded-2xl bg-[#0A0D18] px-5 py-8 shadow-[0_20px_60px_-20px_rgba(10,13,24,0.5)] sm:rounded-3xl sm:px-12 sm:py-16 lg:px-16 lg:py-20">
+          {/* Sparse teal accent — single subtle glow, not a flood */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-blue-500/30 blur-3xl"
+            className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-[#00D8C7]/10 blur-3xl"
           />
 
           <div className="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15 backdrop-blur">
+              {/* Eyebrow chip on dark — muted white surface with tiny teal sparkle */}
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10 backdrop-blur">
                 <Sparkles className="h-3 w-3 text-[#00D8C7]" aria-hidden="true" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]">
+                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
                   {t.ctaEyebrow}
                 </span>
               </div>
+              {/* Headline stays white on dark — no teal gradient text */}
               <h2 className="font-display mt-3 text-2xl font-bold leading-tight text-white sm:mt-5 sm:text-4xl lg:text-5xl">
                 {t.ctaHeadlineLead}{' '}
-                <span className="bg-gradient-to-r from-[#00D8C7] to-[#4FFFE5] bg-clip-text text-transparent">
+                <span className="text-white/90">
                   {t.ctaHeadlineAccent}
                 </span>
               </h2>
@@ -208,6 +206,7 @@ export default async function FooterSection() {
             </div>
 
             <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-end">
+              {/* PRIMARY CTA on dark surface — bright teal fill + midnight text + glow (rule 2) */}
               <Link
                 href="/signup"
                 className="group inline-flex items-center gap-2 rounded-full bg-[#00D8C7] px-5 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] ring-1 ring-[#00D8C7]/40 transition hover:bg-[#2BF0DE] sm:px-7 sm:py-4 sm:text-base"
@@ -229,7 +228,7 @@ export default async function FooterSection() {
         </div>
       </div>
 
-      {/* Footer columns */}
+      {/* Footer columns — pure white surface, slate-600 links, no teal/blue hover */}
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
@@ -240,7 +239,7 @@ export default async function FooterSection() {
             </p>
             <a
               href="mailto:hola@portalservices.digital"
-              className="mt-3 inline-block border-b border-[#00D8C7]/20 pb-1 text-sm text-slate-600 transition hover:border-[#00D8C7] hover:text-[#00D8C7]"
+              className="mt-3 inline-block border-b border-slate-200 pb-1 text-sm text-slate-600 transition hover:border-slate-400 hover:text-slate-900"
             >
               hola@portalservices.digital
             </a>
@@ -256,7 +255,7 @@ export default async function FooterSection() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-700 transition hover:text-blue-700"
+                      className="text-sm text-slate-600 transition hover:text-slate-900"
                     >
                       {link.label}
                     </Link>

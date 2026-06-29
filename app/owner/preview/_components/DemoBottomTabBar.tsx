@@ -78,15 +78,24 @@ export function DemoBottomTabBar({ active }: { active: DemoTab }) {
               <Link
                 href={href}
                 className={`relative flex h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition ${
-                  isActive ? 'text-blue-700' : 'text-slate-600 hover:text-slate-900'
+                  isActive ? 'text-[#0A0D18]' : 'text-slate-600 hover:text-slate-900'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
                 {isActive ? (
-                  <span
-                    aria-hidden
-                    className="absolute top-0 h-[3px] w-10 rounded-b bg-blue-600"
-                  />
+                  <>
+                    {/* Top hairline rendered in midnight; the active-state
+                        "accent moment" is the small teal dot below the
+                        label per palette rule 7. */}
+                    <span
+                      aria-hidden
+                      className="absolute top-0 h-[3px] w-10 rounded-b bg-[#0A0D18]"
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute bottom-1 h-1 w-1 rounded-full bg-[#00D8C7]"
+                    />
+                  </>
                 ) : null}
                 <Icon
                   className={`h-5 w-5 ${isActive ? 'stroke-[2.25]' : 'stroke-[1.75]'}`}

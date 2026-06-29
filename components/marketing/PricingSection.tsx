@@ -210,21 +210,12 @@ export default async function PricingSection() {
   return (
     <section
       id="precios"
-      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 py-12 sm:py-28"
+      className="relative overflow-hidden bg-white py-12 sm:py-28"
     >
-      {/* decorative blurs */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-80 w-[40rem] -translate-x-1/2 rounded-full bg-cyan-200/30 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-40 right-0 h-80 w-[32rem] rounded-full bg-blue-200/30 blur-3xl"
-      />
-
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700">
+          <p className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
             {t.eyebrow}
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
@@ -243,13 +234,13 @@ export default async function PricingSection() {
                 key={plan.id}
                 className={
                   isHighlighted
-                    ? "relative flex flex-col rounded-2xl bg-[#0A0D18] p-6 text-white shadow-[0_20px_60px_-15px_rgba(10,13,24,0.55)] ring-4 ring-[#00D8C7]/30 sm:p-8 md:-mt-4 md:mb-4 md:scale-[1.04]"
-                    : "relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-8"
+                    ? "relative flex flex-col rounded-2xl bg-[#0A0D18] p-6 text-white shadow-[0_20px_60px_-15px_rgba(10,13,24,0.55)] sm:p-8 md:-mt-4 md:mb-4 md:scale-[1.04]"
+                    : "relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(15,23,42,0.06)] sm:p-8"
                 }
               >
                 {isHighlighted && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#00D8C7] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)]">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#00D8C7] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18]">
                       <Sparkles className="h-3 w-3" />
                       {t.mostPopular}
                     </span>
@@ -260,8 +251,8 @@ export default async function PricingSection() {
                   <p
                     className={
                       isHighlighted
-                        ? "text-[10px] font-bold uppercase tracking-[0.22em] text-[#00D8C7]"
-                        : "text-[10px] font-bold uppercase tracking-[0.22em] text-blue-700"
+                        ? "text-[10px] font-bold uppercase tracking-[0.22em] text-[#5EEAD4]"
+                        : "text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700"
                     }
                   >
                     {plan.name}
@@ -311,15 +302,15 @@ export default async function PricingSection() {
                         <span
                           className={
                             isHighlighted
-                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#00D8C7]/15 ring-2 ring-[#00D8C7]/40"
-                              : "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-emerald-50 ring-2 ring-emerald-100"
+                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#00D8C7]/15 ring-1 ring-[#00D8C7]/40"
+                              : "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-slate-100 ring-1 ring-slate-200"
                           }
                         >
                           <Check
                             className={
                               isHighlighted
                                 ? "h-3.5 w-3.5 text-[#00D8C7]"
-                                : "h-3.5 w-3.5 text-emerald-600"
+                                : "h-3.5 w-3.5 text-slate-700"
                             }
                           />
                         </span>
@@ -327,7 +318,7 @@ export default async function PricingSection() {
                           className={
                             isHighlighted
                               ? "text-sm text-white/90"
-                              : "text-sm text-slate-700"
+                              : "text-sm text-slate-600"
                           }
                         >
                           {feature}
@@ -341,8 +332,8 @@ export default async function PricingSection() {
                   href="/signup"
                   className={
                     isHighlighted
-                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-bold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] transition hover:bg-[#2BF0DE] sm:mt-8"
-                      : "mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-sm font-bold text-white shadow-md transition hover:from-blue-500 hover:to-blue-600 sm:mt-8"
+                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-bold text-[#0A0D18] transition hover:bg-[#2BF0DE] sm:mt-8"
+                      : "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#0A0D18] px-6 py-3 text-sm font-bold text-white shadow-[0_1px_2px_rgba(15,23,42,0.12)] transition hover:bg-[#1a1f2e] sm:mt-8"
                   }
                 >
                   {plan.cta}

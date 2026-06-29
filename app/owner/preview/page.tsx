@@ -117,11 +117,6 @@ export default function OwnerPreviewHome() {
         hogarHref="/owner/preview"
         airbnbHref="/owner/preview-airbnb"
       />
-      {/* Ambient depth: cyan/blue blob top-right — sits behind content. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 -right-32 z-0 h-[420px] w-[420px] rounded-full bg-[#00D8C7]/15 blur-3xl"
-      />
       <div className="relative z-10 mx-auto max-w-5xl px-3 pt-4 sm:px-4 sm:pt-5 lg:px-8 lg:pt-7">
         <DemoCorporateHeader
           firstName="Alan"
@@ -133,12 +128,7 @@ export default function OwnerPreviewHome() {
         </div>
 
         <div>
-          {/* Soft radial highlight above the stat row */}
           <div className="relative">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 -top-4 h-24 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.05),_transparent_60%)]"
-            />
             <DemoStatCardsRow
               cleanersActive={3}
               bookingsWeek={12}
@@ -156,11 +146,8 @@ export default function OwnerPreviewHome() {
             <DemoCleanersField checkins={checkins} />
           </div>
 
-          {/* Featured element: today-hero wrapped with a hairline gradient border */}
-          <div className="mt-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 p-[1px]">
-            <div className="rounded-2xl bg-slate-50">
-              <DemoTodayHero />
-            </div>
+          <div className="mt-6">
+            <DemoTodayHero />
           </div>
 
           <Link
@@ -191,10 +178,10 @@ export default function OwnerPreviewHome() {
           <Link
             href="/owner/preview/analytics"
             title={t.analyticsTitle}
-            className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
           >
             <div className="flex min-w-0 items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-700">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-slate-100 text-slate-700">
                 <BarChart3 className="h-5 w-5" />
               </span>
               <div className="min-w-0">
@@ -206,7 +193,7 @@ export default function OwnerPreviewHome() {
                 </p>
               </div>
             </div>
-            <ArrowRight className="h-5 w-5 shrink-0 text-blue-600" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-slate-400" />
           </Link>
         </div>
         <div className="mt-10">
