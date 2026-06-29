@@ -305,7 +305,7 @@ export default async function LoginPage({ searchParams }: Props) {
             <div className="flex items-center justify-end">
               <Link
                 href="/forgot-password"
-                className="text-xs font-semibold text-blue-600 transition hover:text-blue-700"
+                className="text-xs font-semibold text-[#0A0D18] underline decoration-[#00D8C7] decoration-2 underline-offset-4 transition hover:decoration-[#2BF0DE]"
               >
                 {t('login.forgotPassword')}
               </Link>

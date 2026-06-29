@@ -77,14 +77,14 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
   }
 
   return (
-    <main className="relative min-h-[100dvh] overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/60">
+    <main className="relative min-h-[100dvh] overflow-hidden bg-white">
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-cyan-300/40 via-blue-400/30 to-transparent blur-3xl"
+        className="pointer-events-none absolute -left-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-[#00D8C7]/10 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-blue-500/25 via-cyan-400/20 to-transparent blur-3xl"
+        className="pointer-events-none absolute -right-32 bottom-0 h-[28rem] w-[28rem] rounded-full bg-[#0A0D18]/[0.04] blur-3xl"
       />
 
       <div className="relative mx-auto flex min-h-[100dvh] max-w-md flex-col items-center justify-center px-4 py-6 sm:py-10">
@@ -189,7 +189,7 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
                   <button
                     type="submit"
                     disabled={pending}
-                    className="group relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_18px_36px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-300 hover:shadow-[0_22px_48px_-12px_rgba(37,99,235,0.65)] hover:brightness-[1.08] active:translate-y-px disabled:cursor-wait disabled:opacity-70"
+                    className="group relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#00D8C7] text-sm font-bold uppercase tracking-[0.18em] text-[#0A0D18] shadow-[0_8px_24px_-6px_rgba(0,216,199,0.55),inset_0_1px_0_rgba(255,255,255,0.35)] transition-all duration-300 hover:bg-[#2BF0DE] hover:shadow-[0_12px_28px_-6px_rgba(0,216,199,0.65),inset_0_1px_0_rgba(255,255,255,0.45)] active:translate-y-px disabled:cursor-wait disabled:opacity-70"
                   >
                     <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                     {pending ? (
@@ -208,7 +208,7 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
                     {dict.haveAccount}{' '}
                     <Link
                       href="/login"
-                      className="font-semibold text-blue-600 transition hover:text-blue-700"
+                      className="font-semibold text-[#0A0D18] underline decoration-[#00D8C7] decoration-2 underline-offset-4 transition hover:decoration-[#2BF0DE]"
                     >
                       {dict.signIn}
                     </Link>
@@ -232,7 +232,7 @@ export function SignupForm({ dict }: { dict: SignupDict }) {
 }
 
 const inputClass =
-  'block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-500 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10';
+  'block h-12 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-3 text-sm font-medium text-slate-900 shadow-inner shadow-slate-200/40 placeholder:font-normal placeholder:text-slate-500 transition focus:border-[#00D8C7] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#00D8C7]/20';
 
 function Field({
   label,
@@ -274,7 +274,7 @@ function PendingPanel({ email, dict }: { email: string; dict: SignupDict }) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
       <div className="flex justify-center">
-        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-50 text-blue-600 shadow-inner ring-1 ring-cyan-200/70">
+        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#0A0D18] text-[#00D8C7] shadow-inner ring-1 ring-[#00D8C7]/30">
           <Clock className="h-7 w-7" />
         </span>
       </div>

@@ -31,7 +31,7 @@ export default async function WelcomePage() {
     <>
       <ScrollLock />
       <main
-        className="flex flex-col items-center bg-gradient-to-br from-blue-50/80 via-white to-cyan-50/60"
+        className="flex flex-col items-center bg-white"
         style={{
           position: 'fixed',
           inset: 0,
@@ -47,18 +47,18 @@ export default async function WelcomePage() {
         {/* Decorative orbs */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-32 -top-32 -z-10 h-[26rem] w-[26rem] rounded-full bg-gradient-to-br from-cyan-300/40 via-blue-400/25 to-transparent blur-3xl"
+          className="pointer-events-none absolute -left-32 -top-32 -z-10 h-[26rem] w-[26rem] rounded-full bg-[#00D8C7]/12 blur-3xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-32 bottom-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-gradient-to-tr from-blue-500/30 via-cyan-300/20 to-transparent blur-3xl"
+          className="pointer-events-none absolute -right-32 bottom-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-[#0A0D18]/[0.04] blur-3xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.05]"
+          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04]"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(37,99,235,1) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,1) 1px, transparent 1px)',
+              'linear-gradient(rgba(10,13,24,1) 1px, transparent 1px), linear-gradient(90deg, rgba(10,13,24,1) 1px, transparent 1px)',
             backgroundSize: '48px 48px',
             maskImage:
               'radial-gradient(ellipse at center, black 40%, transparent 85%)',
@@ -161,7 +161,7 @@ function RoleCard({
         className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${
           primary
             ? 'bg-white/15 text-white ring-1 ring-inset ring-white/20'
-            : 'bg-gradient-to-br from-cyan-100 to-blue-100 text-[#2563eb]'
+            : 'bg-[#00D8C7]/15 text-[#0A0D18] ring-1 ring-inset ring-[#00D8C7]/30'
         }`}
       >
         <Icon className="h-5 w-5" />
