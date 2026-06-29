@@ -229,13 +229,17 @@ export function ConciergeSheet() {
 
   return (
     <>
-      {/* The pill — fixed above the bottom tab bar. Hidden while sheet is open. */}
+      {/* The pill — fixed above the bottom tab bar. Hidden while sheet
+          is open. The blue→indigo→purple gradient was rule-9 forbidden
+          (decorative non-semantic colour); we now use the midnight ink
+          fill as a primary CTA on the white app surface and reserve the
+          teal #00D8C7 for the tiny sparkle glyph. */}
       <button
         type="button"
         onClick={() => setOpen(true)}
         title={t.openTitle}
         aria-label={t.openAria}
-        className={`fixed bottom-20 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(99,102,241,0.65)] transition will-change-transform hover:scale-[1.03] ${
+        className={`fixed bottom-20 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(10,13,24,0.45)] transition will-change-transform hover:scale-[1.03] ${
           open ? 'pointer-events-none scale-90 opacity-0' : 'opacity-100'
         }`}
         style={{ transitionDuration: '260ms', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
@@ -270,7 +274,10 @@ export function ConciergeSheet() {
             {/* Header — visually echoes the pill so it reads as the
                 same object morphing into place. */}
             <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600">
+              {/* Header echo of the pill — midnight ink fill, no
+                  decorative gradient. The sparkle inside remains the
+                  single chromatic accent. */}
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#0A0D18]">
                 <SparkleGlyph size={18} />
               </span>
               <div>
@@ -296,10 +303,10 @@ export function ConciergeSheet() {
                       type="button"
                       onClick={() => setPicked(p)}
                       title={p.text}
-                      className="group flex w-full items-center justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-left text-[13px] font-medium text-slate-800 ring-1 ring-inset ring-slate-100 transition hover:bg-blue-50 hover:ring-blue-200"
+                      className="group flex w-full items-center justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-left text-[13px] font-medium text-slate-800 ring-1 ring-inset ring-slate-100 transition hover:bg-white hover:ring-[#00D8C7]/40"
                     >
                       <span>{p.text}</span>
-                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition group-hover:text-blue-600" />
+                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-slate-400 transition group-hover:text-[#0A0D18]" />
                     </button>
                   </li>
                 ))}
@@ -314,7 +321,8 @@ export function ConciergeSheet() {
                 </p>
                 <p className="mt-1 text-[13px] text-slate-700">{picked.text}</p>
 
-                <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
+                <p className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-700">
+                  <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
                   {t.sofiaLabel}
                 </p>
                 <p className="mt-1 min-h-[5.5rem] text-[13.5px] leading-relaxed text-slate-800">
@@ -341,7 +349,7 @@ export function ConciergeSheet() {
                     onClick={close}
                     disabled={!streamingDone}
                     title={picked.action.label}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-[#0A0D18] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-[#0A0D18]/90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {picked.action.label}
                     <ArrowRight className="h-3.5 w-3.5" />

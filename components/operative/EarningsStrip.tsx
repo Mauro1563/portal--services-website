@@ -39,32 +39,33 @@ export function EarningsStrip({
       href={href}
       prefetch={true}
       aria-label="Ver desglose de ganancias"
-      className="mt-4 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4 shadow-card transition hover:border-emerald-300 hover:shadow-md"
+      className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)] transition hover:border-slate-300 hover:shadow-md"
     >
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-emerald-600 text-white shadow-[0_8px_20px_-8px_rgba(5,150,105,0.6)]">
+      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#0A0D18] text-white ring-1 ring-[#00D8C7]/40">
         <Coins className="h-5 w-5" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700">
+        <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
+          <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
           Ganado hoy
         </p>
         {isEmpty ? (
-          <p className="mt-1 max-w-[18ch] text-[11px] leading-snug text-emerald-800/80">
+          <p className="mt-1 max-w-[18ch] text-[11px] leading-snug text-slate-500">
             Empieza tu primera tarea para ver tus ganancias.
           </p>
         ) : (
           <>
-            <p className="mt-0.5 font-display text-[40px] font-bold leading-none tabular-nums text-text-1">
+            <p className="mt-0.5 font-display text-[40px] font-bold leading-none tabular-nums text-[#0A0D18]">
               {formatMoney(todayPence)}
             </p>
-            <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-text-3">
+            <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
               <TrendingUp className="h-3 w-3" />
               Semana {formatMoney(weekPence)}
             </p>
           </>
         )}
       </div>
-      <ChevronRight className="h-4 w-4 shrink-0 text-emerald-700" />
+      <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" />
     </Link>
   );
 }

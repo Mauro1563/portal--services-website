@@ -105,7 +105,8 @@ export function FlippableCleanerCard({
         aria-pressed={flipped}
         className="absolute -top-1 right-0 z-20 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-700 ring-1 ring-inset ring-slate-200 backdrop-blur transition hover:bg-white"
       >
-        <Sparkles className="h-3 w-3 text-amber-500" />
+        {/* Sparkle glyph: teal #00D8C7 — a tiny accent dot, no amber. */}
+        <Sparkles className="h-3 w-3 text-[#00D8C7]" />
         {flipped ? t.backLabel : t.meetLabel}
       </button>
 
@@ -154,9 +155,12 @@ function CleanerBack({
   cleanerName: string;
   t: (typeof COPY)['en'];
 }) {
+  // Back face: was an amber→gold "kintsugi" surface; now a clean white card
+  // with a slate ring and a single teal eyebrow dot — on-palette.
   return (
-    <div className="relative h-full rounded-2xl bg-gradient-to-br from-amber-50 to-white p-4 ring-1 ring-inset ring-amber-100">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
+    <div className="relative h-full rounded-2xl bg-white p-4 ring-1 ring-inset ring-slate-200">
+      <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-700">
+        <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
         {t.howWorks(cleanerName)}
       </p>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-700">
@@ -169,9 +173,10 @@ function CleanerBack({
         <RoomIcon icon={Bed} label={t.bedroom} />
       </div>
 
-      {/* Kintsugi-style gold accent — a single hairline gold stroke
-          across the bottom that breaks into two slivers, evoking the
-          repaired-with-gold motif. */}
+      {/* Hairline accent across the bottom — kept as the same
+          compositional flourish but recoloured from kintsugi gold to a
+          single teal #00D8C7 stroke that fades at both ends. Sparse,
+          per rule 7. */}
       <svg
         aria-hidden
         className="absolute inset-x-3 bottom-2 h-2"
@@ -180,10 +185,9 @@ function CleanerBack({
       >
         <defs>
           <linearGradient id="kint-grad" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%"   stopColor="#fbbf24" stopOpacity="0" />
-            <stop offset="35%"  stopColor="#f59e0b" stopOpacity="1" />
-            <stop offset="65%"  stopColor="#d97706" stopOpacity="1" />
-            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+            <stop offset="0%"   stopColor="#00D8C7" stopOpacity="0" />
+            <stop offset="50%"  stopColor="#00D8C7" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#00D8C7" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path
@@ -206,8 +210,9 @@ function RoomIcon({
   label: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-1 text-amber-800">
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-white shadow-sm ring-1 ring-inset ring-amber-100">
+    /* Room icon: slate ink on white, slate hairline ring — no amber. */
+    <div className="flex flex-col items-center gap-1 text-slate-700">
+      <span className="grid h-9 w-9 place-items-center rounded-xl bg-white shadow-sm ring-1 ring-inset ring-slate-200">
         <Icon className="h-4 w-4" />
       </span>
       <span className="text-[10px] font-semibold text-slate-600">{label}</span>

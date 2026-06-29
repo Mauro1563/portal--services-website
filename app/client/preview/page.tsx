@@ -336,13 +336,19 @@ function StatChip({
   title?: string;
   onClick?: () => void;
 }) {
+  // Per palette discipline: stat chips live on white surfaces and stay
+  // slate-neutral. The accent (live/primary) chip uses the midnight
+  // ink fill — never a colored wash — and the secondary chips render
+  // as quiet white pills with a tiny dot. The dot is the only place
+  // teal/green/amber peek through, and even there it's a 6px micro-
+  // accent, not a flood.
   const accentTones: Record<typeof tone, string> = {
-    blue: 'bg-blue-50 text-blue-800 ring-blue-100 hover:bg-blue-100',
-    emerald: 'bg-emerald-50 text-emerald-800 ring-emerald-100 hover:bg-emerald-100',
-    amber: 'bg-amber-50 text-amber-800 ring-amber-100 hover:bg-amber-100',
+    blue: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
+    emerald: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
+    amber: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
   };
   const dotColors: Record<NonNullable<typeof dotTone>, string> = {
-    blue: 'bg-blue-500',
+    blue: 'bg-[#00D8C7]',
     emerald: 'bg-emerald-500',
     amber: 'bg-amber-500',
   };
@@ -396,7 +402,7 @@ function HelpTip({ label }: { label: string }) {
       type="button"
       aria-label={label}
       title={label}
-      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
+      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/50"
     >
       <HelpCircle className="h-3.5 w-3.5" />
     </button>
@@ -508,10 +514,13 @@ function ClientPreviewInner({
 
   return (
     <ClientShell ctx={MOCK_CTX} token={PREVIEW_TOKEN} activeTab="home" hideHeader>
-      {/* Ambient depth: sky/indigo blob top-center — sits behind content. */}
+      {/* Page bg is a quiet slate-50 wash via a single subtle radial. No
+          teal floods, no sky/indigo blob, no blue gradient overlays —
+          per palette discipline, depth on white surfaces comes from
+          shadow and slate-50, not colored ambient lights. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed left-1/2 top-0 -z-0 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-br from-sky-300 to-indigo-400 opacity-30 blur-3xl"
+        className="pointer-events-none fixed left-1/2 top-0 -z-0 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-slate-100 opacity-50 blur-3xl"
       />
       {/* Header: greeting + search/filter — wired to local state, not a
           GET-navigation, so the input actually filters the lists below. */}
@@ -520,7 +529,7 @@ function ClientPreviewInner({
           <div className="min-w-0">
             <p className="inline-flex items-center gap-1.5 font-display text-xl font-bold tracking-tight text-slate-900">
               {t.greetingName}
-              <Hand className="h-5 w-5 -rotate-12 text-amber-400" />
+              <Hand className="h-5 w-5 -rotate-12 text-slate-400" />
             </p>
             <p className="mt-0.5 text-[13px] text-slate-600">
               {t.greetingTagline}
@@ -536,7 +545,8 @@ function ClientPreviewInner({
             >
               <RotateCcw className="h-4 w-4" />
             </button>
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white">
+            {/* User avatar: midnight ink fill — no blue gradient. */}
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#0A0D18] text-sm font-bold text-white">
               S
             </span>
           </div>
@@ -555,7 +565,7 @@ function ClientPreviewInner({
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t.searchPlaceholder}
               title={t.searchTitle}
-              className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#00D8C7] focus:outline-none focus:ring-2 focus:ring-[#00D8C7]/30"
             />
           </label>
           <button
@@ -567,7 +577,7 @@ function ClientPreviewInner({
           >
             <SlidersHorizontal className="h-4 w-4" />
             {activeFilterCount > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-blue-600 px-1 text-[9px] font-bold text-white ring-2 ring-white">
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#0A0D18] px-1 text-[9px] font-bold text-white ring-2 ring-white">
                 {activeFilterCount}
               </span>
             )}
@@ -575,22 +585,25 @@ function ClientPreviewInner({
         </div>
       </section>
 
-      {/* Primary action — owns the first viewport. The blue gradient is
-          reserved for this CTA only; secondary surfaces stay neutral. */}
+      {/* Primary action — owns the first viewport. Per rule 1: on the
+          white page surface the primary CTA is midnight ink (#0A0D18)
+          with white text and a subtle shadow (no teal glow). The teal
+          colour is reserved for the tiny "Ready in 30s" accent dot. */}
       <Link
         href="/client/preview/book"
         title={t.bookCtaTitle}
-        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-[#00D8C7] p-5 text-[#0A0D18] shadow-[0_14px_32px_-14px_rgba(0,216,199,0.7)] transition hover:brightness-105"
+        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-[#0A0D18] p-5 text-white shadow-[0_10px_28px_-14px_rgba(10,13,24,0.5)] transition hover:bg-[#0A0D18]/90"
       >
         <div className="min-w-0">
-          <p className="text-[12px] font-semibold text-[#0A0D18]/70">
+          <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/70">
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
             {t.bookCtaKicker}
           </p>
           <p className="mt-1 font-display text-xl font-bold leading-tight">
             {t.bookCtaLabel}
           </p>
         </div>
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#0A0D18]/10 backdrop-blur">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 backdrop-blur">
           <ArrowRight className="h-5 w-5" />
         </span>
       </Link>
@@ -602,9 +615,12 @@ function ClientPreviewInner({
       </div>
 
       <div className="relative mt-3">
+        {/* Removed the blue radial wash behind the stat row — replaced
+            by a near-invisible slate halo so the chips read as floating
+            on the white page surface, not on a blue tint. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-4 h-24 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.05),_transparent_60%)]"
+          className="pointer-events-none absolute inset-x-0 -top-4 h-24 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.03),_transparent_60%)]"
         />
         <div className="relative flex gap-2">
         <StatChip
@@ -721,8 +737,8 @@ function ClientPreviewInner({
             </button>
           </div>
         ) : (
-          <div className="mt-3 rounded-3xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 p-[1px] shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)]">
-          <div className="relative rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-100">
+          <div className="mt-3 rounded-3xl bg-slate-200/60 p-[1px] shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)]">
+          <div className="relative rounded-3xl bg-white p-4 ring-1 ring-inset ring-slate-200">
             {/* Wax-seal celebration overlay — only when status flips to
                 'done'. Auto-dismisses; the underlying status sticks. */}
             <CompletionSeal
@@ -737,11 +753,16 @@ function ClientPreviewInner({
                   title={t.visitCardTitle}
                   className="group -m-1 flex items-start gap-3 rounded-2xl p-1 transition hover:bg-slate-50"
                 >
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-700">
+                  {/* Visit icon block: slate surface + midnight glyph,
+                      with a tiny teal sparkle dot in the corner as the
+                      only chromatic accent. Replaces the blue-50/blue-700
+                      flood. */}
+                  <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-slate-100 text-[#0A0D18]">
                     <CalendarCheck className="h-5 w-5" />
+                    <span aria-hidden className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-blue-700">
+                    <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-slate-700">
                       {t.tomorrowKicker}
                     </p>
                     <p className="mt-0.5 font-display text-sm font-bold text-slate-900">
@@ -860,7 +881,7 @@ function ClientPreviewInner({
             {t.yourReferralCode}
           </p>
           <div className="mt-2 flex items-center justify-between gap-3">
-            <code className="font-mono text-2xl font-bold tracking-widest text-blue-700">
+            <code className="font-mono text-2xl font-bold tracking-widest text-[#0A0D18]">
               PREVIEW
             </code>
             <button
@@ -940,7 +961,7 @@ function ClientPreviewInner({
             <Link
               href="/client/preview/book"
               title={t.requestCleanerTitle(openCleaner.name)}
-              className="mt-4 flex h-11 items-center justify-center rounded-2xl bg-blue-600 px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)] hover:bg-blue-700"
+              className="mt-4 flex h-11 items-center justify-center rounded-2xl bg-[#0A0D18] px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-12px_rgba(10,13,24,0.5)] hover:bg-[#0A0D18]/90"
               onClick={() => setCleanerOpen(null)}
             >
               {t.requestCleanerCta}
@@ -974,7 +995,7 @@ function ClientPreviewInner({
                   title={t.serviceFilterTitle(f)}
                   className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
                     on
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-[#0A0D18] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -998,7 +1019,7 @@ function ClientPreviewInner({
                 title={n === 0 ? t.minRatingNoFilter : t.minRatingShow(n)}
                 className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold transition ${
                   minStars === n
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#0A0D18] text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -1023,7 +1044,7 @@ function ClientPreviewInner({
                   title={t.availabilityTitle(f)}
                   className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
                     on
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-[#0A0D18] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -1047,7 +1068,7 @@ function ClientPreviewInner({
             type="button"
             onClick={() => setFilterOpen(false)}
             title={t.applyTitle}
-            className="flex-1 rounded-2xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white hover:bg-blue-700"
+            className="flex-1 rounded-2xl bg-[#0A0D18] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white hover:bg-[#0A0D18]/90"
           >
             {t.apply}
           </button>
