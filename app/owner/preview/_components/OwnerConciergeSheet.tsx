@@ -222,7 +222,7 @@ export function OwnerConciergeSheet() {
         onClick={() => setOpen(true)}
         title={t.talkToSofia}
         aria-label={t.openSofia}
-        className={`fixed bottom-20 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(99,102,241,0.65)] transition will-change-transform hover:scale-[1.03] ${
+        className={`fixed bottom-20 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-10px_rgba(10,13,24,0.65)] transition will-change-transform hover:scale-[1.03] ${
           open ? 'pointer-events-none scale-90 opacity-0' : 'opacity-100'
         }`}
         style={{ transitionDuration: '260ms', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
@@ -328,7 +328,7 @@ export function OwnerConciergeSheet() {
                     onClick={close}
                     disabled={!streamingDone}
                     title={picked.action.label}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-blue-600 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-[#0A0D18] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {picked.action.label}
                     <ArrowRight className="h-3.5 w-3.5" />

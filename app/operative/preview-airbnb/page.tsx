@@ -944,9 +944,10 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               <div className="flex items-baseline justify-between gap-3">
                 <dt className="text-[11.5px] text-text-3">{t.weekCardPayout}</dt>
                 <dd
-                  className="font-display text-[15px] font-bold tabular-nums"
-                  style={{ color: '#00D8C7' }}
+                  className="inline-flex items-baseline gap-1.5 font-display text-[15px] font-bold tabular-nums"
+                  style={{ color: '#0A0D18' }}
                 >
+                  <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#00D8C7' }} />
                   £{(weekPayoutPence / 100).toFixed(2)}
                 </dd>
               </div>
@@ -967,8 +968,8 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
             <div className="mt-3 flex items-center gap-3">
               <span
                 aria-hidden
-                className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-display text-[18px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(0,216,199,0.6)]"
-                style={{ backgroundColor: '#00D8C7' }}
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-display text-[18px] font-bold text-white ring-2 ring-[#00D8C7]/40"
+                style={{ backgroundColor: '#0A0D18' }}
               >
                 C
               </span>
@@ -980,9 +981,9 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                   Carmen Ruiz
                 </p>
                 <span
-                  className="mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-                  style={{ backgroundColor: 'rgba(0,216,199,0.12)', color: '#0A0D18' }}
+                  className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-700"
                 >
+                  <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#00D8C7]" />
                   {t.profileRole}
                 </span>
               </div>
@@ -1492,7 +1493,7 @@ function TurnoverCard({
                     type="button"
                     onClick={onUploadPhoto}
                     aria-label={copy.addPhotoAria}
-                    className="grid aspect-square w-full place-items-center rounded-lg border border-dashed border-orange-300 bg-white text-orange-700 transition hover:bg-orange-50"
+                    className="grid aspect-square w-full place-items-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-900 transition hover:border-slate-400 hover:bg-slate-50"
                   >
                     <Camera className="h-5 w-5" />
                   </button>
@@ -1508,11 +1509,11 @@ function TurnoverCard({
               <button
                 type="button"
                 onClick={onCopyLockbox}
-                className="mt-1 inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-white px-3 py-1.5 font-mono text-[14px] font-bold tabular-nums text-orange-800 transition hover:bg-orange-50"
+                className="mt-1 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-[14px] font-bold tabular-nums text-slate-900 transition hover:bg-slate-50"
               >
-                <KeyRound className="h-3.5 w-3.5" />
+                <KeyRound className="h-3.5 w-3.5 text-slate-500" />
                 {task.lockboxCode}
-                <Copy className="h-3 w-3 opacity-60" />
+                <Copy className="h-3 w-3 opacity-50" />
               </button>
               <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-text-3">
                 {copy.hostNotes}
@@ -1538,7 +1539,7 @@ function TurnoverCard({
               <button
                 type="button"
                 onClick={onCheckIn}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-orange-600 px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(234,88,12,0.55)] transition active:scale-[0.99]"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#0A0D18] px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.55)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
               >
                 {copy.checkInAndStart}
               </button>
