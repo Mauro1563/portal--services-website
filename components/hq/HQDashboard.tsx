@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {
   AlertTriangle,
+  Building2,
   Inbox,
   Users,
   TrendingUp,
@@ -440,6 +441,9 @@ export function HQDashboard({
           <div className="flex flex-wrap gap-2">
             <QuickAction href="/hq/leads" icon={Inbox} primary>
               Revisar leads ({kpis.pendingLeads})
+            </QuickAction>
+            <QuickAction href="/hq/company" icon={Building2}>
+              Empresa
             </QuickAction>
             <QuickAction href="/hq/site" icon={Sparkles}>
               Editar sitio

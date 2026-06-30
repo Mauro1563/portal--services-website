@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { AlertTriangle, FileText, Globe, Inbox, Palette, Settings, Users } from 'lucide-react';
+import { AlertTriangle, Building2, FileText, Globe, Inbox, Palette, Settings, Users } from 'lucide-react';
 
 export default function HQError({
   error,
@@ -19,6 +19,7 @@ export default function HQError({
   const sections = [
     { href: '/hq/leads', label: 'Leads', desc: 'Registros y solicitudes', Icon: Inbox },
     { href: '/hq/companies', label: 'Empresas', desc: 'Gestiona los tenants', Icon: Users },
+    { href: '/hq/company', label: 'Empresa', desc: 'Stack, costos, socios y cuentas', Icon: Building2 },
     { href: '/hq/branding', label: 'Branding', desc: 'Logo y colores', Icon: Palette },
     { href: '/hq/site', label: 'Sitio web', desc: 'Textos del marketing', Icon: Globe },
     { href: '/hq/content', label: 'Contenido', desc: 'CMS del sitio', Icon: FileText },
