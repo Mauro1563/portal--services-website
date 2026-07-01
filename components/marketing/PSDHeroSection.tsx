@@ -1,23 +1,28 @@
 /**
  * PSDHeroSection — Portal Services Digital umbrella hero.
  *
- * Modern light hero: white / soft-blue gradient background, midnight
- * H1 with a blue→green gradient accent on the closing word, and two
- * dark solution cards (Workforce blue #2563EB / Home green #10B981)
- * that float over the light band so the composition still feels
- * layered without being oppressive. Ambient blue + green blobs plus a
- * subtle dot grid provide depth without visual weight.
- *
- * Palette:
- *   - Bg: white → slate-50 → blue-50 gradient (no more solid navy).
- *   - H1 body text: slate-900. Accent word: blue→green text gradient.
- *   - Cards: dark navy glass surface with the section palette accents.
- *   - No warm colors, no orange.
+ * Light modern hero: soft blue gradient bg, gradient headline, and
+ * two LIGHT solution cards with per-card accent (Workforce blue,
+ * Home green). Cards are interactive:
+ *   - Persistent CSS-only pulses on the "live" indicator dot.
+ *   - Soft accent-color ring that appears on hover.
+ *   - Icon tile pops (scale + rotate) on hover.
+ *   - Arrow in the CTA slides right on hover.
+ *   - Chip glows when the parent card is hovered.
+ * All animations respect prefers-reduced-motion via media queries
+ * baked into Tailwind's `motion-reduce:` variant.
  */
 
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { ArrowRight, Users, Home as HomeIcon, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  Users,
+  Home as HomeIcon,
+  Sparkles,
+  TrendingUp,
+  Activity,
+} from 'lucide-react';
 
 export default async function PSDHeroSection() {
   const t = await getTranslations('psd.landing.hero');
@@ -30,11 +35,13 @@ export default async function PSDHeroSection() {
       {/* Ambient depth — cool blobs bring life without darkening */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -right-32 h-[28rem] w-[28rem] rounded-full bg-[#2563EB]/12 blur-3xl"
+        className="pointer-events-none absolute -top-40 -right-32 h-[28rem] w-[28rem] rounded-full bg-[#2563EB]/12 blur-3xl motion-safe:animate-pulse"
+        style={{ animationDuration: '6s' }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-[#10B981]/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-[#10B981]/10 blur-3xl motion-safe:animate-pulse"
+        style={{ animationDuration: '7s', animationDelay: '1s' }}
       />
       <div
         aria-hidden
@@ -49,10 +56,13 @@ export default async function PSDHeroSection() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-28">
-        {/* Eyebrow */}
+        {/* Eyebrow with a live pulse dot */}
         <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700 shadow-sm backdrop-blur">
           <Sparkles className="h-3 w-3 text-[#10B981]" aria-hidden />
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60 motion-safe:animate-ping" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+          </span>
           {t('eyebrow')}
         </span>
 
@@ -69,59 +79,184 @@ export default async function PSDHeroSection() {
           {t('subtitle')}
         </p>
 
-        {/* Two solution cards — dark glass, still floats over light bg */}
+        {/* Two solution cards — LIGHT surfaces with per-accent interactivity */}
         <div className="mt-12 grid gap-5 md:grid-cols-2">
-          {/* Workforce (blue accent) */}
-          <div className="group relative overflow-hidden rounded-2xl border border-[#2563EB]/30 bg-gradient-to-br from-[#0F172A] to-[#0B2A6B] p-6 shadow-psd-blue-glow ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:border-[#2563EB]/60 hover:shadow-[0_18px_40px_-12px_rgba(37,99,235,0.4)]">
-            <div className="relative flex items-center justify-between">
-              <span className="inline-flex items-center rounded-full bg-[#2563EB]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#93C5FD]">
-                Workforce
-              </span>
-              <Users className="h-5 w-5 text-[#2563EB]" aria-hidden />
-            </div>
-            <h2 className="font-display mt-6 text-2xl font-bold text-white">
-              {t('workforce.title')}
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/75">
-              {t('workforce.body')}
-            </p>
-            <div className="mt-5">
-              <Link
-                href="#soluciones"
-                className="inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B2A6B]"
-              >
-                {t('workforce.cta')}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </Link>
-            </div>
-          </div>
-
-          {/* Home (green accent) */}
-          <div className="group relative overflow-hidden rounded-2xl border border-[#10B981]/30 bg-gradient-to-br from-[#0F172A] to-[#064E3B] p-6 shadow-psd-teal-glow ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:border-[#10B981]/60 hover:shadow-[0_18px_40px_-12px_rgba(16,185,129,0.4)]">
-            <div className="relative flex items-center justify-between">
-              <span className="inline-flex items-center rounded-full bg-[#10B981]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#6EE7B7]">
-                Home
-              </span>
-              <HomeIcon className="h-5 w-5 text-[#10B981]" aria-hidden />
-            </div>
-            <h2 className="font-display mt-6 text-2xl font-bold text-white">
-              {t('home.title')}
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/75">
-              {t('home.body')}
-            </p>
-            <div className="mt-5">
-              <Link
-                href="#home-solution"
-                className="inline-flex items-center gap-2 rounded-full bg-[#10B981] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#059669] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B2A6B]"
-              >
-                {t('home.cta')}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </Link>
-            </div>
-          </div>
+          <SolutionCard
+            accent="blue"
+            eyebrow="Workforce"
+            title={t('workforce.title')}
+            body={t('workforce.body')}
+            cta={t('workforce.cta')}
+            href="#soluciones"
+            Icon={Users}
+            LiveIcon={Activity}
+            liveText="+59 live"
+          />
+          <SolutionCard
+            accent="green"
+            eyebrow="Home"
+            title={t('home.title')}
+            body={t('home.body')}
+            cta={t('home.cta')}
+            href="#home-solution"
+            Icon={HomeIcon}
+            LiveIcon={TrendingUp}
+            liveText="+12 hoy"
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+type Accent = 'blue' | 'green';
+
+const PALETTE: Record<
+  Accent,
+  {
+    dot: string;
+    chipBg: string;
+    chipText: string;
+    ring: string;
+    iconTileBg: string;
+    iconTileText: string;
+    ctaBg: string;
+    ctaHover: string;
+    glow: string;
+  }
+> = {
+  blue: {
+    dot: '#2563EB',
+    chipBg: '#2563EB1a', // 10% alpha
+    chipText: '#1D4ED8',
+    ring: '#2563EB',
+    iconTileBg: '#EFF6FF',
+    iconTileText: '#2563EB',
+    ctaBg: '#2563EB',
+    ctaHover: '#1D4ED8',
+    glow: 'rgba(37,99,235,0.18)',
+  },
+  green: {
+    dot: '#10B981',
+    chipBg: '#10B9811a',
+    chipText: '#059669',
+    ring: '#10B981',
+    iconTileBg: '#ECFDF5',
+    iconTileText: '#10B981',
+    ctaBg: '#10B981',
+    ctaHover: '#059669',
+    glow: 'rgba(16,185,129,0.18)',
+  },
+};
+
+function SolutionCard({
+  accent,
+  eyebrow,
+  title,
+  body,
+  cta,
+  href,
+  Icon,
+  LiveIcon,
+  liveText,
+}: {
+  accent: Accent;
+  eyebrow: string;
+  title: string;
+  body: string;
+  cta: string;
+  href: string;
+  Icon: typeof Users;
+  LiveIcon: typeof Activity;
+  liveText: string;
+}) {
+  const p = PALETTE[accent];
+
+  return (
+    <div
+      className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-xl motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      style={{
+        // Custom hover ring + shadow tinted with the accent
+        // (Tailwind arbitrary values would inflate the class name)
+        boxShadow: `0 1px 2px rgba(15,23,42,0.04)`,
+      }}
+    >
+      {/* Accent halo that appears on hover */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition duration-500 group-hover:opacity-100"
+        style={{
+          boxShadow: `0 22px 60px -20px ${p.glow}, inset 0 0 0 1px ${p.ring}66`,
+        }}
+      />
+
+      {/* Row 1: chip + live pulse + icon */}
+      <div className="relative flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest transition group-hover:brightness-110"
+            style={{ backgroundColor: p.chipBg, color: p.chipText }}
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span
+                className="absolute inline-flex h-full w-full rounded-full opacity-60 motion-safe:animate-ping"
+                style={{ backgroundColor: p.dot }}
+              />
+              <span
+                className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: p.dot }}
+              />
+            </span>
+            {eyebrow}
+          </span>
+          {/* Live counter chip — gives the card a heartbeat */}
+          <span
+            className="hidden items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 sm:inline-flex"
+            title="Live activity"
+          >
+            <LiveIcon
+              className="h-3 w-3 transition motion-safe:group-hover:animate-pulse"
+              style={{ color: p.dot }}
+            />
+            {liveText}
+          </span>
+        </div>
+
+        {/* Icon tile — scales and rotates on hover */}
+        <span
+          className="grid h-11 w-11 place-items-center rounded-xl transition duration-500 group-hover:scale-110 group-hover:rotate-[-6deg] motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0"
+          style={{ backgroundColor: p.iconTileBg, color: p.iconTileText }}
+        >
+          <Icon className="h-5 w-5" aria-hidden />
+        </span>
+      </div>
+
+      {/* Title */}
+      <h2 className="font-display mt-6 text-2xl font-bold text-slate-900">
+        {title}
+      </h2>
+
+      {/* Body */}
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">{body}</p>
+
+      {/* CTA — arrow slides right on hover */}
+      <div className="mt-6">
+        <Link
+          href={href}
+          className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+          style={{
+            backgroundColor: p.ctaBg,
+            // The style prop can't do :hover — the group-hover on the
+            // arrow below handles the visible interaction.
+          }}
+        >
+          {cta}
+          <ArrowRight
+            className="h-4 w-4 transition duration-300 group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0"
+            aria-hidden
+          />
+        </Link>
+      </div>
+    </div>
   );
 }
