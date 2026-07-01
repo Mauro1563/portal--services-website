@@ -505,6 +505,72 @@
           "chat": { "title": "Chat integrado", "body": "Habla con el rol correcto en un toque. Sin grupos de WhatsApp, sin hilos perdidos." },
           "exports": { "title": "Exportaciones y reportes", "body": "CSV, PDF y API. Conecta con tu BI o contabilidad favorita." }
         }
+      },
+      "demos": {
+        "eyebrow": "Demos en vivo",
+        "title": "Prueba el producto real — sin registro",
+        "subtitle": "Cada tarjeta abajo entra a un preview real de la app con datos de ejemplo. Nada se graba, nada se comparte.",
+        "workforceSub": "Siete portales por rol. Explora cada uno con datos de ejemplo.",
+        "homeSub": "Residencial + turnovers de Airbnb.",
+        "note": "Los demos con candado requieren login de demo — escríbenos y lo activamos."
+      },
+      "contact": {
+        "eyebrow": "Hablemos",
+        "title": "¿Listo para verlo con tu equipo?",
+        "subtitle": "Reserva un walkthrough de 20 minutos o déjanos un mensaje. Respondemos en un día laborable.",
+        "bullets": {
+          "fast": "Respuesta en un día laborable, garantizado",
+          "noSpam": "Sin spam, sin seguimientos no solicitados",
+          "gdpr": "GDPR — tus datos siguen siendo tuyos"
+        },
+        "form": {
+          "name": "Nombre completo",
+          "namePh": "María García",
+          "email": "Email de trabajo",
+          "emailPh": "tu@tuempresa.com",
+          "company": "Empresa",
+          "companyPh": "Tu empresa o equipo",
+          "solution": "¿Qué solución?",
+          "solutionAny": "Aún no lo sé",
+          "solutionBoth": "Ambas — hablemos",
+          "message": "Cuéntanos más (opcional)",
+          "messagePh": "Tamaño de equipo, ciudades, herramientas actuales…",
+          "submit": "Enviar mensaje",
+          "submitting": "Enviando…",
+          "successTitle": "Mensaje enviado",
+          "successBody": "Gracias — te respondemos en un día laborable.",
+          "errors": {
+            "name": "Por favor ingresa tu nombre completo.",
+            "email": "Ese email no parece válido.",
+            "company": "Por favor ingresa el nombre de tu empresa.",
+            "server": "No pudimos guardar tu mensaje. Inténtalo de nuevo."
+          }
+        }
+      },
+      "footer": {
+        "tagline": "La plataforma operativa para servicios y hogar. Una marca, dos soluciones.",
+        "solutions": {
+          "title": "Soluciones",
+          "workforce": "Workforce",
+          "home": "Home",
+          "demos": "Demos en vivo",
+          "features": "Características"
+        },
+        "company": {
+          "title": "Empresa",
+          "about": "Nosotros",
+          "contact": "Contacto",
+          "requestDemo": "Solicitar demo"
+        },
+        "legal": {
+          "title": "Legal",
+          "privacy": "Privacidad",
+          "terms": "Términos",
+          "security": "Seguridad",
+          "cookies": "Cookies"
+        },
+        "rights": "Todos los derechos reservados.",
+        "domain": "portalservices.digital"
       }
     },
     "nav": {

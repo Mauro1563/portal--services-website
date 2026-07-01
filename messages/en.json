@@ -495,6 +495,72 @@
           "chat": { "title": "In-app chat", "body": "Message the right role in one tap. No WhatsApp groups, no lost threads." },
           "exports": { "title": "Exports & reporting", "body": "CSV, PDF and API. Pipe data to your BI or accounting tool of choice." }
         }
+      },
+      "demos": {
+        "eyebrow": "Live demos",
+        "title": "Try the actual product — no sign-up",
+        "subtitle": "Every card below opens a real preview of the app with sample data. Nothing is recorded, nothing shared.",
+        "workforceSub": "Seven role-specific portals. Explore each with sample data.",
+        "homeSub": "Residential + Airbnb turnover experiences.",
+        "note": "Some demos marked with a lock require a demo login — write to us and we'll set it up."
+      },
+      "contact": {
+        "eyebrow": "Get in touch",
+        "title": "Ready to see it on your team?",
+        "subtitle": "Book a 20-minute walkthrough or drop us a message. We'll get back within one business day.",
+        "bullets": {
+          "fast": "One business-day reply, guaranteed",
+          "noSpam": "No spam, no unsolicited follow-ups",
+          "gdpr": "GDPR compliant — your data stays yours"
+        },
+        "form": {
+          "name": "Full name",
+          "namePh": "Maria García",
+          "email": "Work email",
+          "emailPh": "you@yourcompany.com",
+          "company": "Company",
+          "companyPh": "Your company or team",
+          "solution": "Which solution?",
+          "solutionAny": "I'm not sure yet",
+          "solutionBoth": "Both — let's talk",
+          "message": "Tell us more (optional)",
+          "messagePh": "Team size, cities, current tools…",
+          "submit": "Send message",
+          "submitting": "Sending…",
+          "successTitle": "Message sent",
+          "successBody": "Thanks — we'll get back to you within one business day.",
+          "errors": {
+            "name": "Please enter your full name.",
+            "email": "That email doesn't look right.",
+            "company": "Please enter your company name.",
+            "server": "We couldn't save your message. Please try again."
+          }
+        }
+      },
+      "footer": {
+        "tagline": "The operations platform for services and home. One brand, two solutions.",
+        "solutions": {
+          "title": "Solutions",
+          "workforce": "Workforce",
+          "home": "Home",
+          "demos": "Live demos",
+          "features": "Features"
+        },
+        "company": {
+          "title": "Company",
+          "about": "About",
+          "contact": "Contact",
+          "requestDemo": "Request a demo"
+        },
+        "legal": {
+          "title": "Legal",
+          "privacy": "Privacy",
+          "terms": "Terms",
+          "security": "Security",
+          "cookies": "Cookies"
+        },
+        "rights": "All rights reserved.",
+        "domain": "portalservices.digital"
       }
     },
     "nav": {

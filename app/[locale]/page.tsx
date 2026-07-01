@@ -5,10 +5,11 @@ import PSDWorkforceSection from '@/components/marketing/PSDWorkforceSection';
 import PSDHomeSection from '@/components/marketing/PSDHomeSection';
 import PSDComparisonSection from '@/components/marketing/PSDComparisonSection';
 import PSDFeaturesGrid from '@/components/marketing/PSDFeaturesGrid';
+import PSDDemosSection from '@/components/marketing/PSDDemosSection';
+import PSDContactSection from '@/components/marketing/PSDContactSection';
+import PSDFooter from '@/components/marketing/PSDFooter';
 import PricingSection from '@/components/marketing/PricingSection';
-import TestimonialsSection from '@/components/marketing/TestimonialsSection';
 import FaqSection from '@/components/marketing/FaqSection';
-import FooterSection from '@/components/marketing/FooterSection';
 
 export default function LocaleHome() {
   return (
@@ -20,10 +21,11 @@ export default function LocaleHome() {
       <PSDHomeSection />
       <PSDComparisonSection />
       <PSDFeaturesGrid />
+      <PSDDemosSection />
       <PricingSection />
-      <TestimonialsSection />
       <FaqSection />
-      <FooterSection />
+      <PSDContactSection />
+      <PSDFooter />
     </main>
   );
 }
