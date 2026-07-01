@@ -57,9 +57,9 @@ const TAGLINE_TEXT_SIZE: Record<
   NonNullable<PortalServicesLogoProps['size']>,
   string
 > = {
-  sm: 'text-[8px]',
-  md: 'text-[9.5px]',
-  lg: 'text-[11px]',
+  sm: 'text-[7px]',
+  md: 'text-[8.5px]',
+  lg: 'text-[10px]',
 };
 
 // Exact palette colors — no filter math involved. Adjust here to shift
