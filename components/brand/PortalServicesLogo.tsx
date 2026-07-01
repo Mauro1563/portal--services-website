@@ -1,25 +1,18 @@
-'use client';
-
-import Image from 'next/image';
-import type { CSSProperties } from 'react';
-
 /**
  * PortalServicesLogo
  *
- * Renders the Portal Services Digital brand lockup using the master PNG
- * asset located at `/public/brand/portal-services-logo.png`.
+ * Renders the Portal Services Digital brand mark using
+ * `/public/brand/portal-services-logo.png` as a CSS mask, so the
+ * silhouette of the PNG is painted with an exact palette color instead
+ * of relying on a CSS filter chain (which was producing a purple tint
+ * because chrome/silver → hue-rotate is imprecise).
  *
  * Variants:
- * - `light`: The logo is displayed as-is with its native chrome/silver
- *   finish. Use this on dark surfaces (navy, black, hero backgrounds)
- *   where the metallic gradient reads well.
- * - `dark`: The logo is tinted deep navy via a CSS filter chain
- *   (invert + sepia + hue-rotate + saturate) so it reads as a solid
- *   navy mark. Use this on light surfaces (white, cream, gray-50)
- *   where the chrome would otherwise disappear.
- * - `auto`: Falls back to `dark` tinting by default, but is intended
- *   to be used in components that inherit `currentColor` context
- *   (e.g. inside a themed header). Prefer explicit variants when the
+ * - `light`: mark is painted white (`#F8FAFC`) — use on dark surfaces
+ *   (navy hero, footer).
+ * - `dark`:  mark is painted deep navy (`#0B2A6B`) — use on light
+ *   surfaces (white nav, cream card).
+ * - `auto`:  defaults to `dark`. Prefer explicit variants when the
  *   surface color is known at authoring time.
  *
  * Sizes map to the vertical height of the mark:
@@ -30,6 +23,9 @@ import type { CSSProperties } from 'react';
  * The wordmark "Portal Services Digital" renders adjacent to the mark
  * unless `showWordmark` is set to `false` (icon-only usage).
  */
+
+import type { CSSProperties } from 'react';
+
 export interface PortalServicesLogoProps {
   variant?: 'auto' | 'light' | 'dark';
   size?: 'sm' | 'md' | 'lg';
@@ -52,12 +48,12 @@ const WORDMARK_TEXT_SIZE: Record<
   lg: 'text-xl',
 };
 
-// Filter chain that converts the chrome/silver artwork to the Portal
-// Services navy (#0B2A6B). The invert flips lights to darks, sepia
-// provides a warm base, and the hue-rotate/saturate combination pulls
-// the tone toward navy without washing out edges.
-const NAVY_TINT_FILTER =
-  'brightness(0) saturate(100%) invert(13%) sepia(58%) saturate(3200%) hue-rotate(220deg) brightness(92%) contrast(101%)';
+// Exact palette colors — no filter math involved. What you set here is
+// what you see. Adjust here to move the entire brand mark's tint site-wide.
+const DARK_COLOR = '#0B2A6B'; // navy on light surfaces
+const LIGHT_COLOR = '#F8FAFC'; // near-white on dark surfaces
+
+const MASK_URL = "url('/brand/portal-services-logo.png')";
 
 export function PortalServicesLogo({
   variant = 'auto',
@@ -67,13 +63,26 @@ export function PortalServicesLogo({
 }: PortalServicesLogoProps) {
   const pxSize = SIZE_PX[size];
 
-  // `auto` defaults to the dark tint since the majority of marketing
-  // surfaces are light. Consumers that need chrome-on-dark should pass
-  // `variant="light"` explicitly.
   const resolvedVariant = variant === 'auto' ? 'dark' : variant;
+  const markColor = resolvedVariant === 'dark' ? DARK_COLOR : LIGHT_COLOR;
 
-  const markStyle: CSSProperties =
-    resolvedVariant === 'dark' ? { filter: NAVY_TINT_FILTER } : {};
+  // Mask-based render: the PNG's alpha channel dictates the shape, the
+  // background-color paints it in the exact palette hue. No filter, no
+  // hue drift.
+  const markStyle: CSSProperties = {
+    display: 'inline-block',
+    width: pxSize,
+    height: pxSize,
+    backgroundColor: markColor,
+    WebkitMaskImage: MASK_URL,
+    maskImage: MASK_URL,
+    WebkitMaskSize: 'contain',
+    maskSize: 'contain',
+    WebkitMaskRepeat: 'no-repeat',
+    maskRepeat: 'no-repeat',
+    WebkitMaskPosition: 'center',
+    maskPosition: 'center',
+  };
 
   const wordmarkColor =
     resolvedVariant === 'dark' ? 'text-[#0B2A6B]' : 'text-white';
@@ -89,19 +98,7 @@ export function PortalServicesLogo({
         .filter(Boolean)
         .join(' ')}
     >
-      <Image
-        src="/brand/portal-services-logo.png"
-        alt=""
-        aria-hidden="true"
-        width={pxSize}
-        height={pxSize}
-        priority
-        style={{
-          height: pxSize,
-          width: 'auto',
-          ...markStyle,
-        }}
-      />
+      <span aria-hidden="true" style={markStyle} />
       {showWordmark && (
         <span
           className={[
