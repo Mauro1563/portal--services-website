@@ -72,8 +72,17 @@ const config: Config = {
           blue: '#2563EB',
           // Cool accents
           cyan: '#06B6D4',
-          // Teal-cold — Home accent (kept within blue family)
+          // Teal-cold — legacy Home accent (kept for compatibility with
+          // earlier components; new Home CTAs use `green` below).
           teal: '#0EA5A4',
+          // Green family — Home accent + primary CTAs across the site
+          // (introduced by the v2 brief which specified blue + green as
+          // the only allowed families).
+          green: {
+            500: '#10B981', // primary CTA / Home accent
+            600: '#059669', // hover / deep CTA
+            300: '#6EE7B7', // chip text on dark surfaces
+          },
         },
       },
       backgroundImage: {
@@ -103,6 +112,8 @@ const config: Config = {
           '0 10px 28px -8px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.12)',
         'psd-teal-glow':
           '0 10px 28px -8px rgba(14,165,164,0.32), inset 0 1px 0 rgba(255,255,255,0.12)',
+        'psd-green-glow':
+          '0 10px 28px -8px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
         'psd-navy-card': '0 20px 40px -20px rgba(11,42,107,0.35)',
       },
       animation: {
