@@ -18,10 +18,11 @@ import { Menu, X } from 'lucide-react';
 import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
-type NavItem = { href: string; key: 'solutions' | 'features' | 'demos' | 'about' | 'contact' };
+type NavItem = { href: string; key: 'solutions' | 'chat' | 'features' | 'demos' | 'about' | 'contact' };
 
 const ITEMS: NavItem[] = [
   { href: '#soluciones', key: 'solutions' },
+  { href: '#chat', key: 'chat' },
   { href: '#features', key: 'features' },
   { href: '#demos', key: 'demos' },
   { href: '/company', key: 'about' },

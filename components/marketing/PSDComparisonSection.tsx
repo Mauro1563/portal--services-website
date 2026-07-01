@@ -2,7 +2,7 @@
  * PSDComparisonSection — "¿Cuál es para ti?" side-by-side comparison.
  *
  * Table-style layout with two columns: Workforce (blue #2563EB accent)
- * and Home (teal-cold #0EA5A4 accent). Rows compare who it's for, key
+ * and Home (green #10B981 accent). Rows compare who it's for, key
  * capability, deployment size, integrations and price entry.
  */
 
@@ -52,7 +52,7 @@ export default async function PSDComparisonSection() {
             </div>
             {/* Home column header */}
             <div className="border-b border-slate-200 bg-slate-50 p-6 text-center md:border-b-0 md:border-l md:border-slate-200">
-              <div className="mx-auto grid h-10 w-10 place-items-center rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4]">
+              <div className="mx-auto grid h-10 w-10 place-items-center rounded-full bg-[#10B981]/10 text-[#10B981]">
                 <Home className="h-5 w-5" aria-hidden />
               </div>
               <p className="mt-3 font-display text-lg font-bold text-slate-900">
@@ -81,7 +81,7 @@ export default async function PSDComparisonSection() {
                   key={`${row}-home`}
                   className="border-t border-slate-200 bg-slate-50/40 p-4 text-sm text-slate-800 md:border-l md:border-slate-200 md:p-5"
                 >
-                  <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-[#0EA5A4] md:hidden">
+                  <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-[#10B981] md:hidden">
                     Home
                   </span>
                   {t(`rows.${row}.home`)}
@@ -116,7 +116,7 @@ export default async function PSDComparisonSection() {
           </Link>
           <Link
             href="#home-solution"
-            className="inline-flex items-center gap-2 rounded-full bg-[#0EA5A4] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0F766E]"
+            className="inline-flex items-center gap-2 rounded-full bg-[#10B981] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#059669]"
           >
             {t('ctaHome')}
           </Link>

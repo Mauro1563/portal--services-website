@@ -2,7 +2,7 @@
  * PSDHeroSection — Portal Services Digital umbrella hero.
  *
  * Server component. Dark navy surface (#0B2A6B) with two solution cards:
- * Workforce (blue #2563EB) and Home (cool teal #0EA5A4). Trust hints
+ * Workforce (blue #2563EB) and Home (cool teal #10B981). Trust hints
  * strip below reads TRUST_METRICS from lib/marketing-config so anonymous
  * metrics can be edited without touching this file.
  *
@@ -88,12 +88,12 @@ export default async function PSDHeroSection() {
           </div>
 
           {/* Home (teal-cold accent, kept in blue family) */}
-          <div className="group relative overflow-hidden rounded-2xl border border-[#0EA5A4]/40 bg-white/5 p-6 shadow-psd-teal-glow ring-1 ring-white/10 backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-[#0EA5A4]/70">
+          <div className="group relative overflow-hidden rounded-2xl border border-[#10B981]/40 bg-white/5 p-6 shadow-psd-teal-glow ring-1 ring-white/10 backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-[#10B981]/70">
             <div className="relative flex items-center justify-between">
-              <span className="inline-flex items-center rounded-full bg-[#0EA5A4]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#5EEAD4]">
+              <span className="inline-flex items-center rounded-full bg-[#10B981]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#6EE7B7]">
                 Home
               </span>
-              <HomeIcon className="h-5 w-5 text-[#0EA5A4]" aria-hidden />
+              <HomeIcon className="h-5 w-5 text-[#10B981]" aria-hidden />
             </div>
             <h2 className="font-display mt-6 text-2xl font-bold text-white">
               {t('home.title')}
@@ -104,7 +104,7 @@ export default async function PSDHeroSection() {
             <div className="mt-5">
               <Link
                 href="#soluciones"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0EA5A4] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0F766E] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B2A6B]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#10B981] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#059669] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B2A6B]"
               >
                 {t('home.cta')}
                 <ArrowRight className="h-4 w-4" aria-hidden />
