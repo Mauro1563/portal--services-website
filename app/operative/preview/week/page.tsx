@@ -27,7 +27,7 @@ import {
   X,
 } from 'lucide-react';
 import { pickCopy, useClientLocale, type ClientLocale } from '@/lib/use-locale-client';
-import { ZapliLogo } from '@/components/brand/ZapliLogo';
+import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { PreviewBottomTabBar } from '@/components/preview/PreviewBottomTabBar';
 import {
   WEEK_DAYS,
@@ -381,7 +381,7 @@ export default function OperativePreviewWeek() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <ZapliLogo size="sm" />
+          <PortalServicesLogo variant="dark" size="sm" showWordmark showTagline={false} />
           <button
             type="button"
             onClick={refresh}

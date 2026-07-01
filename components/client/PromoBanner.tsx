@@ -31,7 +31,7 @@ export function PromoBanner({
     >
       {/* Brand-driven swatch — uses the owner's --brand-primary / secondary
           when mounted under <BrandThemeProvider>; falls back to blue/cyan
-          Zapli defaults everywhere else. */}
+          Portal Services defaults everywhere else. */}
       <span className="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-on-brand shadow-[0_8px_18px_-8px_rgba(15,23,42,0.35)]">
         <Gift className="h-5 w-5" />
       </span>

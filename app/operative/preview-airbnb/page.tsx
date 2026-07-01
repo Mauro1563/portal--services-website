@@ -792,7 +792,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               done. Built inline (not reusing PreviewEarningsStrip) because
               that component is locked to the Hogar emerald palette and
               also depends on the EarningsAnimationProvider, which we
-              don't mount on this route. Tiles use the Zapli teal accent
+              don't mount on this route. Tiles use the Portal Services green accent
               (#00D8C7) to differentiate from in-card orange chrome while
               keeping numbers high-contrast on midnight #0A0D18. */}
           <section

@@ -19,7 +19,7 @@ const MONTH = [
 ];
 
 /**
- * "Tu Agenda Hoy" header — compact light card on the Zapli palette
+ * "Tu Agenda Hoy" header — compact light card on the Portal Services palette
  * (white surface + teal accents) so it sits in the same family as the
  * earnings card and "Next stop" card beneath it instead of crashing in
  * as a dark slab.

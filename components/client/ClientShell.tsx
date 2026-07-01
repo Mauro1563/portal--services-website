@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { ZapliLogo } from '@/components/brand/ZapliLogo';
+import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import type { ClientContext } from '@/lib/client-auth';
 import { ClientTabBar, type Tab } from './ClientTabBar';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 /**
  * Mobile-first shell for the client portal. Uses the owner's white-label
- * logo if available; otherwise falls back to the Zapli
- * brand. Light theme. Fixed bottom tab bar for the four primary views.
+ * logo if available; otherwise falls back to the Portal Services Digital
+ * brand mark. Light theme. Fixed bottom tab bar for the four primary views.
  */
 export function ClientShell({
   ctx,
@@ -65,7 +65,7 @@ export function ClientShell({
                 className="h-6 w-auto max-w-[140px] object-contain"
               />
             ) : (
-              <ZapliLogo size="sm" />
+              <PortalServicesLogo variant="dark" size="sm" showWordmark showTagline={false} />
             )}
 
             {/* Locale switcher pinned to the top-right of the client header.

@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { ArrowLeft, Sparkles } from 'lucide-react';
+import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 
 /**
  * Slim top strip mounted above every /<portal>/preview route via a layout.
  * Keeps the portal's own header intact (some have the white-label logo
  * centered) but adds two things prospects need:
- *   • Zapli wordmark in the LEFT corner so the brand is always visible
- *   • a clear "Volver al sitio" link in the RIGHT corner to bounce back
+ *   • Portal Services Digital wordmark in the LEFT corner so the brand
+ *     is always visible.
+ *   • A clear "Volver al sitio" link in the RIGHT corner to bounce back
  *     to the marketing landing without hunting for the browser back button.
  * The center "DEMO" badge makes it obvious that data is mocked.
  */
@@ -30,27 +32,30 @@ export function DemoTopBar({
     client: 'Client',
   }[portal];
 
+  // All three previews live inside "Portal Services: Home" per the
+  // umbrella brand, so tones are kept inside the Home green family +
+  // navy for the management-facing owner view.
   const tone = {
-    owner: 'bg-slate-900 text-cyan-300',
-    cleaner: 'bg-emerald-600 text-emerald-50',
-    client: 'bg-[#00D8C7] text-[#0A0D18]',
+    owner: 'bg-[#0B2A6B] text-white',
+    cleaner: 'bg-[#10B981] text-white',
+    client: 'bg-[#059669] text-white',
   }[portal];
 
   return (
     <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-12 max-w-md items-center justify-between gap-2 px-3 sm:max-w-2xl">
-        {/* Left — wordmark, always in the corner */}
+        {/* Left — Portal Services Digital wordmark */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 -ml-1 rounded-md px-1.5 py-1 text-slate-900 transition hover:bg-slate-100"
-          aria-label="Zapli"
+          className="inline-flex items-center gap-1.5 -ml-1 rounded-md px-1.5 py-1 transition hover:bg-slate-100"
+          aria-label="Portal Services Digital"
         >
-          <span className="grid h-6 w-6 place-items-center rounded-md bg-[#00D8C7] text-[10px] font-bold text-[#0A0D18]">
-            Z
-          </span>
-          <span className="font-display text-[12px] font-semibold leading-none">
-            Zapli
-          </span>
+          <PortalServicesLogo
+            variant="dark"
+            size="sm"
+            showWordmark
+            showTagline={false}
+          />
         </Link>
 
         {/* Center — DEMO badge */}
@@ -64,7 +69,7 @@ export function DemoTopBar({
         {/* Right — back to marketing */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/40"
+          className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
         >
           <ArrowLeft className="h-3 w-3" />
           <span className="hidden sm:inline">Volver al sitio</span>
