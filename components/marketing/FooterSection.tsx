@@ -181,14 +181,14 @@ export default async function FooterSection() {
           {/* Sparse teal accent — single subtle glow, not a flood */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-[#00D8C7]/10 blur-3xl"
+            className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-[#10B981]/10 blur-3xl"
           />
 
           <div className="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               {/* Eyebrow chip on dark — muted white surface with tiny teal sparkle */}
               <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10 backdrop-blur">
-                <Sparkles className="h-3 w-3 text-[#00D8C7]" aria-hidden="true" />
+                <Sparkles className="h-3 w-3 text-[#10B981]" aria-hidden="true" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
                   {t.ctaEyebrow}
                 </span>
@@ -209,7 +209,7 @@ export default async function FooterSection() {
               {/* PRIMARY CTA on dark surface — bright teal fill + midnight text + glow (rule 2) */}
               <Link
                 href="/signup"
-                className="group inline-flex items-center gap-2 rounded-full bg-[#00D8C7] px-5 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] ring-1 ring-[#00D8C7]/40 transition hover:bg-[#2BF0DE] sm:px-7 sm:py-4 sm:text-base"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#10B981] px-5 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_0_24px_rgba(0,216,199,0.45)] ring-1 ring-[#10B981]/40 transition hover:bg-[#2BF0DE] sm:px-7 sm:py-4 sm:text-base"
               >
                 {t.ctaPrimary}
                 <ArrowRight

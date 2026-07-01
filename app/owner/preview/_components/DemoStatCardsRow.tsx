@@ -92,38 +92,39 @@ type StatProps = {
   animateMoney?: boolean;
 };
 
-// All stat-card icons share the same neutral slate chip on white. Status
-// colour (success/warn/error) is reserved for delta chips / live dots —
-// decorative per-card accent colours were dropped to keep the palette
-// disciplined (slate + a teal micro-accent dot).
+// Per-card accent tile keyed to the metric family. Palette stays inside
+// brand (blue/green) + softened secondaries (amber warning, rose loss) so
+// the row reads as one system while each metric carries its own hint.
+// The status colour role (delta chip) still lives separately in emerald/
+// rose regardless of the tile accent.
 const ACCENT: Record<
   StatProps['accent'],
   { iconBg: string; iconText: string; ring: string }
 > = {
   brand: {
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
-    ring: 'ring-slate-200',
+    iconBg: 'bg-gradient-to-br from-[#EFF6FF] to-[#DBEAFE]',
+    iconText: 'text-[#2563EB]',
+    ring: 'ring-[#2563EB]/15',
   },
   emerald: {
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
-    ring: 'ring-slate-200',
+    iconBg: 'bg-gradient-to-br from-[#ECFDF5] to-[#D1FAE5]',
+    iconText: 'text-[#10B981]',
+    ring: 'ring-[#10B981]/15',
   },
   amber: {
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
-    ring: 'ring-slate-200',
+    iconBg: 'bg-gradient-to-br from-[#FFFBEB] to-[#FEF3C7]',
+    iconText: 'text-[#D97706]',
+    ring: 'ring-[#D97706]/15',
   },
   violet: {
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
-    ring: 'ring-slate-200',
+    iconBg: 'bg-gradient-to-br from-[#F5F3FF] to-[#EDE9FE]',
+    iconText: 'text-[#7C3AED]',
+    ring: 'ring-[#7C3AED]/15',
   },
   rose: {
-    iconBg: 'bg-slate-100',
-    iconText: 'text-slate-700',
-    ring: 'ring-slate-200',
+    iconBg: 'bg-gradient-to-br from-[#FFF1F2] to-[#FFE4E6]',
+    iconText: 'text-[#E11D48]',
+    ring: 'ring-[#E11D48]/15',
   },
 };
 
@@ -204,10 +205,10 @@ function StatCardInner({
           className={`relative grid h-8 w-8 shrink-0 place-items-center rounded-lg sm:h-9 sm:w-9 sm:rounded-xl ${cls.iconBg} ${cls.iconText} ring-1 ${cls.ring}`}
         >
           <Icon className="h-4 w-4" />
-          {/* Teal micro-accent dot — the only colour pop on the card. */}
+          {/* Green micro-accent dot — brand pulse on the tile. */}
           <span
             aria-hidden
-            className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+            className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-[#10B981] shadow-[0_0_6px_rgba(16,185,129,0.6)]"
           />
         </span>
         {delta ? (

@@ -41,12 +41,12 @@ export function EarningsStrip({
       aria-label="Ver desglose de ganancias"
       className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)] transition hover:border-slate-300 hover:shadow-md"
     >
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#0A0D18] text-white ring-1 ring-[#00D8C7]/40">
+      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#0A0D18] text-white ring-1 ring-[#10B981]/40">
         <Coins className="h-5 w-5" />
       </span>
       <div className="min-w-0 flex-1">
         <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
-          <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+          <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
           Ganado hoy
         </p>
         {isEmpty ? (

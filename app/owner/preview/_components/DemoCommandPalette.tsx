@@ -325,7 +325,7 @@ export function DemoCommandPalette() {
         aria-label={t.openQuick}
         className="fixed bottom-20 right-4 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-[#0A0D18] px-4 text-[12.5px] font-semibold text-white shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] transition hover:scale-[1.02] active:scale-95"
       >
-        <Mic className="h-4 w-4 text-[#00D8C7]" />
+        <Mic className="h-4 w-4 text-[#10B981]" />
         <span>{t.voice}</span>
         <kbd className="hidden rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-mono text-white/80 sm:inline">⌘K</kbd>
       </button>
@@ -352,13 +352,13 @@ export function DemoCommandPalette() {
               {bars.map((v, i) => (
                 <span
                   key={i}
-                  className="w-1 rounded-t bg-[#00D8C7] transition-[height] duration-100"
+                  className="w-1 rounded-t bg-[#10B981] transition-[height] duration-100"
                   style={{ height: `${Math.max(2, v * 18)}px` }}
                 />
               ))}
             </div>
             <form onSubmit={onSubmit} className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
-              <Sparkles className="h-4 w-4 shrink-0 text-[#00D8C7]" />
+              <Sparkles className="h-4 w-4 shrink-0 text-[#10B981]" />
               <input
                 ref={inputRef}
                 type="text"

@@ -348,7 +348,7 @@ function StatChip({
     amber: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
   };
   const dotColors: Record<NonNullable<typeof dotTone>, string> = {
-    blue: 'bg-[#00D8C7]',
+    blue: 'bg-[#10B981]',
     emerald: 'bg-emerald-500',
     amber: 'bg-amber-500',
   };
@@ -402,7 +402,7 @@ function HelpTip({ label }: { label: string }) {
       type="button"
       aria-label={label}
       title={label}
-      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/50"
+      className="group relative -m-2 grid h-8 w-8 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/50"
     >
       <HelpCircle className="h-3.5 w-3.5" />
     </button>
@@ -565,7 +565,7 @@ function ClientPreviewInner({
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t.searchPlaceholder}
               title={t.searchTitle}
-              className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#00D8C7] focus:outline-none focus:ring-2 focus:ring-[#00D8C7]/30"
+              className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#10B981] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30"
             />
           </label>
           <button
@@ -596,7 +596,7 @@ function ClientPreviewInner({
       >
         <div className="min-w-0">
           <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/70">
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
             {t.bookCtaKicker}
           </p>
           <p className="mt-1 font-display text-xl font-bold leading-tight">
@@ -759,7 +759,7 @@ function ClientPreviewInner({
                       flood. */}
                   <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-slate-100 text-[#0A0D18]">
                     <CalendarCheck className="h-5 w-5" />
-                    <span aria-hidden className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+                    <span aria-hidden className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-[#10B981]" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-slate-700">

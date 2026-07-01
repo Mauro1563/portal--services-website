@@ -341,7 +341,7 @@ function buildStatusMeta(t: CopyShape): Record<DemoStatus, { label: string; cls:
     in_progress: {
       label: t.statusInProgress,
       cls: 'bg-slate-100 text-slate-900',
-      dot: 'bg-[#00D8C7] animate-pulse',
+      dot: 'bg-[#10B981] animate-pulse',
     },
     completed: {
       label: t.statusCompleted,
@@ -607,7 +607,7 @@ function OperativePreviewHomeBody({
           <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)]">
             <div className="flex items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
-                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
                 {t.nextStop}
               </span>
               <span className="text-[11px] font-semibold tabular-nums text-slate-500">
@@ -628,7 +628,7 @@ function OperativePreviewHomeBody({
                 target="_blank"
                 rel="noopener noreferrer"
                 title={t.navigateTitle}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A0D18] px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.5)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A0D18] px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.5)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2"
               >
                 <Navigation2 className="h-4 w-4" /> {t.goToAddress}
               </a>
@@ -732,7 +732,7 @@ function OperativePreviewHomeBody({
                     <div
                       className={
                         task.status === 'in_progress'
-                          ? 'rounded-2xl bg-gradient-to-br from-[#00D8C7]/30 to-[#00D8C7]/0 p-[1px]'
+                          ? 'rounded-2xl bg-gradient-to-br from-[#10B981]/30 to-[#10B981]/0 p-[1px]'
                           : ''
                       }
                     >
@@ -772,7 +772,7 @@ function OperativePreviewHomeBody({
 
                       {task.checkInAt ? (
                         <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-slate-700">
-                          <Play className="h-2.5 w-2.5 text-[#00D8C7]" />
+                          <Play className="h-2.5 w-2.5 text-[#10B981]" />
                           {t.checkInLoggedAt(task.checkInAt)}
                         </p>
                       ) : null}
@@ -787,7 +787,7 @@ function OperativePreviewHomeBody({
                           title={t.tipTitle}
                           className="mt-1 inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-900"
                         >
-                          <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#00D8C7]" />
+                          <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#10B981]" />
                           {t.tipLabel((task.tipPence / 100).toFixed(2))}
                         </span>
                       ) : null}
@@ -818,7 +818,7 @@ function OperativePreviewHomeBody({
                                 placeholder="0.0"
                                 aria-label={t.hoursInputAria}
                                 title={t.hoursInputTitle}
-                                className="h-11 w-16 rounded-lg border border-slate-200 bg-white text-center text-[15px] font-semibold tabular-nums text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]"
+                                className="h-11 w-16 rounded-lg border border-slate-200 bg-white text-center text-[15px] font-semibold tabular-nums text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]"
                               />
                               <button
                                 type="button"
@@ -856,7 +856,7 @@ function OperativePreviewHomeBody({
                             title={t.checkInTitle}
                             className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-900 transition hover:bg-slate-50"
                           >
-                            <Play className="h-3 w-3 text-[#00D8C7]" />
+                            <Play className="h-3 w-3 text-[#10B981]" />
                             {t.checkIn}
                           </button>
                         ) : null}
@@ -881,7 +881,7 @@ function OperativePreviewHomeBody({
                           type="button"
                           onClick={() => handleComplete(task.id)}
                           title={t.markCompletedTitle}
-                          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#0A0D18] px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.55)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
+                          className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#0A0D18] px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.55)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2"
                         >
                           <CheckCircle2 className="h-4 w-4" />
                           {t.markCompleted}
@@ -1034,7 +1034,7 @@ function OperativePreviewHomeBody({
               toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
             }`}
           >
-            <span aria-hidden className="text-[#00D8C7]">✓</span> {toast}
+            <span aria-hidden className="text-[#10B981]">✓</span> {toast}
           </div>
         </div>
       ) : null}

@@ -160,7 +160,7 @@ export function DemoLiveOpsPulse() {
                 aligns with the micro-accent rule (sparse teal moments). */}
             <linearGradient id="demo-pulse-grad" x1="0" x2="1">
               <stop offset="0" stopColor="#0A0D18" stopOpacity="0.15" />
-              <stop offset="0.5" stopColor="#00D8C7" stopOpacity="0.55" />
+              <stop offset="0.5" stopColor="#10B981" stopOpacity="0.55" />
               <stop offset="1" stopColor="#0A0D18" stopOpacity="0.15" />
             </linearGradient>
           </defs>

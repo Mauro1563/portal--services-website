@@ -188,7 +188,7 @@ export default async function FaqSection() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
             <span
-              className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+              className="h-1.5 w-1.5 rounded-full bg-[#10B981]"
               aria-hidden
             />
             <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
@@ -239,7 +239,7 @@ export default async function FaqSection() {
         <div className="mt-12 rounded-2xl bg-[#0A0D18] px-5 py-6 text-center sm:rounded-3xl sm:px-10 sm:py-10">
           <div className="inline-flex items-center gap-2">
             <span
-              className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+              className="h-1.5 w-1.5 rounded-full bg-[#10B981]"
               aria-hidden
             />
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-300">
@@ -254,7 +254,7 @@ export default async function FaqSection() {
           </p>
           <a
             href="mailto:hola@portalservices.digital"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_4px_12px_rgba(0,216,199,0.25)] transition hover:bg-[#00B8AA]"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#10B981] px-6 py-3 text-sm font-semibold text-[#0A0D18] shadow-[0_4px_12px_rgba(0,216,199,0.25)] transition hover:bg-[#00B8AA]"
           >
             {t.footerCta}
           </a>

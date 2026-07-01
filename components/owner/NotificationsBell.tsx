@@ -120,7 +120,7 @@ export function NotificationsBell({
         aria-label="Notificaciones"
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="relative grid h-10 w-10 place-items-center rounded-lg border border-surface-2 bg-white text-[#0A0D18] transition hover:border-surface-3 hover:bg-surface-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
+        className="relative grid h-10 w-10 place-items-center rounded-lg border border-surface-2 bg-white text-[#0A0D18] transition hover:border-surface-3 hover:bg-surface-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2"
       >
         <Bell className="h-5 w-5" />
         {count > 0 && (

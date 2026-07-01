@@ -220,7 +220,7 @@ export function CleanerConciergeSheet() {
         onClick={() => setOpen(true)}
         title={t.pillTitle}
         aria-label={t.pillAria}
-        className={`fixed bottom-20 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-12px_rgba(10,13,24,0.55)] transition will-change-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2 ${
+        className={`fixed bottom-20 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#0A0D18] px-4 py-2 text-[12px] font-bold text-white shadow-[0_10px_28px_-12px_rgba(10,13,24,0.55)] transition will-change-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2 ${
           open ? 'pointer-events-none scale-90 opacity-0' : 'opacity-100'
         }`}
         style={{ transitionDuration: '260ms', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
@@ -255,7 +255,7 @@ export function CleanerConciergeSheet() {
             {/* Header — visually echoes the pill so it reads as the
                 same object morphing into place. */}
             <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#0A0D18] ring-1 ring-[#00D8C7]/40">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#0A0D18] ring-1 ring-[#10B981]/40">
                 <SparkleGlyph size={18} />
               </span>
               <div>
@@ -300,7 +300,7 @@ export function CleanerConciergeSheet() {
                 <p className="mt-1 text-[13px] text-slate-700">{picked.text}</p>
 
                 <p className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-700">
-                  <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+                  <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
                   {t.name}
                 </p>
                 <p className="mt-1 min-h-[5.5rem] text-[13.5px] leading-relaxed text-slate-800">
@@ -327,7 +327,7 @@ export function CleanerConciergeSheet() {
                     onClick={close}
                     disabled={!streamingDone}
                     title={picked.action.label}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-[#0A0D18] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-[#0A0D18] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2"
                   >
                     {picked.action.label}
                     <ArrowRight className="h-3.5 w-3.5" />

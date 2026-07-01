@@ -128,7 +128,7 @@ export default async function TestimonialsSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" aria-hidden="true" />
             {t.eyebrow}
           </span>
           <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">

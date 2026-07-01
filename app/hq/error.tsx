@@ -62,9 +62,9 @@ export default function HQError({
             <Link
               key={href}
               href={href}
-              className="group flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#00D8C7] hover:shadow"
+              className="group flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#10B981] hover:shadow"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#00D8C7]/15 text-[#0A0D18]">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#10B981]/15 text-[#0A0D18]">
                 <Icon className="h-5 w-5" />
               </span>
               <div>

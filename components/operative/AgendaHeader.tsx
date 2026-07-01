@@ -60,7 +60,7 @@ export async function AgendaHeader({
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
             Cleaner · {firstName}
           </p>
           <h1 className="mt-1 font-display text-[14px] font-medium text-slate-900">
@@ -117,7 +117,7 @@ export async function AgendaHeader({
             title="Saltar a la tarea que tienes en curso ahora mismo"
             className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-700 transition hover:bg-slate-200"
           >
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7] animate-pulse" />
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
             En curso
           </a>
         ) : null}

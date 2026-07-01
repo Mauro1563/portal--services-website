@@ -69,7 +69,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
         {/* LEFT — brand mark. Link home so users always have an escape hatch. */}
         <Link
           href="/"
-          className="flex items-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60"
+          className="flex items-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/60"
         >
           <ZapliLogo size="sm" tone="onDark" />
         </Link>
@@ -91,7 +91,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
                 className={[
                   'relative inline-flex items-center text-[13.5px] transition-colors',
                   isActive
-                    ? 'font-semibold text-[#00D8C7]'
+                    ? 'font-semibold text-[#10B981]'
                     : 'font-medium text-[#F8F9FA]/85 hover:text-white',
                 ].join(' ')}
               >
@@ -99,7 +99,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
                 {isActive ? (
                   <span
                     aria-hidden
-                    className="absolute inset-x-0 -bottom-1 h-[2px] bg-[#00D8C7]"
+                    className="absolute inset-x-0 -bottom-1 h-[2px] bg-[#10B981]"
                   />
                 ) : null}
               </Link>
@@ -114,7 +114,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
           </div>
           <Link
             href={signedIn ? '/dashboard' : '/login'}
-            className="hidden h-9 items-center rounded-full bg-[#00D8C7] px-4 text-[13px] font-semibold text-[#0D0D11] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60 md:inline-flex"
+            className="hidden h-9 items-center rounded-full bg-[#10B981] px-4 text-[13px] font-semibold text-[#0D0D11] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/60 md:inline-flex"
           >
             {signedIn ? 'Account' : 'Sign in'}
           </Link>
@@ -124,7 +124,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
             aria-label="Open menu"
             aria-expanded={mobileOpen}
             aria-controls="zapli-mobile-sheet"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/60"
           >
             <Menu className="h-5 w-5" aria-hidden />
           </button>
@@ -158,7 +158,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close menu"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/60"
               >
                 <X className="h-5 w-5" aria-hidden />
               </button>
@@ -179,7 +179,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
                     className={[
                       'rounded-lg px-4 py-3 text-base transition-colors',
                       isActive
-                        ? 'bg-white/5 font-semibold text-[#00D8C7]'
+                        ? 'bg-white/5 font-semibold text-[#10B981]'
                         : 'font-medium text-[#F8F9FA]/85 hover:bg-white/5 hover:text-white',
                     ].join(' ')}
                   >
@@ -195,7 +195,7 @@ export function ZapliNavbar({ active, signedIn = false }: ZapliNavbarProps) {
               <Link
                 href={signedIn ? '/dashboard' : '/login'}
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#00D8C7] px-4 text-sm font-semibold text-[#0D0D11] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#10B981] px-4 text-sm font-semibold text-[#0D0D11] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/60"
               >
                 {signedIn ? 'Account' : 'Sign in'}
               </Link>

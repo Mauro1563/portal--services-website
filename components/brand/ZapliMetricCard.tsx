@@ -63,7 +63,7 @@ function CardChrome({
           keeps it visually pinned to the corner regardless of label length. */}
       <span
         aria-hidden="true"
-        className="absolute top-4 left-4 block h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+        className="absolute top-4 left-4 block h-1.5 w-1.5 rounded-full bg-[#10B981]"
       />
 
       {(delta || icon) && (

@@ -254,7 +254,7 @@ export function DemoCorporateHeader({
               aria-haspopup="dialog"
               aria-expanded={notifOpen}
               title={t.notifTitle}
-              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
+              className="relative grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]"
             >
               <Bell className="h-4 w-4" />
               {unread > 0 ? (
@@ -271,7 +271,7 @@ export function DemoCorporateHeader({
               aria-haspopup="dialog"
               aria-expanded={settingsOpen}
               title={t.settingsTitle}
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
+              className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]"
             >
               <Settings className="h-4 w-4" />
             </button>
@@ -333,7 +333,7 @@ export function DemoCorporateHeader({
                       >
                         <span
                           className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
-                            n.read ? 'bg-slate-300' : 'bg-[#00D8C7]'
+                            n.read ? 'bg-slate-300' : 'bg-[#10B981]'
                           }`}
                         />
                         <span className="min-w-0 flex-1">

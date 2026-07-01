@@ -135,7 +135,7 @@ export function CleanerEtaRibbon({
         className="flex w-full items-center gap-3 rounded-full bg-white/90 px-3 py-2 text-left shadow-[0_6px_18px_-12px_rgba(15,23,42,0.4)] ring-1 ring-inset ring-slate-200 transition hover:bg-white"
       >
         {/* Cleaner avatar with breathing pulse dot. The dot stays teal
-            #00D8C7 — it's the live/online indicator (a micro-accent per
+            #10B981 — it's the live/online indicator (a micro-accent per
             rule 7), not a semantic success state. Avatar is midnight
             ink so it harmonises with the rest of the palette. */}
         <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#0A0D18] text-[12px] font-bold text-white">
@@ -144,16 +144,16 @@ export function CleanerEtaRibbon({
             <span className="relative inline-grid h-2.5 w-2.5 place-items-center">
               <span
                 className="absolute inset-0 rounded-full client-eta-pulse"
-                style={{ color: '#00D8C7' }}
+                style={{ color: '#10B981' }}
               />
-              <span className="relative h-2 w-2 rounded-full bg-[#00D8C7] ring-2 ring-white" />
+              <span className="relative h-2 w-2 rounded-full bg-[#10B981] ring-2 ring-white" />
             </span>
           </span>
         </span>
 
         <div className="min-w-0 flex-1">
           <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-700">
-            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+            <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
             {arrived ? t.atDoor : t.onTheWay}
           </p>
           <p
@@ -218,7 +218,7 @@ export function CleanerEtaRibbon({
                   arrival accent, no decorative blue/green. */}
               <linearGradient id="etaGrad" x1="0" x2="1" y1="0" y2="0">
                 <stop offset="0%"  stopColor="#0A0D18" />
-                <stop offset="100%" stopColor="#00D8C7" />
+                <stop offset="100%" stopColor="#10B981" />
               </linearGradient>
             </defs>
           </svg>

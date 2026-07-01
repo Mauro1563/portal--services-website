@@ -105,8 +105,8 @@ export function FlippableCleanerCard({
         aria-pressed={flipped}
         className="absolute -top-1 right-0 z-20 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-700 ring-1 ring-inset ring-slate-200 backdrop-blur transition hover:bg-white"
       >
-        {/* Sparkle glyph: teal #00D8C7 — a tiny accent dot, no amber. */}
-        <Sparkles className="h-3 w-3 text-[#00D8C7]" />
+        {/* Sparkle glyph: teal #10B981 — a tiny accent dot, no amber. */}
+        <Sparkles className="h-3 w-3 text-[#10B981]" />
         {flipped ? t.backLabel : t.meetLabel}
       </button>
 
@@ -160,7 +160,7 @@ function CleanerBack({
   return (
     <div className="relative h-full rounded-2xl bg-white p-4 ring-1 ring-inset ring-slate-200">
       <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-700">
-        <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+        <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
         {t.howWorks(cleanerName)}
       </p>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-700">
@@ -175,7 +175,7 @@ function CleanerBack({
 
       {/* Hairline accent across the bottom — kept as the same
           compositional flourish but recoloured from kintsugi gold to a
-          single teal #00D8C7 stroke that fades at both ends. Sparse,
+          single teal #10B981 stroke that fades at both ends. Sparse,
           per rule 7. */}
       <svg
         aria-hidden
@@ -185,9 +185,9 @@ function CleanerBack({
       >
         <defs>
           <linearGradient id="kint-grad" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%"   stopColor="#00D8C7" stopOpacity="0" />
-            <stop offset="50%"  stopColor="#00D8C7" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#00D8C7" stopOpacity="0" />
+            <stop offset="0%"   stopColor="#10B981" stopOpacity="0" />
+            <stop offset="50%"  stopColor="#10B981" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path

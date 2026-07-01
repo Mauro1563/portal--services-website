@@ -182,32 +182,32 @@ const PORTAL_STYLES: readonly PortalStyle[] = [
   {
     key: "owner",
     href: "/owner/preview",
-    badgeClass: "bg-[#00D8C7] text-[#0A0D18]",
+    badgeClass: "bg-[#10B981] text-[#0A0D18]",
     headerGradient: "bg-[#0A0D18]",
     iconTileClass: "bg-slate-900",
-    iconRing: "ring-1 ring-[#00D8C7]/30",
+    iconRing: "ring-1 ring-[#10B981]/30",
     Icon: Building2,
-    linkClass: "text-slate-900 hover:text-[#00D8C7]",
+    linkClass: "text-slate-900 hover:text-[#10B981]",
   },
   {
     key: "cleaner",
     href: "/operative/preview",
-    badgeClass: "bg-[#00D8C7] text-[#0A0D18]",
+    badgeClass: "bg-[#10B981] text-[#0A0D18]",
     headerGradient: "bg-[#0A0D18]",
     iconTileClass: "bg-slate-900",
-    iconRing: "ring-1 ring-[#00D8C7]/30",
+    iconRing: "ring-1 ring-[#10B981]/30",
     Icon: Users,
-    linkClass: "text-slate-900 hover:text-[#00D8C7]",
+    linkClass: "text-slate-900 hover:text-[#10B981]",
   },
   {
     key: "client",
     href: "/client/preview",
-    badgeClass: "bg-[#00D8C7] text-[#0A0D18]",
+    badgeClass: "bg-[#10B981] text-[#0A0D18]",
     headerGradient: "bg-[#0A0D18]",
     iconTileClass: "bg-slate-900",
-    iconRing: "ring-1 ring-[#00D8C7]/30",
+    iconRing: "ring-1 ring-[#10B981]/30",
     Icon: Sparkles,
-    linkClass: "text-slate-900 hover:text-[#00D8C7]",
+    linkClass: "text-slate-900 hover:text-[#10B981]",
   },
 ];
 
@@ -221,7 +221,7 @@ export default async function PortalsSection() {
           {/* Eyebrow chip: slate-100 surface with slate-700 text and a tiny
               teal dot as the only accent (rule 5). */}
           <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" aria-hidden="true" />
             {t.eyebrow}
           </span>
           {/* Headline stays solid slate-900 — no teal fill, no gradient
@@ -246,7 +246,7 @@ export default async function PortalsSection() {
                 {/* Thin midnight header bar with a single teal hairline
                     underneath as the micro-accent (rule 7). */}
                 <div className={`h-2 w-full ${style.headerGradient}`} />
-                <div className="h-px w-full bg-[#00D8C7]/40" />
+                <div className="h-px w-full bg-[#10B981]/40" />
 
                 <div className="flex flex-1 flex-col p-5 sm:p-7">
                   <div className="flex items-center gap-3">
@@ -261,7 +261,7 @@ export default async function PortalsSection() {
                     <span
                       className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" aria-hidden="true" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" aria-hidden="true" />
                       {portal.badge}
                     </span>
                   </div>

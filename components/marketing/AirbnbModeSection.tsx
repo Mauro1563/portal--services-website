@@ -31,7 +31,7 @@ import { getLocale, type Locale } from '@/lib/i18n';
  *  - Portal cards (BOTH): dark midnight gradient with bright teal chips
  *    (rule 2: bright teal floods are only allowed on dark surfaces).
  *  - Callout: white + slate-200 border + small teal accent dot.
- *  - Teal (#00D8C7) reserved for micro-accents: dots, sparkles, focus rings,
+ *  - Teal (#10B981) reserved for micro-accents: dots, sparkles, focus rings,
  *    chip text inside dark cards, KPI values inside dark cards.
  */
 type PortalCopy = {
@@ -181,7 +181,7 @@ export default async function AirbnbModeSection() {
         {/* Eyebrow + headline — slate-100 chip with a tiny teal sparkle dot */}
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
-            <Sparkles className="h-3 w-3 text-[#00D8C7]" />
+            <Sparkles className="h-3 w-3 text-[#10B981]" />
             {t.eyebrow}
           </span>
           <h2 className="mt-6 font-display text-3xl font-bold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
@@ -225,7 +225,7 @@ export default async function AirbnbModeSection() {
               <House className="h-4 w-4" />
               <span
                 aria-hidden
-                className="absolute -mt-5 ml-5 h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+                className="absolute -mt-5 ml-5 h-1.5 w-1.5 rounded-full bg-[#10B981]"
               />
             </span>
             <div>
@@ -277,11 +277,11 @@ function PortalCardDark({
     <Link
       href={href}
       aria-label={cta}
-      className="group relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0D18] via-[#0A0D18] to-[#111524] p-5 shadow-[0_18px_34px_-18px_rgba(10,13,24,0.55)] ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-18px_rgba(10,13,24,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7]/60"
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0D18] via-[#0A0D18] to-[#111524] p-5 shadow-[0_18px_34px_-18px_rgba(10,13,24,0.55)] ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:shadow-[0_24px_40px_-18px_rgba(10,13,24,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]/60"
     >
       <div className="relative flex items-start justify-between">
         {/* Bright teal chip — allowed flood per rule 2 (dark surface) */}
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#00D8C7] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18]">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#10B981] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18]">
           {label}
         </span>
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white ring-1 ring-white/15">
@@ -324,7 +324,7 @@ function PortalCardDark({
               key={f}
               className="flex items-center gap-2 text-[12px] text-white/85"
             >
-              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#00D8C7]/15 text-[#5EEAD4] ring-1 ring-inset ring-[#00D8C7]/25">
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#10B981]/15 text-[#5EEAD4] ring-1 ring-inset ring-[#10B981]/25">
                 <Icon className="h-2.5 w-2.5" />
               </span>
               <span className="leading-tight">{f}</span>
@@ -334,7 +334,7 @@ function PortalCardDark({
       </ul>
 
       {/* CTA pill — primary CTA on dark = bright teal fill, midnight text (rule 2) */}
-      <div className="relative mt-5 flex items-center justify-between rounded-xl bg-[#00D8C7] px-3 py-2 transition group-hover:shadow-[0_0_24px_rgba(0,216,199,0.45)]">
+      <div className="relative mt-5 flex items-center justify-between rounded-xl bg-[#10B981] px-3 py-2 transition group-hover:shadow-[0_0_24px_rgba(0,216,199,0.45)]">
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#0A0D18]">
           {cta}
         </span>

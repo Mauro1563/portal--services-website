@@ -15,7 +15,7 @@ import { getLocale, type Locale } from '@/lib/i18n';
  * Palette rules (Portal Services marketing):
  *   - white page background
  *   - midnight #0A0D18 body text
- *   - #00D8C7 used ONLY as small dots / sparkles
+ *   - #10B981 used ONLY as small dots / sparkles
  *   - CTAs are midnight pills (white text), matching marketing buttons
  *
  * Explicitly excluded per the brief: cost figures, repo links, email
@@ -274,7 +274,7 @@ export default async function CompanyPage() {
         {/* Sparse teal glow — single dot in the corner, never a flood */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full bg-[#00D8C7]/10 blur-3xl"
+          className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full bg-[#10B981]/10 blur-3xl"
         />
         <div className="relative mx-auto max-w-3xl px-6 pt-28 pb-20 sm:pt-32 sm:pb-24">
           <Eyebrow>{c.heroEyebrow}</Eyebrow>
@@ -353,7 +353,7 @@ export default async function CompanyPage() {
                   <div className="flex items-center gap-2">
                     <span
                       aria-hidden="true"
-                      className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+                      className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]"
                     />
                     <Icon className="h-5 w-5 text-[#0A0D18]" aria-hidden="true" />
                   </div>
@@ -372,7 +372,7 @@ export default async function CompanyPage() {
       <section className="bg-white">
         <div className="mx-auto max-w-3xl px-6 py-20 sm:py-24">
           <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1">
-            <Sparkles className="h-3 w-3 text-[#00D8C7]" aria-hidden="true" />
+            <Sparkles className="h-3 w-3 text-[#10B981]" aria-hidden="true" />
             <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
               {c.contactEyebrow}
             </span>
@@ -435,7 +435,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
     <div className="inline-flex items-center gap-2">
       <span
         aria-hidden="true"
-        className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]"
+        className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]"
       />
       <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
         {children}

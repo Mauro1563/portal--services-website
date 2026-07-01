@@ -215,7 +215,7 @@ export default async function PricingSection() {
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
             {t.eyebrow}
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
@@ -240,7 +240,7 @@ export default async function PricingSection() {
               >
                 {isHighlighted && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#00D8C7] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18]">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#10B981] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0D18]">
                       <Sparkles className="h-3 w-3" />
                       {t.mostPopular}
                     </span>
@@ -302,14 +302,14 @@ export default async function PricingSection() {
                         <span
                           className={
                             isHighlighted
-                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#00D8C7]/15 ring-1 ring-[#00D8C7]/40"
+                              ? "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-[#10B981]/15 ring-1 ring-[#10B981]/40"
                               : "mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-slate-100 ring-1 ring-slate-200"
                           }
                         >
                           <Check
                             className={
                               isHighlighted
-                                ? "h-3.5 w-3.5 text-[#00D8C7]"
+                                ? "h-3.5 w-3.5 text-[#10B981]"
                                 : "h-3.5 w-3.5 text-slate-700"
                             }
                           />
@@ -332,7 +332,7 @@ export default async function PricingSection() {
                   href="/signup"
                   className={
                     isHighlighted
-                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#00D8C7] px-6 py-3 text-sm font-bold text-[#0A0D18] transition hover:bg-[#2BF0DE] sm:mt-8"
+                      ? "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#10B981] px-6 py-3 text-sm font-bold text-[#0A0D18] transition hover:bg-[#2BF0DE] sm:mt-8"
                       : "mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#0A0D18] px-6 py-3 text-sm font-bold text-white shadow-[0_1px_2px_rgba(15,23,42,0.12)] transition hover:bg-[#1a1f2e] sm:mt-8"
                   }
                 >

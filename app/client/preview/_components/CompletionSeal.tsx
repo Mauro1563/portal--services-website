@@ -58,15 +58,15 @@ export function CompletionSeal({
       <div className="absolute inset-0 rounded-3xl bg-slate-50/60 backdrop-grayscale-[40%]" />
 
       {/* The seal itself. Reworked from amber/gold wax (off-palette
-          decorative orange) to a midnight ink stamp with teal #00D8C7
+          decorative orange) to a midnight ink stamp with teal #10B981
           accents — same weighty "completed" feel, on-palette. */}
       <div className="relative client-seal-drop">
         {/* Dust ring — one-shot expanding circle in the accent teal. */}
         <span
-          className="absolute left-1/2 top-1/2 -ml-12 -mt-12 h-24 w-24 rounded-full border border-[#00D8C7]/60 client-seal-dust"
+          className="absolute left-1/2 top-1/2 -ml-12 -mt-12 h-24 w-24 rounded-full border border-[#10B981]/60 client-seal-dust"
         />
         <div
-          className="relative grid h-28 w-28 place-items-center rounded-full border-[3px] border-[#00D8C7]/80 text-white shadow-[0_8px_18px_-6px_rgba(10,13,24,0.5)]"
+          className="relative grid h-28 w-28 place-items-center rounded-full border-[3px] border-[#10B981]/80 text-white shadow-[0_8px_18px_-6px_rgba(10,13,24,0.5)]"
           style={{
             background:
               'radial-gradient(circle at 35% 30%, #1a1f33 0%, #0A0D18 55%, #050811 100%)',
@@ -75,7 +75,7 @@ export function CompletionSeal({
           {/* Inner stamp ring. */}
           <span className="absolute inset-2 rounded-full border border-white/15" />
           <div className="flex flex-col items-center justify-center text-center">
-            <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#00D8C7]">
+            <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#10B981]">
               {t.workLabel}
             </span>
             <span className="font-display text-[16px] font-extrabold leading-none tracking-tight text-white">

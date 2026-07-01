@@ -185,14 +185,14 @@ export function DemoPullSummary() {
         title={t.insightTitle}
         className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-full bg-[#0A0D18] px-3 text-[12px] font-semibold text-white shadow-sm transition hover:bg-slate-800"
       >
-        <Sparkles className="h-3.5 w-3.5 text-[#00D8C7]" /> {t.insightToday}
+        <Sparkles className="h-3.5 w-3.5 text-[#10B981]" /> {t.insightToday}
       </button>
 
       {open ? (
         <section className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:p-5 demo-pop">
           <header className="flex items-center justify-between gap-3">
             <h3 className="inline-flex items-center gap-2 font-display text-base font-semibold text-slate-900">
-              <Sparkles className="h-4 w-4 text-[#00D8C7]" />
+              <Sparkles className="h-4 w-4 text-[#10B981]" />
               {t.insightToday}
             </h3>
             <button

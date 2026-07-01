@@ -249,7 +249,7 @@ export function DemoQuickActions() {
           type="button"
           onClick={() => setShowNew((s) => !s)}
           title={t.newTaskTitle}
-          className="inline-flex items-center gap-1 rounded-full bg-[#0A0D18] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
+          className="inline-flex items-center gap-1 rounded-full bg-[#0A0D18] px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]"
         >
           <Plus className="h-3.5 w-3.5" /> {t.newTaskBtn}
         </button>
@@ -259,7 +259,7 @@ export function DemoQuickActions() {
         <div className="mb-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
           <div className="flex items-center justify-between">
             <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-900">
-              <Sparkles className="h-3.5 w-3.5 text-[#00D8C7]" /> {t.schedulingTitle}
+              <Sparkles className="h-3.5 w-3.5 text-[#10B981]" /> {t.schedulingTitle}
             </p>
             <button
               type="button"
@@ -336,7 +336,7 @@ export function DemoQuickActions() {
               key={t.href}
               href={t.href}
               title={t.title}
-              className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
+              className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]"
             >
               <span
                 className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${t.iconBg} ${t.iconText}`}
@@ -365,7 +365,7 @@ export function DemoQuickActions() {
               <Link
                 href={t.href}
                 title={t.title}
-                className="group flex items-center gap-3 px-4 py-3 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#00D8C7]"
+                className="group flex items-center gap-3 px-4 py-3 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#10B981]"
               >
                 <span
                   className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg ${t.iconBg} ${t.iconText}`}

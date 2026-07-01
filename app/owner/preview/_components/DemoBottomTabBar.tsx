@@ -93,7 +93,7 @@ export function DemoBottomTabBar({ active }: { active: DemoTab }) {
                     />
                     <span
                       aria-hidden
-                      className="absolute bottom-1 h-1 w-1 rounded-full bg-[#00D8C7]"
+                      className="absolute bottom-1 h-1 w-1 rounded-full bg-[#10B981]"
                     />
                   </>
                 ) : null}

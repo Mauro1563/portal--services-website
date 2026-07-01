@@ -153,10 +153,10 @@ export default function OwnerPreviewHome() {
           <Link
             href="/owner/preview/scheduler"
             title={t.schedulerTitle}
-            className="group mt-4 flex items-center justify-between gap-3 rounded-2xl bg-[#0A0D18] p-4 text-white shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(10,13,24,0.45)] transition duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
+            className="group mt-4 flex items-center justify-between gap-3 rounded-2xl bg-[#0A0D18] p-4 text-white shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-8px_rgba(10,13,24,0.45)] transition duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]"
           >
             <div className="flex min-w-0 items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#00D8C7] text-[#0A0D18] shadow-sm">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#10B981] text-[#0A0D18] shadow-sm">
                 <Sparkles className="h-5 w-5" />
               </span>
               <div className="min-w-0">
@@ -168,7 +168,7 @@ export default function OwnerPreviewHome() {
                 </p>
               </div>
             </div>
-            <ArrowRight className="h-5 w-5 shrink-0 text-[#00D8C7] transition group-hover:translate-x-0.5" />
+            <ArrowRight className="h-5 w-5 shrink-0 text-[#10B981] transition group-hover:translate-x-0.5" />
           </Link>
 
           <div className="mt-8">
@@ -178,7 +178,7 @@ export default function OwnerPreviewHome() {
           <Link
             href="/owner/preview/analytics"
             title={t.analyticsTitle}
-            className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00D8C7]"
+            className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_4px_12px_-2px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]"
           >
             <div className="flex min-w-0 items-center gap-3">
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-slate-100 text-slate-700">

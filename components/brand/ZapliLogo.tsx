@@ -2,7 +2,7 @@
  * Zapli brand mark.
  *
  * The visual hook: the dot of the "i" in "zapli" IS a lightning glyph in
- * electric cyan (#00D8C7). The wordmark is rendered as `zapl` + dotless `ı`
+ * electric cyan (#10B981). The wordmark is rendered as `zapl` + dotless `ı`
  * (U+0131) so we can position a crisp inline-SVG bolt where the tittle would
  * otherwise sit. Pure inline SVG — no network fetches, no external assets.
  *
@@ -30,7 +30,7 @@ export type ZapliLogoProps = {
 };
 
 // Brand palette — keep these in sync with the design tokens.
-const CYAN = '#00D8C7'; // electric cyan / turquoise neon
+const CYAN = '#10B981'; // electric cyan / turquoise neon
 const WHITE = '#F8F9FA'; // platinum white
 const DARK = '#1A1A1A'; // near-black for onLight wordmark
 

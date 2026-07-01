@@ -47,7 +47,7 @@ export default async function WelcomePage() {
         {/* Decorative orbs */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-32 -top-32 -z-10 h-[26rem] w-[26rem] rounded-full bg-[#00D8C7]/12 blur-3xl"
+          className="pointer-events-none absolute -left-32 -top-32 -z-10 h-[26rem] w-[26rem] rounded-full bg-[#10B981]/12 blur-3xl"
         />
         <div
           aria-hidden
@@ -161,7 +161,7 @@ function RoleCard({
         className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${
           primary
             ? 'bg-white/15 text-white ring-1 ring-inset ring-white/20'
-            : 'bg-[#00D8C7]/15 text-[#0A0D18] ring-1 ring-inset ring-[#00D8C7]/30'
+            : 'bg-[#10B981]/15 text-[#0A0D18] ring-1 ring-inset ring-[#10B981]/30'
         }`}
       >
         <Icon className="h-5 w-5" />

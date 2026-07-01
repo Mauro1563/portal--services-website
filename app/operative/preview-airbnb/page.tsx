@@ -525,7 +525,7 @@ function buildStatusMeta(
     in_progress: {
       label: t.statusInProgress,
       cls: 'bg-slate-100 text-slate-900',
-      dot: 'bg-[#00D8C7] animate-pulse',
+      dot: 'bg-[#10B981] animate-pulse',
     },
     completed: {
       label: t.statusCompleted,
@@ -776,7 +776,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
           <header className="flex items-end justify-between gap-3">
             <div>
               <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-700">
-                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
                 {t.overline}
               </p>
               <h1 className="mt-1 font-display text-2xl font-semibold text-slate-900">
@@ -793,7 +793,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               that component is locked to the Hogar emerald palette and
               also depends on the EarningsAnimationProvider, which we
               don't mount on this route. Tiles use the Portal Services green accent
-              (#00D8C7) to differentiate from in-card orange chrome while
+              (#10B981) to differentiate from in-card orange chrome while
               keeping numbers high-contrast on midnight #0A0D18. */}
           <section
             aria-label={t.statTodayLabel}
@@ -812,7 +812,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               <span
                 aria-hidden
                 className="mt-1.5 block h-0.5 w-6 rounded-full"
-                style={{ backgroundColor: '#00D8C7' }}
+                style={{ backgroundColor: '#10B981' }}
               />
             </div>
             <div className="rounded-xl bg-slate-50 px-2.5 py-2.5">
@@ -828,7 +828,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               <span
                 aria-hidden
                 className="mt-1.5 block h-0.5 w-6 rounded-full"
-                style={{ backgroundColor: '#00D8C7' }}
+                style={{ backgroundColor: '#10B981' }}
               />
             </div>
             <div className="rounded-xl bg-slate-50 px-2.5 py-2.5">
@@ -844,7 +844,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               <span
                 aria-hidden
                 className="mt-1.5 block h-0.5 w-6 rounded-full"
-                style={{ backgroundColor: '#00D8C7' }}
+                style={{ backgroundColor: '#10B981' }}
               />
             </div>
           </section>
@@ -919,7 +919,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
               <span
                 aria-hidden
                 className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: '#00D8C7' }}
+                style={{ backgroundColor: '#10B981' }}
               />
             </div>
             <dl className="mt-3 space-y-2">
@@ -947,7 +947,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                   className="inline-flex items-baseline gap-1.5 font-display text-[15px] font-bold tabular-nums"
                   style={{ color: '#0A0D18' }}
                 >
-                  <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#00D8C7' }} />
+                  <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#10B981' }} />
                   £{(weekPayoutPence / 100).toFixed(2)}
                 </dd>
               </div>
@@ -968,7 +968,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
             <div className="mt-3 flex items-center gap-3">
               <span
                 aria-hidden
-                className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-display text-[18px] font-bold text-white ring-2 ring-[#00D8C7]/40"
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-full font-display text-[18px] font-bold text-white ring-2 ring-[#10B981]/40"
                 style={{ backgroundColor: '#0A0D18' }}
               >
                 C
@@ -983,7 +983,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                 <span
                   className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-700"
                 >
-                  <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#00D8C7]" />
+                  <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#10B981]" />
                   {t.profileRole}
                 </span>
               </div>
@@ -1093,7 +1093,7 @@ function OperativePreviewAirbnbBody({ onReset }: { onReset: () => void }) {
                 toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
               }`}
             >
-              <span aria-hidden className="text-[#00D8C7]">✓</span> {toast}
+              <span aria-hidden className="text-[#10B981]">✓</span> {toast}
             </div>
           </div>
         ) : null}
@@ -1127,7 +1127,7 @@ function TurnoverHero({
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_10px_24px_-12px_rgba(15,23,42,0.08)]">
       <div className="flex items-center justify-between gap-2">
         <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
-          <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#00D8C7]" />
+          <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981]" />
           {copy.nextTurnover}
         </p>
         <span
@@ -1175,7 +1175,7 @@ function TurnoverHero({
           target="_blank"
           rel="noopener noreferrer"
           title={copy.goToAddressTitle}
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A0D18] px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.5)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A0D18] px-4 py-3 text-[15px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.5)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2"
         >
           <Navigation2 className="h-4 w-4" /> {copy.goToAddress}
         </a>
@@ -1259,7 +1259,7 @@ function TurnoverCard({
     <div
       className={
         task.status === 'in_progress'
-          ? 'rounded-2xl bg-gradient-to-br from-[#00D8C7]/30 to-[#00D8C7]/0 p-[1px]'
+          ? 'rounded-2xl bg-gradient-to-br from-[#10B981]/30 to-[#10B981]/0 p-[1px]'
           : ''
       }
     >
@@ -1337,7 +1337,7 @@ function TurnoverCard({
 
         {task.checkInAt ? (
           <p className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-slate-700">
-            <Clock className="h-2.5 w-2.5 text-[#00D8C7]" />
+            <Clock className="h-2.5 w-2.5 text-[#10B981]" />
             {copy.checkInLoggedAt(task.checkInAt)}
           </p>
         ) : null}
@@ -1385,7 +1385,7 @@ function TurnoverCard({
               title={copy.checkInScheduled}
               className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-semibold text-slate-900 transition hover:bg-slate-50"
             >
-              <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#00D8C7]" />
+              <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-[#10B981]" />
               {copy.checkIn}
             </button>
           ) : null}
@@ -1539,7 +1539,7 @@ function TurnoverCard({
               <button
                 type="button"
                 onClick={onCheckIn}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#0A0D18] px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.55)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D8C7] focus-visible:ring-offset-2"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#0A0D18] px-3 py-3 text-[14px] font-semibold text-white shadow-[0_8px_20px_-12px_rgba(10,13,24,0.55)] transition hover:bg-slate-800 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] focus-visible:ring-offset-2"
               >
                 {copy.checkInAndStart}
               </button>

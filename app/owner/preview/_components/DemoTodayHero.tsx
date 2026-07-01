@@ -218,7 +218,7 @@ export function DemoTodayHero() {
                     cx={(i / (SPARK.length - 1)) * 140}
                     cy={32 - ((v - 80) / 20) * 28}
                     r={i === SPARK.length - 1 ? 3 : 1.5}
-                    fill={i === SPARK.length - 1 ? '#00D8C7' : '#0A0D18'}
+                    fill={i === SPARK.length - 1 ? '#10B981' : '#0A0D18'}
                   />
                 ))}
               </svg>

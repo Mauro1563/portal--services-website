@@ -79,6 +79,40 @@ export default async function PSDHeroSection() {
           {t('subtitle')}
         </p>
 
+        {/* Micro-metrics strip — three anonymous stats bringing brand colors
+             into the top of the fold before the solution cards land. */}
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#EFF6FF]">
+              <span className="h-2 w-2 rounded-full bg-[#2563EB]" />
+            </span>
+            <span className="font-semibold tabular-nums text-slate-900">
+              +59
+            </span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+              operativos activos
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#ECFDF5]">
+              <span className="h-2 w-2 rounded-full bg-[#10B981]" />
+            </span>
+            <span className="font-semibold tabular-nums text-slate-900">7</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+              edificios gestionados
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-gradient-to-br from-[#EFF6FF] to-[#ECFDF5]">
+              <span className="h-2 w-2 rounded-full bg-gradient-to-br from-[#2563EB] to-[#10B981]" />
+            </span>
+            <span className="font-semibold tabular-nums text-slate-900">3</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+              idiomas
+            </span>
+          </div>
+        </div>
+
         {/* Two solution cards — LIGHT surfaces with per-accent interactivity */}
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           <SolutionCard

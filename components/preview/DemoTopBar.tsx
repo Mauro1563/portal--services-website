@@ -36,9 +36,12 @@ export function DemoTopBar({
   // umbrella brand, so tones are kept inside the Home green family +
   // navy for the management-facing owner view.
   const tone = {
-    owner: 'bg-[#0B2A6B] text-white',
-    cleaner: 'bg-[#10B981] text-white',
-    client: 'bg-[#059669] text-white',
+    owner:
+      'bg-gradient-to-r from-[#0B2A6B] to-[#2563EB] text-white shadow-[0_0_16px_rgba(37,99,235,0.35)]',
+    cleaner:
+      'bg-gradient-to-r from-[#10B981] to-[#34D399] text-white shadow-[0_0_16px_rgba(16,185,129,0.35)]',
+    client:
+      'bg-gradient-to-r from-[#065F46] to-[#059669] text-white shadow-[0_0_16px_rgba(5,150,105,0.35)]',
   }[portal];
 
   return (

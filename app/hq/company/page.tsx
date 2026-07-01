@@ -76,7 +76,7 @@ function StatusPill({ status }: { status: CompanyItem['status'] }) {
     >
       <span
         className="h-1.5 w-1.5 rounded-full"
-        style={{ background: status === 'Activo' ? '#00D8C7' : 'currentColor' }}
+        style={{ background: status === 'Activo' ? '#10B981' : 'currentColor' }}
       />
       {status}
     </span>
@@ -194,7 +194,7 @@ function CategorySection({
             <p className="mt-0.5">
               <span
                 className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle"
-                style={{ background: '#00D8C7' }}
+                style={{ background: '#10B981' }}
               />
               recurrentes
             </p>
@@ -261,7 +261,7 @@ export default async function CompanyPage() {
               <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                 <span
                   className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: '#00D8C7' }}
+                  style={{ background: '#10B981' }}
                 />
                 {admin.email}
               </span>
@@ -288,7 +288,7 @@ export default async function CompanyPage() {
               <span className="inline-flex items-center gap-2">
                 <span
                   className="inline-block h-1.5 w-1.5 rounded-full"
-                  style={{ background: '#00D8C7' }}
+                  style={{ background: '#10B981' }}
                 />
                 Como agregar items?
                 <span className="text-slate-400 group-open:hidden">+</span>
