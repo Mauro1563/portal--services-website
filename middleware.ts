@@ -65,6 +65,14 @@ export async function middleware(request: NextRequest) {
     return await updateSession(request);
   }
 
+  // /company is a locale-less marketing page that resolves the locale
+  // internally from the `portal_locale` cookie. next-intl's "always
+  // prefix" mode would otherwise redirect it to /{locale}/company and
+  // 404 because no page exists at that path. Bypass intl for it.
+  if (pathname === '/company' || pathname.startsWith('/company/')) {
+    return NextResponse.next({ request });
+  }
+
   const response = intl(request);
 
   // Sync `portal_locale` cookie with the marketing URL prefix so that
