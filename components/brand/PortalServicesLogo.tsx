@@ -1,27 +1,31 @@
 /**
  * PortalServicesLogo
  *
- * Renders the Portal Services Digital brand mark using
- * `/public/brand/portal-services-logo.png` as a CSS mask, so the
- * silhouette of the PNG is painted with an exact palette color instead
- * of relying on a CSS filter chain (which was producing a purple tint
- * because chrome/silver → hue-rotate is imprecise).
+ * Renders the Portal Services Digital brand lockup:
+ *   [PC mark]  Portal Services Digital
+ *              CLEANING & FACILITIES
+ *
+ * The mark uses `/public/brand/portal-services-logo.png` as a CSS mask
+ * so the silhouette is painted with an exact palette color (no filter
+ * drift into purple/violet).
  *
  * Variants:
- * - `light`: mark is painted white (`#F8FAFC`) — use on dark surfaces
- *   (navy hero, footer).
- * - `dark`:  mark is painted deep navy (`#0B2A6B`) — use on light
- *   surfaces (white nav, cream card).
+ * - `light`: mark + text painted in near-white (`#F8FAFC`). Use on
+ *   dark surfaces (navy hero, dark footer).
+ * - `dark`:  mark + text painted in deep navy (`#0B2A6B`). Use on
+ *   light surfaces (white nav, cream card).
  * - `auto`:  defaults to `dark`. Prefer explicit variants when the
  *   surface color is known at authoring time.
  *
  * Sizes map to the vertical height of the mark:
- * - `sm`: 28px  (dense nav bars, footers)
- * - `md`: 40px  (standard header)
- * - `lg`: 56px  (hero, marketing pages)
+ * - `sm`: 28px
+ * - `md`: 40px
+ * - `lg`: 56px
  *
- * The wordmark "Portal Services Digital" renders adjacent to the mark
- * unless `showWordmark` is set to `false` (icon-only usage).
+ * `showWordmark`  toggles the whole "Portal Services Digital" + tagline
+ *                 block (defaults to true).
+ * `showTagline`   toggles the "CLEANING & FACILITIES" line beneath the
+ *                 wordmark (defaults to true).
  */
 
 import type { CSSProperties } from 'react';
@@ -30,6 +34,7 @@ export interface PortalServicesLogoProps {
   variant?: 'auto' | 'light' | 'dark';
   size?: 'sm' | 'md' | 'lg';
   showWordmark?: boolean;
+  showTagline?: boolean;
   className?: string;
 }
 
@@ -48,17 +53,29 @@ const WORDMARK_TEXT_SIZE: Record<
   lg: 'text-xl',
 };
 
-// Exact palette colors — no filter math involved. What you set here is
-// what you see. Adjust here to move the entire brand mark's tint site-wide.
+const TAGLINE_TEXT_SIZE: Record<
+  NonNullable<PortalServicesLogoProps['size']>,
+  string
+> = {
+  sm: 'text-[8px]',
+  md: 'text-[9.5px]',
+  lg: 'text-[11px]',
+};
+
+// Exact palette colors — no filter math involved. Adjust here to shift
+// the mark tint site-wide.
 const DARK_COLOR = '#0B2A6B'; // navy on light surfaces
 const LIGHT_COLOR = '#F8FAFC'; // near-white on dark surfaces
 
 const MASK_URL = "url('/brand/portal-services-logo.png')";
 
+const TAGLINE_TEXT = 'CLEANING & FACILITIES';
+
 export function PortalServicesLogo({
   variant = 'auto',
   size = 'md',
   showWordmark = true,
+  showTagline = true,
   className,
 }: PortalServicesLogoProps) {
   const pxSize = SIZE_PX[size];
@@ -86,11 +103,13 @@ export function PortalServicesLogo({
 
   const wordmarkColor =
     resolvedVariant === 'dark' ? 'text-[#0B2A6B]' : 'text-white';
+  const taglineColor =
+    resolvedVariant === 'dark' ? 'text-[#4B5B7A]' : 'text-white/70';
 
   return (
     <span
       role="img"
-      aria-label="Portal Services Digital"
+      aria-label="Portal Services Digital — Cleaning & Facilities"
       className={[
         'inline-flex items-center gap-2 align-middle',
         className ?? '',
@@ -100,14 +119,27 @@ export function PortalServicesLogo({
     >
       <span aria-hidden="true" style={markStyle} />
       {showWordmark && (
-        <span
-          className={[
-            'font-semibold tracking-tight whitespace-nowrap',
-            WORDMARK_TEXT_SIZE[size],
-            wordmarkColor,
-          ].join(' ')}
-        >
-          Portal Services Digital
+        <span className="flex flex-col leading-tight">
+          <span
+            className={[
+              'font-semibold tracking-tight whitespace-nowrap',
+              WORDMARK_TEXT_SIZE[size],
+              wordmarkColor,
+            ].join(' ')}
+          >
+            Portal Services Digital
+          </span>
+          {showTagline && (
+            <span
+              className={[
+                'mt-0.5 font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
+                TAGLINE_TEXT_SIZE[size],
+                taglineColor,
+              ].join(' ')}
+            >
+              {TAGLINE_TEXT}
+            </span>
+          )}
         </span>
       )}
     </span>
