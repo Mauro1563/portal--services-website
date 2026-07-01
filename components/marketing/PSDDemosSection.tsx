@@ -77,7 +77,7 @@ export default async function PSDDemosSection() {
           {/* Home demos */}
           <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 sm:p-8">
             <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#0EA5A4]/10 text-[#0EA5A4]">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#10B981]/10 text-[#10B981]">
                 <Home className="h-4 w-4" aria-hidden />
               </span>
               <h3 className="font-display text-xl font-bold text-slate-900">
@@ -90,7 +90,7 @@ export default async function PSDDemosSection() {
                 <li key={d.key}>
                   <Link
                     href={d.href}
-                    className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 transition hover:border-[#0EA5A4]/40 hover:bg-white hover:shadow-sm"
+                    className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 transition hover:border-[#10B981]/40 hover:bg-white hover:shadow-sm"
                   >
                     <span className="inline-flex items-center gap-2">
                       <span className="font-medium">{d.name[locale]}</span>
@@ -102,7 +102,7 @@ export default async function PSDDemosSection() {
                       ) : null}
                     </span>
                     <ArrowUpRight
-                      className="h-4 w-4 text-slate-400 transition group-hover:text-[#0EA5A4]"
+                      className="h-4 w-4 text-slate-400 transition group-hover:text-[#10B981]"
                       aria-hidden
                     />
                   </Link>

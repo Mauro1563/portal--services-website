@@ -9,7 +9,7 @@ import {
   Phone,
   Star,
 } from 'lucide-react';
-import { ZapliLogo } from '@/components/brand/ZapliLogo';
+import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 export const revalidate = 60; // ISR — refresh public pages every minute
@@ -79,9 +79,9 @@ export async function generateMetadata({
     .eq('is_public_profile', true)
     .maybeSingle();
 
-  if (!data) return { title: 'Cleaning service · Zapli' };
+  if (!data) return { title: 'Cleaning service · Portal Services Digital' };
   return {
-    title: `${data.business_name ?? 'Cleaning service'} · Zapli`,
+    title: `${data.business_name ?? 'Cleaning service'} · Portal Services Digital`,
     description: data.tagline ?? undefined,
   };
 }
@@ -165,8 +165,8 @@ export default async function PublicBusinessPage({
                 className="h-20 w-20 shrink-0 rounded-2xl border border-white/10 bg-white/[0.04] object-contain p-2"
               />
             ) : (
-              <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-cyan-300">
-                <ZapliLogo size="sm" mono />
+              <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
+                <PortalServicesLogo variant="light" size="sm" showWordmark={false} />
               </span>
             )}
             <div className="min-w-0 flex-1">
@@ -424,7 +424,7 @@ export default async function PublicBusinessPage({
       </section>
 
       <footer className="mx-auto max-w-3xl px-6 pb-6 text-center text-[10px] text-text-3">
-        Powered by Zapli
+        Powered by Portal Services Digital
       </footer>
     </main>
   );

@@ -34,7 +34,7 @@
     "more": "Más"
   },
   "hero": {
-    "eyebrow": "Zapli",
+    "eyebrow": "Portal Services Digital",
     "title_a": "La plataforma de gestión operativa para",
     "title_b": "empresas de limpieza y servicios.",
     "subtitle": "Controla equipos, edificios, calidad y comunicación desde un solo lugar, en tiempo real, desde cualquier dispositivo.",
@@ -106,7 +106,7 @@
     "director_f5": "Encuestas de satisfacción",
     "hq_title": "Portal HQ — Centro de control",
     "hq_tag": "El cerebro de la plataforma",
-    "hq_who": "Propietarios y administradores de Zapli",
+    "hq_who": "Propietarios y administradores de Portal Services",
     "hq_desc": "Control absoluto de la plataforma: gestión de usuarios, edificios, contraseñas, branding, seguridad y accesos.",
     "hq_f1": "Gestión de usuarios y permisos",
     "hq_f2": "Configuración de edificios y branding",
@@ -222,7 +222,7 @@
     "trial_note": "Prueba gratuita 30 días — sin tarjeta de crédito. Cancela cuando quieras.",
     "footnote": "Todos los precios en GBP, sin IVA. Descuentos por volumen disponibles. Cambia de plan en cualquier momento.",
     "popular": "Más popular",
-    "corporate_eyebrow": "Zapli · Corporativo",
+    "corporate_eyebrow": "Portal Services · Corporativo",
     "corporate_starter_name": "Starter",
     "corporate_starter_range": "1 – 3 edificios · hasta 10 operativos",
     "corporate_starter_price": "£49",
@@ -734,7 +734,7 @@
           "sub": "Centro de control",
           "title": "Portal HQ",
           "tag": "El cerebro de la plataforma",
-          "for": "Para propietarios y administradores de Zapli",
+          "for": "Para propietarios y administradores de Portal Services",
           "features": [
             "Gestión de usuarios y permisos",
             "Configuración de edificios y branding",
@@ -1334,7 +1334,7 @@
     }
   },
   "common": {
-    "appName": "Zapli",
+    "appName": "Portal Services Digital",
     "save": "Guardar",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
@@ -1388,7 +1388,7 @@
     "iAmCleaner": "Soy limpiadora",
     "newHere": "¿Eres nuevo?",
     "learnMore": "Conocer la plataforma",
-    "goodbye": "Cuenta eliminada. Gracias por usar Zapli."
+    "goodbye": "Cuenta eliminada. Gracias por usar Portal Services Digital."
   },
   "welcome": {
     "title": "Bienvenido",
@@ -1418,7 +1418,7 @@
     "createAccountBtn": "Crear cuenta",
     "forgotPassword": "¿Olvidaste la contraseña?",
     "back": "Volver",
-    "badge": "Zapli",
+    "badge": "Portal Services Digital",
     "pageTitle": "Inicia sesión en tu cuenta",
     "pageSubtitle": "Introduce tus credenciales para continuar",
     "emailPh": "nombre@email.com",
