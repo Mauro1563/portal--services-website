@@ -61,6 +61,20 @@ const config: Config = {
           textSubtle: '#A1A6BA',
           border: '#81869D',
         },
+        psd: {
+          // Navy family — dark surfaces + brand identity
+          navy: {
+            900: '#16224A',
+            800: '#0B2A6B',
+            700: '#103A8C',
+          },
+          // Medium blue — primary action + Workforce accent
+          blue: '#2563EB',
+          // Cool accents
+          cyan: '#06B6D4',
+          // Teal-cold — Home accent (kept within blue family)
+          teal: '#0EA5A4',
+        },
       },
       backgroundImage: {
         'brand-gradient':
@@ -85,6 +99,11 @@ const config: Config = {
         'zapli-glow': '0 0 24px rgba(0,216,199,0.45)',
         // Glassmorphism / depth
         glass: '0 8px 32px 0 rgba(31, 38, 135, 0.12)',
+        'psd-blue-glow':
+          '0 10px 28px -8px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.12)',
+        'psd-teal-glow':
+          '0 10px 28px -8px rgba(14,165,164,0.32), inset 0 1px 0 rgba(255,255,255,0.12)',
+        'psd-navy-card': '0 20px 40px -20px rgba(11,42,107,0.35)',
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',

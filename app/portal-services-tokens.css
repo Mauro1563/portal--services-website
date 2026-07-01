@@ -1,0 +1,36 @@
+/**
+ * Portal Services Digital design tokens (CSS custom properties).
+ * Used alongside Tailwind's theme.extend.colors.psd.* for surfaces that
+ * need CSS-level tokens (gradients, box-shadows composed dynamically,
+ * legacy CSS in .css files).
+ */
+:root {
+  /* Navy — dark surfaces */
+  --psd-navy-900: #16224A;
+  --psd-navy-800: #0B2A6B;
+  --psd-navy-700: #103A8C;
+
+  /* Action + accents */
+  --psd-blue: #2563EB;
+  --psd-cyan: #06B6D4;
+  --psd-teal: #0EA5A4;
+
+  /* Surfaces */
+  --psd-surface: #FFFFFF;
+  --psd-surface-alt: #F8FAFC;
+  --psd-line: #E2E8F0;
+
+  /* Text */
+  --psd-text-strong: #0F172A;
+  --psd-text: #334155;
+  --psd-text-muted: #64748B;
+
+  /* Text on dark */
+  --psd-text-on-dark: #F8FAFC;
+  --psd-text-on-dark-muted: #94A3B8;
+
+  /* Composed shadows */
+  --psd-blue-glow: 0 10px 28px -8px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+  --psd-teal-glow: 0 10px 28px -8px rgba(14,165,164,0.32), inset 0 1px 0 rgba(255,255,255,0.12);
+  --psd-navy-card: 0 20px 40px -20px rgba(11,42,107,0.35);
+}
