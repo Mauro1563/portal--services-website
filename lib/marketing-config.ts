@@ -32,12 +32,13 @@ export const CONTACT_CONFIG = {
 };
 
 // Workforce sub-portal demo URLs — edit as new portals ship.
+// Client sits in HOME_DEMOS only — clients belong to the residential
+// / Home surface, not Workforce (which is for corporate staff roles).
 export const WORKFORCE_DEMOS: DemoTarget[] = [
   { key: 'operative', name: { en: 'Operative', es: 'Operativo', pt: 'Operativo' }, href: '/operative/preview', requiresAuth: false },
   { key: 'supervisor', name: { en: 'Supervisor', es: 'Supervisor', pt: 'Supervisor' }, href: '/operative/preview', requiresAuth: false },
   { key: 'manager', name: { en: 'Manager', es: 'Manager', pt: 'Gestor' }, href: '/owner/preview', requiresAuth: false },
   { key: 'hq', name: { en: 'Director / HQ', es: 'Director / HQ', pt: 'Diretor / HQ' }, href: '/hq', requiresAuth: true },
-  { key: 'client', name: { en: 'Client', es: 'Cliente', pt: 'Cliente' }, href: '/client/preview', requiresAuth: false },
   { key: 'community', name: { en: 'Community', es: 'Comunidad', pt: 'Comunidade' }, href: '/operative/preview', requiresAuth: false },
   { key: 'hs', name: { en: 'Health & Safety', es: 'Salud y Seguridad', pt: 'Saúde e Segurança' }, href: '/operative/preview', requiresAuth: false },
 ];
