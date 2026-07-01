@@ -576,9 +576,10 @@
         "eyebrow": "Demos ao vivo",
         "title": "Experimenta o produto real — sem registo",
         "subtitle": "Cada cartão abaixo abre uma preview real da app com dados de exemplo. Nada é gravado, nada é partilhado.",
-        "workforceSub": "Sete portais por função. Explora cada um com dados de exemplo.",
+        "workforceSub": "Seis portais por função. Cada um terá o seu próprio demo — solicita acesso antecipado abaixo.",
         "homeSub": "Residencial + turnovers de Airbnb.",
-        "note": "Os demos com cadeado exigem login de demo — escreve-nos e ativamos."
+        "note": "Os demos com cadeado exigem login de demo — escreve-nos e ativamos.",
+        "comingSoon": "Em breve"
       },
       "contact": {
         "eyebrow": "Fala connosco",

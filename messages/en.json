@@ -566,9 +566,10 @@
         "eyebrow": "Live demos",
         "title": "Try the actual product — no sign-up",
         "subtitle": "Every card below opens a real preview of the app with sample data. Nothing is recorded, nothing shared.",
-        "workforceSub": "Seven role-specific portals. Explore each with sample data.",
+        "workforceSub": "Six role-specific portals. Each ships with its own demo — request early access below.",
         "homeSub": "Residential + Airbnb turnover experiences.",
-        "note": "Some demos marked with a lock require a demo login — write to us and we'll set it up."
+        "note": "Some demos marked with a lock require a demo login — write to us and we'll set it up.",
+        "comingSoon": "Soon"
       },
       "contact": {
         "eyebrow": "Get in touch",

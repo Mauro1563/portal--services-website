@@ -14,6 +14,14 @@ export type DemoTarget = {
   name: { en: string; es: string; pt: string };
   href: string;
   requiresAuth: boolean;
+  /**
+   * When true, the demo card renders as a disabled "Coming soon" tile
+   * instead of a clickable link. Set to true for portals that don't
+   * yet have their own preview route so the marketing site never
+   * misroutes users into an unrelated demo (e.g. Workforce Operative
+   * → residential Home Cleaner demo).
+   */
+  comingSoon?: boolean;
 };
 
 // Trust bar metrics — ANONYMOUS ONLY, no company names.
@@ -32,15 +40,22 @@ export const CONTACT_CONFIG = {
 };
 
 // Workforce sub-portal demo URLs — edit as new portals ship.
-// Client sits in HOME_DEMOS only — clients belong to the residential
-// / Home surface, not Workforce (which is for corporate staff roles).
+// Client sits in HOME_DEMOS only (clients belong to the residential
+// / Home surface, not Workforce, which is for corporate staff roles).
+//
+// The Workforce portals are all marked comingSoon: true until their
+// dedicated preview routes ship. Reusing the Home /operative/preview
+// or /owner/preview demos here would misroute users into the wrong
+// product (a Workforce visitor clicking "Operative" would land on the
+// residential Home cleaner app). Flip comingSoon to false and update
+// the href when the real Workforce demo goes live.
 export const WORKFORCE_DEMOS: DemoTarget[] = [
-  { key: 'operative', name: { en: 'Operative', es: 'Operativo', pt: 'Operativo' }, href: '/operative/preview', requiresAuth: false },
-  { key: 'supervisor', name: { en: 'Supervisor', es: 'Supervisor', pt: 'Supervisor' }, href: '/operative/preview', requiresAuth: false },
-  { key: 'manager', name: { en: 'Manager', es: 'Manager', pt: 'Gestor' }, href: '/owner/preview', requiresAuth: false },
-  { key: 'hq', name: { en: 'Director / HQ', es: 'Director / HQ', pt: 'Diretor / HQ' }, href: '/hq', requiresAuth: true },
-  { key: 'community', name: { en: 'Community', es: 'Comunidad', pt: 'Comunidade' }, href: '/operative/preview', requiresAuth: false },
-  { key: 'hs', name: { en: 'Health & Safety', es: 'Salud y Seguridad', pt: 'Saúde e Segurança' }, href: '/operative/preview', requiresAuth: false },
+  { key: 'operative', name: { en: 'Operative', es: 'Operativo', pt: 'Operativo' }, href: '#', requiresAuth: false, comingSoon: true },
+  { key: 'supervisor', name: { en: 'Supervisor', es: 'Supervisor', pt: 'Supervisor' }, href: '#', requiresAuth: false, comingSoon: true },
+  { key: 'manager', name: { en: 'Manager', es: 'Manager', pt: 'Gestor' }, href: '#', requiresAuth: false, comingSoon: true },
+  { key: 'hq', name: { en: 'Director / HQ', es: 'Director / HQ', pt: 'Diretor / HQ' }, href: '/hq', requiresAuth: true, comingSoon: true },
+  { key: 'community', name: { en: 'Community', es: 'Comunidad', pt: 'Comunidade' }, href: '#', requiresAuth: false, comingSoon: true },
+  { key: 'hs', name: { en: 'Health & Safety', es: 'Salud y Seguridad', pt: 'Saúde e Segurança' }, href: '#', requiresAuth: false, comingSoon: true },
 ];
 
 // Home sub-solution demo URLs.
