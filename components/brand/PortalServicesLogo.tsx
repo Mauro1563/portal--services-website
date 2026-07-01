@@ -103,8 +103,11 @@ export function PortalServicesLogo({
 
   const wordmarkColor =
     resolvedVariant === 'dark' ? 'text-[#0B2A6B]' : 'text-white';
+  // Tagline color — teal-cold (matches the "Explore Home" CTA). Deeper
+  // #0EA5A4 on light surfaces, brighter #5EEAD4 (teal-300) on dark so
+  // it stays readable on the navy footer/hero.
   const taglineColor =
-    resolvedVariant === 'dark' ? 'text-[#4B5B7A]' : 'text-white/70';
+    resolvedVariant === 'dark' ? 'text-[#0EA5A4]' : 'text-[#5EEAD4]';
 
   return (
     <span
