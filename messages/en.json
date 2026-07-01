@@ -345,7 +345,7 @@
     "companyLinks": { "hq": "HQ access", "privacy": "Privacy", "terms": "Terms" },
     "contact": "Contact",
     "legal": "Legal",
-    "rights": "© 2026 Zapli. All rights reserved.",
+    "rights": "© 2026 Portal Services Digital. All rights reserved.",
     "madeWith": "Made with ♥ in Madrid · London · Lisbon"
   },
   "howItWorks": {
@@ -1094,7 +1094,7 @@
         "privacy": "Privacy",
         "terms": "Terms"
       },
-      "copyright": "© 2026 Zapli. All rights reserved."
+      "copyright": "© 2026 Portal Services Digital. All rights reserved."
     },
     "ticker": {
       "trial": "✓ 30-day free trial",
@@ -1253,7 +1253,7 @@
         "terms": "Terms",
         "gdpr": "GDPR"
       },
-      "bottom": "© 2026 Zapli. All rights reserved.",
+      "bottom": "© 2026 Portal Services Digital. All rights reserved.",
       "langs": "ES · EN · PT"
     }
   },

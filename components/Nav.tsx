@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { Logo } from './Logo';
+import { PortalServicesLogo } from './brand/PortalServicesLogo';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
 export function Nav() {
@@ -18,8 +18,12 @@ export function Nav() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Top row: logo + utilities */}
         <div className="flex h-14 items-center justify-between gap-3 md:h-16">
-          <Link href={`/${locale}`} aria-label="Zapli" className="shrink-0">
-            <Logo size="md" variant="icon" />
+          <Link
+            href={`/${locale}`}
+            aria-label="Portal Services Digital"
+            className="shrink-0"
+          >
+            <PortalServicesLogo variant="dark" size="md" showWordmark />
           </Link>
 
           {/* Desktop-only inline links */}
@@ -45,7 +49,7 @@ export function Nav() {
             </Link>
             <a
               href="mailto:hola@portalservices.digital?subject=Demo%20request"
-              className="inline-flex h-9 items-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 px-3 text-xs font-semibold text-white shadow-[0_8px_24px_-8px_rgba(37,99,235,0.55)] transition hover:brightness-110 sm:px-3.5 sm:text-sm"
+              className="inline-flex h-9 items-center rounded-full bg-[#0B2A6B] px-3.5 text-xs font-semibold text-white shadow-[0_8px_24px_-8px_rgba(11,42,107,0.4)] transition hover:bg-[#103A8C] sm:text-sm"
             >
               {t('cta')}
             </a>
