@@ -2,6 +2,7 @@ import { PSDNavbar } from '@/components/nav/PSDNavbar';
 import PSDHeroSection from '@/components/marketing/PSDHeroSection';
 import PSDTrustBar from '@/components/marketing/PSDTrustBar';
 import PSDWorkforceSection from '@/components/marketing/PSDWorkforceSection';
+import PSDChatSection from '@/components/marketing/PSDChatSection';
 import PSDHomeSection from '@/components/marketing/PSDHomeSection';
 import PSDComparisonSection from '@/components/marketing/PSDComparisonSection';
 import PSDFeaturesGrid from '@/components/marketing/PSDFeaturesGrid';
@@ -16,6 +17,7 @@ export default function LocaleHome() {
       <PSDHeroSection />
       <PSDTrustBar />
       <PSDWorkforceSection />
+      <PSDChatSection />
       <PSDHomeSection />
       <PSDComparisonSection />
       <PSDFeaturesGrid />

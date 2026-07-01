@@ -442,6 +442,54 @@
         "ctaPrimary": "Abrir demo Operativo",
         "ctaSecondary": "Solicitar walkthrough completo"
       },
+      "chat": {
+        "eyebrow": "Portal Chat · Chat corporativo",
+        "title": "Um chat para cada função, cada edifício, cada turno",
+        "body": "O Portal Chat substitui os grupos de WhatsApp e o email por um chat corporativo dentro do Portal Services. Agrupado por edifício, com chamadas de voz e vídeo, anúncios fixados e um centro de administração HQ — nada sai da tua organização.",
+        "featuresLabel": "Tudo incluído",
+        "groups": {
+          "conversations": { "title": "Conversas" },
+          "rich": { "title": "Comunicação rica" },
+          "organisation": { "title": "Organização" },
+          "control": { "title": "Controlo" }
+        },
+        "features": {
+          "buildingGroups": "Grupos por edifício",
+          "community": "Canais de comunidade da empresa",
+          "directWithPresence": "Mensagens diretas com presença",
+          "voiceVideoCalls": "Chamadas de voz e vídeo",
+          "voiceMessages": "Mensagens de voz",
+          "files": "Ficheiros (fotos, PDFs, docs)",
+          "searchFilters": "Pesquisa e filtros",
+          "pinnedMessages": "Mensagens fixadas",
+          "announcementsTickets": "Anúncios e tickets",
+          "emergencyCenter": "Centro de emergências",
+          "hqAdmin": "Administração HQ do chat"
+        },
+        "preview": {
+          "groupName": "Edifício A · Turno manhã",
+          "presenceLabel": "3 pessoas online",
+          "pinnedAnnouncement": "Limpeza profunda hoje após as 22:00 — trazer EPI.",
+          "messages": {
+            "supervisorName": "Supervisor",
+            "supervisorText": "Equipa, por favor confirmem a presença para a limpeza profunda desta noite.",
+            "time1": "09:14",
+            "operativeName": "Operativo",
+            "voiceDuration": "0:12",
+            "time2": "09:16",
+            "hqName": "HQ",
+            "hqText": "Protocolo assinado em anexo — ler antes de começar.",
+            "time3": "09:22"
+          },
+          "attachmentName": "protocolo-limpeza.pdf",
+          "composerPlaceholder": "Escreve uma mensagem…"
+        },
+        "ctaEyebrow": "Vê em ação",
+        "ctaTitle": "Tira a comunicação do WhatsApp",
+        "ctaBody": "Reserva um walkthrough ao vivo do Portal Chat com a tua equipa, ou entra no demo.",
+        "ctaPrimary": "Solicitar walkthrough",
+        "ctaSecondary": "Ver demos ao vivo"
+      },
       "home": {
         "eyebrow": "Portal Services: Home",
         "title": "Limpeza residencial + turnovers de Airbnb num único sítio",

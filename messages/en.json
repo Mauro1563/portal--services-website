@@ -432,6 +432,54 @@
         "ctaPrimary": "Open Operative demo",
         "ctaSecondary": "Request a full walkthrough"
       },
+      "chat": {
+        "eyebrow": "Portal Chat · Corporate chat",
+        "title": "One chat for every role, every building, every shift",
+        "body": "Portal Chat replaces WhatsApp groups and email with a corporate chat built into Portal Services. Grouped by building, with voice + video calls, pinned announcements and a HQ admin centre — nothing leaves your organisation.",
+        "featuresLabel": "Everything included",
+        "groups": {
+          "conversations": { "title": "Conversations" },
+          "rich": { "title": "Rich communication" },
+          "organisation": { "title": "Organisation" },
+          "control": { "title": "Control" }
+        },
+        "features": {
+          "buildingGroups": "Groups per building",
+          "community": "Company-wide community channels",
+          "directWithPresence": "Direct messages with presence",
+          "voiceVideoCalls": "Voice + video calls",
+          "voiceMessages": "Voice messages",
+          "files": "File sharing (photos, PDFs, docs)",
+          "searchFilters": "Search + filters",
+          "pinnedMessages": "Pinned messages",
+          "announcementsTickets": "Announcements + tickets",
+          "emergencyCenter": "Emergency centre",
+          "hqAdmin": "HQ chat administration"
+        },
+        "preview": {
+          "groupName": "Building A · Morning shift",
+          "presenceLabel": "3 people online",
+          "pinnedAnnouncement": "Deep-clean tonight after 22:00 — bring PPE.",
+          "messages": {
+            "supervisorName": "Supervisor",
+            "supervisorText": "Team, please confirm attendance for tonight's deep-clean.",
+            "time1": "09:14",
+            "operativeName": "Operative",
+            "voiceDuration": "0:12",
+            "time2": "09:16",
+            "hqName": "HQ",
+            "hqText": "Signed protocol attached — read before you start.",
+            "time3": "09:22"
+          },
+          "attachmentName": "deep-clean-protocol.pdf",
+          "composerPlaceholder": "Write a message…"
+        },
+        "ctaEyebrow": "See it in action",
+        "ctaTitle": "Bring your comms out of WhatsApp",
+        "ctaBody": "Book a live walkthrough of Portal Chat with your team, or jump into the demo.",
+        "ctaPrimary": "Request walkthrough",
+        "ctaSecondary": "See live demos"
+      },
       "home": {
         "eyebrow": "Portal Services: Home",
         "title": "Residential cleaning + Airbnb turnovers in one place",
