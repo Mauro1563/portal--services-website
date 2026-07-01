@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { ZapliLogo } from '@/components/brand/ZapliLogo';
+import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { getLocale, type Locale } from '@/lib/i18n';
 
 type FooterLink = {
@@ -73,11 +73,11 @@ const COPY: Record<
     ctaEyebrow: 'Empieza hoy',
     ctaHeadlineLead: '¿Listo para empezar?',
     ctaHeadlineAccent: 'Prueba 14 días gratis',
-    ctaSub: 'Sin tarjeta. Sin compromisos. Activa Zapli en minutos y empieza a gestionar tu equipo, clientes y reservas desde un solo lugar.',
+    ctaSub: 'Sin tarjeta. Sin compromisos. Activa Portal Services Digital en minutos y empieza a gestionar tu equipo, clientes y reservas desde un solo lugar.',
     ctaPrimary: 'Prueba 14 días gratis',
     ctaSecondary: 'Hablar con ventas',
     copyright: (year) =>
-      `© ${year} Zapli. Todos los derechos reservados.`,
+      `© ${year} Portal Services Digital. Todos los derechos reservados.`,
     legalShort: { privacy: 'Privacidad', terms: 'Términos', status: 'Estado' },
   },
   en: {
@@ -114,11 +114,11 @@ const COPY: Record<
     ctaEyebrow: 'Start today',
     ctaHeadlineLead: 'Ready to get started?',
     ctaHeadlineAccent: 'Try it free for 14 days',
-    ctaSub: 'No credit card. No commitment. Set up Zapli in minutes and start managing your team, customers and bookings from one place.',
+    ctaSub: 'No credit card. No commitment. Set up Portal Services Digital in minutes and start managing your team, customers and bookings from one place.',
     ctaPrimary: 'Start 14-day free trial',
     ctaSecondary: 'Talk to sales',
     copyright: (year) =>
-      `© ${year} Zapli. All rights reserved.`,
+      `© ${year} Portal Services Digital. All rights reserved.`,
     legalShort: { privacy: 'Privacy', terms: 'Terms', status: 'Status' },
   },
   pt: {
@@ -155,11 +155,11 @@ const COPY: Record<
     ctaEyebrow: 'Comece hoje',
     ctaHeadlineLead: 'Pronto para começar?',
     ctaHeadlineAccent: 'Experimente 14 dias grátis',
-    ctaSub: 'Sem cartão. Sem compromissos. Active o Zapli em minutos e comece a gerir a sua equipa, clientes e reservas num só lugar.',
+    ctaSub: 'Sem cartão. Sem compromissos. Active o Portal Services Digital em minutos e comece a gerir a sua equipa, clientes e reservas num só lugar.',
     ctaPrimary: 'Experimentar 14 dias grátis',
     ctaSecondary: 'Falar com vendas',
     copyright: (year) =>
-      `© ${year} Zapli. Todos os direitos reservados.`,
+      `© ${year} Portal Services Digital. Todos os direitos reservados.`,
     legalShort: { privacy: 'Privacidade', terms: 'Termos', status: 'Estado' },
   },
 };
@@ -233,7 +233,7 @@ export default async function FooterSection() {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
-            <ZapliLogo size="sm" />
+            <PortalServicesLogo variant="dark" size="sm" showWordmark />
             <p className="mt-4 max-w-xs text-sm text-slate-600">
               {t.tagline}
             </p>
