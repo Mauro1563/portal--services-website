@@ -404,6 +404,51 @@
           "body": "Limpieza residencial + turnovers de Airbnb. Reservas, equipos y cobros en un mismo lugar.",
           "cta": "Explorar Home"
         }
+      },
+      "trust": {
+        "eyebrow": "En cifras"
+      },
+      "workforce": {
+        "eyebrow": "Portal Services: Workforce",
+        "title": "Control en tiempo real para empresas de servicios y limpieza",
+        "body": "Una plataforma, siete portales por rol. Los operativos gestionan su turno desde la app. Supervisores, managers y HQ tienen visibilidad en vivo. El cliente tiene su vista de solo lectura.",
+        "portalsLabel": "Sub-portales incluidos",
+        "features": {
+          "chat": { "title": "Chat en tiempo real", "body": "Cada mensaje llega al rol correcto al instante. Agrupa por edificio, turno o incidencia." },
+          "timesheets": { "title": "Timesheets y asistencia", "body": "Check-in con PIN, geofence, horas registradas automáticamente. Exporta nómina en un clic." },
+          "registry": { "title": "Registro de incidencias", "body": "Fotos, firmas y trazabilidad. Todo con fecha y hora, nada se pierde." },
+          "liveControl": { "title": "Control de operación en vivo", "body": "Mira quién está en sitio ahora mismo, por edificio y por turno. Las alertas saltan antes de que escale un problema." }
+        },
+        "ctaEyebrow": "Míralo en vivo",
+        "ctaTitle": "Prueba el demo del operativo — sin registro",
+        "ctaBody": "Entra a la app real que usarían tus equipos, con datos de ejemplo. Sin cuenta, sin tarjeta.",
+        "ctaPrimary": "Abrir demo Operativo",
+        "ctaSecondary": "Solicitar walkthrough completo"
+      },
+      "home": {
+        "eyebrow": "Portal Services: Home",
+        "title": "Limpieza residencial + turnovers de Airbnb en un solo sitio",
+        "body": "Reservas, equipos y cobros unificados. Sirve para limpieza residencial recurrente y para turnovers de Airbnb con sync iCal y checklists por habitación.",
+        "pillars": {
+          "schedule": { "title": "Agenda diaria", "body": "Asigna limpiadores a reservas con arrastrar-y-soltar. Detección automática de conflictos." },
+          "teams": { "title": "Equipos y pagos", "body": "Registra horas trabajadas, propinas y reparto de tarifas. Pagos automáticos semanales." },
+          "properties": { "title": "Propiedades y clientes", "body": "Cada vivienda tiene su checklist, instrucciones de acceso e historial." },
+          "turnover": { "title": "Turnover Loop", "body": "De check-out a check-in en menos de 4 horas. Traspaso automático entre huésped, limpiador y próximo huésped." }
+        },
+        "loopEyebrow": "Airbnb Turnover Loop",
+        "loopTitle": "Del check-out del huésped al siguiente check-in — automatizado",
+        "loopBody": "El sync de iCal trae todas las reservas. En cuanto un huésped hace check-out el limpiador recibe la tarea, hace el turnover, sube fotos y la propiedad queda lista para el siguiente.",
+        "loopSteps": {
+          "step1": "Check-out del huésped",
+          "step2": "Limpiador notificado",
+          "step3": "Turnover hecho + fotos",
+          "step4": "Lista para el próximo"
+        },
+        "ctaEyebrow": "Míralo en vivo",
+        "ctaTitle": "Prueba los demos de Home + Airbnb",
+        "ctaBody": "Dos demos sin registro: el panel del dueño residencial y la vista de anfitrión Airbnb con iCal + checklist de turnover.",
+        "ctaPrimary": "Abrir demo Home",
+        "ctaSecondary": "Ver demo Airbnb"
       }
     },
     "nav": {

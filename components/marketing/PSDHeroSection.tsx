@@ -15,12 +15,8 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { ArrowRight, Users, Home as HomeIcon, Sparkles } from 'lucide-react';
-import { TRUST_METRICS } from '@/lib/marketing-config';
-import { getLocale } from '@/lib/i18n';
-
 export default async function PSDHeroSection() {
   const t = await getTranslations('psd.landing.hero');
-  const locale = await getLocale();
 
   return (
     <section
@@ -117,19 +113,6 @@ export default async function PSDHeroSection() {
           </div>
         </div>
 
-        {/* Trust hints (anonymous metrics only, from marketing-config) */}
-        <div className="mt-14 flex flex-wrap items-baseline gap-x-8 gap-y-3 border-t border-white/10 pt-6 text-sm text-white/60">
-          {TRUST_METRICS.map((m) => (
-            <span key={m.value} className="inline-flex items-baseline gap-1.5">
-              <strong className="text-lg font-bold text-white tabular-nums">
-                {m.value}
-              </strong>
-              <span className="text-[13px] text-white/70">
-                {m.label[locale]}
-              </span>
-            </span>
-          ))}
-        </div>
       </div>
     </section>
   );

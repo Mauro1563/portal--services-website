@@ -394,6 +394,51 @@
           "body": "Residential cleaning + short-let Airbnb turnovers. Bookings, teams and payments in one place.",
           "cta": "Explore Home"
         }
+      },
+      "trust": {
+        "eyebrow": "In numbers"
+      },
+      "workforce": {
+        "eyebrow": "Portal Services: Workforce",
+        "title": "Real-time control for services and cleaning companies",
+        "body": "One platform, seven role-specific portals. Operatives run their shift on the app. Supervisors, managers and HQ get live visibility. Clients get their own read-only view.",
+        "portalsLabel": "Sub-portals included",
+        "features": {
+          "chat": { "title": "Real-time chat", "body": "Every message reaches the right role instantly. Group by building, shift or incident." },
+          "timesheets": { "title": "Timesheets & attendance", "body": "PIN check-in, geofence, hours logged automatically. Export payroll in one click." },
+          "registry": { "title": "Incident registry", "body": "Photos, signatures and audit trail. Everything time-stamped, nothing lost." },
+          "liveControl": { "title": "Live operations control", "body": "See who's on site right now, per building, per shift. Alerts fire before problems escalate." }
+        },
+        "ctaEyebrow": "See it live",
+        "ctaTitle": "Try the operative demo — no sign-up",
+        "ctaBody": "Enter the actual app your teams would use, with sample data. No account, no credit card.",
+        "ctaPrimary": "Open Operative demo",
+        "ctaSecondary": "Request a full walkthrough"
+      },
+      "home": {
+        "eyebrow": "Portal Services: Home",
+        "title": "Residential cleaning + Airbnb turnovers in one place",
+        "body": "Bookings, teams and payments unified. Works for recurring residential cleaning and short-let Airbnb turnovers with iCal sync and per-room checklists.",
+        "pillars": {
+          "schedule": { "title": "Daily schedule", "body": "Assign cleaners to bookings with drag-and-drop. Automatic conflict detection." },
+          "teams": { "title": "Teams & payouts", "body": "Track hours worked, tips and split rates. Weekly automatic payouts." },
+          "properties": { "title": "Properties & clients", "body": "Every home has its checklist, entry instructions and history." },
+          "turnover": { "title": "Turnover Loop", "body": "Check-out to check-in in under 4 hours. Automatic hand-off between guest, cleaner and next guest." }
+        },
+        "loopEyebrow": "Airbnb Turnover Loop",
+        "loopTitle": "From guest check-out to the next check-in — automated",
+        "loopBody": "iCal sync pulls every reservation. The moment a guest checks out the cleaner gets the task, does the turnover, uploads photos and the property is marked ready for the next arrival.",
+        "loopSteps": {
+          "step1": "Guest check-out",
+          "step2": "Cleaner notified",
+          "step3": "Turnover done + photos",
+          "step4": "Ready for next guest"
+        },
+        "ctaEyebrow": "See it live",
+        "ctaTitle": "Try the Home + Airbnb demos",
+        "ctaBody": "Two demos, no sign-up: the residential owner panel and the Airbnb host view with iCal + turnover checklist.",
+        "ctaPrimary": "Open Home demo",
+        "ctaSecondary": "See Airbnb host demo"
       }
     },
     "nav": {
