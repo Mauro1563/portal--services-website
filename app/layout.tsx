@@ -36,35 +36,35 @@ export const viewport: import('next').Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Zapli — Smart Turnover & Home Management',
-    template: '%s | Zapli',
+    default: 'Portal Services Digital — Workforce & Home operations platform',
+    template: '%s | Portal Services Digital',
   },
   description:
-    'Zapli — Smart Turnover & Home Management. Gestiona tu equipo, clientes y propiedades de Airbnb en tiempo real. Reemplaza WhatsApp y Excel.',
-  applicationName: 'Zapli',
+    'Portal Services Digital — one platform, two solutions: Workforce for cleaning and services companies, Home for residential cleaning and Airbnb turnovers.',
+  applicationName: 'Portal Services Digital',
   keywords: [
-    'software gestión limpieza hogar',
-    'gestión limpieza Airbnb',
-    'plataforma empresa de limpieza',
-    'home cleaning software',
-    'Airbnb cleaning management',
-    'Zapli',
+    'workforce management platform',
+    'cleaning services software',
+    'Airbnb turnover management',
+    'operatives supervisors managers',
+    'facility services software',
+    'Portal Services Digital',
   ],
-  authors: [{ name: 'Zapli' }],
+  authors: [{ name: 'Portal Services Digital' }],
   openGraph: {
-    title: 'Zapli — Smart Turnover & Home Management',
+    title: 'Portal Services Digital — Workforce & Home operations platform',
     description:
-      'Gestiona tu equipo, tus clientes y tus propiedades de Airbnb desde un solo lugar con Zapli. Foto de cada limpieza, check-in con GPS, valoraciones automáticas y portal del cliente.',
+      'Portal Services Digital: la plataforma operativa para servicios y hogar. Una marca, dos soluciones — Workforce y Home.',
     url: SITE_URL,
-    siteName: 'Zapli',
+    siteName: 'Portal Services Digital',
     locale: 'es_ES',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Zapli — Smart Turnover & Home Management',
+    title: 'Portal Services Digital — Workforce & Home operations platform',
     description:
-      'Zapli es la plataforma para empresas de limpieza de hogar y Airbnb. Reemplaza WhatsApp y Excel con una sola herramienta.',
+      'Portal Services Digital: la plataforma operativa para servicios y hogar. Workforce y Home en una sola marca.',
   },
   robots: {
     index: true,
@@ -82,12 +82,12 @@ export const metadata: Metadata = {
 const softwareLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Zapli',
+  name: 'Portal Services Digital',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   url: SITE_URL,
   description:
-    'Plataforma para empresas de limpieza de hogar y gestión de Airbnb. Equipo, clientes y propiedades en tiempo real.',
+    'La plataforma operativa para servicios y hogar. Workforce para empresas de limpieza y servicios, Home para residencial y Airbnb.',
   offers: {
     '@type': 'Offer',
     price: '39',
@@ -102,7 +102,7 @@ const softwareLd = {
   },
   publisher: {
     '@type': 'Organization',
-    name: 'Zapli',
+    name: 'Portal Services Digital',
     url: SITE_URL,
   },
 };

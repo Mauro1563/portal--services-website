@@ -8,8 +8,6 @@ import PSDFeaturesGrid from '@/components/marketing/PSDFeaturesGrid';
 import PSDDemosSection from '@/components/marketing/PSDDemosSection';
 import PSDContactSection from '@/components/marketing/PSDContactSection';
 import PSDFooter from '@/components/marketing/PSDFooter';
-import PricingSection from '@/components/marketing/PricingSection';
-import FaqSection from '@/components/marketing/FaqSection';
 
 export default function LocaleHome() {
   return (
@@ -22,8 +20,6 @@ export default function LocaleHome() {
       <PSDComparisonSection />
       <PSDFeaturesGrid />
       <PSDDemosSection />
-      <PricingSection />
-      <FaqSection />
       <PSDContactSection />
       <PSDFooter />
     </main>
