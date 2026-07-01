@@ -103,7 +103,7 @@ export default async function PSDHeroSection() {
             </p>
             <div className="mt-5">
               <Link
-                href="#soluciones"
+                href="#home-solution"
                 className="inline-flex items-center gap-2 rounded-full bg-[#10B981] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#059669] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B2A6B]"
               >
                 {t('home.cta')}
