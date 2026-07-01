@@ -411,13 +411,30 @@
       "workforce": {
         "eyebrow": "Portal Services: Workforce",
         "title": "Controlo em tempo real para empresas de serviços e limpeza",
-        "body": "Uma plataforma, sete portais por função. Os operativos gerem o turno a partir da app. Supervisores, gestores e HQ têm visibilidade ao vivo. O cliente tem a sua vista só de leitura.",
+        "body": "Uma plataforma, sete portais por função e catorze módulos que cobrem desde o registo de pessoal e o planeamento de turnos até à exportação de salários e o controlo ao vivo.",
         "portalsLabel": "Sub-portais incluídos",
-        "features": {
-          "chat": { "title": "Chat em tempo real", "body": "Cada mensagem chega ao papel certo ao instante. Agrupa por edifício, turno ou incidente." },
-          "timesheets": { "title": "Timesheets e assiduidade", "body": "Check-in com PIN, geofence, horas registadas automaticamente. Exporta salários num clique." },
-          "registry": { "title": "Registo de incidentes", "body": "Fotos, assinaturas e trilho de auditoria. Tudo com data e hora, nada se perde." },
-          "liveControl": { "title": "Controlo de operações ao vivo", "body": "Vê quem está no local agora mesmo, por edifício e por turno. Os alertas disparam antes de o problema escalar." }
+        "modulesLabel": "Módulos incluídos",
+        "categories": {
+          "personnel": { "title": "Gestão de pessoal" },
+          "operations": { "title": "Operação diária" },
+          "reports": { "title": "Relatórios e controlo" },
+          "security": { "title": "Segurança" }
+        },
+        "modules": {
+          "register": "Registo de pessoal",
+          "timeclock": "Fichas de ponto",
+          "shifts": "Planeamento de turnos",
+          "coverage": "Coberturas de ausência",
+          "holidays": "Férias",
+          "orders": "Ordens de trabalho",
+          "surveys": "Inquéritos de qualidade",
+          "evaluations": "Avaliações de pessoal",
+          "workforceControl": "Controlo de força de trabalho",
+          "liveReports": "Relatórios ao vivo",
+          "hqControl": "Centro de controlo HQ",
+          "payrollExport": "Exportação de salários",
+          "audit": "Auditoria de alterações",
+          "roleAccess": "Acessos por função"
         },
         "ctaEyebrow": "Vê ao vivo",
         "ctaTitle": "Experimenta o demo do operativo — sem registo",

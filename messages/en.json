@@ -401,13 +401,30 @@
       "workforce": {
         "eyebrow": "Portal Services: Workforce",
         "title": "Real-time control for services and cleaning companies",
-        "body": "One platform, seven role-specific portals. Operatives run their shift on the app. Supervisors, managers and HQ get live visibility. Clients get their own read-only view.",
+        "body": "One platform, seven role-specific portals, fourteen modules covering everything from onboarding and shift planning to payroll exports and live control.",
         "portalsLabel": "Sub-portals included",
-        "features": {
-          "chat": { "title": "Real-time chat", "body": "Every message reaches the right role instantly. Group by building, shift or incident." },
-          "timesheets": { "title": "Timesheets & attendance", "body": "PIN check-in, geofence, hours logged automatically. Export payroll in one click." },
-          "registry": { "title": "Incident registry", "body": "Photos, signatures and audit trail. Everything time-stamped, nothing lost." },
-          "liveControl": { "title": "Live operations control", "body": "See who's on site right now, per building, per shift. Alerts fire before problems escalate." }
+        "modulesLabel": "Modules included",
+        "categories": {
+          "personnel": { "title": "Personnel management" },
+          "operations": { "title": "Daily operations" },
+          "reports": { "title": "Reports & Control" },
+          "security": { "title": "Security" }
+        },
+        "modules": {
+          "register": "Personnel register",
+          "timeclock": "Time-clock",
+          "shifts": "Shift planning",
+          "coverage": "Absence coverage",
+          "holidays": "Holiday requests",
+          "orders": "Work orders",
+          "surveys": "Quality surveys",
+          "evaluations": "Staff evaluations",
+          "workforceControl": "Workforce control",
+          "liveReports": "Live reports",
+          "hqControl": "HQ control centre",
+          "payrollExport": "Payroll export",
+          "audit": "Change audit log",
+          "roleAccess": "Role-based access"
         },
         "ctaEyebrow": "See it live",
         "ctaTitle": "Try the operative demo — no sign-up",

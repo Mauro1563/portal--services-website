@@ -411,13 +411,30 @@
       "workforce": {
         "eyebrow": "Portal Services: Workforce",
         "title": "Control en tiempo real para empresas de servicios y limpieza",
-        "body": "Una plataforma, siete portales por rol. Los operativos gestionan su turno desde la app. Supervisores, managers y HQ tienen visibilidad en vivo. El cliente tiene su vista de solo lectura.",
+        "body": "Una plataforma, siete portales por rol y catorce módulos que cubren desde el alta del personal y la planificación de turnos hasta la exportación de nómina y el control en vivo.",
         "portalsLabel": "Sub-portales incluidos",
-        "features": {
-          "chat": { "title": "Chat en tiempo real", "body": "Cada mensaje llega al rol correcto al instante. Agrupa por edificio, turno o incidencia." },
-          "timesheets": { "title": "Timesheets y asistencia", "body": "Check-in con PIN, geofence, horas registradas automáticamente. Exporta nómina en un clic." },
-          "registry": { "title": "Registro de incidencias", "body": "Fotos, firmas y trazabilidad. Todo con fecha y hora, nada se pierde." },
-          "liveControl": { "title": "Control de operación en vivo", "body": "Mira quién está en sitio ahora mismo, por edificio y por turno. Las alertas saltan antes de que escale un problema." }
+        "modulesLabel": "Módulos incluidos",
+        "categories": {
+          "personnel": { "title": "Gestión de personal" },
+          "operations": { "title": "Operativa diaria" },
+          "reports": { "title": "Reportes y control" },
+          "security": { "title": "Seguridad" }
+        },
+        "modules": {
+          "register": "Registro de personal",
+          "timeclock": "Fichajes",
+          "shifts": "Planificación de turnos",
+          "coverage": "Coberturas de ausencia",
+          "holidays": "Vacaciones",
+          "orders": "Órdenes de trabajo",
+          "surveys": "Encuestas de calidad",
+          "evaluations": "Evaluaciones de personal",
+          "workforceControl": "Control de fuerza laboral",
+          "liveReports": "Reportes en vivo",
+          "hqControl": "Centro de control HQ",
+          "payrollExport": "Exportación de nómina",
+          "audit": "Auditoría de cambios",
+          "roleAccess": "Accesos por rol"
         },
         "ctaEyebrow": "Míralo en vivo",
         "ctaTitle": "Prueba el demo del operativo — sin registro",
