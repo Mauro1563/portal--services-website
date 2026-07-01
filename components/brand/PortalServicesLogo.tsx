@@ -103,11 +103,13 @@ export function PortalServicesLogo({
 
   const wordmarkColor =
     resolvedVariant === 'dark' ? 'text-[#0B2A6B]' : 'text-white';
+
   // Tagline color — teal-cold (matches the "Explore Home" CTA). Deeper
   // #0EA5A4 on light surfaces, brighter #5EEAD4 (teal-300) on dark so
-  // it stays readable on the navy footer/hero.
-  const taglineColor =
-    resolvedVariant === 'dark' ? 'text-[#0EA5A4]' : 'text-[#5EEAD4]';
+  // it stays readable on the navy footer/hero. Applied inline instead
+  // of via a Tailwind arbitrary-value class so it survives every JIT
+  // scanning edge case — the browser sees a plain inline style.
+  const TAGLINE_HEX = resolvedVariant === 'dark' ? '#0EA5A4' : '#5EEAD4';
 
   return (
     <span
@@ -137,8 +139,8 @@ export function PortalServicesLogo({
               className={[
                 'mt-0.5 font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
                 TAGLINE_TEXT_SIZE[size],
-                taglineColor,
               ].join(' ')}
+              style={{ color: TAGLINE_HEX }}
             >
               {TAGLINE_TEXT}
             </span>
