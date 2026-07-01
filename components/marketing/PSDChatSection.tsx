@@ -61,16 +61,28 @@ export default async function PSDChatSection() {
   return (
     <section
       id="chat"
-      className="relative overflow-hidden bg-slate-50 py-20 sm:py-28"
+      className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 py-24 sm:py-32"
       aria-labelledby="psd-chat-heading"
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 -left-24 h-96 w-96 rounded-full bg-[#10B981]/6 blur-3xl"
+        className="pointer-events-none absolute -top-32 -left-24 h-96 w-96 rounded-full bg-[#10B981]/10 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-[#10B981]/6 blur-3xl"
+        className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-[#2563EB]/8 blur-3xl"
+      />
+      {/* Fine grid overlay for texture */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            'linear-gradient(#10B981 1px, transparent 1px), linear-gradient(90deg, #10B981 1px, transparent 1px)',
+          backgroundSize: '56px 56px',
+          maskImage:
+            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+        }}
       />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -98,9 +110,23 @@ export default async function PSDChatSection() {
         <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:items-start">
           {/* Left / top: chat preview mockup */}
           <div className="order-1 lg:order-1">
+            {/* Green halo behind the mockup */}
+            <div className="relative mx-auto max-w-md">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-3 rounded-[32px] bg-gradient-to-br from-[#10B981]/25 via-[#10B981]/10 to-[#2563EB]/15 blur-2xl"
+              />
+              {/* Floating live-activity chip */}
+              <div className="absolute -right-3 -top-3 z-10 hidden items-center gap-2 rounded-full border border-[#10B981]/30 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 shadow-lg sm:inline-flex">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60 motion-safe:animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10B981]" />
+                </span>
+                {t('preview.presenceLabel')}
+              </div>
             <div
               aria-hidden="true"
-              className="relative mx-auto max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl"
+              className="relative mx-auto max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl"
             >
               {/* Mockup top bar */}
               <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
@@ -211,6 +237,7 @@ export default async function PSDChatSection() {
                 </button>
               </div>
             </div>
+            </div>
           </div>
 
           {/* Right / bottom: feature groups */}
@@ -244,30 +271,42 @@ export default async function PSDChatSection() {
           </div>
         </div>
 
-        {/* CTA card */}
-        <div className="mt-16 overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-[#0B2A6B] to-[#103A8C] p-6 sm:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+        {/* CTA card — deep emerald gradient with dual color glow */}
+        <div className="relative mt-16 overflow-hidden rounded-3xl bg-gradient-to-br from-[#052E2A] via-[#0F4C3A] to-[#059669] p-8 sm:p-12">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-[#34D399]/25 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-[#2563EB]/18 blur-3xl"
+          />
+
+          <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#6EE7B7]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#6EE7B7]">
                 <Bell className="mr-1 inline h-3 w-3" aria-hidden />
                 {t('ctaEyebrow')}
               </p>
-              <h3 className="font-display mt-3 text-2xl font-bold text-white sm:text-3xl">
+              <h3 className="font-display mt-3 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
                 {t('ctaTitle')}
               </h3>
-              <p className="mt-3 max-w-xl text-white/70">{t('ctaBody')}</p>
+              <p className="mt-3 max-w-xl text-white/75">{t('ctaBody')}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-full bg-[#10B981] px-5 py-2.5 text-sm font-semibold text-white shadow-psd-green-glow transition hover:bg-[#059669]"
+                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#065F46] shadow-lg transition hover:shadow-xl"
               >
                 {t('ctaPrimary')}
-                <ArrowRight className="h-4 w-4" aria-hidden />
+                <ArrowRight
+                  className="h-4 w-4 transition group-hover:translate-x-0.5"
+                  aria-hidden
+                />
               </Link>
               <Link
                 href="#demos"
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
               >
                 <Settings className="h-4 w-4" aria-hidden />
                 {t('ctaSecondary')}
