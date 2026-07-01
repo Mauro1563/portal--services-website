@@ -379,6 +379,33 @@
     "cta": "Empezar prueba gratis"
   },
   "psd": {
+    "landing": {
+      "nav": {
+        "solutions": "Soluciones",
+        "features": "Características",
+        "demos": "Demos",
+        "about": "Nosotros",
+        "contact": "Contacto",
+        "requestDemo": "Solicitar demo",
+        "openMenu": "Abrir menú",
+        "closeMenu": "Cerrar menú"
+      },
+      "hero": {
+        "eyebrow": "Portal Services Digital",
+        "title": "La plataforma operativa para servicios y hogar",
+        "subtitle": "Una marca, dos soluciones: Workforce para empresas de limpieza y servicios. Home para limpieza residencial y turnovers de Airbnb.",
+        "workforce": {
+          "title": "Portal Services: Workforce",
+          "body": "Control en tiempo real para empresas de limpieza y servicios. Operativos, supervisores, managers y HQ en una plataforma.",
+          "cta": "Explorar Workforce"
+        },
+        "home": {
+          "title": "Portal Services: Home",
+          "body": "Limpieza residencial + turnovers de Airbnb. Reservas, equipos y cobros en un mismo lugar.",
+          "cta": "Explorar Home"
+        }
+      }
+    },
     "nav": {
       "portals": "Portales",
       "platform": "Plataforma",
