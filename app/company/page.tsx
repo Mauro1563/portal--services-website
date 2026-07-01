@@ -12,7 +12,7 @@ import { getLocale, type Locale } from '@/lib/i18n';
  * surfaces where the route segment is locale-less; the locale still resolves
  * from the `portal_locale` cookie.
  *
- * Palette rules (Zapli marketing):
+ * Palette rules (Portal Services marketing):
  *   - white page background
  *   - midnight #0A0D18 body text
  *   - #00D8C7 used ONLY as small dots / sparkles
@@ -60,19 +60,19 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   en: {
-    metaTitle: 'About Zapli — Company',
+    metaTitle: 'About Portal Services Digital — Company',
     metaDescription:
-      'Zapli is the operations platform for cleaning teams, individual cleaners and residential hosts. Mission, audience and how we work.',
+      'Portal Services Digital is the operations platform for cleaning teams, individual cleaners and residential hosts. Mission, audience and how we work.',
     heroEyebrow: 'Company',
-    heroTitle: 'About Zapli',
+    heroTitle: 'About Portal Services Digital',
     heroTagline:
       'A calmer way to run cleaning operations — built for the people doing the work, not the people watching dashboards.',
     missionEyebrow: 'Mission',
     missionTitle: 'What we do',
     missionBody:
-      'Zapli gives small and mid-size cleaning operations the same calm, reliable tooling that the biggest brands take for granted. We turn the daily mess of WhatsApp groups, paper checklists and scattered spreadsheets into one clear place where teams plan the day, clients see what is happening and operators get proof the job was done well.',
+      'Portal Services Digital gives small and mid-size cleaning operations the same calm, reliable tooling that the biggest brands take for granted. We turn the daily mess of WhatsApp groups, paper checklists and scattered spreadsheets into one clear place where teams plan the day, clients see what is happening and operators get proof the job was done well.',
     audienceEyebrow: 'Audience',
-    audienceTitle: 'Who Zapli is for',
+    audienceTitle: 'Who Portal Services Digital is for',
     audienceSub:
       'Three kinds of teams sit at the centre of every product decision we make.',
     audiences: [
@@ -115,24 +115,24 @@ const COPY: Record<Locale, Copy> = {
     contactEyebrow: 'Contact',
     contactTitle: 'Want to talk to us?',
     contactBody:
-      'Questions, feedback or just curious whether Zapli fits your team? Head to the contact page — a real person reads every message.',
+      'Questions, feedback or just curious whether Portal Services Digital fits your team? Head to the contact page — a real person reads every message.',
     ctaPrimary: 'Start free',
     ctaSecondary: 'Go to contact',
   },
   es: {
-    metaTitle: 'Sobre Zapli — Empresa',
+    metaTitle: 'Sobre Portal Services Digital — Empresa',
     metaDescription:
-      'Zapli es la plataforma operativa para equipos de limpieza, limpiadores autónomos y anfitriones residenciales. Misión, público y cómo trabajamos.',
+      'Portal Services Digital es la plataforma operativa para equipos de limpieza, limpiadores autónomos y anfitriones residenciales. Misión, público y cómo trabajamos.',
     heroEyebrow: 'Empresa',
-    heroTitle: 'Sobre Zapli',
+    heroTitle: 'Sobre Portal Services Digital',
     heroTagline:
       'Una forma más tranquila de gestionar operaciones de limpieza — pensada para quien hace el trabajo, no para quien mira paneles.',
     missionEyebrow: 'Misión',
     missionTitle: 'Lo que hacemos',
     missionBody:
-      'Zapli da a las operaciones de limpieza pequeñas y medianas las mismas herramientas tranquilas y fiables que las grandes marcas dan por sentadas. Convertimos el lío diario de grupos de WhatsApp, listas en papel y hojas de cálculo dispersas en un único lugar claro donde el equipo planifica el día, el cliente ve lo que pasa y el operador tiene prueba de que el trabajo se hizo bien.',
+      'Portal Services Digital da a las operaciones de limpieza pequeñas y medianas las mismas herramientas tranquilas y fiables que las grandes marcas dan por sentadas. Convertimos el lío diario de grupos de WhatsApp, listas en papel y hojas de cálculo dispersas en un único lugar claro donde el equipo planifica el día, el cliente ve lo que pasa y el operador tiene prueba de que el trabajo se hizo bien.',
     audienceEyebrow: 'Público',
-    audienceTitle: '¿Para quién es Zapli?',
+    audienceTitle: '¿Para quién es Portal Services Digital?',
     audienceSub:
       'Tres tipos de equipos están en el centro de cada decisión de producto.',
     audiences: [
@@ -175,24 +175,24 @@ const COPY: Record<Locale, Copy> = {
     contactEyebrow: 'Contacto',
     contactTitle: '¿Quieres hablar con nosotros?',
     contactBody:
-      '¿Dudas, comentarios o simplemente curiosidad por si Zapli encaja con tu equipo? Pasa por la página de contacto — una persona real lee cada mensaje.',
+      '¿Dudas, comentarios o simplemente curiosidad por si Portal Services Digital encaja con tu equipo? Pasa por la página de contacto — una persona real lee cada mensaje.',
     ctaPrimary: 'Empezar gratis',
     ctaSecondary: 'Ir a contacto',
   },
   pt: {
-    metaTitle: 'Sobre a Zapli — Empresa',
+    metaTitle: 'Sobre a Portal Services Digital — Empresa',
     metaDescription:
-      'A Zapli é a plataforma operacional para equipas de limpeza, limpadores independentes e anfitriões residenciais. Missão, público e como trabalhamos.',
+      'A Portal Services Digital é a plataforma operacional para equipas de limpeza, limpadores independentes e anfitriões residenciais. Missão, público e como trabalhamos.',
     heroEyebrow: 'Empresa',
-    heroTitle: 'Sobre a Zapli',
+    heroTitle: 'Sobre a Portal Services Digital',
     heroTagline:
       'Uma forma mais calma de gerir operações de limpeza — pensada para quem faz o trabalho, não para quem olha para painéis.',
     missionEyebrow: 'Missão',
     missionTitle: 'O que fazemos',
     missionBody:
-      'A Zapli dá às operações de limpeza pequenas e médias as mesmas ferramentas calmas e fiáveis que as grandes marcas tomam por garantidas. Transformamos a confusão diária de grupos de WhatsApp, listas em papel e folhas de cálculo dispersas num único sítio claro onde a equipa planeia o dia, o cliente vê o que se passa e o operador tem prova de que o trabalho foi bem feito.',
+      'A Portal Services Digital dá às operações de limpeza pequenas e médias as mesmas ferramentas calmas e fiáveis que as grandes marcas tomam por garantidas. Transformamos a confusão diária de grupos de WhatsApp, listas em papel e folhas de cálculo dispersas num único sítio claro onde a equipa planeia o dia, o cliente vê o que se passa e o operador tem prova de que o trabalho foi bem feito.',
     audienceEyebrow: 'Público',
-    audienceTitle: 'Para quem é a Zapli',
+    audienceTitle: 'Para quem é a Portal Services Digital',
     audienceSub:
       'Três tipos de equipas estão no centro de cada decisão de produto que tomamos.',
     audiences: [
@@ -235,7 +235,7 @@ const COPY: Record<Locale, Copy> = {
     contactEyebrow: 'Contacto',
     contactTitle: 'Queres falar connosco?',
     contactBody:
-      'Dúvidas, feedback ou só curiosidade para saber se a Zapli encaixa na tua equipa? Passa pela página de contacto — uma pessoa real lê cada mensagem.',
+      'Dúvidas, feedback ou só curiosidade para saber se a Portal Services Digital encaixa na tua equipa? Passa pela página de contacto — uma pessoa real lê cada mensagem.',
     ctaPrimary: 'Começar grátis',
     ctaSecondary: 'Ir para contacto',
   },
