@@ -7,7 +7,7 @@ import {
   UserRound,
   Users,
 } from 'lucide-react';
-import { ZapliLogo } from '@/components/brand/ZapliLogo';
+import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { PasswordInput } from './PasswordInput';
 import { SubmitButton } from './SubmitButton';
@@ -118,15 +118,15 @@ export default async function LoginPage({ searchParams }: Props) {
 
         {/* Logo top-left */}
         <div className="relative z-10 px-12 pt-10">
-          <ZapliLogo size="md" className="!h-12" mono />
+          <PortalServicesLogo variant="light" size="md" showWordmark showTagline={false} />
         </div>
 
         {/* Hero copy, anchored bottom-left so it doesn't fight the phone */}
         <div className="relative z-10 flex h-[calc(100%-7rem)] flex-col justify-end px-12 pb-12">
-          <div className="inline-flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-300/85">
+          <div className="inline-flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#6EE7B7]">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10B981] opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10B981]" />
             </span>
             {t('login.heroEyebrow')}
           </div>
@@ -136,7 +136,7 @@ export default async function LoginPage({ searchParams }: Props) {
             <br />
             {t('login.heroTitleB')}
             <br />
-            <span className="bg-gradient-to-r from-[#00D8C7] via-[#00D8C7] to-[#F8F9FA] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#10B981] via-[#10B981] to-[#F8F9FA] bg-clip-text text-transparent">
               {t('login.heroTitleC')}
             </span>
           </h1>
@@ -167,20 +167,9 @@ export default async function LoginPage({ searchParams }: Props) {
           </p>
         </div>
 
-        {/* Floating phone — uses the same real screenshot the marketing
-            hero uses so the login screen mirrors the product. */}
-        <div className="pointer-events-none absolute right-[-3rem] top-[12%] z-10 hidden w-[20rem] -rotate-[6deg] xl:block">
-          <div className="rounded-[40px] bg-slate-950 p-1.5 shadow-[0_50px_120px_-20px_rgba(0,0,0,0.7)] ring-1 ring-white/5">
-            <div className="overflow-hidden rounded-[34px] bg-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/hero-product.png"
-                alt=""
-                className="block h-auto w-full"
-              />
-            </div>
-          </div>
-        </div>
+        {/* Floating phone hidden until we regenerate /hero-product.png
+            with the Portal Services Digital chrome. The old asset still
+            shows the pre-rebrand "Portal Services Digital" cross logo. */}
       </aside>
 
       {/* ============================================================== */}
@@ -196,7 +185,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <div className="w-full max-w-sm">
           {/* Mobile-only logo since the left panel hides */}
           <div className="mb-8 flex justify-center lg:hidden">
-            <ZapliLogo size="md" className="!h-12" />
+            <PortalServicesLogo variant="dark" size="md" showWordmark showTagline={false} />
           </div>
 
           <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-950">
@@ -223,9 +212,9 @@ export default async function LoginPage({ searchParams }: Props) {
               real account (the common path for prospects coming from the
               marketing site) gets a direct, no-PIN one-tap entry into the
               three live previews. */}
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-[#00D8C7]/10 p-3">
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-[#10B981]/10 p-3">
             <p className="px-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#0A0D18]">
-              <Sparkles className="-mt-px mr-1 inline h-3 w-3 text-[#00D8C7]" />
+              <Sparkles className="-mt-px mr-1 inline h-3 w-3 text-[#10B981]" />
               {copy.demoEyebrow}
             </p>
             <p className="mt-0.5 px-1 text-[12px] font-bold text-slate-900">
@@ -237,7 +226,7 @@ export default async function LoginPage({ searchParams }: Props) {
                 title={copy.demoOwner}
                 className="group flex flex-col items-center gap-1 rounded-xl bg-[#0A0D18] px-2 py-2.5 text-white transition hover:bg-[#15151F]"
               >
-                <Building2 className="h-4 w-4 text-[#00D8C7] transition group-hover:scale-110" />
+                <Building2 className="h-4 w-4 text-[#10B981] transition group-hover:scale-110" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">
                   Owner
                 </span>
@@ -245,9 +234,9 @@ export default async function LoginPage({ searchParams }: Props) {
               <Link
                 href="/operative/preview"
                 title={copy.demoCleaner}
-                className="group flex flex-col items-center gap-1 rounded-xl border border-[#00D8C7]/30 bg-white px-2 py-2.5 text-[#0A0D18] transition hover:bg-[#00D8C7]/10"
+                className="group flex flex-col items-center gap-1 rounded-xl border border-[#10B981]/30 bg-white px-2 py-2.5 text-[#0A0D18] transition hover:bg-[#10B981]/10"
               >
-                <Users className="h-4 w-4 text-[#00D8C7] transition group-hover:scale-110" />
+                <Users className="h-4 w-4 text-[#10B981] transition group-hover:scale-110" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">
                   Cleaner
                 </span>
@@ -255,7 +244,7 @@ export default async function LoginPage({ searchParams }: Props) {
               <Link
                 href="/client/preview"
                 title={copy.demoClient}
-                className="group flex flex-col items-center gap-1 rounded-xl bg-[#00D8C7] px-2 py-2.5 text-[#0A0D18] transition hover:bg-[#00C2B3]"
+                className="group flex flex-col items-center gap-1 rounded-xl bg-[#10B981] px-2 py-2.5 text-[#0A0D18] transition hover:bg-[#059669]"
               >
                 <UserRound className="h-4 w-4 transition group-hover:scale-110" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">
@@ -282,7 +271,7 @@ export default async function LoginPage({ searchParams }: Props) {
                   autoComplete="username"
                   inputMode="text"
                   placeholder={copy.identifierPh}
-                  className="block h-12 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 transition focus:border-[#00D8C7] focus:outline-none focus:ring-4 focus:ring-[#00D8C7]/20"
+                  className="block h-12 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 transition focus:border-[#10B981] focus:outline-none focus:ring-4 focus:ring-[#10B981]/20"
                 />
               </div>
             </label>
@@ -305,7 +294,7 @@ export default async function LoginPage({ searchParams }: Props) {
             <div className="flex items-center justify-end">
               <Link
                 href="/forgot-password"
-                className="text-xs font-semibold text-[#0A0D18] underline decoration-[#00D8C7] decoration-2 underline-offset-4 transition hover:decoration-[#2BF0DE]"
+                className="text-xs font-semibold text-[#0A0D18] underline decoration-[#10B981] decoration-2 underline-offset-4 transition hover:decoration-[#2BF0DE]"
               >
                 {t('login.forgotPassword')}
               </Link>

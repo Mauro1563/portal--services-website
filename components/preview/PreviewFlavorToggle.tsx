@@ -4,8 +4,8 @@ import Link from 'next/link';
  * Tiny pill bar that sits just below DemoTopBar on every /<portal>/preview*
  * entry page. Lets a prospect flip between the residential ("Hogar") and
  * short-let ("Airbnb") flavours of the same portal without having to bounce
- * back to the marketing site. Two pills, active = solid blue, inactive =
- * white card with a hairline ring.
+ * back to the marketing site. Two pills, active = solid green (Home
+ * accent per v2 palette), inactive = white card with a hairline ring.
  *
  * The component is intentionally stateless — `active` decides which pill is
  * solid; the hogarHref / airbnbHref props decide where each link goes — so
@@ -22,8 +22,8 @@ export function PreviewFlavorToggle({
   airbnbHref: string;
 }) {
   const baseCls =
-    'inline-flex h-7 items-center gap-1 rounded-full px-2.5 text-[11px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500';
-  const activeCls = 'bg-blue-600 text-white shadow-sm';
+    'inline-flex h-7 items-center gap-1 rounded-full px-2.5 text-[11px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981]';
+  const activeCls = 'bg-[#10B981] text-white shadow-sm';
   const inactiveCls =
     'bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50';
 

@@ -40,7 +40,7 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
             Últimos 7 días
           </p>
         </div>
-        <p className="font-display text-lg font-bold tabular-nums text-blue-700">
+        <p className="font-display text-lg font-bold tabular-nums text-[#10B981]">
           {fmtMoney(data.reduce((sum, d) => sum + d.pence, 0))}
         </p>
       </header>
@@ -74,7 +74,7 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
                 tickFormatter={(v: number) => fmtMoney(v)}
               />
               <Tooltip
-                cursor={{ fill: 'rgba(37, 99, 235, 0.08)' }}
+                cursor={{ fill: 'rgba(16, 185, 129, 0.08)' }}
                 contentStyle={{
                   borderRadius: 10,
                   border: '1px solid #E2E8F0',
@@ -85,7 +85,7 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
               />
               <Bar
                 dataKey="pence"
-                fill="#2563EB"
+                fill="#10B981"
                 radius={[6, 6, 0, 0]}
                 maxBarSize={32}
               />
