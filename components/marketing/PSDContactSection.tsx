@@ -1,14 +1,11 @@
 /**
- * PSDContactSection — premium SaaS-style contact section.
+ * PSDContactSection — light modern closing block.
  *
- * Two-column asymmetric grid on desktop, stacked on mobile. Left is the
- * pitch (Prussian navy #0F2042 with white heading + blue-gray body).
- * Right is a floating white card with the form, rounded-3xl with a
- * subtle shadow. Emerald #10B981 is the CTA accent (checks + submit
- * button), reserved to this section only.
- *
- * Rendered with `next-intl` server translations so copy travels in
- * `messages/{en,es,pt}.json psd.landing.contact.*`.
+ * Mirrors the hero: soft white/blue gradient background, slate-900
+ * headline, green #10B981 as the single loud accent (chip, bullets,
+ * submit button). Form card floats over the light band with a subtle
+ * green halo instead of the previous dark Prussian navy surface, so
+ * the whole landing reads as one calm light composition top-to-bottom.
  */
 
 import { getTranslations } from 'next-intl/server';
@@ -21,36 +18,53 @@ export default async function PSDContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#0F2042] py-20 sm:py-24"
+      className="relative overflow-hidden bg-gradient-to-b from-[#ECFDF5] via-white to-[#EFF6FF] py-20 sm:py-24"
       aria-labelledby="psd-contact-heading"
     >
-      {/* Subtle depth washes — kept sparse so the pitch stays center-stage */}
+      {/* Ambient blobs — same rhythm as the hero, mirrored orientation */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-white/[0.04] blur-3xl"
+        className="pointer-events-none absolute -top-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-[#10B981]/12 blur-3xl motion-safe:animate-pulse"
+        style={{ animationDuration: '7s' }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -right-32 h-[24rem] w-[24rem] rounded-full bg-[#10B981]/[0.06] blur-3xl"
+        className="pointer-events-none absolute -bottom-40 -right-32 h-[24rem] w-[24rem] rounded-full bg-[#2563EB]/10 blur-3xl motion-safe:animate-pulse"
+        style={{ animationDuration: '8s', animationDelay: '1s' }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, #0F172A 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          maskImage:
+            'radial-gradient(ellipse at center, black 45%, transparent 90%)',
+        }}
       />
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="grid items-start gap-12 md:grid-cols-2 md:gap-16">
           {/* Left — pitch + benefits */}
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-[#10B981]/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#6EE7B7] ring-1 ring-inset ring-[#10B981]/30">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-white/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#059669] shadow-sm backdrop-blur">
               <Sparkles className="h-3 w-3" aria-hidden />
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60 motion-safe:animate-ping" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+              </span>
               {t('eyebrow')}
             </span>
 
             <h2
               id="psd-contact-heading"
-              className="font-display mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl"
+              className="font-display mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl"
             >
               {t('title')}
             </h2>
 
-            <p className="mt-5 max-w-lg text-lg leading-relaxed text-slate-300/85">
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-slate-600">
               {t('subtitle')}
             </p>
 
@@ -61,7 +75,7 @@ export default async function PSDContactSection() {
                     className="mt-0.5 h-5 w-5 shrink-0 text-[#10B981]"
                     aria-hidden
                   />
-                  <span className="text-[15px] leading-relaxed text-slate-200/90">
+                  <span className="text-[15px] leading-relaxed text-slate-700">
                     {t(`bullets.${k}`)}
                   </span>
                 </li>
@@ -69,9 +83,15 @@ export default async function PSDContactSection() {
             </ul>
           </div>
 
-          {/* Right — floating form card */}
-          <div className="rounded-3xl bg-[#F4F7FC] p-6 shadow-[0_20px_60px_-20px_rgba(15,23,42,0.4),_0_2px_4px_rgba(15,23,42,0.08)] sm:p-8 md:p-10">
-            <PSDContactForm />
+          {/* Right — floating white form card with a green halo */}
+          <div className="relative">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-1 rounded-[28px] bg-gradient-to-br from-[#10B981]/20 to-[#2563EB]/15 blur-xl"
+            />
+            <div className="relative rounded-3xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8 md:p-10">
+              <PSDContactForm />
+            </div>
           </div>
         </div>
       </div>
