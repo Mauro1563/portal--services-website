@@ -3,6 +3,8 @@ import PSDHeroSection from '@/components/marketing/PSDHeroSection';
 import PSDTrustBar from '@/components/marketing/PSDTrustBar';
 import PSDWorkforceSection from '@/components/marketing/PSDWorkforceSection';
 import PSDHomeSection from '@/components/marketing/PSDHomeSection';
+import PSDComparisonSection from '@/components/marketing/PSDComparisonSection';
+import PSDFeaturesGrid from '@/components/marketing/PSDFeaturesGrid';
 import PricingSection from '@/components/marketing/PricingSection';
 import TestimonialsSection from '@/components/marketing/TestimonialsSection';
 import FaqSection from '@/components/marketing/FaqSection';
@@ -16,6 +18,8 @@ export default function LocaleHome() {
       <PSDTrustBar />
       <PSDWorkforceSection />
       <PSDHomeSection />
+      <PSDComparisonSection />
+      <PSDFeaturesGrid />
       <PricingSection />
       <TestimonialsSection />
       <FaqSection />

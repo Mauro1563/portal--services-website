@@ -449,6 +449,62 @@
         "ctaBody": "Dois demos sem registo: o painel do dono residencial e a vista de anfitrião Airbnb com iCal + checklist de turnover.",
         "ctaPrimary": "Abrir demo Home",
         "ctaSecondary": "Ver demo Airbnb"
+      },
+      "comparison": {
+        "eyebrow": "Qual é para ti?",
+        "title": "Duas soluções, uma plataforma",
+        "subtitle": "Escolhe pela tua equipa e modelo de entrega — ambas partilham o mesmo core, podes adicionar a outra depois.",
+        "rows": {
+          "audience": {
+            "label": "Ideal para",
+            "workforce": "Empresas de limpeza e serviços com pessoal, turnos e clientes por edifício",
+            "home": "Limpeza residencial e anfitriões Airbnb"
+          },
+          "core": {
+            "label": "Capacidade principal",
+            "workforce": "Portais por função + controlo ao vivo do pessoal + timesheets",
+            "home": "Reservas diárias + Airbnb Turnover Loop + portal do cliente"
+          },
+          "size": {
+            "label": "Tamanho de equipa",
+            "workforce": "10 a 500+ operativos em vários edifícios",
+            "home": "1 a 50 limpadores, de solo a agência pequena"
+          },
+          "integrations": {
+            "label": "Integrações",
+            "workforce": "SSO, exportar RH, salários, sistemas de incidentes",
+            "home": "Sincronização iCal de Airbnb, pagamentos Stripe, email + WhatsApp"
+          },
+          "price": {
+            "label": "Preço inicial",
+            "workforce": "Desde £6 por operativo por mês",
+            "home": "Desde £29 por mês tudo incluído"
+          }
+        },
+        "bothLabel": "Ambas incluem",
+        "both": {
+          "multiLang": "Multi-idioma (EN · ES · PT)",
+          "realtime": "Atualizações em tempo real",
+          "pwa": "PWA móvel, funciona offline",
+          "security": "GDPR + acessos por função"
+        },
+        "ctaWorkforce": "Ver Workforce",
+        "ctaHome": "Ver Home"
+      },
+      "features": {
+        "eyebrow": "Base partilhada",
+        "title": "Construído sobre o mesmo core fiável",
+        "subtitle": "Todos os produtos Portal Services trazem estas capacidades desde o primeiro dia.",
+        "items": {
+          "multiLang": { "title": "Multi-idioma", "body": "Inglês, espanhol, português desde o início. Adiciona mais sem rebuild." },
+          "realtime": { "title": "Tempo real", "body": "Cada mudança propaga-se em menos de um segundo. Sem refresh, sem esperar." },
+          "pwa": { "title": "PWA móvel", "body": "Instalável, funciona offline para check-in e fotos no terreno." },
+          "security": { "title": "Segurança e GDPR", "body": "Acessos por função, log de auditoria, dados na UE. Cumpre GDPR por design." },
+          "geofence": { "title": "GPS + geofence", "body": "O check-in só dispara dentro do local. Sem spoofing, sem edições manuais." },
+          "photos": { "title": "Evidência fotográfica", "body": "Antes / depois por tarefa, com marca temporal e retenção configurável." },
+          "chat": { "title": "Chat integrado", "body": "Fala com a função certa num toque. Sem grupos de WhatsApp, sem tópicos perdidos." },
+          "exports": { "title": "Exportações e relatórios", "body": "CSV, PDF e API. Liga ao teu BI ou contabilidade favorita." }
+        }
       }
     },
     "nav": {
