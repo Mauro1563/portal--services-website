@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { signOutOperative } from '@/app/operative/actions';
 import { ThemeToggle } from '@/components/operative/ThemeToggle';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
 const DAY_NAMES = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 const DAY_FULL = [
@@ -54,6 +55,7 @@ export async function AgendaHeader({
   const dayShort = DAY_NAMES[now.getDay()];
   const monthShort = MONTH[now.getMonth()];
   const dayNum = now.getDate();
+  const locale = await getLocale();
 
   return (
     <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 pb-4 pt-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-12px_rgba(15,23,42,0.08)] sm:px-5 sm:pt-5">
@@ -69,7 +71,7 @@ export async function AgendaHeader({
           {decorationSlot ? <div className="mt-1">{decorationSlot}</div> : null}
         </div>
         <div className="flex items-center gap-1.5">
-          <LocaleSwitcher variant="premium" />
+          <LocaleSwitcher variant="premium" current={locale} />
           <ThemeToggle />
           <form action={signOutOperative}>
             <button

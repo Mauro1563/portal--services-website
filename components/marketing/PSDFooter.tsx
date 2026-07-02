@@ -10,9 +10,11 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
 export default async function PSDFooter() {
   const t = await getTranslations('psd.landing.footer');
+  const locale = await getLocale();
   const year = 2026;
 
   return (
@@ -29,7 +31,7 @@ export default async function PSDFooter() {
               {t('tagline')}
             </p>
             <div className="mt-6">
-              <LocaleSwitcher variant="premium" />
+              <LocaleSwitcher variant="premium" current={locale} />
             </div>
           </div>
 

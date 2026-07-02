@@ -245,7 +245,7 @@ export function DemoCorporateHeader({
           <div ref={popoverRef} className="relative flex shrink-0 items-center gap-2">
             {/* Locale switcher first so it sits at the very top-right edge of
                 the preview header — mirrors the real /owner CorporateHeader. */}
-            <LocaleSwitcher variant="premium" />
+            <LocaleSwitcher variant="premium" current={locale} />
             <button
               ref={bellRef}
               type="button"

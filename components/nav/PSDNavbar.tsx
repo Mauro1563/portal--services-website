@@ -15,7 +15,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Menu, X } from 'lucide-react';
 import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
@@ -36,6 +36,7 @@ const ITEMS: NavItem[] = [
 
 export function PSDNavbar() {
   const t = useTranslations('psd.landing.nav');
+  const locale = useLocale() as 'en' | 'es' | 'pt';
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -88,7 +89,7 @@ export function PSDNavbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <LocaleSwitcher variant="premium" />
+          <LocaleSwitcher variant="premium" current={locale} />
           <Link
             href="#contact"
             className="hidden items-center gap-1.5 rounded-full bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] ring-1 ring-inset ring-[#60A5FA]/40 transition hover:bg-[#1D4ED8] hover:shadow-[0_0_28px_rgba(37,99,235,0.7)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1327] sm:inline-flex"

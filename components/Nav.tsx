@@ -40,7 +40,7 @@ export function Nav() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
-            <LocaleSwitcher />
+            <LocaleSwitcher current={locale as 'en' | 'es' | 'pt'} />
             <Link
               href="https://hq.portalservices.digital"
               className="text-xs font-medium text-graphite-3 transition hover:text-graphite-1 sm:text-sm"

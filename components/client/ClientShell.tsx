@@ -3,13 +3,14 @@ import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import type { ClientContext } from '@/lib/client-auth';
 import { ClientTabBar, type Tab } from './ClientTabBar';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { getLocale } from '@/lib/i18n';
 
 /**
  * Mobile-first shell for the client portal. Uses the owner's white-label
  * logo if available; otherwise falls back to the Portal Services Digital
  * brand mark. Light theme. Fixed bottom tab bar for the four primary views.
  */
-export function ClientShell({
+export async function ClientShell({
   ctx,
   token,
   activeTab,
@@ -33,6 +34,7 @@ export function ClientShell({
   const logoUrl = ctx.owner.business_logo_url;
   const businessName = ctx.owner.business_name ?? 'Cleaning';
   const showTabs = Boolean(token && activeTab);
+  const locale = await getLocale();
 
   return (
     <main
@@ -70,11 +72,13 @@ export function ClientShell({
 
             {/* Locale switcher pinned to the top-right of the client header.
                 Uses the premium midnight pill so it pops on the white bar
-                without competing with the business logo on the left. The
-                switcher reads the locale cookie + localStorage on the client
-                and self-corrects on mount, so we don't need an async prop. */}
+                without competing with the business logo on the left. We pass
+                the resolved cookie locale so the "active" checkmark and the
+                equality guard inside the switcher match reality — omitting
+                `current` was defaulting to 'en' and swallowing English clicks
+                whenever the user was actually on ES/PT. */}
             <div className="ml-auto">
-              <LocaleSwitcher variant="premium" />
+              <LocaleSwitcher variant="premium" current={locale} />
             </div>
           </div>
         </header>

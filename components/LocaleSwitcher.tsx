@@ -179,45 +179,46 @@ export function LocaleSwitcher({
     const hash = typeof window !== 'undefined' ? window.location.hash : '';
     const suffix = (qs ? `?${qs}` : '') + (hash || '');
 
-    startTransition(() => {
-      // 1. Flip the cookie immediately so cookie-driven sections (e.g. HeroSection)
-      // render in the new language on the very next paint, without waiting for the
-      // middleware round-trip.
-      if (typeof document !== 'undefined') {
-        document.cookie = `portal_locale=${nextLocale}; path=/; max-age=${
-          60 * 60 * 24 * 365
-        }; samesite=lax`;
+    // 1. Flip the client cookie + localStorage synchronously so any sync
+    // read hits the new value before we navigate.
+    if (typeof document !== 'undefined') {
+      document.cookie = `portal_locale=${nextLocale}; path=/; max-age=${
+        60 * 60 * 24 * 365
+      }; samesite=lax`;
+    }
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+      } catch {
+        // Storage may be disabled — cookie still carries the preference.
       }
+    }
 
-      // 1b. Persist to localStorage so other tabs and future sessions honor
-      // the pick even before the cookie is read on the next request.
-      if (typeof window !== 'undefined') {
-        try {
-          window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
-        } catch {
-          // Storage may be disabled — cookie still carries the preference.
+    // 2. Await the server action so its cookie set + revalidatePath
+    // completes BEFORE we navigate. Fire-and-forget was racing with the
+    // router refresh and occasionally leaving the page on the old locale.
+    const fd = new FormData();
+    fd.set('locale', nextLocale);
+    void (async () => {
+      try {
+        await setLocale(fd);
+      } catch {
+        // Server action failure still leaves the cookie set client-side,
+        // and the router refresh below will pick it up on next request.
+      }
+      startTransition(() => {
+        if (hasLocalePrefix) {
+          segments[1] = nextLocale;
+          const nextPath = segments.join('/') || '/';
+          router.replace(nextPath + suffix, { scroll: false });
+        } else {
+          router.refresh();
         }
-      }
+      });
+    })();
 
-      // 2. Also call the server action so the cookie is set server-side for the
-      // current request and dependent caches are revalidated.
-      const fd = new FormData();
-      fd.set('locale', nextLocale);
-      void setLocale(fd);
-
-      // 3. Drive the URL. If the current path has a locale prefix, swap it;
-      // otherwise just refresh so the page picks up the new cookie.
-      if (hasLocalePrefix) {
-        segments[1] = nextLocale;
-        const nextPath = segments.join('/') || '/';
-        router.replace(nextPath + suffix, { scroll: false });
-      } else {
-        router.refresh();
-      }
-
-      setOpen(false);
-      triggerRef.current?.focus();
-    });
+    setOpen(false);
+    triggerRef.current?.focus();
   }
 
   // Style buckets per variant. The new "premium" variant is the midnight +
