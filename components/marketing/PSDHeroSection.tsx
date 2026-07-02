@@ -55,19 +55,34 @@ export default async function PSDHeroSection() {
         }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-28">
-        {/* Eyebrow with a live pulse dot */}
-        <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-700 shadow-sm backdrop-blur">
-          <Sparkles className="h-3 w-3 text-[#10B981]" aria-hidden />
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60 motion-safe:animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+      <div className="relative mx-auto max-w-7xl px-6 pt-10 pb-16 sm:pt-16 sm:pb-24">
+        {/* Eyebrow — no longer the brand wordmark (which lives in the navbar
+             right above). Now it's a category tag with dual dot preview of
+             the two solutions Workforce (blue) + Home (green), acting as a
+             visual promise of the two cards that land below the headline. */}
+        <span className="inline-flex items-center gap-2.5 rounded-full border border-slate-200 bg-white/85 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-800 shadow-sm backdrop-blur">
+          <Sparkles className="h-3 w-3 text-[#2563EB]" aria-hidden />
+          <span className="flex items-center gap-1">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-60 motion-safe:animate-ping" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+            </span>
+            <span
+              className="relative flex h-1.5 w-1.5"
+              style={{ animationDelay: '0.6s' }}
+            >
+              <span
+                className="absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60 motion-safe:animate-ping"
+                style={{ animationDelay: '0.6s' }}
+              />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+            </span>
           </span>
           {t('eyebrow')}
         </span>
 
         {/* Headline — slate body, gradient accent word */}
-        <h1 className="font-display mt-6 max-w-4xl text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+        <h1 className="font-display mt-5 max-w-4xl text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
           {t('title').split(' ').slice(0, -3).join(' ')}{' '}
           <span className="bg-gradient-to-r from-[#2563EB] via-[#0EA5A4] to-[#10B981] bg-clip-text text-transparent">
             {t('title').split(' ').slice(-3).join(' ')}
