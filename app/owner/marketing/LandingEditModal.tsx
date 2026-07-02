@@ -2,10 +2,18 @@
 
 import { useState } from 'react';
 import { ImageIcon, Pencil, X } from 'lucide-react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: { save: 'Save', saved: 'Saved' },
+  es: { save: 'Guardar', saved: 'Guardado' },
+  pt: { save: 'Guardar', saved: 'Guardado' },
+} as const;
 
 type ModalKind = 'text' | 'photo';
 
 export function LandingEditButtons() {
+  const t = pickCopy(COPY, useClientLocale());
   const [open, setOpen] = useState<ModalKind | null>(null);
   const [saved, setSaved] = useState(false);
 
@@ -111,7 +119,7 @@ export function LandingEditButtons() {
                   type="submit"
                   className="inline-flex h-10 items-center justify-center rounded-xl bg-brand-600 px-4 text-sm font-semibold text-white shadow-card hover:bg-brand-700"
                 >
-                  {saved ? 'Guardado' : 'Guardar'}
+                  {saved ? t.saved : t.save}
                 </button>
               </div>
             </form>

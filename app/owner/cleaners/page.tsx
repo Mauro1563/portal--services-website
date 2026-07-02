@@ -109,7 +109,7 @@ export default async function CleanersPage({
                 title={t('cleaners.empty')}
                 description={t('cleaners.emptyHint')}
                 actions={[
-                  { label: 'Añadir limpiador', href: '/owner/cleaners/new' },
+                  { label: t('common.addCleaner'), href: '/owner/cleaners/new' },
                 ]}
               />
             )}

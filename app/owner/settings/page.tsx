@@ -129,7 +129,7 @@ export default async function SettingsPage({
           </div>
 
           <SubmitButton
-            pendingLabel="Guardando…"
+            pendingLabel={t('common.saving')}
             className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
           >
             {t('common.saveChanges')}
@@ -183,7 +183,7 @@ export default async function SettingsPage({
             </span>
           </label>
           <SubmitButton
-            pendingLabel="Guardando…"
+            pendingLabel={t('common.saving')}
             className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow disabled:opacity-70"
           >
             {t('common.saveChanges')}
@@ -314,7 +314,7 @@ export default async function SettingsPage({
         </p>
         <form action={signout}>
           <SubmitButton
-            pendingLabel="Saliendo…"
+            pendingLabel={t('common.signingOut')}
             className="inline-flex h-9 items-center gap-2 rounded-xl border border-surface-2 bg-surface-0 px-3 text-xs font-medium text-text-1 hover:bg-surface-1 disabled:opacity-60"
           >
             {t('common.signOut')}

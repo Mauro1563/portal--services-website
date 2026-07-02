@@ -213,7 +213,7 @@ export default async function MorePage() {
         <div>
           <form action={signout}>
             <SubmitButton
-              pendingLabel="Saliendo…"
+              pendingLabel={t('common.signingOut')}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-surface-2 bg-surface-0 text-sm font-medium text-rose-600 shadow-card transition hover:bg-rose-50 disabled:opacity-70"
             >
               <LogOut className="h-4 w-4" />

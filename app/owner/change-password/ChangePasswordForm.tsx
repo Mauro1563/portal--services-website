@@ -2,6 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: { saving: 'Saving…' },
+  es: { saving: 'Guardando…' },
+  pt: { saving: 'A guardar…' },
+} as const;
 import {
   ArrowRight,
   Eye,
@@ -15,6 +22,7 @@ import { completeForcedPasswordChange } from '@/app/signup/actions';
 
 export function ChangePasswordForm() {
   const router = useRouter();
+  const t = pickCopy(COPY, useClientLocale());
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [show, setShow] = useState(false);
@@ -104,7 +112,7 @@ export function ChangePasswordForm() {
               <span className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
               {pending ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" /> Guardando…
+                  <Loader2 className="h-4 w-4 animate-spin" /> {t.saving}
                 </>
               ) : (
                 <>

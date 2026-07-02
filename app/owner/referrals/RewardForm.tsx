@@ -4,17 +4,25 @@ import { useState } from 'react';
 import { Gift } from 'lucide-react';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import { addReward } from './actions';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: { addReward: 'Add a reward' },
+  es: { addReward: 'Añadir un premio' },
+  pt: { addReward: 'Adicionar uma recompensa' },
+} as const;
 
 const inputCls =
   'mt-1.5 block w-full rounded-xl border border-surface-2 bg-surface-0 px-3.5 py-2.5 text-sm text-text-1 placeholder:text-text-3 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20';
 
 export function RewardForm() {
   const [kind, setKind] = useState('free_cleaning');
+  const t = pickCopy(COPY, useClientLocale());
 
   return (
     <section className="mt-6 rounded-2xl border border-surface-2 bg-surface-0 p-5 shadow-card">
       <h2 className="inline-flex items-center gap-2 font-display text-base font-semibold text-text-1">
-        <Gift className="h-4 w-4 text-brand-600" /> Añadir un premio
+        <Gift className="h-4 w-4 text-brand-600" /> {t.addReward}
       </h2>
       <p className="mt-1 text-[11px] text-text-3">
         Crea las opciones de recompensa que verán tus clientes al recomendarte.

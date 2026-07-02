@@ -24,6 +24,7 @@ import { RevenueChart, type RevenuePoint } from '@/components/owner/RevenueChart
 import { CleanersField, type FieldCheckin } from '@/components/owner/CleanersField';
 import { BottomTabBar } from '@/components/owner/BottomTabBar';
 import { SubmitButton } from '@/components/forms/SubmitButton';
+import { getT } from '@/lib/i18n';
 
 /**
  * Subset of `tasks` rows joined with their property + cleaner needed to
@@ -89,6 +90,7 @@ export default async function OwnerHome() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
+  const t = await getT();
 
   const now = new Date();
   const today = toIsoDay(now);
@@ -404,10 +406,10 @@ export default async function OwnerHome() {
         {/* Sign-out at the bottom — discreet */}
         <form action={signout} className="mt-8 flex justify-center">
           <SubmitButton
-            pendingLabel="Saliendo…"
+            pendingLabel={t('common.signingOut')}
             className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-700 disabled:opacity-60"
           >
-            Cerrar sesión
+            {t('common.signOut')}
           </SubmitButton>
         </form>
       </div>

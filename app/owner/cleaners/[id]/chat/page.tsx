@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import { markCleanerMessagesRead, sendOwnerToCleaner } from './actions';
+import { getT } from '@/lib/i18n';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,6 +73,7 @@ export default async function OwnerCleanerChat({
     .limit(200);
 
   const messages = (msgs ?? []) as Msg[];
+  const t = await getT();
 
   return (
     <LightLayout
@@ -86,7 +88,7 @@ export default async function OwnerCleanerChat({
             href={`/owner/cleaners/${id}`}
             className="inline-flex items-center gap-1 text-[12px] font-semibold text-text-3 hover:text-text-1"
           >
-            <ChevronLeft className="h-3.5 w-3.5" /> Volver al detalle
+            <ChevronLeft className="h-3.5 w-3.5" /> {t('common.backToDetail')}
           </Link>
         </header>
 

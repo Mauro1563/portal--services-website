@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { getT } from '@/lib/i18n';
 import { ArrowLeft } from 'lucide-react';
 import { requireMarketingAdmin, getMarketingSection } from '@/lib/marketing';
 import { saveMarketingSection } from '@/app/hq/actions';
@@ -26,6 +27,7 @@ const FIELDS: FieldSpec<CTABannerContent>[] = [
 export default async function HQCTAEditor() {
   const admin = await requireMarketingAdmin();
   if (!admin) redirect('/hq/login');
+  const t = await getT();
 
   const stored = await getMarketingSection<CTABannerContent>('cta_banner');
   const initial: CTABannerContent = stored ?? (await loadFromI18n());
@@ -46,7 +48,7 @@ export default async function HQCTAEditor() {
           href="/hq/content"
           className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-xs font-medium text-slate-300 hover:bg-white/[0.06] hover:text-white"
         >
-          <ArrowLeft className="h-3.5 w-3.5" /> Volver a contenido
+          <ArrowLeft className="h-3.5 w-3.5" /> {t("common.backToContent")}
         </Link>
       }
     >

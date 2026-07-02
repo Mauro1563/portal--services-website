@@ -4,6 +4,13 @@ import { useRef, useState, useTransition } from 'react';
 import { Palette, RotateCcw, Save, Upload } from 'lucide-react';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import { resetBranding, saveColors, uploadLogo } from './actions';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const COPY = {
+  en: { saving: 'Saving…' },
+  es: { saving: 'Guardando…' },
+  pt: { saving: 'A guardar…' },
+} as const;
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 const DEFAULT_PRIMARY = '#22d3ee';
@@ -30,6 +37,7 @@ export function BrandingForm({
   initialSecondary,
   businessName,
 }: Props) {
+  const t = pickCopy(COPY, useClientLocale());
   const [savedPrimary, setSavedPrimary] = useState(initialPrimary);
   const [savedSecondary, setSavedSecondary] = useState(initialSecondary);
   const [primary, setPrimary] = useOptimisticHex(savedPrimary);
@@ -189,7 +197,7 @@ export function BrandingForm({
               Restaurar default
             </button>
             {isPending ? (
-              <span className="text-[11px] text-text-3">Guardando…</span>
+              <span className="text-[11px] text-text-3">{t.saving}</span>
             ) : null}
           </div>
         </section>

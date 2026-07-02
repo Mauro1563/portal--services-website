@@ -1,4 +1,28 @@
 {
+  "common": {
+    "back": "Back",
+    "backToDetail": "Back to detail",
+    "backToSite": "Back to site",
+    "backToContent": "Back to content",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "search": "Search…",
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "addCleaner": "Add cleaner",
+    "addClient": "Add client",
+    "addProperty": "Add property",
+    "addService": "Add a service",
+    "addReward": "Add a reward",
+    "addAddon": "Add add-on"
+  },
   "metadata": {
     "title": "Portal Services Digital — Workforce & Home operations platform",
     "description": "Portal Services Digital — one brand, two solutions. Workforce for cleaning and services companies; Home for residential cleaning and Airbnb turnovers.",
@@ -1382,6 +1406,7 @@
     "goodbye": "Account deleted. thanks for using Portal Services Digital."
   },
   "welcome": {
+    "metaTitle": "Welcome",
     "title": "Welcome",
     "subtitle": "Choose how you want to sign in.",
     "bullet1": "6-digit PIN",

@@ -3,6 +3,7 @@ import { ChatHub, type ChatConversation } from '@/components/chat/ChatHub';
 import { ChatThread } from '@/components/chat/ChatThread';
 import type { ChatMessage } from '@/components/chat/ChatBubble';
 import { BottomTabBar } from '@/components/owner/BottomTabBar';
+import { getT } from '@/lib/i18n';
 
 /**
  * Owner inbox: surfaces every conversation the owner is part of —
@@ -148,6 +149,7 @@ export default async function OwnerChatPage({ searchParams }: Props) {
   const open = openId
     ? MOCK_THREADS.find((t) => t.id === openId) ?? null
     : null;
+  const t = await getT();
 
   return (
     <main className="flex min-h-screen flex-col bg-canvas pb-20">
@@ -158,7 +160,7 @@ export default async function OwnerChatPage({ searchParams }: Props) {
               href="/owner/chat"
               className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100"
             >
-              <span aria-hidden>←</span> Volver
+              <span aria-hidden>←</span> {t('common.back')}
             </Link>
           </div>
           <div className="flex-1 min-h-0">

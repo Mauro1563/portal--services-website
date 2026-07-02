@@ -7,6 +7,13 @@
 
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
+
+const CONFIRM_COPY = {
+  en: { confirm: 'Confirm', cancel: 'Cancel', close: 'Close' },
+  es: { confirm: 'Confirmar', cancel: 'Cancelar', close: 'Cerrar' },
+  pt: { confirm: 'Confirmar', cancel: 'Cancelar', close: 'Fechar' },
+} as const;
 
 export function DemoSheet({
   open,
@@ -31,6 +38,8 @@ export function DemoSheet({
    */
   aboveTabBar?: boolean;
 }) {
+  const c = pickCopy(CONFIRM_COPY, useClientLocale());
+
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
@@ -59,7 +68,7 @@ export function DemoSheet({
         <button
           type="button"
           onClick={onClose}
-          title="Cerrar"
+          title={c.close}
           className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-slate-500 hover:bg-slate-100"
         >
           <X className="h-4 w-4" />
@@ -81,8 +90,8 @@ export function DemoConfirm({
   onConfirm,
   title,
   description,
-  confirmLabel = 'Confirmar',
-  cancelLabel = 'Cancelar',
+  confirmLabel,
+  cancelLabel,
   tone = 'danger',
 }: {
   open: boolean;
@@ -94,6 +103,9 @@ export function DemoConfirm({
   cancelLabel?: string;
   tone?: 'danger' | 'primary';
 }) {
+  const c = pickCopy(CONFIRM_COPY, useClientLocale());
+  const confirmText = confirmLabel ?? c.confirm;
+  const cancelText = cancelLabel ?? c.cancel;
   return (
     <DemoSheet open={open} onClose={onCancel} maxWidth="max-w-sm">
       <h3 className="font-display text-base font-bold text-slate-900">{title}</h3>
@@ -104,22 +116,22 @@ export function DemoConfirm({
         <button
           type="button"
           onClick={onCancel}
-          title={cancelLabel}
+          title={cancelText}
           className="flex-1 rounded-2xl bg-slate-100 px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-200"
         >
-          {cancelLabel}
+          {cancelText}
         </button>
         <button
           type="button"
           onClick={onConfirm}
-          title={confirmLabel}
+          title={confirmText}
           className={`flex-1 rounded-2xl px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white ${
             tone === 'danger'
               ? 'bg-rose-600 hover:bg-rose-700'
               : 'bg-blue-600 hover:bg-blue-700'
           }`}
         >
-          {confirmLabel}
+          {confirmText}
         </button>
       </div>
     </DemoSheet>

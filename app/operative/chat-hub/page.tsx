@@ -3,6 +3,7 @@ import { ChatHub, type ChatConversation } from '@/components/chat/ChatHub';
 import { ChatThread } from '@/components/chat/ChatThread';
 import type { ChatMessage } from '@/components/chat/ChatBubble';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
+import { getT } from '@/lib/i18n';
 
 /**
  * Cleaner inbox: the existing `/operative/chat` is a single-thread view
@@ -118,6 +119,7 @@ export default async function OperativeChatHub({ searchParams }: Props) {
   const open = openId
     ? MOCK_THREADS.find((t) => t.id === openId) ?? null
     : null;
+  const t = await getT();
 
   return (
     <main className="flex min-h-screen flex-col bg-canvas pb-20">
@@ -128,7 +130,7 @@ export default async function OperativeChatHub({ searchParams }: Props) {
               href="/operative/chat-hub"
               className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100"
             >
-              <span aria-hidden>←</span> Volver
+              <span aria-hidden>←</span> {t('common.back')}
             </Link>
           </div>
           <div className="flex-1 min-h-0">

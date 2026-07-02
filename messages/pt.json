@@ -1,4 +1,28 @@
 {
+  "common": {
+    "back": "Voltar",
+    "backToDetail": "Voltar ao detalhe",
+    "backToSite": "Voltar ao site",
+    "backToContent": "Voltar ao conteúdo",
+    "signOut": "Terminar sessão",
+    "signingOut": "A sair…",
+    "save": "Guardar",
+    "saving": "A guardar…",
+    "saved": "Guardado",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "edit": "Editar",
+    "search": "Pesquisar…",
+    "name": "Nome",
+    "description": "Descrição",
+    "price": "Preço",
+    "addCleaner": "Adicionar cleaner",
+    "addClient": "Adicionar cliente",
+    "addProperty": "Adicionar propriedade",
+    "addService": "Adicionar um serviço",
+    "addReward": "Adicionar uma recompensa",
+    "addAddon": "Adicionar add-on"
+  },
   "metadata": {
     "title": "Portal Services Digital — Plataforma operacional Workforce e Home",
     "description": "Portal Services Digital — uma marca, duas soluções. Workforce para empresas de limpeza e serviços; Home para limpeza residencial e turnovers de Airbnb.",
@@ -1392,6 +1416,7 @@
     "goodbye": "Conta eliminada. Obrigado por usares o Portal Services Digital."
   },
   "welcome": {
+    "metaTitle": "Bem-vindo",
     "title": "Bem-vindo",
     "subtitle": "Escolhe como queres entrar no teu portal.",
     "bullet1": "PIN de 6 dígitos",

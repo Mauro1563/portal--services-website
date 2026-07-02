@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
+import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
 
 /**
  * Slim top strip mounted above every /<portal>/preview route via a layout.
@@ -8,10 +11,23 @@ import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
  * centered) but adds two things prospects need:
  *   • Portal Services Digital wordmark in the LEFT corner so the brand
  *     is always visible.
- *   • A clear "Volver al sitio" link in the RIGHT corner to bounce back
+ *   • A localized "Back to site" link in the RIGHT corner to bounce back
  *     to the marketing landing without hunting for the browser back button.
  * The center "DEMO" badge makes it obvious that data is mocked.
+ *
+ * Marked 'use client' so it can be composed both from server layouts
+ * (app/{owner,operative,client}/preview/layout.tsx) and from client
+ * pages (app/operative/preview-airbnb/page.tsx). The `useClientLocale`
+ * hook reads from the ClientLocaleProvider that RootLayout seeds with
+ * the resolved locale, so SSR and CSR agree on first paint (no flash).
  */
+
+const COPY = {
+  en: { backToSite: 'Back to site', back: 'Back' },
+  es: { backToSite: 'Volver al sitio', back: 'Volver' },
+  pt: { backToSite: 'Voltar ao site', back: 'Voltar' },
+} as const;
+
 export function DemoTopBar({
   portal,
   title,
@@ -26,6 +42,9 @@ export function DemoTopBar({
    */
   title?: string;
 }) {
+  const locale = useClientLocale();
+  const t = pickCopy(COPY, locale);
+
   const portalLabel = {
     owner: 'Owner',
     cleaner: 'Cleaner',
@@ -75,8 +94,8 @@ export function DemoTopBar({
           className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
         >
           <ArrowLeft className="h-3 w-3" />
-          <span className="hidden sm:inline">Volver al sitio</span>
-          <span className="sm:hidden">Volver</span>
+          <span className="hidden sm:inline">{t.backToSite}</span>
+          <span className="sm:hidden">{t.back}</span>
         </Link>
       </div>
     </div>

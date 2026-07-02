@@ -95,7 +95,7 @@ export default async function PropertiesPage({
                 title={t('properties.empty')}
                 description={t('properties.emptyHint')}
                 actions={[
-                  { label: 'Añadir propiedad', href: '/owner/properties/new' },
+                  { label: t('common.addProperty'), href: '/owner/properties/new' },
                 ]}
               />
             )}

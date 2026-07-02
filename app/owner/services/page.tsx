@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { SubmitButton } from '@/components/forms/SubmitButton';
 import { addService, deleteService, toggleService } from './actions';
+import { getT } from '@/lib/i18n';
 
 type Props = {
   searchParams: Promise<{ error?: string; created?: string }>;
@@ -21,6 +22,7 @@ export default async function ServicesPage({ searchParams }: Props) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
+  const t = await getT();
 
   const { error, created } = await searchParams;
 
@@ -53,7 +55,7 @@ export default async function ServicesPage({ searchParams }: Props) {
       {/* Add form */}
       <section className="mt-6 rounded-2xl border border-surface-2 bg-surface-0 p-5 shadow-card">
         <h2 className="inline-flex items-center gap-2 font-display text-base font-semibold text-text-1">
-          <Sparkles className="h-4 w-4 text-brand-600" /> Añadir un servicio
+          <Sparkles className="h-4 w-4 text-brand-600" /> {t('common.addService')}
         </h2>
         <form action={addService} className="mt-4 space-y-3">
           <Field label="Nombre" name="name" required placeholder="ej. Limpieza regular" />

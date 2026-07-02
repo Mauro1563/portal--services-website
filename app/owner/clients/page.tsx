@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { LightLayout } from '@/components/owner/LightLayout';
 import { EmptyState } from '@/components/EmptyState';
 import { CsvExportButton } from '@/components/CsvExportButton';
+import { getT } from '@/lib/i18n';
 
 type SearchParams = Promise<{ q?: string }>;
 
@@ -28,6 +29,7 @@ export default async function ClientsPage({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect('/login?role=owner');
+  const t = await getT();
 
   const { q } = await searchParams;
   const needle = (q ?? '').trim();
@@ -83,7 +85,7 @@ export default async function ClientsPage({
               href="/owner/clients/new"
               className="inline-flex h-10 items-center gap-2 rounded-xl bg-brand-gradient px-4 text-sm font-semibold text-white shadow-brand-glow transition hover:brightness-110 active:scale-[0.99]"
             >
-              <Plus className="h-4 w-4" /> Añadir cliente
+              <Plus className="h-4 w-4" /> {t('common.addClient')}
             </Link>
           </div>
         </div>
@@ -120,7 +122,7 @@ export default async function ClientsPage({
                 title="Aún no hay clientes"
                 description="Añadí tu primer cliente para darle su propio portal donde ve y valora las limpiezas."
                 actions={[
-                  { label: 'Añadir cliente', href: '/owner/clients/new' },
+                  { label: t('common.addClient'), href: '/owner/clients/new' },
                 ]}
               />
             )}
