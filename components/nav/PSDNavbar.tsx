@@ -4,11 +4,13 @@
  * PSDNavbar — Portal Services Digital top navigation.
  *
  * Standalone component (not embedded in a hero) so any marketing page can
- * mount it independently. Uses PortalServicesLogo for the mother-brand
- * mark and next-intl for i18n copy (namespace `psd.nav`).
+ * mount it independently. Uses PortalServicesLogo (light variant) for the
+ * mother-brand mark on the dark navy surface and next-intl for i18n copy
+ * (namespace `psd.nav`).
  *
- * Palette is strict: navy #0B2A6B for the primary CTA, blue #2563EB for
- * hover accents, no teal or green anywhere on this shell.
+ * Palette: deep navy gradient bar (#0B1327 → #0F1B3D → #0B2A6B), blue
+ * #2563EB accent for hover states and the primary CTA. Zero teal, zero
+ * green in this shell.
  */
 
 import { useEffect, useState } from 'react';
@@ -18,7 +20,10 @@ import { Menu, X } from 'lucide-react';
 import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
-type NavItem = { href: string; key: 'solutions' | 'chat' | 'features' | 'demos' | 'about' | 'contact' };
+type NavItem = {
+  href: string;
+  key: 'solutions' | 'chat' | 'features' | 'demos' | 'about' | 'contact';
+};
 
 const ITEMS: NavItem[] = [
   { href: '#soluciones', key: 'solutions' },
@@ -47,22 +52,35 @@ export function PSDNavbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-gradient-to-r from-[#0B1327] via-[#0F1B3D] to-[#0B2A6B] shadow-[0_1px_0_rgba(255,255,255,0.05)_inset,0_10px_30px_-15px_rgba(11,42,107,0.5)] backdrop-blur-md">
+      {/* Subtle ambient glow so the bar has depth instead of being a flat block */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-60"
+        style={{
+          background:
+            'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(37,99,235,0.25) 0%, transparent 70%)',
+        }}
+      />
+
+      <div className="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1327]"
           aria-label="Portal Services Digital — home"
         >
-          <PortalServicesLogo variant="dark" size="md" showWordmark />
+          <PortalServicesLogo variant="light" size="md" showWordmark />
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
+        <nav
+          className="hidden items-center gap-6 md:flex"
+          aria-label="Primary"
+        >
           {ITEMS.map((it) => (
             <Link
               key={it.key}
               href={it.href}
-              className="text-sm font-medium text-slate-700 transition hover:text-[#2563EB]"
+              className="text-sm font-medium text-white/80 transition hover:text-white"
             >
               {t(it.key)}
             </Link>
@@ -73,7 +91,7 @@ export function PSDNavbar() {
           <LocaleSwitcher variant="premium" />
           <Link
             href="#contact"
-            className="hidden items-center gap-1.5 rounded-full bg-[#0B2A6B] px-4 py-2 text-sm font-semibold text-white shadow-psd-navy-card transition hover:bg-[#103A8C] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2 sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-full bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] ring-1 ring-inset ring-[#60A5FA]/40 transition hover:bg-[#1D4ED8] hover:shadow-[0_0_28px_rgba(37,99,235,0.7)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1327] sm:inline-flex"
           >
             {t('requestDemo')}
           </Link>
@@ -83,7 +101,7 @@ export function PSDNavbar() {
             aria-label={open ? t('closeMenu') : t('openMenu')}
             aria-expanded={open}
             aria-controls="psd-mobile-menu"
-            className="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-700 transition hover:border-slate-300 hover:text-[#2563EB] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] md:hidden"
+            className="grid h-10 w-10 place-items-center rounded-lg border border-white/20 bg-white/5 text-white transition hover:border-white/40 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -95,7 +113,7 @@ export function PSDNavbar() {
           id="psd-mobile-menu"
           role="dialog"
           aria-modal="true"
-          className="border-t border-slate-200 bg-white md:hidden"
+          className="relative border-t border-white/10 bg-gradient-to-b from-[#0F1B3D] to-[#0B1327] md:hidden"
         >
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {ITEMS.map((it) => (
@@ -103,7 +121,7 @@ export function PSDNavbar() {
                 key={it.key}
                 href={it.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-800 transition hover:bg-slate-50 hover:text-[#2563EB]"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-white/85 transition hover:bg-white/5 hover:text-white"
               >
                 {t(it.key)}
               </Link>
@@ -111,7 +129,7 @@ export function PSDNavbar() {
             <Link
               href="#contact"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center rounded-full bg-[#0B2A6B] px-4 py-2.5 text-sm font-semibold text-white shadow-psd-navy-card hover:bg-[#103A8C]"
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-[#2563EB] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] ring-1 ring-inset ring-[#60A5FA]/40 hover:bg-[#1D4ED8]"
             >
               {t('requestDemo')}
             </Link>
