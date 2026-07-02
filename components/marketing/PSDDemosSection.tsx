@@ -16,7 +16,8 @@ import {
   HOME_DEMOS,
   type DemoTarget,
 } from '@/lib/marketing-config';
-import { getLocale, type Locale } from '@/lib/i18n';
+import { getLocale } from 'next-intl/server';
+import type { Locale } from '@/lib/i18n';
 
 type Accent = 'blue' | 'green';
 
@@ -51,7 +52,7 @@ const ACCENT_CONF: Record<
 
 export default async function PSDDemosSection() {
   const t = await getTranslations('psd.landing.demos');
-  const locale = await getLocale();
+  const locale = (await getLocale()) as import('@/lib/i18n').Locale;
   const comingSoonLabel = t('comingSoon');
 
   return (

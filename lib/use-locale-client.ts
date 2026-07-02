@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, createElement, useContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 export const CLIENT_LOCALES = ["en", "es", "pt"] as const;
 export type ClientLocale = (typeof CLIENT_LOCALES)[number];
@@ -22,7 +23,7 @@ function readCookie(name: string): string | null {
   return null;
 }
 
-function detectLocale(): ClientLocale {
+function detectLocaleFromBrowser(): ClientLocale {
   if (typeof window === "undefined") return "en";
   try {
     const fromStorage = window.localStorage.getItem("portal_locale");
@@ -39,12 +40,58 @@ function detectLocale(): ClientLocale {
   return "en";
 }
 
-export function useClientLocale(): ClientLocale {
-  const [locale, setLocale] = useState<ClientLocale>("en");
+/**
+ * Server-seeded locale context.
+ *
+ * The RootLayout server-renders `<ClientLocaleProvider locale={await getLocale()}>`,
+ * so both SSR HTML and CSR hydration start with the SAME locale — no flash
+ * of English on Spanish/Portuguese pages. Client updates (via
+ * LocaleSwitcher setting cookie/localStorage) propagate through the storage
+ * event listener below.
+ */
+const ClientLocaleContext = createContext<ClientLocale>("en");
+
+export function ClientLocaleProvider({
+  locale,
+  children,
+}: {
+  locale: ClientLocale;
+  children: ReactNode;
+}) {
+  // Wrap the seed locale in state so downstream consumers re-render when
+  // the user changes language in this tab (LocaleSwitcher writes to
+  // localStorage, we listen for the storage event) or on any cross-tab
+  // change. The seed is authoritative for first paint; the effect below
+  // reconciles with whatever the browser currently holds.
+  const [current, setCurrent] = useState<ClientLocale>(locale);
+
   useEffect(() => {
-    setLocale(detectLocale());
-  }, []);
-  return locale;
+    // On mount, adopt whatever the browser has if it disagrees with the
+    // server-seeded value (e.g. user switched language in another tab).
+    const detected = detectLocaleFromBrowser();
+    if (detected !== current) setCurrent(detected);
+
+    // Watch for cross-tab changes.
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "portal_locale" && isClientLocale(e.newValue)) {
+        setCurrent(e.newValue);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+    // Intentionally only react to the initial mount + prop change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
+
+  return createElement(
+    ClientLocaleContext.Provider,
+    { value: current },
+    children,
+  );
+}
+
+export function useClientLocale(): ClientLocale {
+  return useContext(ClientLocaleContext);
 }
 
 export function pickCopy<

@@ -10,11 +10,11 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { PortalServicesLogo } from '@/components/brand/PortalServicesLogo';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
-import { getLocale } from '@/lib/i18n';
+import { getLocale } from 'next-intl/server';
 
 export default async function PSDFooter() {
   const t = await getTranslations('psd.landing.footer');
-  const locale = await getLocale();
+  const locale = (await getLocale()) as import('@/lib/i18n').Locale;
   const year = 2026;
 
   return (

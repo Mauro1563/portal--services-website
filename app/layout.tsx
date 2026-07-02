@@ -5,7 +5,8 @@ import './globals.css';
 import './psd.css';
 import { ThemeManager } from '@/components/ThemeManager';
 import { CapacitorBridge } from '@/components/CapacitorBridge';
-import { getLocale } from '@/lib/i18n';
+import { getLocale, type Locale } from '@/lib/i18n';
+import { ClientLocaleProvider } from '@/lib/use-locale-client';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -140,7 +141,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareLd) }}
         />
-        {children}
+        <ClientLocaleProvider locale={locale as Locale}>
+          {children}
+        </ClientLocaleProvider>
         <Toaster
           position="top-right"
           richColors

@@ -18,13 +18,13 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { HOME_DEMOS } from '@/lib/marketing-config';
-import { getLocale } from '@/lib/i18n';
+import { getLocale } from 'next-intl/server';
 
 const PILLAR_ICONS = [Calendar, Users2, Building2, RefreshCw];
 
 export default async function PSDHomeSection() {
   const t = await getTranslations('psd.landing.home');
-  const locale = await getLocale();
+  const locale = (await getLocale()) as import('@/lib/i18n').Locale;
 
   const pillars = ['schedule', 'teams', 'properties', 'turnover'] as const;
 

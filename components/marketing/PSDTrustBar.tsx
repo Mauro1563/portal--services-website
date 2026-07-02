@@ -10,13 +10,13 @@
 
 import { getTranslations } from 'next-intl/server';
 import { TRUST_METRICS } from '@/lib/marketing-config';
-import { getLocale } from '@/lib/i18n';
+import { getLocale } from 'next-intl/server';
 
 const ACCENTS = ['#2563EB', '#10B981', '#2563EB', '#10B981'];
 
 export default async function PSDTrustBar() {
   const t = await getTranslations('psd.landing.trust');
-  const locale = await getLocale();
+  const locale = (await getLocale()) as import('@/lib/i18n').Locale;
 
   return (
     <section

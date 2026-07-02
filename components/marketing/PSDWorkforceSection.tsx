@@ -23,7 +23,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { WORKFORCE_DEMOS } from '@/lib/marketing-config';
-import { getLocale } from '@/lib/i18n';
+import { getLocale } from 'next-intl/server';
 
 const CATEGORIES = [
   {
@@ -50,7 +50,7 @@ const CATEGORIES = [
 
 export default async function PSDWorkforceSection() {
   const t = await getTranslations('psd.landing.workforce');
-  const locale = await getLocale();
+  const locale = (await getLocale()) as import('@/lib/i18n').Locale;
 
   return (
     <section
