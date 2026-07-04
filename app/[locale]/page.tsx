@@ -1,5 +1,12 @@
 import { PSDNavbar } from '@/components/nav/PSDNavbar';
 import PSDHeroSection from '@/components/marketing/PSDHeroSection';
+
+// Force dynamic render while we track down a stale-cache issue on
+// the marketing landing so every hit re-fetches the fresh RSC payload
+// with the latest hero cards + brand palette.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import PSDTrustBar from '@/components/marketing/PSDTrustBar';
 import PSDWorkforceSection from '@/components/marketing/PSDWorkforceSection';
 import PSDChatSection from '@/components/marketing/PSDChatSection';
