@@ -301,7 +301,7 @@ export default function ClientCleaningPreview() {
             <Link
               href="/client/preview/messages"
               title={t.chatTitle}
-              className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-slate-700"
+              className="inline-flex items-center gap-1 rounded-full bg-[#065F46] px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-[#047857]"
             >
               <MessageCircle className="h-3 w-3" /> {t.chat}
             </Link>

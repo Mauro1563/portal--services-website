@@ -163,38 +163,46 @@ type Accent = 'blue' | 'green';
 const PALETTE: Record<
   Accent,
   {
-    dot: string;
+    // Card surface — deep saturated gradient (previous dark treatment
+    // the user asked to restore).
+    cardBg: string;
+    // Chip on the dark card.
     chipBg: string;
     chipText: string;
-    ring: string;
-    iconTileBg: string;
-    iconTileText: string;
+    chipDot: string;
+    // Icon in the top-right corner of the card.
+    iconColor: string;
+    // Bottom CTA pill.
     ctaBg: string;
+    ctaText: string;
     ctaHover: string;
+    // Ambient corner glow.
     glow: string;
   }
 > = {
   blue: {
-    dot: '#2563EB',
-    chipBg: '#2563EB1a', // 10% alpha
-    chipText: '#1D4ED8',
-    ring: '#2563EB',
-    iconTileBg: '#EFF6FF',
-    iconTileText: '#2563EB',
+    cardBg:
+      'bg-gradient-to-br from-[#0B1327] via-[#0F1B3D] to-[#0B2A6B]',
+    chipBg: 'rgba(37,99,235,0.22)',
+    chipText: '#93C5FD',
+    chipDot: '#60A5FA',
+    iconColor: '#60A5FA',
     ctaBg: '#2563EB',
+    ctaText: '#FFFFFF',
     ctaHover: '#1D4ED8',
-    glow: 'rgba(37,99,235,0.18)',
+    glow: 'rgba(37,99,235,0.32)',
   },
   green: {
-    dot: '#10B981',
-    chipBg: '#10B9811a',
-    chipText: '#059669',
-    ring: '#10B981',
-    iconTileBg: '#ECFDF5',
-    iconTileText: '#10B981',
-    ctaBg: '#10B981',
-    ctaHover: '#059669',
-    glow: 'rgba(16,185,129,0.18)',
+    cardBg:
+      'bg-gradient-to-br from-[#052E2A] via-[#064E3B] to-[#065F46]',
+    chipBg: 'rgba(16,185,129,0.22)',
+    chipText: '#A7F3D0',
+    chipDot: '#34D399',
+    iconColor: '#34D399',
+    ctaBg: '#A7F3D0',
+    ctaText: '#065F46',
+    ctaHover: '#6EE7B7',
+    glow: 'rgba(16,185,129,0.32)',
   },
 };
 
@@ -223,19 +231,25 @@ function SolutionCard({
 
   return (
     <div
-      className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-xl motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      className={`group relative overflow-hidden rounded-2xl border border-white/5 p-6 text-white transition duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${p.cardBg}`}
       style={{
-        // Custom hover ring + shadow tinted with the accent
-        // (Tailwind arbitrary values would inflate the class name)
-        boxShadow: `0 1px 2px rgba(15,23,42,0.04)`,
+        boxShadow: `0 20px 40px -20px ${p.glow}, 0 1px 0 rgba(255,255,255,0.05) inset`,
       }}
     >
-      {/* Accent halo that appears on hover */}
+      {/* Accent corner glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition duration-500 group-hover:opacity-100"
+        className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-70 blur-3xl transition duration-500 group-hover:opacity-100"
+        style={{ background: p.glow }}
+      />
+      {/* Subtle noise/pattern overlay for depth */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
-          boxShadow: `0 22px 60px -20px ${p.glow}, inset 0 0 0 1px ${p.ring}66`,
+          backgroundImage:
+            'radial-gradient(circle, #FFFFFF 1px, transparent 1px)',
+          backgroundSize: '22px 22px',
         }}
       />
 
@@ -243,60 +257,60 @@ function SolutionCard({
       <div className="relative flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest transition group-hover:brightness-110"
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest"
             style={{ backgroundColor: p.chipBg, color: p.chipText }}
           >
             <span className="relative flex h-1.5 w-1.5">
               <span
-                className="absolute inline-flex h-full w-full rounded-full opacity-60 motion-safe:animate-ping"
-                style={{ backgroundColor: p.dot }}
+                className="absolute inline-flex h-full w-full rounded-full opacity-70 motion-safe:animate-ping"
+                style={{ backgroundColor: p.chipDot }}
               />
               <span
                 className="relative inline-flex h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: p.dot }}
+                style={{ backgroundColor: p.chipDot }}
               />
             </span>
             {eyebrow}
           </span>
-          {/* Live counter chip — gives the card a heartbeat */}
+          {/* Live counter chip — muted white surface on dark card */}
           <span
-            className="hidden items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600 sm:inline-flex"
+            className="hidden items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur sm:inline-flex"
             title="Live activity"
           >
             <LiveIcon
               className="h-3 w-3 transition motion-safe:group-hover:animate-pulse"
-              style={{ color: p.dot }}
+              style={{ color: p.chipDot }}
             />
             {liveText}
           </span>
         </div>
 
-        {/* Icon tile — scales and rotates on hover */}
-        <span
-          className="grid h-11 w-11 place-items-center rounded-xl transition duration-500 group-hover:scale-110 group-hover:rotate-[-6deg] motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0"
-          style={{ backgroundColor: p.iconTileBg, color: p.iconTileText }}
-        >
-          <Icon className="h-5 w-5" aria-hidden />
-        </span>
+        {/* Icon — top-right, colored outline style (matches mockup) */}
+        <Icon
+          className="h-6 w-6 transition duration-500 group-hover:scale-110 group-hover:rotate-[-6deg] motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0"
+          style={{ color: p.iconColor }}
+          aria-hidden
+        />
       </div>
 
       {/* Title */}
-      <h2 className="font-display mt-6 text-2xl font-bold text-slate-900">
+      <h2 className="font-display relative mt-8 text-2xl font-bold text-white sm:text-3xl">
         {title}
       </h2>
 
       {/* Body */}
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">{body}</p>
+      <p className="relative mt-3 text-sm leading-relaxed text-white/70">
+        {body}
+      </p>
 
       {/* CTA — arrow slides right on hover */}
-      <div className="mt-6">
+      <div className="relative mt-8">
         <Link
           href={href}
-          className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold shadow-lg transition duration-200 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
           style={{
             backgroundColor: p.ctaBg,
-            // The style prop can't do :hover — the group-hover on the
-            // arrow below handles the visible interaction.
+            color: p.ctaText,
           }}
         >
           {cta}

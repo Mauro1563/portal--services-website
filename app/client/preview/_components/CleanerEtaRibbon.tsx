@@ -138,7 +138,7 @@ export function CleanerEtaRibbon({
             #10B981 — it's the live/online indicator (a micro-accent per
             rule 7), not a semantic success state. Avatar is midnight
             ink so it harmonises with the rest of the palette. */}
-        <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#0A0D18] text-[12px] font-bold text-white">
+        <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#065F46] text-[12px] font-bold text-white">
           {cleanerInitials}
           <span className="absolute -bottom-0.5 -right-0.5 grid h-3.5 w-3.5 place-items-center">
             <span className="relative inline-grid h-2.5 w-2.5 place-items-center">
@@ -211,13 +211,13 @@ export function CleanerEtaRibbon({
               strokeDashoffset={dashOffset}
             />
             {/* Endpoint marker — your home. Midnight ink dot. */}
-            <circle cx="235" cy="15" r="4" fill="#0A0D18" />
+            <circle cx="235" cy="15" r="4" fill="#065F46" />
             <defs>
               {/* Route stroke: midnight → teal so the line feels like
                   it grows out of the cleaner avatar into the teal
                   arrival accent, no decorative blue/green. */}
               <linearGradient id="etaGrad" x1="0" x2="1" y1="0" y2="0">
-                <stop offset="0%"  stopColor="#0A0D18" />
+                <stop offset="0%"  stopColor="#065F46" />
                 <stop offset="100%" stopColor="#10B981" />
               </linearGradient>
             </defs>

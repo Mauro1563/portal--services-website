@@ -69,7 +69,7 @@ export function CompletionSeal({
           className="relative grid h-28 w-28 place-items-center rounded-full border-[3px] border-[#10B981]/80 text-white shadow-[0_8px_18px_-6px_rgba(10,13,24,0.5)]"
           style={{
             background:
-              'radial-gradient(circle at 35% 30%, #1a1f33 0%, #0A0D18 55%, #050811 100%)',
+              'radial-gradient(circle at 35% 30%, #1a1f33 0%, #065F46 55%, #050811 100%)',
           }}
         >
           {/* Inner stamp ring. */}

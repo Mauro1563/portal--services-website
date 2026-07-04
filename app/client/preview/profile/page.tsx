@@ -560,7 +560,7 @@ export default function ClientProfilePreview() {
                 type="button"
                 onClick={copyCode}
                 title={t.copyTitle}
-                className="inline-flex shrink-0 items-center gap-1 rounded-full bg-slate-900 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
+                className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#065F46] px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-[#047857]"
               >
                 {copied ? (
                   <>

@@ -393,9 +393,9 @@ function StatChip({
   // teal/green/amber peek through, and even there it's a 6px micro-
   // accent, not a flood.
   const accentTones: Record<typeof tone, string> = {
-    blue: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
-    emerald: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
-    amber: 'bg-[#0A0D18] text-white ring-[#0A0D18] hover:bg-[#0A0D18]/90',
+    blue: 'bg-[#065F46] text-white ring-[#065F46] hover:bg-[#065F46]/90',
+    emerald: 'bg-[#065F46] text-white ring-[#065F46] hover:bg-[#065F46]/90',
+    amber: 'bg-[#065F46] text-white ring-[#065F46] hover:bg-[#065F46]/90',
   };
   const dotColors: Record<NonNullable<typeof dotTone>, string> = {
     blue: 'bg-[#10B981]',
@@ -640,7 +640,7 @@ function ClientPreviewInner({
           >
             <SlidersHorizontal className="h-4 w-4" />
             {activeFilterCount > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#0A0D18] px-1 text-[9px] font-bold text-white ring-2 ring-white">
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#065F46] px-1 text-[9px] font-bold text-white ring-2 ring-white">
                 {activeFilterCount}
               </span>
             )}
@@ -649,13 +649,13 @@ function ClientPreviewInner({
       </section>
 
       {/* Primary action — owns the first viewport. Per rule 1: on the
-          white page surface the primary CTA is midnight ink (#0A0D18)
+          white page surface the primary CTA is midnight ink (#065F46)
           with white text and a subtle shadow (no teal glow). The teal
           colour is reserved for the tiny "Ready in 30s" accent dot. */}
       <Link
         href="/client/preview/book"
         title={t.bookCtaTitle}
-        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-[#0A0D18] p-5 text-white shadow-[0_10px_28px_-14px_rgba(10,13,24,0.5)] transition hover:bg-[#0A0D18]/90"
+        className="mt-5 flex items-center justify-between gap-4 rounded-3xl bg-[#065F46] p-5 text-white shadow-[0_10px_28px_-14px_rgba(10,13,24,0.5)] transition hover:bg-[#065F46]/90"
       >
         <div className="min-w-0">
           <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/70">
@@ -936,7 +936,7 @@ function ClientPreviewInner({
               type="button"
               onClick={() => setNextStatus('pending')}
               title={t.restoreDemoTitle}
-              className="mt-3 rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold text-white hover:bg-slate-700"
+              className="mt-3 rounded-full bg-[#065F46] px-4 py-2 text-[11px] font-semibold text-white hover:bg-[#047857]"
             >
               {t.restoreDemo}
             </button>
@@ -962,7 +962,7 @@ function ClientPreviewInner({
                       with a tiny teal sparkle dot in the corner as the
                       only chromatic accent. Replaces the blue-50/blue-700
                       flood. */}
-                  <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-slate-100 text-[#0A0D18]">
+                  <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-slate-100 text-[#065F46]">
                     <CalendarCheck className="h-5 w-5" />
                     <span aria-hidden className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-[#10B981]" />
                   </span>
@@ -981,7 +981,7 @@ function ClientPreviewInner({
                       <span className="truncate">{PROPERTY.address}</span>
                     </p>
                   </div>
-                  <span className="shrink-0 self-center rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-white transition group-hover:bg-slate-700">
+                  <span className="shrink-0 self-center rounded-full bg-[#065F46] px-3 py-1.5 text-[11px] font-semibold text-white transition group-hover:bg-[#047857]">
                     {t.see}
                   </span>
                 </Link>
@@ -1086,14 +1086,14 @@ function ClientPreviewInner({
             {t.yourReferralCode}
           </p>
           <div className="mt-2 flex items-center justify-between gap-3">
-            <code className="font-mono text-2xl font-bold tracking-widest text-[#0A0D18]">
+            <code className="font-mono text-2xl font-bold tracking-widest text-[#065F46]">
               PREVIEW
             </code>
             <button
               type="button"
               onClick={copyReferral}
               title={t.copyCodeTitle}
-              className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-2 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-slate-700"
+              className="inline-flex items-center gap-1 rounded-full bg-[#065F46] px-3 py-2 text-[10.5px] font-bold uppercase tracking-wider text-white hover:bg-[#047857]"
             >
               {copied ? (
                 <>
@@ -1166,7 +1166,7 @@ function ClientPreviewInner({
             <Link
               href="/client/preview/book"
               title={t.requestCleanerTitle(openCleaner.name)}
-              className="mt-4 flex h-11 items-center justify-center rounded-2xl bg-[#0A0D18] px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-12px_rgba(10,13,24,0.5)] hover:bg-[#0A0D18]/90"
+              className="mt-4 flex h-11 items-center justify-center rounded-2xl bg-[#065F46] px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-12px_rgba(10,13,24,0.5)] hover:bg-[#065F46]/90"
               onClick={() => setCleanerOpen(null)}
             >
               {t.requestCleanerCta}
@@ -1200,7 +1200,7 @@ function ClientPreviewInner({
                   title={t.serviceFilterTitle(f)}
                   className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
                     on
-                      ? 'bg-[#0A0D18] text-white'
+                      ? 'bg-[#065F46] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -1224,7 +1224,7 @@ function ClientPreviewInner({
                 title={n === 0 ? t.minRatingNoFilter : t.minRatingShow(n)}
                 className={`flex-1 rounded-xl px-2 py-1.5 text-[11px] font-bold transition ${
                   minStars === n
-                    ? 'bg-[#0A0D18] text-white'
+                    ? 'bg-[#065F46] text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -1249,7 +1249,7 @@ function ClientPreviewInner({
                   title={t.availabilityTitle(f)}
                   className={`rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${
                     on
-                      ? 'bg-[#0A0D18] text-white'
+                      ? 'bg-[#065F46] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -1273,7 +1273,7 @@ function ClientPreviewInner({
             type="button"
             onClick={() => setFilterOpen(false)}
             title={t.applyTitle}
-            className="flex-1 rounded-2xl bg-[#0A0D18] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white hover:bg-[#0A0D18]/90"
+            className="flex-1 rounded-2xl bg-[#065F46] px-4 py-2.5 text-[12px] font-bold uppercase tracking-wider text-white hover:bg-[#065F46]/90"
           >
             {t.apply}
           </button>
