@@ -38,11 +38,11 @@ import {
   EarningsAnimationProvider,
   useEarningsAnimation,
 } from '@/components/preview/EarningsCoinAnimator';
-import { PreviewEarningsStrip } from '@/components/preview/PreviewEarningsStrip';
 import { PullToCheckInHero } from '@/components/preview/PullToCheckInHero';
 import { KintsugiThread } from '@/components/preview/KintsugiThread';
 import { PreviewFlavorToggle } from '@/components/preview/PreviewFlavorToggle';
 import { CleanerConciergeSheet } from './_components/CleanerConciergeSheet';
+import { CleanerEarningsCard } from './_components/CleanerEarningsCard';
 import {
   TaskChecklist,
   type ChecklistItem as TaskChecklistItem,
@@ -110,6 +110,16 @@ const COPY = {
     photoStripCaption: 'The photos you upload after each service are saved — and the client sees them.',
     resetDemo: 'Reset demo',
     resetDemoTitle: 'Reset the demo — back to the initial state without reloading',
+    tabAgenda: 'Agenda',
+    tabTasks: 'Tasks',
+    tabSupport: 'Support',
+    tabAgendaTitle: 'Jump to your agenda for today',
+    tabTasksTitle: 'Jump to your task list',
+    tabSupportTitle: 'Open help & support',
+    startedPill: 'Started',
+    nextStopsTitle: 'Next stops',
+    earningsToday: 'Earnings today',
+    earningsWeek: 'Week',
   },
   es: {
     statusScheduled: 'Pendiente',
@@ -170,6 +180,16 @@ const COPY = {
     photoStripCaption: 'Las fotos que subes después de cada servicio quedan guardadas — y el cliente las ve.',
     resetDemo: 'Reiniciar demo',
     resetDemoTitle: 'Reiniciar la demo — vuelve al estado inicial sin recargar',
+    tabAgenda: 'Agenda',
+    tabTasks: 'Tareas',
+    tabSupport: 'Soporte',
+    tabAgendaTitle: 'Ir a tu agenda de hoy',
+    tabTasksTitle: 'Ir a tu lista de tareas',
+    tabSupportTitle: 'Abrir ayuda y soporte',
+    startedPill: 'Iniciada',
+    nextStopsTitle: 'Próximas paradas',
+    earningsToday: 'Ganancias hoy',
+    earningsWeek: 'Semana',
   },
   pt: {
     statusScheduled: 'Pendente',
@@ -230,6 +250,16 @@ const COPY = {
     photoStripCaption: 'As fotos que envia após cada serviço ficam guardadas — e o cliente vê-as.',
     resetDemo: 'Reiniciar demo',
     resetDemoTitle: 'Reiniciar a demo — volta ao estado inicial sem recarregar',
+    tabAgenda: 'Agenda',
+    tabTasks: 'Tarefas',
+    tabSupport: 'Suporte',
+    tabAgendaTitle: 'Ir para a sua agenda de hoje',
+    tabTasksTitle: 'Ir para a sua lista de tarefas',
+    tabSupportTitle: 'Abrir ajuda e suporte',
+    startedPill: 'Iniciada',
+    nextStopsTitle: 'Próximas paragens',
+    earningsToday: 'Ganhos hoje',
+    earningsWeek: 'Semana',
   },
 } as const satisfies Record<ClientLocale, unknown>;
 
@@ -372,6 +402,22 @@ function formatHours(minutes: number): string {
 function nowHHMM(): string {
   const d = new Date();
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+/**
+ * "MARTES 28 MAR"-style date band shown above the task timeline.
+ * Matches the "Efficient Work" mockup — short Spanish day + short month +
+ * day number, all uppercase, spaced with tracking-wider at the render site.
+ */
+const _DAY_NAMES_ES = [
+  'DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO',
+];
+const _MONTH_ES = [
+  'ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN',
+  'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC',
+];
+function formatDateBand(d: Date): string {
+  return `${_DAY_NAMES_ES[d.getDay()]} ${d.getDate()} ${_MONTH_ES[d.getMonth()]}`;
 }
 
 export default function OperativePreviewHome() {
@@ -572,6 +618,7 @@ function OperativePreviewHomeBody({
         airbnbHref="/operative/preview-airbnb"
       />
       <div className="relative z-10 mx-auto max-w-md px-4 py-5">
+        <span id="agenda-section" aria-hidden className="block scroll-mt-24" />
         <AgendaHeader
           cleanerName={t.cleanerName}
           now={now}
@@ -584,14 +631,41 @@ function OperativePreviewHomeBody({
           }
         />
 
-        {/* Earnings strip — white surface with midnight numbers */}
-        <div className="relative">
-          <PreviewEarningsStrip
-            todayPence={todayPence}
-            weekPence={weekPence}
-            href="/operative/preview/week"
-          />
-        </div>
+        {/* Segmented tab row — AGENDA · TAREAS · SOPORTE.
+            Visual only: each tab scrolls to the anchor already on the page
+            so we don't reroute (the real bottom tab bar still owns nav). */}
+        <nav
+          aria-label="Preview sections"
+          className="mt-4 rounded-full border border-slate-200 bg-white p-1 shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+        >
+          <ul className="grid grid-cols-3 items-stretch gap-1">
+            {[
+              { key: 'agenda', label: t.tabAgenda, title: t.tabAgendaTitle, href: '#agenda-section' },
+              { key: 'tareas', label: t.tabTasks, title: t.tabTasksTitle, href: '#tasks-section' },
+              { key: 'soporte', label: t.tabSupport, title: t.tabSupportTitle, href: '#support-section' },
+            ].map((tab, i) => (
+              <li key={tab.key} className="flex">
+                <a
+                  href={tab.href}
+                  title={tab.title}
+                  className={`relative flex flex-1 items-center justify-center rounded-full px-3 py-2 text-[11px] font-bold uppercase tracking-[0.14em] transition ${
+                    i === 0
+                      ? 'bg-slate-50 text-slate-900'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  {tab.label}
+                  {i === 0 ? (
+                    <span
+                      aria-hidden
+                      className="absolute -bottom-[3px] left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-[#10B981]"
+                    />
+                  ) : null}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {/* Hero card — siguiente parada.
             Only renders when there is genuinely a "next" job to act on. Once
@@ -647,8 +721,26 @@ function OperativePreviewHomeBody({
         ) : null}
 
         {/* Agenda timeline — interactive */}
-        <section className="mt-6">
-          <div className="flex items-center justify-between">
+        <section id="tasks-section" className="mt-6 scroll-mt-24">
+          {/* MARTES 28 MAR — mockup-style date band with "Iniciada" pill
+              wired to the real in-progress task id so it dims when nothing
+              is running. */}
+          <div className="flex items-center justify-between gap-2">
+            <p className="font-display text-[13px] font-bold uppercase tracking-[0.18em] text-slate-900 tabular-nums">
+              {formatDateBand(now)}
+            </p>
+            {inProgressTaskId ? (
+              <a
+                href={`#task-${inProgressTaskId}`}
+                title={t.agendaHelp}
+                className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700 ring-1 ring-emerald-100"
+              >
+                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                {t.startedPill}
+              </a>
+            ) : null}
+          </div>
+          <div className="mt-3 flex items-center justify-between">
             <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-700">
               {t.todayAgenda}
               <button
@@ -736,7 +828,20 @@ function OperativePreviewHomeBody({
                           : ''
                       }
                     >
-                    <div className="rounded-2xl border border-surface-2 bg-paper p-3 shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)] transition duration-200 hover:-translate-y-0.5">
+                    <div
+                      className={`relative overflow-hidden rounded-2xl border border-surface-2 bg-paper p-3 pl-4 shadow-[0_2px_4px_rgba(15,23,42,0.04),_0_10px_24px_-8px_rgba(15,23,42,0.08)] transition duration-200 hover:-translate-y-0.5`}
+                    >
+                      {/* Left status bar — green when active/scheduled,
+                          slate when completed (the accent lives on the
+                          right-side "on" toggle instead). */}
+                      <span
+                        aria-hidden
+                        className={`absolute left-0 top-0 bottom-0 w-1.5 ${
+                          task.status === 'completed'
+                            ? 'bg-slate-300'
+                            : 'bg-[#10B981]'
+                        }`}
+                      />
                       <button
                         type="button"
                         onClick={() => toggleExpand(task.id)}
@@ -745,16 +850,41 @@ function OperativePreviewHomeBody({
                       >
                         <div className="min-w-0 flex-1">
                           <p className="truncate font-display text-sm font-semibold text-text-1">
+                            <span className="tabular-nums text-slate-500">{task.start_time}</span>
+                            <span className="mx-1.5 text-slate-300">·</span>
                             {task.client_name}
                           </p>
                           <p className="mt-0.5 truncate text-[11px] text-text-3">
                             {task.property_name}
                           </p>
                         </div>
+                        {/* Right-side toggle switch. Mirrors the check-in /
+                            complete lifecycle: scheduled = off (grey), in
+                            progress = on (green), completed = green + solid
+                            check to signal the swipe already happened. Tap
+                            reuses the existing handlers so no new state is
+                            introduced. */}
                         <span
-                          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${st.cls}`}
+                          role="switch"
+                          aria-checked={task.status !== 'scheduled'}
+                          aria-label={task.status === 'scheduled' ? t.checkIn : t.markCompleted}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (task.status === 'scheduled') handleCheckIn(task.id);
+                            else if (task.status === 'in_progress') handleComplete(task.id);
+                          }}
+                          className={`relative mt-1 inline-flex h-6 w-10 shrink-0 cursor-pointer items-center rounded-full transition ${
+                            task.status === 'scheduled'
+                              ? 'bg-slate-200'
+                              : 'bg-[#10B981]'
+                          }`}
                         >
-                          {st.label}
+                          <span
+                            aria-hidden
+                            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-1 ring-black/5 transition ${
+                              task.status === 'scheduled' ? 'translate-x-0.5' : 'translate-x-[18px]'
+                            }`}
+                          />
                         </span>
                         {isExpanded ? (
                           <ChevronUp className="mt-1 h-4 w-4 text-text-3" />
@@ -762,6 +892,11 @@ function OperativePreviewHomeBody({
                           <ChevronDown className="mt-1 h-4 w-4 text-text-3" />
                         )}
                       </button>
+                      <span
+                        className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${st.cls}`}
+                      >
+                        {st.label}
+                      </span>
 
                       <p className="mt-1 inline-flex items-center gap-1 truncate text-[11px] text-slate-500">
                         <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
@@ -958,12 +1093,71 @@ function OperativePreviewHomeBody({
               );
             })}
           </ol>
+
+          {/* Two mini-map thumbnails — visual "next stops" strip mirroring
+              the mockup. Decorative only (real routing lives in the hero
+              card's "Ir a la dirección" CTA). */}
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            {tasks
+              .filter((t) => t.status !== 'completed')
+              .slice(0, 2)
+              .map((task, i) => (
+                <a
+                  key={`map-${task.id}`}
+                  href={task.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={t.navigateTitle}
+                  className="group relative block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_20px_-12px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  {/* Faux map tile — layered gradients evoke roads + parcels
+                      without shipping raster assets. Fully static. */}
+                  <span
+                    aria-hidden
+                    className={`block h-24 w-full ${
+                      i === 0
+                        ? 'bg-[linear-gradient(115deg,#E8F1FF_0%,#F4F8FF_45%,#E1EEFF_100%)]'
+                        : 'bg-[linear-gradient(115deg,#ECFDF5_0%,#F0FDF7_45%,#DCFCE7_100%)]'
+                    }`}
+                  >
+                    <span
+                      aria-hidden
+                      className="block h-full w-full opacity-70 [background-image:linear-gradient(90deg,transparent_calc(50%-1px),rgba(15,23,42,0.08)_50%,transparent_calc(50%+1px)),linear-gradient(0deg,transparent_calc(30%-1px),rgba(15,23,42,0.05)_30%,transparent_calc(30%+1px))]"
+                    />
+                  </span>
+                  <span className="absolute inset-0 grid place-items-center">
+                    <span className="grid h-8 w-8 place-items-center rounded-full bg-[#10B981] text-white shadow-[0_6px_16px_-6px_rgba(16,185,129,0.7)]">
+                      <MapPin className="h-4 w-4" />
+                    </span>
+                  </span>
+                  <span className="block px-3 py-2">
+                    <span className="block truncate font-display text-[12px] font-semibold text-slate-900">
+                      {task.property_name}
+                    </span>
+                    <span className="block truncate text-[10.5px] text-slate-500">
+                      {task.start_time} · {task.postcode}
+                    </span>
+                  </span>
+                </a>
+              ))}
+          </div>
         </section>
 
+        {/* Earnings card — mockup shape (big number + Wallet + Cart chips) */}
+        <CleanerEarningsCard
+          todayPence={todayPence}
+          weekPence={weekPence}
+          href="/operative/preview/week"
+          todayLabel={t.earningsToday}
+          weekLabel={t.earningsWeek}
+        />
+
+        <div id="support-section" className="scroll-mt-24">
         <DemoPhotoStrip
           title={t.photoStripTitle}
           caption={t.photoStripCaption}
         />
+        </div>
 
         {/* Demo-only reset — kept as a quiet inline link, well clear of the
             thumb zone, so demo chrome doesn't bleed into production-shaped UI. */}

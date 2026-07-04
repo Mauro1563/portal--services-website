@@ -37,15 +37,29 @@ export const MOCK_CTX: ClientContext = {
 };
 
 export const MOCK_SERVICES = [
-  { id: 'standard', name: 'Limpieza estándar' },
-  { id: 'profunda', name: 'Limpieza profunda' },
-  { id: 'cristales', name: 'Cristales' },
+  { id: 'regular', name: 'Limpieza Regular' },
+  { id: 'profunda', name: 'Profunda' },
+  { id: 'vidrios', name: 'Vidrios' },
   { id: 'mudanza', name: 'Mudanza' },
 ];
 
 export const MOCK_CLEANERS = [
-  { id: 'ana', name: 'Ana Ruiz', avgStars: 4.9, ratingCount: 12 },
-  { id: 'luis', name: 'Luis Pérez', avgStars: 4.7, ratingCount: 8 },
+  {
+    id: 'ana',
+    name: 'Ana Ruiz',
+    avgStars: 4.9,
+    ratingCount: 12,
+    photoUrl:
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=70',
+  },
+  {
+    id: 'luis',
+    name: 'Luis Pérez',
+    avgStars: 4.7,
+    ratingCount: 8,
+    photoUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=70',
+  },
 ];
 
 /** Shared London property pool. Same property = same address across portals. */

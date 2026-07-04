@@ -16,22 +16,28 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import {
   ArrowRight,
+  Bell,
   CalendarCheck,
   Check,
   CheckCircle2,
+  ChevronRight,
   Copy,
+  Droplet,
+  GlassWater,
   Hand,
+  Heart,
   HelpCircle,
+  Home as HomeIcon,
   MapPin,
   RotateCcw,
   Search,
   SlidersHorizontal,
+  Sparkles,
   Star,
+  Truck,
 } from 'lucide-react';
 import { ClientShell } from '@/components/client/ClientShell';
-import { FeaturedCleaners } from '@/components/client/FeaturedCleaners';
 import { PromoBanner } from '@/components/client/PromoBanner';
-import { ServiceCatalog } from '@/components/client/ServiceCatalog';
 import { DemoPhotoStrip, DEMO_PHOTOS } from '@/components/preview/DemoPhotoStrip';
 import { DemoSheet, DemoToast } from '@/components/preview/DemoSheet';
 import { DemoLightbox } from '@/components/preview/DemoLightbox';
@@ -52,10 +58,25 @@ import {
 const COPY = {
   en: {
     greetingName: 'Sofía',
+    greetingHello: 'HELLO',
     greetingTagline: "Let's start your next cleaning",
+    notificationsAria: 'Notifications',
     resetTitle: 'Reset the demo to the initial state',
     resetAria: 'Reset demo',
-    searchPlaceholder: 'Search a service…',
+    searchPlaceholder: 'Search service or cleaner',
+    servicesHeading: 'Available services',
+    viewAll: 'View all',
+    serviceRegular: 'Regular clean',
+    serviceDeep: 'Deep clean',
+    serviceWindows: 'Windows',
+    serviceMove: 'Move-out',
+    featuredHeading: 'Featured cleaners',
+    bookNow: 'BOOK NOW',
+    favoriteAria: 'Add to favourites',
+    recentServiceHeading: 'RECENT SERVICE',
+    recentServiceTitle: 'Regular clean · Deep',
+    recentServiceMeta: 'With Ana Ruiz · 2 weeks ago',
+    seeDetails: 'See details',
     searchTitle: 'Filter the categories and team below by name',
     filtersAria: 'Filters',
     filtersTitle: 'Filter by service type, rating and availability',
@@ -138,10 +159,25 @@ const COPY = {
   },
   es: {
     greetingName: 'Sofía',
+    greetingHello: 'HOLA',
     greetingTagline: 'Empecemos tu próxima limpieza',
+    notificationsAria: 'Notificaciones',
     resetTitle: 'Reiniciar la demo a su estado inicial',
     resetAria: 'Reiniciar demo',
-    searchPlaceholder: 'Buscar servicio…',
+    searchPlaceholder: 'Buscar Servicio o Cleaner',
+    servicesHeading: 'Servicios disponibles',
+    viewAll: 'Ver todos',
+    serviceRegular: 'Limpieza Regular',
+    serviceDeep: 'Profunda',
+    serviceWindows: 'Vidrios',
+    serviceMove: 'Mudanza',
+    featuredHeading: 'Featurado a Cleaner',
+    bookNow: 'RESERVAR AHORA',
+    favoriteAria: 'Añadir a favoritos',
+    recentServiceHeading: 'SERVICIO RECIENTE',
+    recentServiceTitle: 'Limpieza Regular · Profunda',
+    recentServiceMeta: 'Con Ana Ruiz · hace 2 semanas',
+    seeDetails: 'Ver detalle',
     searchTitle: 'Filtra las categorías y el equipo abajo por nombre',
     filtersAria: 'Filtros',
     filtersTitle: 'Filtrar por tipo de servicio, valoración y disponibilidad',
@@ -224,10 +260,25 @@ const COPY = {
   },
   pt: {
     greetingName: 'Sofía',
+    greetingHello: 'OLÁ',
     greetingTagline: 'Vamos começar a sua próxima limpeza',
+    notificationsAria: 'Notificações',
     resetTitle: 'Reiniciar a demo ao estado inicial',
     resetAria: 'Reiniciar demo',
-    searchPlaceholder: 'Procurar serviço…',
+    searchPlaceholder: 'Buscar serviço ou limpador',
+    servicesHeading: 'Serviços disponíveis',
+    viewAll: 'Ver todos',
+    serviceRegular: 'Limpeza Regular',
+    serviceDeep: 'Profunda',
+    serviceWindows: 'Vidros',
+    serviceMove: 'Mudança',
+    featuredHeading: 'Limpadores em destaque',
+    bookNow: 'RESERVAR AGORA',
+    favoriteAria: 'Adicionar aos favoritos',
+    recentServiceHeading: 'SERVIÇO RECENTE',
+    recentServiceTitle: 'Limpeza Regular · Profunda',
+    recentServiceMeta: 'Com Ana Ruiz · há 2 semanas',
+    seeDetails: 'Ver detalhes',
     searchTitle: 'Filtra as categorias e a equipa abaixo por nome',
     filtersAria: 'Filtros',
     filtersTitle: 'Filtrar por tipo de serviço, avaliação e disponibilidade',
@@ -528,14 +579,14 @@ function ClientPreviewInner({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="inline-flex items-center gap-1.5 font-display text-xl font-bold tracking-tight text-slate-900">
-              {t.greetingName}
-              <Hand className="h-5 w-5 -rotate-12 text-slate-400" />
+              {`${t.greetingHello}, ${t.greetingName}!`}
+              <Hand className="h-5 w-5 -rotate-12 text-amber-400" />
             </p>
             <p className="mt-0.5 text-[13px] text-slate-600">
               {t.greetingTagline}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={onReset}
@@ -545,9 +596,22 @@ function ClientPreviewInner({
             >
               <RotateCcw className="h-4 w-4" />
             </button>
-            {/* User avatar: midnight ink fill — no blue gradient. */}
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#0A0D18] text-sm font-bold text-white">
-              S
+            <button
+              type="button"
+              aria-label={t.notificationsAria}
+              title={t.notificationsAria}
+              className="relative grid h-10 w-10 place-items-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <Bell className="h-4 w-4" />
+              <span
+                aria-hidden
+                className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#10B981] ring-2 ring-white"
+              />
+            </button>
+            {/* Greeter avatar: soft green fill with initial — matches
+                Eco-Friendly mockup. */}
+            <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-[#10B981] text-sm font-bold text-white ring-2 ring-white shadow-[0_4px_10px_-4px_rgba(16,185,129,0.5)]">
+              {t.greetingName.charAt(0)}
             </span>
           </div>
         </div>
@@ -565,7 +629,7 @@ function ClientPreviewInner({
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t.searchPlaceholder}
               title={t.searchTitle}
-              className="block h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#10B981] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30"
+              className="block h-11 w-full rounded-full border border-slate-200 bg-white pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#10B981] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30"
             />
           </label>
           <button
@@ -573,7 +637,7 @@ function ClientPreviewInner({
             onClick={() => setFilterOpen(true)}
             aria-label={t.filtersAria}
             title={t.filtersTitle}
-            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50"
+            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50"
           >
             <SlidersHorizontal className="h-4 w-4" />
             {activeFilterCount > 0 && (
