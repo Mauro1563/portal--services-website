@@ -12,6 +12,7 @@ import { DemoCorporateHeader } from './_components/DemoCorporateHeader';
 import { DemoCleanersField, type DemoFieldCheckin } from './_components/DemoCleanersField';
 import { DemoBottomTabBar } from './_components/DemoBottomTabBar';
 import { DemoQuickActions } from './_components/DemoQuickActions';
+import { DemoEarningsCharts } from './_components/DemoEarningsCharts';
 import { DemoPhotoStrip } from '@/components/preview/DemoPhotoStrip';
 import { DemoTodayHero } from './_components/DemoTodayHero';
 import { DemoCommandPalette } from './_components/DemoCommandPalette';
@@ -34,6 +35,11 @@ const COPY = {
     analyticsHint: 'Weekly trends, revenue and detailed KPIs',
     photoTitle: 'Recent team cleans',
     photoCaption: 'Every cleaner uploads photos when they finish. You and your clients see them instantly.',
+    tabDashboard: 'Dashboard',
+    tabCleaners: 'Cleaners',
+    tabClients: 'Clients',
+    totalActive: 'Total Cleaners Active',
+    seeActions: 'See actions',
   },
   es: {
     headerSubtitle: 'Alan Cleaners · 4 limpiezas hoy',
@@ -48,6 +54,11 @@ const COPY = {
     analyticsHint: 'Tendencias semanales, ingresos y KPIs detallados',
     photoTitle: 'Limpiezas recientes del equipo',
     photoCaption: 'Cada cleaner sube fotos al terminar. Tú y tus clientes las ven al instante.',
+    tabDashboard: 'Dashboard',
+    tabCleaners: 'Cleaners',
+    tabClients: 'Clientes',
+    totalActive: 'Total Cleaners Activos',
+    seeActions: 'Ver acciones',
   },
   pt: {
     headerSubtitle: 'Alan Cleaners · 4 limpezas hoje',
@@ -62,6 +73,11 @@ const COPY = {
     analyticsHint: 'Tendências semanais, receitas e KPIs detalhados',
     photoTitle: 'Limpezas recentes da equipa',
     photoCaption: 'Cada cleaner envia fotos ao terminar. Tu e os teus clientes vêem ao instante.',
+    tabDashboard: 'Dashboard',
+    tabCleaners: 'Cleaners',
+    tabClients: 'Clientes',
+    totalActive: 'Total Cleaners Ativos',
+    seeActions: 'Ver ações',
   },
 } as const;
 
@@ -123,14 +139,64 @@ export default function OwnerPreviewHome() {
           subtitle={t.headerSubtitle}
         />
 
-        <div className="mb-4 flex justify-end">
-          <DemoPullSummary />
-        </div>
+        {/* Segmented tab row — DASHBOARD active with a bright green
+            underline. Mirrors the "current view" chip in the mockup so the
+            user always knows which slice of the app they are inside. */}
+        <nav
+          aria-label="Preview sections"
+          className="-mt-1 mb-4 flex items-center gap-1 border-b border-slate-200"
+        >
+          {[
+            { label: t.tabDashboard, href: '/owner/preview', active: true },
+            { label: t.tabCleaners, href: '/owner/preview/cleaners', active: false },
+            { label: t.tabClients, href: '/owner/preview/clients', active: false },
+          ].map((tab) => (
+            <Link
+              key={tab.label}
+              href={tab.href}
+              aria-current={tab.active ? 'page' : undefined}
+              className={`relative px-3 py-2 text-[12px] font-semibold uppercase tracking-wide transition ${
+                tab.active
+                  ? 'text-[#2563EB]'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              {tab.label}
+              {tab.active ? (
+                <span
+                  aria-hidden
+                  className="absolute inset-x-2 -bottom-px h-[2px] rounded-full bg-[#10B981]"
+                />
+              ) : null}
+            </Link>
+          ))}
+          <span className="ml-auto pb-1">
+            <DemoPullSummary />
+          </span>
+        </nav>
 
         <div>
-          <div className="relative">
+          <div>
+            <DemoCleanersField checkins={checkins} />
+          </div>
+
+          {/* Total Cleaners Active caption + green "See actions" pill CTA */}
+          <div className="mt-3 flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-12px_rgba(15,23,42,0.08)]">
+            <p className="min-w-0 truncate text-[12px] font-medium text-slate-600">
+              {t.totalActive}
+            </p>
+            <Link
+              href="/owner/preview/cleaners"
+              className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#10B981] px-3 py-1.5 text-[12px] font-semibold text-white shadow-sm transition hover:bg-[#059669] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B2A6B]"
+            >
+              {t.seeActions}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          <div className="relative mt-4">
             <DemoStatCardsRow
-              cleanersActive={3}
+              cleanersActive={24}
               bookingsWeek={12}
               revenueMonthPence={145000}
               bookingsDelta={{ label: '+20%', positive: true }}
@@ -138,12 +204,12 @@ export default function OwnerPreviewHome() {
             />
           </div>
 
-          <div className="mt-6">
-            <RevenueChart data={revenueData} />
+          <div className="mt-4">
+            <DemoEarningsCharts />
           </div>
 
-          <div className="mt-4">
-            <DemoCleanersField checkins={checkins} />
+          <div className="mt-6">
+            <RevenueChart data={revenueData} />
           </div>
 
           <div className="mt-6">

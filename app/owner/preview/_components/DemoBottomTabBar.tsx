@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import {
+  BarChart3,
   LayoutGrid,
-  ListChecks,
-  MessageCircle,
+  Settings,
   Users,
   UserSquare2,
 } from 'lucide-react';
@@ -16,29 +16,31 @@ export type DemoTab =
   | 'cleaners'
   | 'properties'
   | 'chat'
-  | 'more';
+  | 'more'
+  | 'reports'
+  | 'settings';
 
 const COPY = {
   en: {
-    home: 'Home',
-    tasks: 'Cleans',
-    cleaners: 'Team',
-    chat: 'Chat',
+    dashboard: 'Dashboard',
+    cleaners: 'Cleaners',
     clients: 'Clients',
+    reports: 'Reports',
+    settings: 'Settings',
   },
   es: {
-    home: 'Inicio',
-    tasks: 'Limpiezas',
-    cleaners: 'Equipo',
-    chat: 'Chat',
+    dashboard: 'Dashboard',
+    cleaners: 'Cleaners',
     clients: 'Clientes',
+    reports: 'Reportes',
+    settings: 'Ajustes',
   },
   pt: {
-    home: 'Início',
-    tasks: 'Limpezas',
-    cleaners: 'Equipa',
-    chat: 'Chat',
+    dashboard: 'Dashboard',
+    cleaners: 'Cleaners',
     clients: 'Clientes',
+    reports: 'Relatórios',
+    settings: 'Definições',
   },
 } as const;
 
@@ -57,11 +59,11 @@ export function DemoBottomTabBar({ active }: { active: DemoTab }) {
     label: string;
     Icon: React.ComponentType<{ className?: string }>;
   }> = [
-    { key: 'home', href: '/owner/preview', label: t.home, Icon: LayoutGrid },
-    { key: 'tasks', href: '/owner/preview/tasks', label: t.tasks, Icon: ListChecks },
+    { key: 'home', href: '/owner/preview', label: t.dashboard, Icon: LayoutGrid },
     { key: 'cleaners', href: '/owner/preview/cleaners', label: t.cleaners, Icon: Users },
-    { key: 'chat', href: '/owner/preview/chat-hub', label: t.chat, Icon: MessageCircle },
     { key: 'more', href: '/owner/preview/clients', label: t.clients, Icon: UserSquare2 },
+    { key: 'reports', href: '/owner/preview/analytics', label: t.reports, Icon: BarChart3 },
+    { key: 'settings', href: '/owner/preview', label: t.settings, Icon: Settings },
   ];
 
   return (

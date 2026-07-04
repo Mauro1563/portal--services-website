@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { MapPin, Radio } from 'lucide-react';
+import { MapPin, Minus, Plus, Radio } from 'lucide-react';
 import { DemoLiveOpsPulse } from './DemoLiveOpsPulse';
 import { useClientLocale, pickCopy } from '@/lib/use-locale-client';
 
@@ -22,6 +22,9 @@ const COPY = {
     seeAll: 'See all →',
     viewOnMap: (property: string) => `See ${property} on the map`,
     openInMaps: 'Open location in Google Maps',
+    realtimeLocations: 'Real-time Cleaner locations',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
   },
   es: {
     title: 'Operarios en campo',
@@ -29,6 +32,9 @@ const COPY = {
     seeAll: 'Ver todos →',
     viewOnMap: (property: string) => `Ver ${property} en el mapa`,
     openInMaps: 'Abrir ubicación en Google Maps',
+    realtimeLocations: 'Ubicación de cleaners en vivo',
+    zoomIn: 'Acercar',
+    zoomOut: 'Alejar',
   },
   pt: {
     title: 'Operacionais no terreno',
@@ -36,6 +42,9 @@ const COPY = {
     seeAll: 'Ver todos →',
     viewOnMap: (property: string) => `Ver ${property} no mapa`,
     openInMaps: 'Abrir localização no Google Maps',
+    realtimeLocations: 'Localização dos cleaners em tempo real',
+    zoomIn: 'Aproximar',
+    zoomOut: 'Afastar',
   },
 } as const;
 
@@ -68,7 +77,49 @@ export function DemoCleanersField({ checkins }: { checkins: DemoFieldCheckin[] }
         </Link>
       </header>
 
-      <DemoLiveOpsPulse />
+      {/* Map-style panel: subtle Google-Maps grid backdrop with a
+          "Real-time Cleaner locations" chip pinned top-left and fake
+          zoom controls bottom-right, layered over the live ops pulse. */}
+      <div
+        className="relative mt-3 overflow-hidden rounded-xl ring-1 ring-slate-200"
+        style={{
+          backgroundColor: '#F1F5F9',
+          backgroundImage:
+            'linear-gradient(rgba(148,163,184,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.18) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
+      >
+        <div className="absolute left-2 top-2 z-10">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-[10.5px] font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200">
+            <span
+              aria-hidden
+              className="h-1.5 w-1.5 rounded-full bg-[#2563EB] shadow-[0_0_6px_rgba(37,99,235,0.55)]"
+            />
+            <MapPin className="h-3 w-3 text-[#2563EB]" />
+            {t.realtimeLocations}
+          </span>
+        </div>
+        <div className="absolute bottom-2 right-2 z-10 flex flex-col overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-slate-200">
+          <button
+            type="button"
+            aria-label={t.zoomIn}
+            className="grid h-6 w-6 place-items-center text-slate-700 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#10B981]"
+          >
+            <Plus className="h-3 w-3" />
+          </button>
+          <span aria-hidden className="h-px w-full bg-slate-200" />
+          <button
+            type="button"
+            aria-label={t.zoomOut}
+            className="grid h-6 w-6 place-items-center text-slate-700 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#10B981]"
+          >
+            <Minus className="h-3 w-3" />
+          </button>
+        </div>
+        <div className="px-2 pb-2 pt-8">
+          <DemoLiveOpsPulse />
+        </div>
+      </div>
 
       <ul className="mt-3 space-y-2">
         {checkins.map((c) => {
