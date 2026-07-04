@@ -27,7 +27,6 @@ import {
   Hand,
   Heart,
   HelpCircle,
-  Home as HomeIcon,
   MapPin,
   RotateCcw,
   Search,
@@ -719,44 +718,186 @@ function ClientPreviewInner({
         </div>
       </div>
 
-      {/* Categorías — filtered by local search + filter sheet */}
-      {visibleServices.length > 0 ? (
-        <ServiceCatalog token={PREVIEW_TOKEN} services={visibleServices} />
-      ) : (
-        <section className="mt-6">
-          <h2 className="text-[13px] font-bold text-slate-900">{t.categoriesHeading}</h2>
+      {/* Servicios disponibles — 4 mint tiles per Eco-Friendly mockup.
+          Filtered by local search + filter sheet; on empty search show
+          a friendly empty state so the section grid stays stable. */}
+      <section className="mt-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[13px] font-bold text-slate-900">{t.servicesHeading}</h2>
+          <Link
+            href="/client/preview/book"
+            className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-[#059669] hover:text-[#047857]"
+          >
+            {t.viewAll} <ChevronRight className="h-3 w-3" />
+          </Link>
+        </div>
+        {visibleServices.length > 0 ? (
+          <div className="mt-3 grid grid-cols-4 gap-2">
+            {visibleServices.slice(0, 4).map((s) => {
+              const tile = ((): {
+                Icon: typeof Sparkles;
+                label: string;
+              } => {
+                switch (s.id) {
+                  case 'regular':
+                    return { Icon: Sparkles, label: t.serviceRegular };
+                  case 'profunda':
+                    return { Icon: Droplet, label: t.serviceDeep };
+                  case 'vidrios':
+                    return { Icon: GlassWater, label: t.serviceWindows };
+                  case 'mudanza':
+                    return { Icon: Truck, label: t.serviceMove };
+                  default:
+                    return { Icon: Sparkles, label: s.name };
+                }
+              })();
+              const Icon = tile.Icon;
+              return (
+                <Link
+                  key={s.id}
+                  href={`/client/preview/book?service=${s.id}`}
+                  className="group flex flex-col items-center gap-1.5 rounded-2xl bg-gradient-to-br from-[#ECFDF5] to-[#D1FAE5] p-2.5 text-center shadow-[inset_0_0_0_1px_rgba(16,185,129,0.15)] transition hover:-translate-y-0.5 hover:shadow-[inset_0_0_0_1px_rgba(16,185,129,0.35),_0_8px_18px_-10px_rgba(16,185,129,0.45)]"
+                >
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/70 text-[#059669]">
+                    <Icon className="h-4 w-4" strokeWidth={2} />
+                  </span>
+                  <span
+                    className="line-clamp-2 text-[10.5px] font-semibold leading-tight text-slate-900"
+                    style={{ textWrap: 'balance' } as React.CSSProperties}
+                  >
+                    {tile.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
           <p className="mt-3 rounded-2xl bg-white p-4 text-center text-[12px] text-slate-500 ring-1 ring-inset ring-slate-100">
             {t.categoriesEmpty}
           </p>
-        </section>
-      )}
-
-      {/* FeaturedCleaners overlay — intercept clicks to open profile sheet */}
-      <div
-        onClickCapture={(e) => {
-          const link = (e.target as HTMLElement).closest('a[href]') as HTMLAnchorElement | null;
-          if (!link) return;
-          // The shared component renders one card per cleaner without
-          // an id attribute; match by initials in the card text.
-          const card = link.textContent ?? '';
-          const match = MOCK_CLEANERS.find((c) => card.includes(c.name));
-          if (match) {
-            e.preventDefault();
-            setCleanerOpen(match.id);
-          }
-        }}
-      >
-        {visibleCleaners.length > 0 ? (
-          <FeaturedCleaners token={PREVIEW_TOKEN} cleaners={visibleCleaners} />
-        ) : (
-          <section className="mt-6">
-            <h2 className="text-[13px] font-bold text-slate-900">{t.teamHeading}</h2>
-            <p className="mt-3 rounded-2xl bg-white p-4 text-center text-[12px] text-slate-500 ring-1 ring-inset ring-slate-100">
-              {t.teamEmpty}
-            </p>
-          </section>
         )}
-      </div>
+      </section>
+
+      {/* Featurado a Cleaner — two card grid with real photos + heart,
+          then a wide RESERVAR AHORA CTA. Tapping a card still opens the
+          FlippableCleanerCard sheet via setCleanerOpen. */}
+      <section className="mt-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[13px] font-bold text-slate-900">{t.featuredHeading}</h2>
+          <Link
+            href="/client/preview/book"
+            className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-[#059669] hover:text-[#047857]"
+          >
+            {t.viewAll} <ChevronRight className="h-3 w-3" />
+          </Link>
+        </div>
+        {visibleCleaners.length > 0 ? (
+          <>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              {visibleCleaners.slice(0, 2).map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => setCleanerOpen(c.id)}
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white text-left transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-14px_rgba(16,185,129,0.45)]"
+                >
+                  <div className="relative h-28 w-full bg-slate-100">
+                    {c.photoUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={c.photoUrl}
+                        alt={c.name}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="grid h-full w-full place-items-center bg-[#10B981] text-xl font-bold text-white">
+                        {c.name
+                          .split(' ')
+                          .slice(0, 2)
+                          .map((w) => w[0])
+                          .join('')
+                          .toUpperCase()}
+                      </span>
+                    )}
+                    <span
+                      aria-label={t.favoriteAria}
+                      title={t.favoriteAria}
+                      className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-white/95 text-[#EF4444] shadow-sm backdrop-blur"
+                    >
+                      <Heart className="h-3.5 w-3.5" fill="currentColor" />
+                    </span>
+                  </div>
+                  <div className="px-3 py-2.5">
+                    <p className="truncate text-[12.5px] font-semibold text-slate-900">
+                      {c.name}
+                    </p>
+                    {c.avgStars != null && (
+                      <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-slate-600">
+                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                        <span className="font-semibold text-slate-900">
+                          {c.avgStars.toFixed(1)}
+                        </span>
+                        <span className="text-slate-500">· {c.ratingCount}</span>
+                      </p>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <Link
+              href="/client/preview/book"
+              className="mt-3 flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#10B981] px-4 text-[12px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_-10px_rgba(16,185,129,0.6)] transition hover:bg-[#059669]"
+            >
+              {t.bookNow}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </>
+        ) : (
+          <p className="mt-3 rounded-2xl bg-white p-4 text-center text-[12px] text-slate-500 ring-1 ring-inset ring-slate-100">
+            {t.teamEmpty}
+          </p>
+        )}
+      </section>
+
+      {/* SERVICIO RECIENTE — compact card showing the last completed
+          service with a chevron affordance. */}
+      <section className="mt-6">
+        <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          {t.recentServiceHeading}
+        </h2>
+        <Link
+          href="/client/preview/cleaning"
+          title={t.seeDetails}
+          className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 transition hover:-translate-y-0.5 hover:shadow-[0_10px_20px_-12px_rgba(15,23,42,0.15)]"
+        >
+          {(() => {
+            const recent = MOCK_CLEANERS[0];
+            return recent?.photoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={recent.photoUrl}
+                alt={recent.name}
+                loading="lazy"
+                className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-white shadow-sm"
+              />
+            ) : (
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#10B981] text-sm font-bold text-white">
+                {recent?.name.charAt(0) ?? 'A'}
+              </span>
+            );
+          })()}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] font-semibold text-slate-900">
+              {t.recentServiceTitle}
+            </p>
+            <p className="mt-0.5 truncate text-[11.5px] text-slate-500">
+              {t.recentServiceMeta}
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" />
+        </Link>
+      </section>
 
       {/* Limpiezas anteriores — thumbnails open lightbox */}
       <div
