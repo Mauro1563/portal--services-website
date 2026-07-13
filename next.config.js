@@ -18,6 +18,13 @@ const nextConfig = {
           has: [{ type: 'host', value: 'hq.portalservices.digital' }],
           destination: '/welcome',
         },
+        // Alan's Cleaner — standalone single-file SPA served from
+        // /public/alan.html. Rewrite lets the pretty URL /alan (and
+        // /alan/anything) resolve without exposing the .html suffix.
+        // If we later split it into its own Vercel project on a
+        // subdomain, drop this rewrite and delete public/alan.html.
+        { source: '/alan', destination: '/alan.html' },
+        { source: '/alan/:path*', destination: '/alan.html' },
       ],
     };
   },
