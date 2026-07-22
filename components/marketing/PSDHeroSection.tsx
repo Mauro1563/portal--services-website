@@ -1,16 +1,15 @@
 /**
  * PSDHeroSection — Portal Services Digital umbrella hero.
  *
- * Light modern hero: soft blue gradient bg, gradient headline, and
- * two LIGHT solution cards with per-card accent (Workforce blue,
- * Home green). Cards are interactive:
- *   - Persistent CSS-only pulses on the "live" indicator dot.
- *   - Soft accent-color ring that appears on hover.
- *   - Icon tile pops (scale + rotate) on hover.
- *   - Arrow in the CTA slides right on hover.
- *   - Chip glows when the parent card is hovered.
- * All animations respect prefers-reduced-motion via media queries
- * baked into Tailwind's `motion-reduce:` variant.
+ * Deck-style corporate treatment: dark navy background with a faint
+ * building/city silhouette layered under a navy→blue overlay, kicker
+ * label with a leading bar, big display headline with a cyan→blue
+ * gradient accent word, muted-white lead paragraph. Solution cards
+ * (Workforce navy + Home emerald) sit below and keep their previous
+ * hover choreography.
+ *
+ * i18n copy is unchanged (`psd.landing.hero.*`); only the visual
+ * language of the hero shell changed.
  */
 
 import Link from 'next/link';
@@ -19,117 +18,129 @@ import {
   ArrowRight,
   Users,
   Home as HomeIcon,
-  Sparkles,
-  TrendingUp,
   Activity,
+  TrendingUp,
 } from 'lucide-react';
+
+// Faint city-skyline silhouette used as a corporate photographic
+// backdrop stand-in — self-contained SVG data URI so we don't take on
+// an image asset and the whole hero stays CSP-safe.
+const CITY_SKYLINE =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 500' preserveAspectRatio='none'><defs><pattern id='w' x='0' y='0' width='14' height='18' patternUnits='userSpaceOnUse'><rect x='2' y='2' width='4' height='6' fill='%23fff' opacity='0.35'/><rect x='8' y='4' width='4' height='6' fill='%23fff' opacity='0.22'/></pattern></defs><g fill='%23fff' opacity='0.10'><rect x='0' y='320' width='120' height='180'/><rect x='120' y='260' width='90' height='240'/><rect x='210' y='300' width='140' height='200'/><rect x='350' y='210' width='80' height='290'/><rect x='430' y='260' width='120' height='240'/><rect x='550' y='170' width='110' height='330'/><rect x='660' y='230' width='90' height='270'/><rect x='750' y='140' width='140' height='360'/><rect x='890' y='210' width='100' height='290'/><rect x='990' y='260' width='120' height='240'/><rect x='1110' y='180' width='90' height='320'/><rect x='1200' y='240' width='140' height='260'/><rect x='1340' y='200' width='110' height='300'/><rect x='1450' y='280' width='150' height='220'/></g><g><rect x='350' y='210' width='80' height='290' fill='url(%23w)'/><rect x='550' y='170' width='110' height='330' fill='url(%23w)'/><rect x='750' y='140' width='140' height='360' fill='url(%23w)'/><rect x='1110' y='180' width='90' height='320' fill='url(%23w)'/></g></svg>\")";
 
 export default async function PSDHeroSection() {
   const t = await getTranslations('psd.landing.hero');
 
+  // Split the title so the trailing 3 words render inside the gradient
+  // accent — keeps the current i18n string untouched.
+  const words = t('title').split(' ');
+  const titleLead = words.slice(0, -3).join(' ');
+  const titleAccent = words.slice(-3).join(' ');
+
   return (
     <section
       id="hero"
-      className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-[#EFF6FF]"
+      className="relative overflow-hidden text-white"
+      style={{
+        background:
+          'radial-gradient(1100px 520px at 82% -8%, rgba(56,189,248,0.20), transparent 60%),' +
+          'linear-gradient(155deg, #050f24 0%, #0B2148 55%, #103A8C 125%)',
+      }}
     >
-      {/* Ambient depth — cool blobs bring life without darkening */}
+      {/* Building/city silhouette layer — anchors the hero to the
+           bottom edge, muted so text remains fully legible. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -right-32 h-[28rem] w-[28rem] rounded-full bg-[#2563EB]/12 blur-3xl motion-safe:animate-pulse"
-        style={{ animationDuration: '6s' }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-[#10B981]/10 blur-3xl motion-safe:animate-pulse"
-        style={{ animationDuration: '7s', animationDelay: '1s' }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3"
         style={{
-          backgroundImage:
-            'radial-gradient(circle, #0F172A 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
+          backgroundImage: CITY_SKYLINE,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center bottom',
+          backgroundSize: '110% auto',
           maskImage:
-            'radial-gradient(ellipse at center, black 45%, transparent 90%)',
+            'linear-gradient(to top, black 30%, transparent 100%)',
         }}
       />
+      {/* Fine grid texture — the deck's signature. Confined to the top
+           of the hero so it fades out before the solution cards. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),' +
+            'linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          maskImage:
+            'radial-gradient(760px 420px at 80% 0%, black, transparent 72%)',
+        }}
+      />
+      {/* Bottom-edge fade into the next section — softens the transition
+           from dark hero to the light Trust bar band below. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#0B1327]"
+      />
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-10 pb-16 sm:pt-16 sm:pb-24">
-        {/* Eyebrow — no longer the brand wordmark (which lives in the navbar
-             right above). Now it's a category tag with dual dot preview of
-             the two solutions Workforce (blue) + Home (green), acting as a
-             visual promise of the two cards that land below the headline. */}
-        <span className="inline-flex items-center gap-2.5 rounded-full border border-slate-200 bg-white/85 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-800 shadow-sm backdrop-blur">
-          <Sparkles className="h-3 w-3 text-[#2563EB]" aria-hidden />
-          <span className="flex items-center gap-1">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-60 motion-safe:animate-ping" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
-            </span>
-            <span
-              className="relative flex h-1.5 w-1.5"
-              style={{ animationDelay: '0.6s' }}
-            >
-              <span
-                className="absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60 motion-safe:animate-ping"
-                style={{ animationDelay: '0.6s' }}
-              />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
-            </span>
-          </span>
+      <div className="relative mx-auto max-w-7xl px-6 pt-14 pb-20 sm:pt-20 sm:pb-28">
+        {/* Kicker — bar + label, deck-style */}
+        <div className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.24em] text-[#38BDF8]">
+          <span className="h-[2px] w-7 bg-[#38BDF8]" />
           {t('eyebrow')}
-        </span>
+        </div>
 
-        {/* Headline — slate body, gradient accent word */}
-        <h1 className="font-display mt-5 max-w-4xl text-3xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-          {t('title').split(' ').slice(0, -3).join(' ')}{' '}
-          <span className="bg-gradient-to-r from-[#2563EB] via-[#0EA5A4] to-[#10B981] bg-clip-text text-transparent">
-            {t('title').split(' ').slice(-3).join(' ')}
+        {/* Headline — white body, cyan-blue gradient accent word */}
+        <h1 className="font-display mt-6 max-w-4xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-[68px]">
+          {titleLead}{' '}
+          <span
+            className="bg-clip-text text-transparent"
+            style={{
+              backgroundImage:
+                'linear-gradient(100deg, #38BDF8 0%, #7CB6FF 60%, #A7F3D0 110%)',
+            }}
+          >
+            {titleAccent}
           </span>
         </h1>
 
-        {/* Sub */}
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
+        {/* Lead */}
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#C3D3F0]">
           {t('subtitle')}
         </p>
 
-        {/* Micro-metrics strip — three anonymous stats bringing brand colors
-             into the top of the fold before the solution cards land. */}
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur">
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#EFF6FF]">
-              <span className="h-2 w-2 rounded-full bg-[#2563EB]" />
+        {/* Micro-metrics — dark-theme variant of the three brand chips */}
+        <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 backdrop-blur">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#2563EB]/25">
+              <span className="h-2 w-2 rounded-full bg-[#60A5FA]" />
             </span>
-            <span className="font-semibold tabular-nums text-slate-900">
-              +59
-            </span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+            <span className="font-semibold tabular-nums text-white">+59</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-white/70">
               operativos activos
             </span>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur">
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#ECFDF5]">
-              <span className="h-2 w-2 rounded-full bg-[#10B981]" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 backdrop-blur">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#10B981]/25">
+              <span className="h-2 w-2 rounded-full bg-[#34D399]" />
             </span>
-            <span className="font-semibold tabular-nums text-slate-900">7</span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+            <span className="font-semibold tabular-nums text-white">7</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-white/70">
               edificios gestionados
             </span>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur">
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-gradient-to-br from-[#EFF6FF] to-[#ECFDF5]">
-              <span className="h-2 w-2 rounded-full bg-gradient-to-br from-[#2563EB] to-[#10B981]" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 backdrop-blur">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-gradient-to-br from-[#2563EB]/25 to-[#10B981]/25">
+              <span className="h-2 w-2 rounded-full bg-gradient-to-br from-[#60A5FA] to-[#34D399]" />
             </span>
-            <span className="font-semibold tabular-nums text-slate-900">3</span>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+            <span className="font-semibold tabular-nums text-white">3</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-white/70">
               idiomas
             </span>
           </div>
         </div>
 
-        {/* Two solution cards — LIGHT surfaces with per-accent interactivity */}
-        <div className="mt-12 grid gap-5 md:grid-cols-2">
+        {/* Two solution cards — dark surfaces, per-card accent */}
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
           <SolutionCard
             accent="blue"
             eyebrow="Workforce"
@@ -163,20 +174,13 @@ type Accent = 'blue' | 'green';
 const PALETTE: Record<
   Accent,
   {
-    // Card surface — deep saturated gradient (previous dark treatment
-    // the user asked to restore).
     cardBg: string;
-    // Chip on the dark card.
     chipBg: string;
     chipText: string;
     chipDot: string;
-    // Icon in the top-right corner of the card.
     iconColor: string;
-    // Bottom CTA pill.
     ctaBg: string;
     ctaText: string;
-    ctaHover: string;
-    // Ambient corner glow.
     glow: string;
   }
 > = {
@@ -189,7 +193,6 @@ const PALETTE: Record<
     iconColor: '#60A5FA',
     ctaBg: '#2563EB',
     ctaText: '#FFFFFF',
-    ctaHover: '#1D4ED8',
     glow: 'rgba(37,99,235,0.32)',
   },
   green: {
@@ -201,7 +204,6 @@ const PALETTE: Record<
     iconColor: '#34D399',
     ctaBg: '#A7F3D0',
     ctaText: '#065F46',
-    ctaHover: '#6EE7B7',
     glow: 'rgba(16,185,129,0.32)',
   },
 };
@@ -231,18 +233,16 @@ function SolutionCard({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border border-white/5 p-6 text-white transition duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${p.cardBg}`}
+      className={`group relative overflow-hidden rounded-2xl border border-white/10 p-6 text-white transition duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${p.cardBg}`}
       style={{
         boxShadow: `0 20px 40px -20px ${p.glow}, 0 1px 0 rgba(255,255,255,0.05) inset`,
       }}
     >
-      {/* Accent corner glow */}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-70 blur-3xl transition duration-500 group-hover:opacity-100"
         style={{ background: p.glow }}
       />
-      {/* Subtle noise/pattern overlay for depth */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -253,7 +253,6 @@ function SolutionCard({
         }}
       />
 
-      {/* Row 1: chip + live pulse + icon */}
       <div className="relative flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span
@@ -272,7 +271,6 @@ function SolutionCard({
             </span>
             {eyebrow}
           </span>
-          {/* Live counter chip — muted white surface on dark card */}
           <span
             className="hidden items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white/85 backdrop-blur sm:inline-flex"
             title="Live activity"
@@ -285,7 +283,6 @@ function SolutionCard({
           </span>
         </div>
 
-        {/* Icon — top-right, colored outline style (matches mockup) */}
         <Icon
           className="h-6 w-6 transition duration-500 group-hover:scale-110 group-hover:rotate-[-6deg] motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0"
           style={{ color: p.iconColor }}
@@ -293,17 +290,14 @@ function SolutionCard({
         />
       </div>
 
-      {/* Title */}
       <h2 className="font-display relative mt-8 text-2xl font-bold text-white sm:text-3xl">
         {title}
       </h2>
 
-      {/* Body */}
       <p className="relative mt-3 text-sm leading-relaxed text-white/70">
         {body}
       </p>
 
-      {/* CTA — arrow slides right on hover */}
       <div className="relative mt-8">
         <Link
           href={href}
