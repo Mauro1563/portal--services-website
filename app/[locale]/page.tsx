@@ -10,7 +10,7 @@ export const revalidate = 0;
 // Build stamp — visible in view-source so we can verify which build
 // a user is actually loading. Bumped whenever a deploy needs to be
 // confirmed reaching the wild.
-const BUILD_STAMP = 'dark-cards-v2-2026-07-04';
+const BUILD_STAMP = 'hero-deck-building-2026-07-13';
 
 import PSDTrustBar from '@/components/marketing/PSDTrustBar';
 import PSDWorkforceSection from '@/components/marketing/PSDWorkforceSection';
