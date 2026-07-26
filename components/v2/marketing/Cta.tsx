@@ -1,44 +1,62 @@
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { ArrowRight, MessageCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export async function Cta() {
-  const t = await getTranslations('cta_banner');
+  const t = await getTranslations('psdSite.finalCta');
 
   return (
-    <section id="cta" className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
-        <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 px-8 py-16 text-center text-white sm:px-12 sm:py-24">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(at_30%_20%,rgba(6,182,212,0.25)_0px,transparent_50%),radial-gradient(at_70%_80%,rgba(37,99,235,0.25)_0px,transparent_50%)]"
-          />
+    <section
+      id="contact"
+      className="relative overflow-hidden bg-psd-navy py-24 text-white sm:py-32"
+    >
+      {/* Subtle mesh — matches the deck-style corporate ambient. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(600px 320px at 15% 20%, rgba(37,99,235,0.35), transparent 60%),' +
+            'radial-gradient(700px 380px at 90% 100%, rgba(255,107,53,0.28), transparent 60%)',
+        }}
+      />
+      {/* Fine grid */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),' +
+            'linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          maskImage:
+            'radial-gradient(760px 420px at 50% 40%, black, transparent 72%)',
+        }}
+      />
 
-          <div className="relative">
-            <h2 className="mx-auto max-w-3xl font-display text-3xl font-semibold tracking-[-0.02em] sm:text-4xl lg:text-5xl">
-              {t('title')}
-            </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
-              {t('subtitle')}
-            </p>
+      <div className="relative mx-auto max-w-4xl px-5 text-center">
+        <h2 className="font-display text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+          {t('title')}
+        </h2>
+        <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+          {t('subtitle')}
+        </p>
 
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href="/signup"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 px-6 text-sm font-semibold text-white shadow-[0_12px_30px_-10px_rgba(6,182,212,0.6)] transition hover:brightness-110"
-              >
-                {t('primary')}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a
-                href="mailto:hola@portalservices.digital"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
-              >
-                <MessageCircle className="h-4 w-4" />
-                {t('secondary')}
-              </a>
-            </div>
-          </div>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href="mailto:hello@esuk.digital"
+            className="group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-psd-orange px-8 text-[15px] font-bold text-white shadow-[0_20px_50px_-16px_rgba(255,107,53,0.7)] transition hover:brightness-105 active:scale-[0.98]"
+          >
+            {t('cta')}
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/25 transition group-hover:translate-x-0.5">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </a>
+          <a
+            href="mailto:sales@esuk.digital"
+            className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.08] px-7 text-[15px] font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/[0.14]"
+          >
+            {t('secondary')}
+          </a>
         </div>
       </div>
     </section>

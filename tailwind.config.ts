@@ -32,6 +32,23 @@ const config: Config = {
         // Light-theme surfaces for app portales (cleaner, owner, client, HQ).
         surface: { 0: '#FFFFFF', 1: '#F8FAFC', 2: '#F1F5F9', 3: '#E2E8F0' },
         text: { 1: '#0F172A', 2: '#475569', 3: '#94A3B8' },
+        // Portal Services Digital — exact spec palette (mauro brief 2026-07-26).
+        // Kept on its own `psd.*` scale so it never collides with `brand.*`.
+        psd: {
+          navy: '#0F2044',
+          blue: '#2563EB',
+          orange: '#FF6B35',
+          green: '#16A34A',
+          amber: '#D97706',
+          cyan: '#0891B2',
+          teal: '#0D9488',
+          purple: '#7C3AED',
+          text: '#1E293B',
+          textSoft: '#64748B',
+          bg: '#F8FAFC',
+          card: '#FFFFFF',
+          border: '#E2E8F0',
+        },
       },
       backgroundImage: {
         'brand-gradient':
