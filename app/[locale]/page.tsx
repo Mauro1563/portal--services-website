@@ -13,6 +13,15 @@ import { Cta } from '@/components/v2/marketing/Cta';
 import { Footer } from '@/components/v2/marketing/Footer';
 import { StructuredData } from '@/components/StructuredData';
 
+// Kept dynamic while we're iterating on the landing so Vercel's edge
+// doesn't keep serving stale versions to visitors. Combined with the
+// visible BUILD_STAMP so we can verify which build a user is actually
+// hitting via view-source.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const BUILD_STAMP = 'psd-landing-full-redesign-2026-07-26';
+
 export default async function Home({
   params,
 }: {
@@ -24,7 +33,10 @@ export default async function Home({
   const tNav = await getTranslations('psdSite.nav');
 
   return (
-    <div className="min-h-screen bg-white font-sans text-psd-text antialiased">
+    <div
+      className="min-h-screen bg-white font-sans text-psd-text antialiased"
+      data-build={BUILD_STAMP}
+    >
       <StructuredData locale={locale} />
       <TopBanner />
       <Nav
