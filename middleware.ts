@@ -73,6 +73,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next({ request });
   }
 
+  // Standalone single-file HTML pages served from /public via
+  // `beforeFiles` rewrites in next.config.js (/alan, /demo, /briefing).
+  // Without this bypass, next-intl in "always prefix" mode redirects
+  // /demo → /es/demo, which then 404s because no page component exists
+  // at that path. Skipping intl here lets the rewrite serve the HTML
+  // straight from /public/.
+  if (
+    pathname === '/alan' ||
+    pathname.startsWith('/alan/') ||
+    pathname === '/demo' ||
+    pathname === '/briefing'
+  ) {
+    return NextResponse.next({ request });
+  }
+
   // Sync `portal_locale` cookie with the marketing URL prefix so that
   // app routes (/login, /signup, /welcome, /owner/*) render in the same
   // language the user picked on the public site. We MUST mutate
