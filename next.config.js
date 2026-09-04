@@ -19,6 +19,10 @@ const nextConfig = {
         // subdomain, drop this rewrite and delete public/alan.html.
         { source: '/alan', destination: '/alan.html' },
         { source: '/alan/:path*', destination: '/alan.html' },
+        // Enterprise architecture briefing — standalone single-file
+        // page served from /public/briefing.html. Same pattern as
+        // /alan above; rewrite keeps the .html suffix off the URL.
+        { source: '/briefing', destination: '/briefing.html' },
       ],
     };
   },
