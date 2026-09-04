@@ -25,6 +25,13 @@ const nextConfig = {
         // subdomain, drop this rewrite and delete public/alan.html.
         { source: '/alan', destination: '/alan.html' },
         { source: '/alan/:path*', destination: '/alan.html' },
+        // Enterprise architecture briefing — standalone single-file
+        // page served from /public/briefing.html. Reachable at both
+        // /demo (the primary sales-share URL) and /briefing (alias).
+        // Same pattern as /alan above; rewrite keeps the .html
+        // suffix off the URL.
+        { source: '/demo', destination: '/briefing.html' },
+        { source: '/briefing', destination: '/briefing.html' },
       ],
     };
   },
