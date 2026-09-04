@@ -43,7 +43,7 @@ export async function Cta() {
 
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="mailto:hello@esuk.digital"
+            href="mailto:hello@portalservices.digital"
             className="group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-psd-orange px-8 text-[15px] font-bold text-white shadow-[0_20px_50px_-16px_rgba(255,107,53,0.7)] transition hover:brightness-105 active:scale-[0.98]"
           >
             {t('cta')}
@@ -52,7 +52,7 @@ export async function Cta() {
             </span>
           </a>
           <a
-            href="mailto:sales@esuk.digital"
+            href="mailto:sales@portalservices.digital"
             className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.08] px-7 text-[15px] font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/[0.14]"
           >
             {t('secondary')}

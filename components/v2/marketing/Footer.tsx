@@ -25,7 +25,7 @@ export async function Footer() {
               {t('tagline')}
             </p>
             <p className="mt-4 text-sm font-semibold text-psd-navy">
-              esuk.digital
+              portalservices.digital
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export async function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-psd-border pt-6 text-[12px] text-psd-textSoft sm:flex-row">
           <p>
-            © {year} Portal Services Digital · esuk.digital · {t('rights')}
+            © {year} Portal Services Digital · portalservices.digital · {t('rights')}
           </p>
           <p className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1">
