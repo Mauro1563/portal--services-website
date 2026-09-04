@@ -626,6 +626,7 @@ function OperativePreviewHomeBody({
           totalCount={tasks.length}
           weekHref="/operative/preview/week"
           inProgressTaskId={inProgressTaskId}
+          locale="es"
           decorationSlot={
             <KintsugiThread doneCount={doneCount} totalCount={tasks.length} />
           }

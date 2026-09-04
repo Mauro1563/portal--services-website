@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { signOutOperative } from '@/app/operative/actions';
 import { ThemeToggle } from '@/components/operative/ThemeToggle';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
-import { getLocale } from '@/lib/i18n';
+import type { Locale } from '@/lib/i18n';
 
 const DAY_NAMES = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 const DAY_FULL = [
@@ -25,7 +25,7 @@ const MONTH = [
  * earnings card and "Next stop" card beneath it instead of crashing in
  * as a dark slab.
  */
-export async function AgendaHeader({
+export function AgendaHeader({
   cleanerName,
   now,
   doneCount,
@@ -33,6 +33,7 @@ export async function AgendaHeader({
   weekHref = '/operative/week',
   inProgressTaskId,
   decorationSlot,
+  locale,
 }: {
   cleanerName: string;
   /** Pass `new Date()` from the server component — keeps SSR deterministic. */
@@ -49,13 +50,17 @@ export async function AgendaHeader({
    *  caption. The /operative/preview demo uses this to drop in the kintsugi
    *  progress thread. Prod /operative leaves it undefined. */
   decorationSlot?: React.ReactNode;
+  /** Resolved locale for the LocaleSwitcher. Passed by the caller so this
+   *  component stays server-only-free and can be used both from the async
+   *  /operative server page and from the client-side /operative/preview
+   *  demo. */
+  locale: Locale;
 }) {
   const firstName = cleanerName.split(' ')[0];
   const dayFull = DAY_FULL[now.getDay()];
   const dayShort = DAY_NAMES[now.getDay()];
   const monthShort = MONTH[now.getMonth()];
   const dayNum = now.getDate();
-  const locale = await getLocale();
 
   return (
     <header className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 pb-4 pt-4 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04),_0_8px_24px_-12px_rgba(15,23,42,0.08)] sm:px-5 sm:pt-5">
