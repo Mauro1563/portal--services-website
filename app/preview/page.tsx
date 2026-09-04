@@ -11,20 +11,25 @@ import {
 } from 'lucide-react';
 
 /**
- * /demo — sales-call hub.
+ * /preview — sales-call portal hub.
  *
  * Skips auth entirely: each card links straight to the existing
  * standalone preview route for that portal (`/operative/preview`,
  * `/client/preview`, `/owner/preview`, `/hq/preview`), so during a
- * live demo we open esuk.digital/demo and jump into whichever role
- * fits the conversation. No login, no PIN, no seed data to reset.
+ * live demo we open esuk.digital/preview and jump into whichever
+ * role fits the conversation. No login, no PIN, no seed data to
+ * reset.
  *
- * The route lives outside `[locale]` so it stays reachable at a
- * stable URL regardless of the visitor's cookie-based locale.
+ * The public briefing / pitch page lives at /demo (rewritten to
+ * /public/briefing.html); this route is the "inside the app"
+ * counterpart for jumping into the actual portals.
+ *
+ * Route sits outside `[locale]` so it stays reachable at a stable
+ * URL regardless of the visitor's cookie-based locale.
  */
 
 export const metadata: Metadata = {
-  title: 'Demo · Portal Services Digital',
+  title: 'Previews · Portal Services Digital',
   description:
     'Entra directo a los portales de Portal Services Digital — Operativo, Community, Supervisor y HQ Admin — sin login.',
   robots: { index: false, follow: false },
