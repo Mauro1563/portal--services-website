@@ -6,6 +6,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { CheckInButton } from './CheckInButton';
 import { PhotoUploadButton } from './PhotoUploadButton';
 import { AgendaHeader } from '@/components/operative/AgendaHeader';
+import { getLocale } from '@/lib/i18n';
 import { AgendaTimeline, type AgendaTask } from '@/components/operative/AgendaTimeline';
 import { EarningsStrip } from '@/components/operative/EarningsStrip';
 import { BottomTabBar } from '@/components/operative/BottomTabBar';
@@ -142,6 +143,7 @@ export default async function OperativeHome({ searchParams }: Props) {
           now={now}
           doneCount={todayCompleted.length}
           totalCount={todayTasks.length}
+          locale={await getLocale()}
         />
 
         <EarningsStrip
